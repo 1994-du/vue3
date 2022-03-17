@@ -3,6 +3,8 @@ import {createRouter, createWebHashHistory}from "vue-router";
 import HomePage from "../views/HomePage.vue";
 // 命令行
 import CommandLine from '../views/CommandLine';
+//Sreadjs
+import SpreadJs from "../views/SpreadJs.vue";
 const routes=[
     {
         path:'/',
@@ -14,6 +16,13 @@ const routes=[
                     name:'命令行'
                 },
                 component:CommandLine
+            },
+            {
+                path:'/spreadjs',
+                meta:{
+                    name:'SpreadJs'
+                },
+                component:SpreadJs
             }
         ]
     }

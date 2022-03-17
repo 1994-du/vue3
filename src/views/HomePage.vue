@@ -4,9 +4,9 @@
             <p>当前 <span>node</span> 版本为 16.7.0</p>
             <p>当前 <span>npm</span> 版本为 7.20.3</p>
             <p>当前 <span>@vue/cli</span> 版本为 5.0.1</p>
-            <p>当前 <span>vue</span> 版本为 3.2.31</p>
-            <p>当前 <span>vue-router</span> 版本为 4.0.12</p>
-            <p>当前 <span>vuex</span> 版本为 4.0.2</p>
+            <p>当前 <span>vue</span> 版本为 3.2.31-->2.6.14</p>
+            <p>当前 <span>vue-router</span> 版本为 4.0.12-->3.5.3</p>
+            <p>当前 <span>vuex</span> 版本为 4.0.2-->3.6.2</p>
         </div>
         <div class="layout">
             <div class="layout_menu">

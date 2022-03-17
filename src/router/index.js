@@ -1,4 +1,6 @@
-import {createRouter, createWebHashHistory}from "vue-router";
+import Vue from 'vue'
+import Router from "vue-router";
+Vue.use(Router)
 // 首页
 import HomePage from "../views/HomePage.vue";
 // 命令行
@@ -27,8 +29,7 @@ const routes=[
         ]
     }
 ]
-const router = createRouter({
-    history:createWebHashHistory(),
+const router = new Router({
     routes
 })
 

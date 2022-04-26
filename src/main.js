@@ -1,4 +1,3 @@
-// import { createApp } from 'vue'
 import Vue from 'vue'
 //页面入口
 import App from './App.vue'
@@ -6,15 +5,14 @@ import App from './App.vue'
 import router from './router'
 // 状态管理器
 import store from './store'
+//Axios
+import Axios from './api'
+Vue.prototype.$axios =Axios;
+//ElementUi
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+Vue.use(ElementUI)
 
-
-// import { GcSpreadSheets, GcWorksheet, GcColumn } from '@grapecity/spread-sheets-vue'
-// let app = createApp(App);
-// app.component('gc-spread-sheets', GcSpreadSheets);
-// app.component('gc-worksheet', GcWorksheet);
-// app.component('gc-column', GcColumn);
-
-// createApp(App).use(router).use(store).mount('#app')
 
 new Vue({
     router,

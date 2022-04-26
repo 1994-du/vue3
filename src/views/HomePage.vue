@@ -15,7 +15,7 @@
                         v-for="(menu, index) in menus"
                         :key="menu + index"
                         @click="toPage(menu)"
-                    >
+                        :class="currentMenu==menu.meta.name?'active':''">
                         {{ menu.meta.name }}
                     </li>
                 </ul>
@@ -37,10 +37,12 @@ export default {
         menus() {
             return this.$router.options.routes[0].children
         },
+        //当前菜单名
+        currentMenu(){
+            return this.$route.meta.name
+        }
     },
-    mounted() {
-        console.log(this.$router.options.routes[0].children)
-    },
+    mounted() {},
     methods: {
         toPage(menu) {
             this.$router.push(menu.path)

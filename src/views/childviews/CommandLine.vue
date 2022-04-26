@@ -11,5 +11,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "./../styles/command_line.less";
+@import "~@/styles/command_line.less";
 </style>

@@ -39,8 +39,8 @@ import '@grapecity/spread-sheets-pivot-addon'
 import '@grapecity/spread-sheets-resources-zh'
 GC.Spread.Common.CultureManager.culture('zh-cn')
 import '@grapecity/spread-sheets-designer-resources-cn'
-import { Designer } from '@grapecity/spread-sheets-designer-vue'
-import * as ExcelIO from '@grapecity/spread-excelio'
+// import { Designer } from '@grapecity/spread-sheets-designer-vue'
+// import * as ExcelIO from '@grapecity/spread-excelio'
 
 // 测试环境
 GC.Spread.Sheets.LicenseKey =

@@ -45,6 +45,7 @@ export default {
     mounted() {},
     methods: {
         toPage(menu) {
+            console.log(menu)
             this.$router.push(menu.path)
         },
     },

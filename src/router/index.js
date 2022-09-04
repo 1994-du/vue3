@@ -2,31 +2,31 @@ import { createWebHistory, createRouter } from "vue-router";
 // 首页
 import HomePage from "@/views/HomePage.vue";
 // 命令行
-import CommandLine from './../views/childviews/CommandLine.vue';
-//接口请求
-import UseAxios from "@/views/childviews/useAxios.vue";
+import CommandLine from '@/views/CommandLine.vue';
+// keyframes(关键帧)
+import KeyFrames from "@/views/keyframes.vue";
 
 const routes=[
     {
         path:'/',
-        component:HomePage,
-        redirect:'/commandline',
-        children:[
-            {
-                path:'/commandline',
-                meta:{
-                    name:'命令行'
-                },
-                component:CommandLine
-            },
-            {
-                path:'/useaxios',
-                meta:{
-                    name:'接口请求'
-                },
-                component:UseAxios
-            }
-        ]
+        meta:{
+            name:'首页'
+        },
+        component:HomePage
+    },
+    {
+        path:'/commandline',
+        meta:{
+            name:'命令行'
+        },
+        component:CommandLine
+    },
+    {
+        path:'/keyframes',
+        meta:{
+            name:'关键帧'
+        },
+        component:KeyFrames
     }
 ]
 const router =createRouter({

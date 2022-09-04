@@ -4,4 +4,8 @@ module.exports = defineConfig({
   // chainWebpack:config=>{
   //   config.resolve.alias.set('@',resolve("src"))
   // }
+  devServer:{
+    host:'localhost',
+    port:'8080'
+  }
 })

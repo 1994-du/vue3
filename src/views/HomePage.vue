@@ -1,55 +1,22 @@
 <template>
     <div class="home_wrap">
         <div class="home_page">
-            <p>当前 <span>node</span> 版本为 16.7.0</p>
-            <p>当前 <span>npm</span> 版本为 7.20.3</p>
-            <p>当前 <span>@vue/cli</span> 版本为 5.0.1</p>
-            <p>当前 <span>vue</span> 版本为 3.2.31-->2.6.14</p>
-            <p>当前 <span>vue-router</span> 版本为 4.0.12-->3.5.3</p>
-            <p>当前 <span>vuex</span> 版本为 4.0.2-->3.6.2</p>
-        </div>
-        <div class="layout">
-            <div class="layout_menu">
-                <ul>
-                    <li
-                        v-for="(menu, index) in menus"
-                        :key="menu + index"
-                        @click="toPage(menu)"
-                        :class="currentMenu==menu.meta.name?'active':''">
-                        {{ menu.meta.name }}
-                    </li>
-                </ul>
-            </div>
-            <div class="layout_content">
-                <router-view></router-view>
-            </div>
+            <p>当前 <span>node</span> 版本为 16.15.0</p>
+            <p>当前 <span>npm</span> 版本为 8.5.5</p>
+            <p>当前 <span>@vue/cli</span> 版本为 5.0.4</p>
+            <p>当前 <span>vue</span> 版本为 3.2.37</p>
+            <p>当前 <span>vue-router</span> 版本为 4.1.3</p>
+            <!-- <p>当前 <span>vuex</span> 版本为 4.0.2</p> -->
+            <p>当前代码保存在gitee，并自动同步（也可以手动同步）到github，部署到vercel平台</p>  
+            <p>Docker容器</p>
+            <p>keyframes使用</p>
+            <p>即时通讯websocket</p>
         </div>
     </div>
 </template>
 
 <script>
-export default {
-    data() {
-        return {}
-    },
-    computed: {
-        //菜单列表
-        menus() {
-            return this.$router.options.routes[0].children
-        },
-        //当前菜单名
-        currentMenu(){
-            return this.$route.meta.name
-        }
-    },
-    mounted() {},
-    methods: {
-        toPage(menu) {
-            console.log(menu)
-            this.$router.push(menu.path)
-        },
-    },
-}
+export default {}
 </script>
 
 <style lang="less">

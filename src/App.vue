@@ -1,20 +1,28 @@
 <template>
-  <div class="layout">
-      <div class="layout_menu">
-          <a-menu mode="inline">
-              <a-menu-item v-for="menuitem in menus" :key="menuitem" @click="toPage(menuitem)">{{menuitem.meta.name}}</a-menu-item>
-          </a-menu>
-      </div>
-      <div class="layout_content">
-          <router-view></router-view>
-      </div>
-  </div>
+  <el-config-provider :locale="locale">
+    <div class="layout">
+        <div class="layout_menu">
+            <el-menu>
+              <el-menu-item v-for="(menuitem,index) in menus" :key="menuitem.meta.name+index" :index="index.toString()" @click="toPage(menuitem)">{{menuitem.meta.name}}</el-menu-item>
+            </el-menu>
+        </div>
+        <div class="layout_content">
+            <router-view></router-view>
+        </div>
+    </div>
+  </el-config-provider>
 </template>
 
 <script>
-
+// import zhCn from 'element-plus/lib/locale/lang/zh-cn'
+import en from 'element-plus/lib/locale/lang/en'
 export default {
   name: 'App',
+  data(){
+    return{
+      locale:en
+    }
+  },
   computed: {
       //菜单列表
       menus() {
@@ -42,20 +50,7 @@ export default {
     height: 100%;
   }
 }
-.ant-menu-item-selected{
-  color: black !important;
-}
-.ant-menu-item::after{
-  border-right:3px solid black!important;
-}
-.ant-menu-submenu-title:hover{
-  color: black !important;
-}
-.ant-menu-item:hover{
-  color: black !important;
-}
-.ant-menu-title-content{
-  font-family:Arial, Helvetica, sans-serif;
-  font-weight: bold!important;
+.el-menu{
+  height: 100%;
 }
 </style>

@@ -5,7 +5,8 @@ import HomePage from "@/views/HomePage.vue";
 import CommandLine from '@/views/CommandLine.vue';
 // keyframes(关键帧)
 import KeyFrames from "@/views/keyframes.vue";
-
+// 浏览器内核
+import BrowserCore from "@/views/browserCore.vue"
 const routes=[
     {
         path:'/',
@@ -27,6 +28,13 @@ const routes=[
             name:'关键帧'
         },
         component:KeyFrames
+    },
+    {
+        path:'/browsercore',
+        meta:{
+            name:'浏览器内核'
+        },
+        component:BrowserCore
     }
 ]
 const router =createRouter({

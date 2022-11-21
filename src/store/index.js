@@ -1,14 +1,32 @@
-// import {createStore}from'vuex';
-import Vue from 'vue' 
-import Vuex from 'vuex'
-Vue.use(Vuex)
-export default new Vuex.Store({
+import {createStore} from 'vuex';
+export default createStore({
     //全局变量
-    state:{},
+    state:{
+        name:'dxx',
+        age:28
+    },
     //同步操作
-    mutations:{},
+    mutations:{
+        changAge(state,arg){
+            state.age+=arg.num
+        }
+    },
     //异步操作
-    actions:{},
+    actions:{
+        asyncChangeAge(context,arg){
+            console.log(context)
+            return new Promise(()=>{
+                setTimeout(()=>{
+                    context.commit('changAge',{num:arg.num})
+                },1000)
+            })
+        }
+    },
     // 计算属性
-    getters:{}
+    getters:{
+        
+        info:(state)=>state.age+state.name,
+        moreinfo:(state,gettets)=>state.age+state.name+gettets.info,
+        setName:(state=>((p)=>state.name+p))
+    }
 })

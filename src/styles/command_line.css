@@ -1,0 +1,6 @@
+.command_line p {
+  text-align: left;
+}
+.command_line p strong {
+  margin-bottom: 5px;
+}

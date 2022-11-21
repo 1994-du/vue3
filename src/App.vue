@@ -1,5 +1,4 @@
 <template>
-  <el-config-provider :locale="locale">
     <div class="layout">
         <div class="layout_menu">
             <el-menu>
@@ -10,32 +9,19 @@
             <router-view></router-view>
         </div>
     </div>
-  </el-config-provider>
 </template>
 
-<script>
-// import zhCn from 'element-plus/lib/locale/lang/zh-cn'
-import en from 'element-plus/lib/locale/lang/en'
-export default {
-  name: 'App',
-  data(){
-    return{
-      locale:en
-    }
-  },
-  computed: {
-      //菜单列表
-      menus() {
-          console.log(this.$router.options.routes)
-          return this.$router.options.routes
-      }
-  },
-  methods: {
-      toPage(menu) {
-          this.$router.push(menu.path)
-      },
-  }
+<script setup>
+import {useRouter} from 'vue-router'
+const { computed }=require("@vue/runtime-core")
+const router=useRouter()
+const menus = computed(()=>{
+  return router.getRoutes()
+})
+const toPage=function(menu) {
+    router.push(menu.path)
 }
+
 </script>
 
 <style lang="less">
@@ -47,10 +33,18 @@ export default {
   text-align: center;
   color: #2c3e50;
   .layout{
+    
     height: 100%;
+    .layout_menu{
+      width: 150px;
+    }
   }
 }
 .el-menu{
   height: 100%;
+  .el-menu-item{
+    width: 100%;
+    text-align: center;
+  }
 }
 </style>

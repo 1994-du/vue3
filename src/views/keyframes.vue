@@ -3,7 +3,7 @@
 <div class="use_axios">
     keyframes使用
     <div class="img_transform" >
-      <img src="@/assets/smallportal.webp" alt="">
+      <img src="@/assets/image/smallportal.webp" alt="">
     </div>
 </div>
 </template>
@@ -47,5 +47,5 @@ activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
 }
 </script>
 <style lang="less" scoped>
-@import "~@/styles/keyframes.less";
+@import "@/styles/keyframes.less";
 </style>

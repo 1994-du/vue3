@@ -2,6 +2,7 @@ import {createStore} from 'vuex';
 export default createStore({
     //全局变量
     state:{
+        islogin:0,
         name:'dxx',
         age:28
     },
@@ -9,6 +10,9 @@ export default createStore({
     mutations:{
         changAge(state,arg){
             state.age+=arg.num
+        },
+        changLogin(state,arg){
+            state.islogin=arg.val
         }
     },
     //异步操作

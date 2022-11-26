@@ -3,7 +3,7 @@
 <div class="use_axios">
     keyframes使用
     <div class="img_transform" >
-      <img src="@/assets/image/smallportal.webp" alt="">
+      <img src="static/image/smallportal.webp" alt="">
     </div>
 </div>
 </template>

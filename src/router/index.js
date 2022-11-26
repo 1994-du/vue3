@@ -1,21 +1,4 @@
 import { createWebHistory, createRouter } from "vue-router";
-// 首页
-// import HomePage from "@/views/HomePage.vue";
-const HomePage = ()=>import('@/views/HomePage.vue')
-// 命令行
-import CommandLine from '@/views/CommandLine.vue';
-// keyframes(关键帧)
-import KeyFrames from "@/views/keyframes.vue";
-// 浏览器内核
-import BrowserCore from "@/views/browserCore.vue"
-// git命令行
-import gitLine from "@/views/gitLine.vue"
-//Store
-import useStore from "@/views/useStore.vue";
-//Router
-import useRouter from "@/views/useRouter.vue"
-//Axios
-import useAxios from "@/views/useAxios.vue"
 const routes=[
     {
         path:'/',
@@ -24,6 +7,14 @@ const routes=[
         },
         // component:resolve=>require(['@/views/HomePage.vue'],resolve) //AMD写法
         component:()=>import('@/views/HomePage.vue')
+    },
+    {
+        path:'/login',
+        name:'login',
+        meta:{
+            name:'登录'
+        },
+        component:()=>import('@/views/LoginPage.vue')
     },
     {
         path:'/commandline',
@@ -78,11 +69,44 @@ const routes=[
         meta:{
             name:'路由懒加载'
         },
-        component:import('@/views/routerLazyLoad.vue')
+        component:()=>import('@/views/routerLazyLoad.vue')
+    },
+    {
+        path:"/imgSavePath",
+        meta:{
+            name:"图片保存路径"
+        },
+        component:()=>import('@/views/imgSavePath.vue')
+    },
+    {
+        path:"/httpVersion",
+        meta:{
+            name:"HTTP版本"
+        },
+        component:()=>import('@/views/HttpVersion.vue')
+    },
+    {
+        path:"/customerDirective",
+        meta:{
+            name:"自定义指令"
+        },
+        component:()=>import('@/views/customerDirective.vue')
     }
 ]
 const router =createRouter({
     history:createWebHistory(),
     routes
 })
+
+// const islogin =sessionStorage.getItem('islogin')
+// router.beforeEach((to,from,next)=>{
+//     if(to.path == '/login'){ next()}else{
+//         if(islogin=='0'){
+//             next({path:'/login'})
+//         }else{
+//             next()
+//         }
+//     }
+    
+// })
 export default router;

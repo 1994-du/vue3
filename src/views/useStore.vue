@@ -8,11 +8,11 @@
         </div>
         <h2>一、创建store文件</h2>
         <p>1.store/index.js</p>
-        <img src="@/assets/image/useStore.png" alt="">
+        <img src="static/image/useStore.png" alt="">
         <p>2.main.js</p>
-        <img src="@/assets/image/useStore-main.png" alt="">
+        <img src="static/image/useStore-main.png" alt="">
         <h2>二、使用store</h2>
-        <img src="@/assets/image/useStore-use.png" alt="">
+        <img src="static/image/useStore-use.png" alt="">
     </div>
 </template>
 <script setup>

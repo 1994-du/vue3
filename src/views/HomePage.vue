@@ -35,6 +35,10 @@
 </template>
 
 <script setup>
+import {useStore}from 'vuex'
+import { useRouter } from 'vue-router';
+const router = useRouter()
+const store = useStore()
 const { onMounted }=require("@vue/runtime-core");
 
 onMounted(()=>{})

@@ -1,11 +1,12 @@
 {
   "name": "vue3demo",
-  "version": "0.1.1",
+  "version": "1.4.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve --open",
-    "build": "npm version patch&&vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "buildv": "node buildversion"
   },
   "dependencies": {
     "axios": "^0.27.2",
@@ -45,7 +46,6 @@
   "browserslist": [
     "> 1%",
     "last 2 versions",
-    "not dead",
     "not ie 11"
   ]
 }

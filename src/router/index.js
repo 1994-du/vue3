@@ -19,24 +19,25 @@ const routes=[
     {
         path:'/commandline',
         meta:{
-            name:'cmd命令行'
+            name:'npm命令行'
         },
         component:()=>import('@/views/CommandLine.vue')
     },
+    // {
+    //     path:'/keyframes',
+    //     meta:{
+    //         name:'关键帧'
+    //     },
+    //     component:()=>import('@/views/keyframes.vue')
+    // },
+    // {
+    //     path:'/browsercore',
+    //     meta:{
+    //         name:'浏览器内核'
+    //     },
+    //     component:()=>import('@/views/browserCore.vue')
+    // },
     {
-        path:'/keyframes',
-        meta:{
-            name:'关键帧'
-        },
-        component:()=>import('@/views/keyframes.vue')
-    },
-    {
-        path:'/browsercore',
-        meta:{
-            name:'浏览器内核'
-        },
-        component:()=>import('@/views/browserCore.vue')
-    },{
         path:'/gitLine',
         meta:{
             name:'git命令行'
@@ -91,6 +92,13 @@ const routes=[
             name:"自定义指令"
         },
         component:()=>import('@/views/customerDirective.vue')
+    },
+    {
+        path:"/cacheDetail",
+        meta:{
+            name:"缓存"
+        },
+        component:()=>import('@/views/cacheDetail.vue')
     }
 ]
 const router =createRouter({
@@ -98,15 +106,10 @@ const router =createRouter({
     routes
 })
 
-// const islogin =sessionStorage.getItem('islogin')
-// router.beforeEach((to,from,next)=>{
-//     if(to.path == '/login'){ next()}else{
-//         if(islogin=='0'){
-//             next({path:'/login'})
-//         }else{
-//             next()
-//         }
-//     }
-    
-// })
+router.beforeEach((to,from,next)=>{
+    const islogin =sessionStorage.getItem('islogin')
+    if(to.path == '/login')return next()
+    if(islogin=='0')return next('/login')
+    next()
+})
 export default router;

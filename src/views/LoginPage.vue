@@ -32,7 +32,7 @@ const router = useRouter()
 const toLogin=function(){
     store.commit('changLogin',{val:1})
     sessionStorage.setItem('islogin',1)
-    router.push('/')
+    router.replace('/')
 }
 const isShowPassword=ref(true)
 </script>

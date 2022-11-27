@@ -20,17 +20,6 @@
             <p>vue2是Object.defineProperty、vue3是Proxy</p>
             <p>vue2局限性，无法监听对象或数组新增、删除的元素</p>
         </div>
-        <div class="home_page">
-            <p>webpack和vite的区别</p>
-            <h5>1.生命周期</h5>
-            <p>vue3使用生命周期前需要引入且可拆分多个</p>
-            <h5>2.支持多个根节点</h5>
-            <h5>3.vue2是选项API、vue3是组合式API</h5>
-            <h5>4.异步组件</h5>
-            <h5>5.响应式原理不同</h5>
-            <p>vue2是Object.defineProperty、vue3是Proxy</p>
-            <p>vue2局限性，无法监听对象或数组新增、删除的元素</p>
-        </div>
     </div>
 </template>
 

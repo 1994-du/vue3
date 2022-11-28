@@ -74,8 +74,12 @@ onUnmounted(()=>{
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   header{
     height: 50px;
+    flex-shrink: 0;
     background: #2c3e50;
     display: flex;
     align-items: center;
@@ -87,9 +91,10 @@ onUnmounted(()=>{
     }
   }
   .layout {
-    height: 100%;
+    // height: 100%;
     flex: 1;
     display: flex;
+    overflow: hidden;
     &_menu {
         font-size: 14px;
         font-weight: bold;
@@ -112,6 +117,9 @@ onUnmounted(()=>{
         flex: 1;
         padding: 15px;
         overflow: auto;
+        &::-webkit-scrollbar{
+          display: none;
+        }
     }
     .login_active{
       background: #2c3e50;

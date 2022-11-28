@@ -5,10 +5,10 @@
         <div class="login_box">
             <div class="input_box">
                 <div class="usename">
-                    <input v-focus type="text" placeholder="请输入账号">
+                    <input v-focus type="text" placeholder="请输入账号" v-model="loginObj.username">
                 </div>
                 <div class="password">
-                    <input :type="isShowPassword?'password':'text'" placeholder="请输入密码">
+                    <input :type="isShowPassword?'password':'text'" placeholder="请输入密码" v-model="loginObj.password">
                     <img v-show="isShowPassword" class="showpassword" src="https://s4.ax1x.com/2022/01/07/79E7dg.png" alt="" @click="isShowPassword=!isShowPassword">
                     <img v-show="!isShowPassword" class="showpassword" src="https://s4.ax1x.com/2022/01/07/79EOWn.png" alt="" @click="isShowPassword=!isShowPassword">
                 </div>
@@ -26,13 +26,21 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex';
-import {ref} from 'vue'
+import {ref,getCurrentInstance, reactive} from 'vue'
+let loginObj=reactive({
+    username:"",
+    password:""
+})
+let {proxy}=getCurrentInstance()
 const store = useStore()
 const router = useRouter()
 const toLogin=function(){
-    store.commit('changLogin',{val:1})
-    sessionStorage.setItem('islogin',1)
-    router.replace('/')
+    proxy.$axios.get('/api/login',loginObj).then(res=>{
+        console.log('请求登录',res)
+    })
+    // router.replace('/')
+    // store.commit('changLogin',{val:1})
+    // sessionStorage.setItem('islogin',1)
 }
 const isShowPassword=ref(true)
 </script>

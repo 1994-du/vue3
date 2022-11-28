@@ -7,7 +7,16 @@ module.exports = defineConfig({
     host:'0.0.0.0',
     port:'8080',
     historyApiFallback:true,
-    allowedHosts:'all'
+    allowedHosts:'all',
+    proxy:{
+      '/api':{
+        target:'http://localhost:80',
+        changeOrigin:true,
+        pathRewrite:{
+          "^/api":""
+        }
+      }
+    }
   },
   configureWebpack:(config)=>{
     config['performance']={

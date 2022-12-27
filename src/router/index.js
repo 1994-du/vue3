@@ -23,13 +23,13 @@ const routes=[
         },
         component:()=>import('@/views/CommandLine.vue')
     },
-    // {
-    //     path:'/keyframes',
-    //     meta:{
-    //         name:'关键帧'
-    //     },
-    //     component:()=>import('@/views/keyframes.vue')
-    // },
+    {
+        path:'/keyframes',
+        meta:{
+            name:'关键帧'
+        },
+        component:()=>import('@/views/keyframes.vue')
+    },
     // {
     //     path:'/browsercore',
     //     meta:{
@@ -72,19 +72,26 @@ const routes=[
         },
         component:()=>import('@/views/routerLazyLoad.vue')
     },
-    {
-        path:"/imgSavePath",
-        meta:{
-            name:"图片保存路径"
-        },
-        component:()=>import('@/views/imgSavePath.vue')
-    },
+    // {
+    //     path:"/imgSavePath",
+    //     meta:{
+    //         name:"图片保存路径"
+    //     },
+    //     component:()=>import('@/views/imgSavePath.vue')
+    // },
     {
         path:"/httpVersion",
         meta:{
             name:"HTTP版本"
         },
         component:()=>import('@/views/HttpVersion.vue')
+    },
+    {
+        path:"/httpHand",
+        meta:{
+            name:"HTTP握手"
+        },
+        component:()=>import('@/views/httpHand.vue')
     },
     {
         path:"/customerDirective",
@@ -99,6 +106,34 @@ const routes=[
             name:"缓存"
         },
         component:()=>import('@/views/cacheDetail.vue')
+    },
+    {
+        path:"/debounceThrottling",
+        meta:{
+            name:"防抖节流"
+        },
+        component:()=>import('@/views/debounceThrottling.vue')
+    },
+    {
+        path:"/twoWayBinding",
+        meta:{
+            name:"双向绑定原理"
+        },
+        component:()=>import('@/views/twoWayBinding.vue')
+    },
+    {
+        path:"/copyType",
+        meta:{
+            name:"深浅拷贝"
+        },
+        component:()=>import('@/views/copyType.vue')
+    },
+    {
+        path:"/dataTypeJudge",
+        meta:{
+            name:"数据类型判断"
+        },
+        component:()=>import('@/views/dataTypeJudge.vue')
     }
 ]
 const router =createRouter({

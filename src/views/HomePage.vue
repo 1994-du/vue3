@@ -20,6 +20,22 @@
             <p>vue2是Object.defineProperty、vue3是Proxy</p>
             <p>vue2局限性，无法监听对象或数组新增、删除的元素</p>
         </div>
+        <div class="home_page">
+            <p>Object.defineProperty和Proxy的区别</p>
+            <p>1.Proxy性能优于Object.defineProperty。Proxy代理的是整个对象，Object.defineProperty只代理对象上的某个属性，如果是多层嵌套的数据，需要循环递归绑定</p>
+            <p>2.对象上定义新属性时，Proxy可以监听到，Object.defineProperty监听不到，需要借助$set方法</p>
+            <p>3.数组的某些方法（push、unshift、splice）Object.defineProperty监听不到；Proxy可以监听到</p>
+            <p>4.Proxy在ie浏览器存在兼容性问题</p>
+        </div>
+        <div class="home_page">
+            <p>Vue的优点</p>
+            <p>1.组件化开发，减少代码量</p>
+            <p>2.视图view、数据model、逻辑viewmodel <br>
+                viewmodel:<br>Observer-监听器；对所有数据的属性进行监听。<br> Compiler-解析器；对每个元素节点进行扫描解析，根据指令模板替换数据并绑定响应的更新函数
+            </p>
+            <p>3.数据响应式：数据改变视图随之更新。vue2：Object.property、vue3:Proxy</p>
+            <p>4.数据双向绑定：v-model</p>
+        </div>
     </div>
 </template>
 

@@ -35,12 +35,19 @@ let {proxy}=getCurrentInstance()
 const store = useStore()
 const router = useRouter()
 const toLogin=function(){
-    proxy.$axios.get('/api/login',loginObj).then(res=>{
-        console.log('请求登录',res)
-    })
-    // router.replace('/')
-    // store.commit('changLogin',{val:1})
-    // sessionStorage.setItem('islogin',1)
+    // proxy.$axios.post('/api/login',JSON.stringify(loginObj)).then(res=>{
+    //     console.log('请求登录',res)
+    //     if(res.data.success==1){
+    //         router.replace('/')
+    //         store.commit('changLogin',{val:1})
+    //         sessionStorage.setItem('islogin',1)
+    //     }else{
+    //         alert('登录失败')
+    //     }
+    // })
+    router.replace('/')
+    store.commit('changLogin',{val:1})
+    sessionStorage.setItem('islogin',1)
 }
 const isShowPassword=ref(true)
 </script>
@@ -89,6 +96,7 @@ const isShowPassword=ref(true)
                     outline: none;
                     border: none;
                     border-bottom: 1px solid #aaa;
+                    background: white;
                 }
                 .showpassword{
                     display: none;

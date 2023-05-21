@@ -22,6 +22,7 @@ h4{
     margin: 5px 0;
     background-image: -webkit-linear-gradient(0deg,red,green);
     background-clip: text;
+    -webkit-background-clip:text;
     color: transparent;
     font-size: 20px;
 }
@@ -47,6 +48,7 @@ h4::before{
   overflow: hidden;
   min-width: 960px;
   background-image: url(/static/image/her.jpg);
+  background-size: cover;
   .layout {
     flex: 1;
     display: flex;
@@ -69,6 +71,7 @@ h4::before{
             top: 0;
             left: 0;
             z-index: 2;
+            background-color: white;
           .el-input__wrapper{
             box-shadow: none;
           }
@@ -80,6 +83,10 @@ h4::before{
                 border-bottom: 1px solid #eee;
                 user-select: none;
                 color: var(--fontColor);
+                span{
+                    height: 40px;
+                    line-height: 40px;
+                }
             }
             .is-active{
                 color: var(--h4label);

@@ -47,46 +47,13 @@
         </el-drawer>
     </div>
 </template>
+<script setup>
+import animations from "@/json/animation.json"
+import { ref } from "vue";
+let animation = ref(animations)
+let drawer = ref(false)
+let direction = ref('rtl')
 
-<script>
-import animation from "@/json/animation.json"
-export default {
-    name: 'KeyFrames',
-    components: {},
-    data() {
-        return {
-            animation: animation,
-            drawer: false,
-            direction: 'rtl'
-        };
-    },
-    computed: {},
-    watch: {},
-    methods: {
-
-    },
-    created() {
-        // this.$axios.get('/user', {
-        //     params: {
-        //     ID: 12345
-        //     }
-        // })
-        // .then(function (response) {
-        //     console.log(response);
-        // })
-        // .catch(function (error) {
-        //     console.log(error);
-        // });
-    },
-    mounted() {
-        console.log(animation)
-    },
-    beforeCreate() { },
-    beforeMount() { },
-    beforeUpdate() { },
-    updated() { },
-    activated() { }, //如果页面有keep-alive缓存功能，这个函数会触发
-}
 </script>
 <style lang="less" scoped>
 @import "@/styles/animation.less";

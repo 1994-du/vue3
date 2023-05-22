@@ -13,6 +13,8 @@
         <p>npm list 或 npm ls</p>
         <h4>查看注册表中某个包的信息</h4>
         <p>npm view pagename</p>
+        <h4>npm创建vite项目</h4>
+        <p>npm create vite@latest</p>
     </div>
 </template>
 

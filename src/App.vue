@@ -12,3 +12,6 @@ import { onBeforeRouteUpdate } from 'vue-router';
 //     console.log(to,from,next);
 // })
 </script>
+<style lang="less">
+
+</style>

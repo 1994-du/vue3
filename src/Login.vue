@@ -16,17 +16,18 @@ let username=ref('')
 let password=ref('')
 let router = useRouter()
 const Login=()=>{
-    localStorage.setItem('token',Math.random()*100)
-    router.push('/')
-    // let param={
-    //     username:username.value,
-    //     password:password.value
-    // }
-    // proxy.$axios.post('/api/login',{...param}).then(res=>{
-    //     if(res.status==='success'){
-    //         localStorage.setItem('token',Math.random()*100)
-    //         router.push('/')
-    //     }
-    // })
+    // localStorage.setItem('token',Math.random()*100)
+    // router.push('/')
+    let param={
+        username:username.value,
+        password:password.value
+    }
+    proxy.$axios.post('/api/login',{...param}).then(res=>{
+        console.log('登录',res);
+        if(res.status==='success'){
+            localStorage.setItem('token',JSON.stringify(res.data))
+            router.push('/')
+        }
+    })
 }
 </script>

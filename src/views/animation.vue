@@ -49,7 +49,7 @@
 </template>
 <script setup>
 import animations from "@/json/animation.json"
-import { ref } from "vue";
+import { onActivated, onDeactivated, onUnmounted, ref } from "vue";
 let animation = ref(animations)
 let drawer = ref(false)
 let direction = ref('rtl')

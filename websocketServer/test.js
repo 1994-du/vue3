@@ -2,6 +2,7 @@ const Koa = require('koa');
 const http = require('http');
 const { Server } = require('socket.io');
 const moment = require('moment');
+const { log } = require('console');
 
 const app = new Koa();
 
@@ -16,7 +17,7 @@ const io = new Server(server, {
 });
 
 io.on('connection', (socket) => {
-  socket.emit('fresh-message', chatList);
+  socket.emit('message', chatList);
   socket.on('send-message', (user, message) => {
     const createTime = moment().format('YYYY-MM-DD HH:mm:ss');
     chatList.push({
@@ -24,7 +25,7 @@ io.on('connection', (socket) => {
       message,
       createTime,
     });
-    socket.emit('fresh-message', chatList);
+    socket.emit('message', chatList);
   });
 });
 io.listen(3001);

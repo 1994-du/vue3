@@ -13,5 +13,7 @@ import { onBeforeRouteUpdate } from 'vue-router';
 // })
 </script>
 <style lang="less">
-
+#app{
+    height: 100%;
+}
 </style>

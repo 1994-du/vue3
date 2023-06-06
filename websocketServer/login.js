@@ -4,7 +4,7 @@ const Login = function(req,res){
     req.on('data',(data)=>{
         let param = JSON.parse(data);
         console.log('参数',param);
-        let filter = usersData.filter(el=>el.username===param.username&&el.password===param.password)
+        let filter = usersData.filter(el=>el.account===param.account&&el.password===param.password)
         console.log('筛选结果',filter);
         if(filter.length>0){
             res.end(JSON.stringify({

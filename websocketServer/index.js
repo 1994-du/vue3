@@ -2,7 +2,8 @@ var { createServer } = require('http')
 var {Server} = require('socket.io')
 const fs = require('fs')
 const url = require('url')
-const Login = require('./login')
+const Login = require('./login') // 登录
+const Registry = require('./registry')
 const indexHtml = fs.readFileSync(require.resolve('./index.html'),{encoding:'utf8'})
 var http = createServer((req,res)=>{
     const pathname = url.parse(req.url).pathname
@@ -10,6 +11,9 @@ var http = createServer((req,res)=>{
     switch(pathname){
         case '/login':
             Login(req,res)
+        break;
+        case '/registry':
+          Registry(req,res)
         break;
         default:
             res.end(indexHtml)

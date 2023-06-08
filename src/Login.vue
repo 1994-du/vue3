@@ -9,7 +9,7 @@
                     <el-input type="password" placeholder="密码" v-model="password" @keydown.enter="Login"></el-input>
                     <span class="forget_password">忘记密码？</span>
                 </div>
-                <el-button @click="loginType=0">登录</el-button>
+                <el-button @click="Login">登录</el-button>
             </div>
             <div class="login_d" v-else>
                 <el-button @click="loginType=0">登录</el-button>
@@ -22,9 +22,9 @@
                 <div class="ipts">
                     <el-input type="text" placeholder="用户名" v-model="username"></el-input>
                     <el-input type="text" placeholder="账号" v-model="account"></el-input>
-                    <el-input type="password" placeholder="密码" v-model="password" @keydown.enter="Login"></el-input>
+                    <el-input type="password" placeholder="密码" v-model="password" @keydown.enter="Registry"></el-input>
                 </div>
-                <el-button @click="loginType=1">注册</el-button>
+                <el-button @click="Registry">注册</el-button>
                 <!-- <el-button @click="loginType=0">登录</el-button> -->
             </div>
             <div class="registry_d" v-else>
@@ -43,6 +43,7 @@ let account = ref('');//账号
 let username=ref('');//姓名
 let password=ref('');//密码
 let router = useRouter()
+// 登录
 const Login=()=>{
     // localStorage.setItem('token',Math.random()*100)
     // router.push('/')
@@ -57,6 +58,17 @@ const Login=()=>{
             localStorage.setItem('token',JSON.stringify(res.data))
             router.push('/')
         }
+    })
+}
+// 注册
+const Registry = ()=>{
+    let param={
+        username:username.value,
+        account:account.value,
+        password:password.value
+    }
+    proxy.$axios.post('/api/registry',{...param}).then(res=>{
+        console.log('注册',res);
     })
 }
 </script>

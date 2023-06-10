@@ -44,7 +44,6 @@ onMounted(()=>{
 const to_footer = function() {
   nextTick(()=>{
     var div = document.getElementsByClassName('chat-content')[0];
-    console.log('scrollHeight',div.scrollHeight);
     div.scrollTop = div.scrollHeight;
   })
     

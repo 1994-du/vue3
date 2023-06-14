@@ -43,11 +43,13 @@
                 </div>
                 <div class="item"></div>
                 <div class="light_ball"></div>
+                <bg :width="100"></bg>
             </div>
         </el-drawer>
     </div>
 </template>
 <script setup>
+import bg from '@/components/bg.vue'
 import animations from "@/json/animation.json"
 import { onActivated, onDeactivated, onUnmounted, ref } from "vue";
 let animation = ref(animations)

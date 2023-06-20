@@ -30,7 +30,7 @@ io.on('connection',(socket)=>{
   console.log('连接');
   socket.on('send-message',(data)=>{
     console.log('客户端发送',data);
-    socket.emit('message',data)
+    // socket.emit('message',data)
     socket.broadcast.emit('msg_res',data)
   })
 })

@@ -13,9 +13,7 @@ const currentTime = function(){
   xmlHttp.open("HEAD",location.href,false)
   xmlHttp.send()
   let serverTime = new Date(xmlHttp.getResponseHeader("Date"))
-  let time = serverTime.toLocaleDateString()
-  console.log('servertime',serverTime,serverTime.toLocaleString());
-  console.log('time',time);
+  // let time = serverTime.toLocaleDateString()
   return serverTime.toLocaleString()
 }
 let userId = JSON.parse(localStorage.getItem('token')).id
@@ -24,12 +22,11 @@ onMounted(()=>{
     socket.on('connect',()=>{
         console.log(socket.id,'监听客户端连接成功-connect');
     })
-    socket.on('message',msg=>{
-      console.log('服务器发送信息',msg);
-      chatList.value.push(msg)
-      to_footer()
-      
-    })
+    // socket.on('message',msg=>{
+    //   console.log('服务器发送信息',msg);
+    //   chatList.value.push(msg)
+    //   to_footer()
+    // })
     socket.on('msg_res',(msg)=>{
       console.log('其他客户端信息',msg);
       chatList.value.push(msg)
@@ -54,6 +51,8 @@ const sendMsg = ()=>{
   userInfo.msg=chatMsg.value
   userInfo.time=currentTime()
   socket.emit('send-message',userInfo)
+  chatList.value.push(userInfo)
+  to_footer()
   chatMsg.value = ''
 }
 onUnmounted(()=>{

@@ -44,6 +44,10 @@
                 <div class="item"></div>
                 <div class="light_ball"></div>
                 <bg :width="100"></bg>
+                <div class="nxhz">
+                    <div class="box1"></div>
+                    <div class="box2"></div>
+                </div>
             </div>
         </el-drawer>
     </div>

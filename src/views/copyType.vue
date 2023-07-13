@@ -5,7 +5,13 @@
     <div class="shallow_copy">
         <div class="item">
             <p>Array.slice()</p>
-            <img src="static/image/copy_array.slice.png">
+            <highlightjs :code="$stripIndent`
+            var arr=[1,'a',{name:'dxx'}]
+            var arr2 = arr.slice();
+            arr2[2].name='names'
+            console.log(arr,arr2) // [1,'a',{name:'names'}] [1,'a',{name:'names'}]
+            arr和arr2 都改变
+            `"></highlightjs>
         </div>
         <div class="item">
             <p>Array.concat()</p>

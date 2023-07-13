@@ -9,10 +9,11 @@ import directive from "./globalDirective"
 import 'highlight.js/styles/atom-one-dark.css'
 import hljsVuePlugin from "@highlightjs/vue-plugin"
 import 'highlight.js/lib/common'
-
+import { stripIndent } from 'common-tags'
 // import socket from './socket'
 const app = createApp(App);
 app.config.globalProperties.$axios=axios;
+app.config.globalProperties.$stripIndent=stripIndent;
 // app.config.globalProperties.$socket=socket
 app.use(ElementPlus)
 app.use(store)

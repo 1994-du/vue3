@@ -1,9 +1,9 @@
 <script setup>
-import {io} from "socket.io-client"
-import { onMounted,ref,reactive, onDeactivated, onUnmounted, onActivated,nextTick } from "vue";
+import { onMounted,ref,reactive, onDeactivated, onUnmounted, onActivated,nextTick ,getCurrentInstance, computed} from "vue";
+const {proxy} = getCurrentInstance()
 const chatList = ref([])
 const chatMsg = ref('')
-let socket=ref(null)
+// console.log('历史聊天',historyMsg);
 // 获取服务器时间
 const currentTime = function(){
   let xmlHttp = new XMLHttpRequest()
@@ -13,29 +13,28 @@ const currentTime = function(){
   xmlHttp.open("HEAD",location.href,false)
   xmlHttp.send()
   let serverTime = new Date(xmlHttp.getResponseHeader("Date"))
-  // let time = serverTime.toLocaleDateString()
   return serverTime.toLocaleString()
 }
 let userId = JSON.parse(localStorage.getItem('token')).id
 onMounted(()=>{
-    socket = io('http://localhost:1234');
-    socket.on('connect',()=>{
-        console.log(socket.id,'监听客户端连接成功-connect');
-    })
-    // socket.on('message',msg=>{
-    //   console.log('服务器发送信息',msg);
-    //   chatList.value.push(msg)
-    //   to_footer()
-    // })
-    socket.on('msg_res',(msg)=>{
-      console.log('其他客户端信息',msg);
-      chatList.value.push(msg)
+  // 获取历史聊天记录
+  let historyMsg = computed(()=>{
+    return proxy.$store.state.message
+  })
+  if(historyMsg.value.length>0){
+    historyMsg.value.forEach(el=>{
+      chatList.value.push(el)
       to_footer()
     })
-    socket.on('disconnect',()=>{
-      socket.disconnect()
-      socket.close()
-    })
+  }
+  
+  proxy.$store.commit('clearMessage')
+  proxy.$socket.on('msg_res',(msg)=>{
+    // console.log('其他客户端信息',msg);
+    chatList.value.push(msg)
+    
+    to_footer()
+  })
 })
  /*滚动条到底部*/
 const to_footer = function() {
@@ -50,16 +49,12 @@ const sendMsg = ()=>{
   let userInfo=JSON.parse(localStorage.getItem('token'))
   userInfo.msg=chatMsg.value
   userInfo.time=currentTime()
-  socket.emit('send-message',userInfo)
+  proxy.$socket.emit('send-message',userInfo)
   chatList.value.push(userInfo)
+  proxy.$store.commit('addMessage',{msg:userInfo})
   to_footer()
   chatMsg.value = ''
 }
-onUnmounted(()=>{
-  console.log('onUnmounted');
-  socket.close()
-  socket=null
-})
 </script>
 <template>
 <div class="container">

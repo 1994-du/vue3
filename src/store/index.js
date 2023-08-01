@@ -4,10 +4,18 @@ export default createStore({
     state:{
         islogin:0,
         name:'dxx',
-        age:28
+        age:28,
+        message:[]
     },
     //同步操作
     mutations:{
+        addMessage(state,arg){
+            console.log('arg',arg);
+            state.message.push(arg.msg)
+        },
+        clearMessage(state,arg){
+            state.message=[]
+        },
         changAge(state,arg){
             state.age+=arg.num
         },

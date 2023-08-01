@@ -51,69 +51,106 @@ h4::before{
   background-image: url(/static/image/her.jpg);
   background-size: cover;
   .layout {
-    flex: 1;
+    height: 100%;
     display: flex;
-    overflow: hidden;
-    &_menu {
-        font-size: var(--fontSize);
-        font-weight: bold;
-        max-width: 50vw;
-        min-width: 5vw;
+    flex-direction: column;
+    header{
+        padding: 10px;
+        height: 30px;
         flex-shrink: 0;
-        border: 1px solid #eee;
+        background-color: #fff;
         display: flex;
-        flex-direction: column;
         align-items: center;
-        position: relative;
-        .el-autocomplete {
-            width: 100%;
-            border-bottom: 1px solid #eee;
-            position: sticky;
-            top: 0;
-            left: 0;
-            z-index: 2;
-            background-color: white;
-          .el-input__wrapper{
-            box-shadow: none;
-          }
+        color: #252b3a;
+        justify-content: space-between;
+        border-bottom: 1px solid #252b3a;
+        .userinfo{
+            display: flex;
+            align-items: center;
+            img{
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                margin-left: 10px;
+            }
         }
-        .el-menu{
-            width: 100%;
-            .el-menu-item{
-                height: 40px;
+        .operation{
+            display: flex;
+            align-items: center;
+            img{
+                width: 20px;
+                height: 20px;
+                margin: 0 10px;
+            }
+        }
+    }
+    .container{
+        flex: 1;
+        overflow: hidden;
+        display: flex;
+
+        .layout_menu {
+            font-size: var(--fontSize);
+            font-weight: bold;
+            max-width: 50vw;
+            min-width: 5vw;
+            flex-shrink: 0;
+            border: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            .el-autocomplete {
+                width: 100%;
                 border-bottom: 1px solid #eee;
-                user-select: none;
-                color: var(--menu-font-color);
-                span{
+                position: sticky;
+                top: 0;
+                left: 0;
+                z-index: 2;
+                background-color: white;
+              .el-input__wrapper{
+                box-shadow: none;
+              }
+            }
+            .el-menu{
+                width: 100%;
+                .el-menu-item{
                     height: 40px;
-                    line-height: 40px;
+                    border-bottom: 1px solid #eee;
+                    user-select: none;
+                    color: var(--menu-font-color);
+                    span{
+                        height: 40px;
+                        line-height: 40px;
+                    }
+                }
+                .is-active{
+                    color: var(--h4label);
                 }
             }
-            .is-active{
-                color: var(--h4label);
+            .drop_box{
+                width: 5px;
+                height: 100%;
+                position: absolute;
+                right: 0;
+                cursor: ew-resize;
+                z-index: 2;
             }
         }
-        .drop_box{
-            width: 5px;
-            height: 100%;
-            position: absolute;
-            right: 0;
-            cursor: ew-resize;
-            z-index: 2;
+        .layout_content{
+            flex: 1;
+            padding: 15px;
+            overflow-x: hidden;
+            overflow-y: auto;
+            &::-webkit-scrollbar{
+              display: none;
+            }
+        }
+        .login_active{
+          background: #2c3e50;
         }
     }
-    &_content{
-        flex: 1;
-        padding: 15px;
-        overflow-x: hidden;
-        overflow-y: auto;
-        &::-webkit-scrollbar{
-          display: none;
-        }
-    }
-    .login_active{
-      background: #2c3e50;
-    }
+    
   }
 }
 .toTop{

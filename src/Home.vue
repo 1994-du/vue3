@@ -1,50 +1,101 @@
 <template>
     <div class="layout">
-        <el-scrollbar>
-            <div class="layout_menu">
-                <el-autocomplete
-                    v-model="searchKey"
-                    :fetch-suggestions="querySearch"
-                    :trigger-on-focus="false"
-                    clearable
-                    class="inline-input w-50"
-                    placeholder="搜索关键字"
-                    @select="handleSelect"
-                    ref="searchIpt"
-                />
-                <el-menu>
-                    <el-menu-item
-                        v-for="(menuitem,index) in menus" 
-                        :key="menuitem.meta.name+index"
-                        :index="menuitem.meta.name+index"
-                        @click="toPage(menuitem)">
-                        <span>{{menuitem.meta.name}}</span>
-                    </el-menu-item>
-                </el-menu>
-                <div class="drop_box" @mousedown="menuMouseDown"></div>
+        <header>
+            <div class="userinfo">
+                <span>{{ userInfo.name }}</span>
+                <img :src="userInfo.avatar" alt="">
             </div>
-        </el-scrollbar>
-        <div class="layout_content">
-            <router-view></router-view>
-        </div>
-        <div class="toTop" @click="toTop">
-            <img src="/static/image/toTop.svg" alt="">
+            <span>传入的消息、发送的消息</span>
+            <div class="operation">
+                
+                <el-tooltip
+                    class="box-item"
+                    effect="dark"
+                    content="消息"
+                    placement="top"
+                >
+                    <el-badge :value="message.length==0?'':message.length" class="item">
+                        <img src="/static/image/remind.png" alt="" @click="$router.push('/websocket')">
+                    </el-badge>
+                </el-tooltip>
+                <el-tooltip
+                    class="box-item"
+                    effect="dark"
+                    content="设置"
+                    placement="top"
+                >
+                    <img class="set" src="/static/image/set.png" alt="">
+                </el-tooltip>
+                <el-popconfirm title="确定退出登录?">
+                    <template #reference>
+                        <!-- <el-tooltip
+                            class="box-item"
+                            effect="dark"
+                            content="退出登录"
+                            placement="top"
+                        >
+                            <img class="set" src="/static/image/logout.png" alt="">
+                        </el-tooltip> -->
+                        <img class="set" src="/static/image/logout.png" alt="">
+                    </template>
+                </el-popconfirm>
+            </div>
+        </header>
+        <div class="container">
+            <el-scrollbar>
+                <div class="layout_menu">
+                    <el-autocomplete
+                        v-model="searchKey"
+                        :fetch-suggestions="querySearch"
+                        :trigger-on-focus="false"
+                        clearable
+                        class="inline-input w-50"
+                        placeholder="搜索关键字"
+                        @select="handleSelect"
+                        ref="searchIpt"
+                    />
+                    <el-menu>
+                        <el-menu-item
+                            v-for="(menuitem,index) in menus" 
+                            :key="menuitem.meta.name+index"
+                            :index="menuitem.meta.name+index"
+                            @click="toPage(menuitem)">
+                            <span>{{menuitem.meta.name}}</span>
+                        </el-menu-item>
+                    </el-menu>
+                    <div class="drop_box" @mousedown="menuMouseDown"></div>
+                </div>
+            </el-scrollbar>
+            <div class="layout_content">
+                <router-view></router-view>
+            </div>
+            <div class="toTop" @click="toTop">
+                <img src="/static/image/toTop.svg" alt="">
+            </div>
         </div>
     </div>
     
 </template>
-<!-- <template>
-    login
-</template> -->
 <script setup>
     import {useRouter} from 'vue-router'
-    import {computed, onMounted, onBeforeMount, onUpdated, onUnmounted, onBeforeUnmount,getCurrentInstance,ref,watch,watchEffect} from 'vue'
+    import {computed, onMounted, onBeforeMount, onUpdated, onUnmounted, onBeforeUnmount,getCurrentInstance,ref,watch,watchEffect, reactive} from 'vue'
+    import {useStore} from 'vuex'
+    const store = useStore()
     const { proxy } = getCurrentInstance()
     const router=useRouter()
     let searchKey = ref('');//搜索关键字
     let currentRouter = ref('')//当前路由
+    let userInfo = reactive({})
     const menus = computed(()=>{
         return router.getRoutes().filter(el=>el.path!='/'&&el.path!='/login')
+    })
+    const message = computed(()=>{
+        console.log(store.state.message);
+        return store.state.message
+    })
+    console.log('message',message);
+    watch(message,(newVal,oldVal)=>{
+        console.log('store',newVal );
     })
     watch(()=>router.currentRoute.value.path,(newVal,oldVal)=>{
         currentRouter.value=newVal;
@@ -99,8 +150,9 @@
     }
     onBeforeMount(()=>{
         let token = localStorage.getItem('token')
-        if(!token){
-            
+        if(token){
+            userInfo=JSON.parse(token)
+            console.log(userInfo.userInfo);
         }
     })
     onMounted(()=>{})

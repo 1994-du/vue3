@@ -4,22 +4,22 @@
     <span>浏览器内核</span>
     <div class="imgs">
         <div class="img_item">
-            <img src="static/image/browser.jpg" alt="Trident" title="Trident" class="ie_browser">
+            <img src="/static/image/browser.jpg" alt="Trident" title="Trident" class="ie_browser">
         </div>
         <div class="img_item">
-            <img src="static/image/browser.jpg" alt="Trident" title="Trident" class="edge_browser">
+            <img src="/static/image/browser.jpg" alt="Trident" title="Trident" class="edge_browser">
         </div>
         <div class="img_item">
-            <img src="static/image/browser.jpg" alt="Chromium/Blink" title="Chromium/Blink" class="chrome_browser">
+            <img src="/static/image/browser.jpg" alt="Chromium/Blink" title="Chromium/Blink" class="chrome_browser">
         </div>
         <div class="img_item">
-            <img src="static/image/browser.jpg" alt="Gecko" title="Gecko" class="firefox_browser">
+            <img src="/static/image/browser.jpg" alt="Gecko" title="Gecko" class="firefox_browser">
         </div>
         <div class="img_item">
-            <img src="static/image/browser.jpg" alt="Persto/Blink" title="Persto/Blink" class="opera_browser">
+            <img src="/static/image/browser.jpg" alt="Persto/Blink" title="Persto/Blink" class="opera_browser">
         </div>
         <div class="img_item">
-            <img src="static/image/browser.jpg" alt="Webkit" title="Webkit" class="safari_browser">
+            <img src="/static/image/browser.jpg" alt="Webkit" title="Webkit" class="safari_browser">
         </div>
     </div>
 </div>

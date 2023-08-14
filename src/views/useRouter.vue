@@ -3,11 +3,11 @@
 <div class="use_router">
     <h2>一、创建路由文件</h2>
     <p>1.路由文件 router/index.js</p>
-    <img src="static/image/router-index.png" alt="">
+    <img src="/static/image/router-index.png" alt="">
     <p>2.所有路由地址 router/routes.js</p>
-    <img src="static/image/router-routes.png" alt="">
+    <img src="/static/image/router-routes.png" alt="">
     <h2>二、使用路由</h2>
-    <img src="static/image/router-useRouter.png" alt="">
+    <img src="/static/image/router-useRouter.png" alt="">
 </div>
 </template>
 

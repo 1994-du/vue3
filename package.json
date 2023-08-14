@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@highlightjs/vue-plugin": "^2.1.0",
+    "@rollup/plugin-alias": "^5.0.0",
     "axios": "^1.4.0",
     "common-tags": "^1.8.2",
     "element-plus": "^2.3.4",

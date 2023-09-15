@@ -3,7 +3,7 @@
     <div class="login_inner">
         <div class="login_box" :class="loginType==0?'active':'disactive'">
             <div class="login_c" v-if="loginType==0">
-                <h4>登录</h4>
+                <span class="current_status">登录</span>
                 <div class="ipts">
                     <el-input type="text" placeholder="账号" v-model="account"></el-input>
                     <el-input type="password" placeholder="密码" v-model="password" @keydown.enter="Login"></el-input>
@@ -18,7 +18,7 @@
         </div>
         <div class="registry_box" :class="loginType==1?'active':'disactive'">
             <div class="registry_c" v-if="loginType!=0">
-                注册
+                <span class="current_status">注册</span>
                 <div class="ipts">
                     <el-input type="text" placeholder="用户名" v-model="username"></el-input>
                     <el-input type="text" placeholder="账号" v-model="account"></el-input>
@@ -45,7 +45,7 @@ let password=ref('');//密码
 let router = useRouter()
 // 登录
 const Login=()=>{
-    // localStorage.setItem('token',Math.random()*100)
+    // sessionStorage.setItem('token',Math.random()*100)
     // router.push('/')
     let param={
         // username:username.value,
@@ -53,9 +53,8 @@ const Login=()=>{
         password:password.value
     }
     proxy.$axios.post('/api/login',{...param}).then(res=>{
-        console.log('登录',res);
         if(res.status==='success'){
-            localStorage.setItem('token',JSON.stringify(res.data))
+            sessionStorage.setItem('token',JSON.stringify(res.data))
             router.push('/')
         }
     })

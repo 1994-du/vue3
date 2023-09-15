@@ -15,6 +15,14 @@ var http = createServer((req,res)=>{
         case '/registry':
           Registry(req,res)
         break;
+        case '/test':
+          setTimeout(()=>{
+            res.end(JSON.stringify({
+                msg:'test',
+                status:'error'
+            }))
+          },10000)
+          break;
         default:
             res.end(indexHtml)
         break;
@@ -27,6 +35,7 @@ var io = new Server(http,{
   }
 })
 io.on('connection',(socket)=>{
+  console.log(socket);
   socket.on('send-message',(data)=>{
     socket.broadcast.emit('msg_res',data)
   })

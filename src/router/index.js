@@ -8,7 +8,7 @@ router.onError=(err)=>{
     console.log('路由错误',err)
 }
 router.beforeEach((to,from,next)=>{
-    const token =localStorage.getItem('token')
+    const token =sessionStorage.getItem('token')
     if(to.path==='/login'){
         next()
     }else{

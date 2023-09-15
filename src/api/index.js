@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 const Axios = axios.create({
-    timeout:3000
+    timeout:30000
 })
 
 Axios.interceptors.request.use(req=>{

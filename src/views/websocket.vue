@@ -15,7 +15,7 @@ const currentTime = function(){
   let serverTime = new Date(xmlHttp.getResponseHeader("Date"))
   return serverTime.toLocaleString()
 }
-let userId = JSON.parse(localStorage.getItem('token')).id
+let userId = JSON.parse(sessionStorage.getItem('token')).id
 onMounted(()=>{
   // 获取历史聊天记录
   let historyMsg = computed(()=>{
@@ -46,7 +46,7 @@ const to_footer = function() {
 }
 // 发送消息
 const sendMsg = ()=>{
-  let userInfo=JSON.parse(localStorage.getItem('token'))
+  let userInfo=JSON.parse(sessionStorage.getItem('token'))
   userInfo.msg=chatMsg.value
   userInfo.time=currentTime()
   proxy.$socket.emit('send-message',userInfo)

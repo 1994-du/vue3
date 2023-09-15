@@ -4,9 +4,9 @@ import router from "@/router"
 let websocketSrc = 'http://localhost:1234'
 let socket = io(websocketSrc)
 socket.on('connect',()=>{
-    console.log(socket.id,'监听客户端连接成功-connect');
-    let userInfo=JSON.parse(localStorage.getItem('token'))
-    console.log('userInfo',userInfo);
+    // console.log(socket.id,'监听客户端连接成功-connect');
+    // let userInfo=JSON.parse(sessionStorage.getItem('token'))
+    // console.log('userInfo',userInfo);
     // userInfo.msg=chatMsg.value
     // userInfo.time=currentTime()
     // proxy.$socket.emit('send-message',userInfo)

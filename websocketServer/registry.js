@@ -14,7 +14,7 @@ const Registry = function(req,res){
             }))
         }else{
             usersData.push({
-                id:(Math.random()+new Date().getTime()).toString(36).slice(0,8),
+                id:new Date().getTime()*Math.random()*100000,
                 account:param.account,
                 name:param.username,
                 password:param.password,

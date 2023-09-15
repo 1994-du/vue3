@@ -54,7 +54,7 @@
     const { proxy } = getCurrentInstance()
     const router=useRouter()
     let searchKey = ref('');//搜索关键字
-    let userInfo = reactive({})
+    let userInfo = reactive({});//用户信息
     const menus = computed(()=>{
         return router.getRoutes().filter(el=>el.path!='/'&&el.path!='/login')
     })

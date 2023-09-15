@@ -13,7 +13,6 @@
             </div>
             <div class="login_d" v-else>
                 <el-button @click="loginType=0">登录</el-button>
-                <!-- <el-button @click="loginType=1">注册</el-button> -->
             </div>
         </div>
         <div class="registry_box" :class="loginType==1?'active':'disactive'">
@@ -25,7 +24,6 @@
                     <el-input type="password" placeholder="密码" v-model="password" @keydown.enter="Registry"></el-input>
                 </div>
                 <el-button @click="Registry">注册</el-button>
-                <!-- <el-button @click="loginType=0">登录</el-button> -->
             </div>
             <div class="registry_d" v-else>
                 <el-button @click="loginType=1">注册</el-button>

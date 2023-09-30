@@ -1,4 +1,3 @@
-const { log } = require('console');
 const fs = require('fs')
 var usersData = JSON.parse(fs.readFileSync(require.resolve('./data/login.json'),{encoding:'utf8'}));//所有用户列表
 const Registry = function(req,res){

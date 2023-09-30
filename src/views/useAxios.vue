@@ -11,27 +11,12 @@
         <h2>
             请求方法：get、post、delete、put、patch、options、head
         </h2>
-        <h2>Axios取消请求</h2>
-        <el-button @click="toRequest">请求</el-button>
     </div>
 </template>
 <script setup>
 import {api} from "@/api/api.js"
 import { getCurrentInstance } from "vue";
 const {proxy} = getCurrentInstance();
-const getReq = function(){
-    proxy.$axios.get(api.getLoL).then(res=>{
-        console.log(res.data)
-    })
-}
-
-const controller = new AbortController();
-const toRequest = function(){
-    proxy.$axios.post('/api/test',{signal: controller.signal}).then(res=>{
-        console.log('test',res);
-    })
-    controller.abort()
-}
 </script>
 <style lang="less" scoped>
 h2,p{

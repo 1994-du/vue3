@@ -3,7 +3,8 @@ var {Server} = require('socket.io')
 const fs = require('fs')
 const url = require('url')
 const Login = require('./login') // 登录
-const Registry = require('./registry')
+const Registry = require('./registry') //注册
+const Upload = require('./upload')//上传
 const indexHtml = fs.readFileSync(require.resolve('./index.html'),{encoding:'utf8'})
 var http = createServer((req,res)=>{
     const pathname = url.parse(req.url).pathname
@@ -15,13 +16,8 @@ var http = createServer((req,res)=>{
         case '/registry':
           Registry(req,res)
         break;
-        case '/test':
-          setTimeout(()=>{
-            res.end(JSON.stringify({
-                msg:'test',
-                status:'error'
-            }))
-          },10000)
+        case '/upload':
+          Upload(req,res)
           break;
         default:
             res.end(indexHtml)
@@ -35,7 +31,6 @@ var io = new Server(http,{
   }
 })
 io.on('connection',(socket)=>{
-  console.log(socket);
   socket.on('send-message',(data)=>{
     socket.broadcast.emit('msg_res',data)
   })
@@ -43,32 +38,3 @@ io.on('connection',(socket)=>{
 http.listen(1234,()=>{
   console.log('http://localhost:1234')
 })
-
-
-
-
-// var app = http.createServer(handler)
-// const { log } = require('console')
-
-// var fs = require('fs')
-
-// app.listen(1234,()=>{
-//   log('端口：1234')
-// })
-// function handler(req,res){
-//   fs.readFile(__dirname+'/index.html',(err,data)=>{
-//     if(err){
-//       res.writeHead(500)
-//       return res.end('Error loading index.html')
-//     }
-//     res.writeHead(200)
-//     res.end(data)
-//   })
-// }
-// io.on('connection',(socket)=>{
-//   log('连接')
-//   socket.on('sendMsg',function(data){
-//     socket.emit('newMsg',data)
-//     socket.broadcast.emit('msg_res',data)
-//   })
-// })

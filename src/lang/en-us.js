@@ -1,6 +1,8 @@
 export default{
     common:{
         login:'Login',
-        register:'Register'
+        register:'Register',
+        confirm:'Confirm',
+        cancel:'Cancel'
     }
 }

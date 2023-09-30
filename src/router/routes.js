@@ -210,5 +210,12 @@ export default[
             name:'登录'
         },
         component:()=>import('@/Login.vue')
+    },
+    {
+        path:'/set',
+        meta:{
+            name:'设置'
+        },
+        component:()=>import('@/Set.vue')
     }
 ]

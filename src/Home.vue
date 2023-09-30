@@ -2,13 +2,13 @@
     <div class="layout">
         <header>
             <div class="userinfo">
-                <span>{{ userInfo.name }}</span>
-                <img :src="userInfo.avatar" alt="">
+                <span>{{ userInfo.value.name }}</span>
+                <img :src="userInfo.value.avatar" alt="">
             </div>
             <!-- <span>传入的消息、发送的消息{{ $t('common.login') }}</span> -->
             <div class="operation">
-                <img class="set" src="/static/image/set.png" alt="">
-                <img class="set" src="/static/image/logout.png" alt="" @click="toLoginOut">
+                <img class="set" src="/static/image/set.png" alt="" @click="$router.push('/set')">
+                <img class="set" src="/static/image/logout.png" alt="" @click="dialogVisibleLoginOut=true">
             </div>
         </header>
         <div class="container">
@@ -44,17 +44,36 @@
             </div>
         </div>
     </div>
-    
+    <!-- 确认退出登录 -->
+    <el-dialog
+        v-model="dialogVisibleLoginOut"
+        width="200px"
+        :before-close="handleClose"
+    >
+        <span>确认退出登录？</span>
+        <template #header>
+            <h6 class="dialog__headercon">提示</h6>
+        </template>
+        <template #footer>
+            <span class="dialog-footer">
+                <el-button type="primary" @click="toLoginOut">{{$t('common.confirm')}}</el-button>
+                <el-button @click="dialogVisibleLoginOut = false">{{ $t('common.cancel') }}</el-button>
+            </span>
+        </template>
+    </el-dialog>
 </template>
 <script setup>
     import {useRouter} from 'vue-router'
-    import {computed, onMounted, onBeforeMount, onUpdated, onUnmounted, onBeforeUnmount,getCurrentInstance,ref,watch,watchEffect, reactive} from 'vue'
+    import {computed, onMounted, onBeforeMount, onUpdated, onUnmounted, onBeforeUnmount,getCurrentInstance,ref,watch,watchEffect, reactive, onActivated} from 'vue'
     import {useStore} from 'vuex'
     const store = useStore()
     const { proxy } = getCurrentInstance()
     const router=useRouter()
     let searchKey = ref('');//搜索关键字
-    let userInfo = reactive({});//用户信息
+    let userInfo = reactive({
+        value:{}
+    });//用户信息
+    let dialogVisibleLoginOut = ref(false)//退出登录提示
     const menus = computed(()=>{
         return router.getRoutes().filter(el=>el.path!='/'&&el.path!='/login')
     })
@@ -110,14 +129,30 @@
     const toLoginOut=()=>{
         sessionStorage.removeItem('token')
         proxy.$router.push('/login')
+        dialogVisibleLoginOut.value=false;
     }
+    const handleClose=()=>{
+        console.log('beforeClose');
+    } 
     onBeforeMount(()=>{
+        console.log('beforeMount');
+    })
+    onMounted(()=>{
+        console.log('mounted');
         let token = sessionStorage.getItem('token')
         if(token){
-            userInfo=JSON.parse(token)
+            userInfo.value=JSON.parse(token)
+            console.log(userInfo);
         }
     })
-    onMounted(()=>{})
+    onActivated(()=>{
+        console.log('activated');
+        let token = sessionStorage.getItem('token')
+        if(token){
+            userInfo.value=JSON.parse(token)
+            console.log(userInfo);
+        }
+    })
     onUpdated(()=>{})
     onBeforeUnmount(()=>{})
     onUnmounted(()=>{})

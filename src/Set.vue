@@ -2,7 +2,7 @@
 import { ref ,getCurrentInstance} from 'vue';
 import { Plus } from '@element-plus/icons-vue';
 const {proxy} = getCurrentInstance()
-
+const imageUrl = ref('')
 const handleUploadChange = (e)=>{
   let file = e.target.files[0]
   console.log(file);
@@ -14,12 +14,20 @@ const handleUploadChange = (e)=>{
     data:formData
   }).then(res=>{
     console.log('res',res);
+    imageUrl.value = res.url;
   })
 }
+const openUpload = function(){
+  let ipt = document.getElementsByTagName('input')[0]
+  ipt.click()
+}
+
 </script>
 <template>
 <div>
-  <input type="file" @change="handleUploadChange">
+  <input type="file" style="display: none;" @change="handleUploadChange">
+  <el-icon class="avatar-uploader-icon" @click="openUpload"><Plus /></el-icon>
+  <img v-if="imageUrl" :src="imageUrl" class="avatar" />
     <!-- <el-upload
         ref="upload"
         class="avatar-uploader"

@@ -1,4 +1,5 @@
 var { createServer } = require('http')
+var express = require('express')
 var {Server} = require('socket.io')
 const fs = require('fs')
 const url = require('url')
@@ -6,24 +7,14 @@ const Login = require('./login') // 登录
 const Registry = require('./registry') //注册
 const Upload = require('./upload')//上传
 const indexHtml = fs.readFileSync(require.resolve('./index.html'),{encoding:'utf8'})
-var http = createServer((req,res)=>{
-    const pathname = url.parse(req.url).pathname
-    res.writeHead(200,{'content-type':'text/html;charset=UTF8'})
-    switch(pathname){
-        case '/login':
-            Login(req,res)
-        break;
-        case '/registry':
-          Registry(req,res)
-        break;
-        case '/upload':
-          Upload(req,res)
-          break;
-        default:
-            res.end(indexHtml)
-        break;
-    }
+var app = express()
+app.all('/',(req,res)=>{
+  res.end(indexHtml)
 })
+app.all('/login',(req,res)=>Login(req,res))
+app.all('/registry',(req,res)=>Registry(req,res))
+app.all('/upload',(req,res)=>Upload(req,res))
+var http = createServer(app)
 var io = new Server(http,{
   cors:{
     origin:'*',

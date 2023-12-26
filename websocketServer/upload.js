@@ -3,6 +3,7 @@ const fs = require('fs')
 const multiparty = require('multiparty')
 const path = require('path')
 const Upload = function(req,res){
+    res.writeHead(200,{'content-type':'text/html;charset=UTF8'})
     let form = new multiparty.Form()
     form.parse(req)
     form.on('part',(part)=>{
@@ -11,7 +12,7 @@ const Upload = function(req,res){
         part.pipe(dest);
         dest.on('finish', () => {
             let pth = path.join(__dirname,'./data/images/')
-            let filepth = path.join(pth,part.filename)
+            let filepth = path.join(pth,fileName)
             res.end(JSON.stringify({
                 status:'success',
                 msg:'上传成功！',

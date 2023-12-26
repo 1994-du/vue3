@@ -201,6 +201,13 @@ export default[
                     name:'即时通讯'
                 },
                 component:()=>import('@/views/websocket.vue')
+            },
+            {
+                path:'/promise',
+                meta:{
+                    name:'Promise'
+                },
+                component:()=>import('@/views/promise.vue')
             }
         ]
     },

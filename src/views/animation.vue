@@ -24,8 +24,17 @@
     0%{}
     percentage{}
     100%{}
+}
+// sass 使用for循环
+@for $i from 1 through $n{
+    &:nth-child(#{$i}){
+        transform: rotate(#{360deg / $n * $i});
+        &::after,&::before{
+            animation-delay: - calc($animationTime / $n * ($i - 1) * 6);
+        }
+    }
 }"></highlightjs>
-        <el-button @click="drawer = true">展开{{ drawer }}</el-button>
+        <el-button @click="drawer = true" style="position: fixed;bottom: 20px;">展开{{ drawer }}</el-button>
     </div>
     <div class="el-drawer-wrap">
         <el-drawer :withHeader="false" v-model="drawer" :direction="direction" size="50%">
@@ -44,10 +53,7 @@
                 <div class="item"></div>
                 <div class="light_ball"></div>
                 <bg :width="100"></bg>
-                <div class="nxhz">
-                    <div class="box1"></div>
-                    <div class="box2"></div>
-                </div>
+                <animationDemo1/>
             </div>
         </el-drawer>
     </div>
@@ -56,6 +62,7 @@
 import bg from '@/components/bg.vue'
 import animations from "@/json/animation.json"
 import { onActivated, onDeactivated, onUnmounted, ref } from "vue";
+import animationDemo1 from '@/components/animationDemo1';
 let animation = ref(animations)
 let drawer = ref(false)
 let direction = ref('rtl')

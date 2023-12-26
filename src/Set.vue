@@ -2,23 +2,14 @@
 import { ref ,getCurrentInstance} from 'vue';
 import { Plus } from '@element-plus/icons-vue';
 const {proxy} = getCurrentInstance()
-const imageUrl = ref('')
-const handleAvatarSuccess = (response,uploadFile)=>{
-    console.log(response,uploadFile);
-    // imageUrl.value = URL.createObjectURL(uploadFile.raw)
-}
-const beforeAvatarUpload = (file)=>{
-  return true
-}
-const handleUploadChange = (file)=>{
+
+const handleUploadChange = (e)=>{
+  let file = e.target.files[0]
   console.log(file);
   let formData = new FormData()
-  formData.append('file',file.raw)
+  formData.append('file',file)
   proxy.$axios({
     url:'/api/upload',
-    headers: {
-      'Content-Type': 'multipart/form-data'
-    },
     method:'POST',
     data:formData
   }).then(res=>{
@@ -28,7 +19,9 @@ const handleUploadChange = (file)=>{
 </script>
 <template>
 <div>
-    <el-upload
+  <input type="file" @change="handleUploadChange">
+    <!-- <el-upload
+        ref="upload"
         class="avatar-uploader"
         :auto-upload="false"
         :show-file-list="false"
@@ -38,7 +31,7 @@ const handleUploadChange = (file)=>{
         >
         <img v-if="imageUrl" :src="imageUrl" class="avatar" />
         <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
-    </el-upload>
+    </el-upload> -->
 </div>
 </template>
 <style scoped>

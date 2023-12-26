@@ -1,0 +1,3 @@
+<template>
+    Promise
+</template>

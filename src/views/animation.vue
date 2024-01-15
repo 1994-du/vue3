@@ -53,7 +53,7 @@
                 <div class="item"></div>
                 <div class="light_ball"></div>
                 <bg :width="100"></bg>
-                <animationDemo1/>
+                <!-- <animationDemo1/> -->
             </div>
         </el-drawer>
     </div>
@@ -62,7 +62,7 @@
 import bg from '@/components/bg.vue'
 import animations from "@/json/animation.json"
 import { onActivated, onDeactivated, onUnmounted, ref } from "vue";
-import animationDemo1 from '@/components/animationDemo1';
+// import animationDemo1 from '@/components/animationDemo1';
 let animation = ref(animations)
 let drawer = ref(false)
 let direction = ref('rtl')

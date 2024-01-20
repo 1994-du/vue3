@@ -1,7 +1,7 @@
 :root {
     --h4label:#409eff;
     --menu-font-color:#6f6d6d;
-    --fontColor:#f7f8f9;
+    --fontColor:#000000;
     --fontSize:14px;
     --inputColor:white;
 }
@@ -13,6 +13,12 @@ h1,.hljs{
     font-weight: bold;
     margin:10px 0;
 }
+.el-scrollbar__bar{
+    z-index:2!important;
+}
+// ::v-deep .el-scrollbar__thumb {
+//     background-color: #ff0000; /* 红色示例 */
+// }
 h4{
     width: fit-content;
     position: relative;
@@ -73,8 +79,8 @@ h4::before{
   flex-direction: column;
   overflow: hidden;
   min-width: 960px;
-  background-image: url(/static/image/her.jpg);
-  background-size: cover;
+//   background-image: url(/static/image/her.jpg);
+//   background-size: cover;
   .layout {
     height: 100%;
     display: flex;
@@ -88,7 +94,7 @@ h4::before{
         align-items: center;
         color: #252b3a;
         justify-content: space-between;
-        border-bottom: 1px solid #252b3a;
+        border-bottom: 1px solid #9b9b9b;
         .userinfo{
             display: flex;
             align-items: center;
@@ -139,6 +145,7 @@ h4::before{
             }
             .el-menu{
                 width: 100%;
+                border-right: none;
                 .el-menu-item{
                     height: 40px;
                     border-bottom: 1px solid #eee;

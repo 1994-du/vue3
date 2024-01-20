@@ -195,13 +195,13 @@ export default[
                 },
                 component:()=>import('@/views/vue3/watch.vue')
             },
-            {
-                path:'/websocket',
-                meta:{
-                    name:'即时通讯'
-                },
-                component:()=>import('@/views/websocket.vue')
-            },
+            // {
+            //     path:'/websocket',
+            //     meta:{
+            //         name:'即时通讯'
+            //     },
+            //     component:()=>import('@/views/websocket.vue')
+            // },
             {
                 path:'/promise',
                 meta:{

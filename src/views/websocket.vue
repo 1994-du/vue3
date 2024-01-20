@@ -18,23 +18,23 @@ const currentTime = function(){
 let userId = JSON.parse(sessionStorage.getItem('token')).id
 onMounted(()=>{
   // 获取历史聊天记录
-  let historyMsg = computed(()=>{
-    return proxy.$store.state.message
-  })
-  if(historyMsg.value.length>0){
-    historyMsg.value.forEach(el=>{
-      chatList.value.push(el)
-      to_footer()
-    })
-  }
+  // let historyMsg = computed(()=>{
+  //   return proxy.$store.state.message
+  // })
+  // if(historyMsg.value.length>0){
+  //   historyMsg.value.forEach(el=>{
+  //     chatList.value.push(el)
+  //     to_footer()
+  //   })
+  // }
   
-  proxy.$store.commit('clearMessage')
-  proxy.$socket.on('msg_res',(msg)=>{
-    // console.log('其他客户端信息',msg);
-    chatList.value.push(msg)
+  // proxy.$store.commit('clearMessage')
+  // proxy.$socket.on('msg_res',(msg)=>{
+  //   // console.log('其他客户端信息',msg);
+  //   chatList.value.push(msg)
     
-    to_footer()
-  })
+  //   to_footer()
+  // })
 })
  /*滚动条到底部*/
 const to_footer = function() {

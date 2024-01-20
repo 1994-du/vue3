@@ -5,16 +5,19 @@ const {proxy} = getCurrentInstance()
 const imageUrl = ref('')
 const handleUploadChange = (e)=>{
   let file = e.target.files[0]
-  console.log(file);
+  console.log(file,JSON.parse(sessionStorage.getItem('token')).id);
   let formData = new FormData()
   formData.append('file',file)
+  formData.append('id',JSON.parse(sessionStorage.getItem('token')).id)
+  console.log(formData.getAll('file'));
   proxy.$axios({
     url:'/api/upload',
     method:'POST',
     data:formData
   }).then(res=>{
-    console.log('res',res);
-    imageUrl.value = res.url;
+    if(res.status='success'){
+      imageUrl.value = res.url;
+    }
   })
 }
 const openUpload = function(){
@@ -25,7 +28,7 @@ const openUpload = function(){
 </script>
 <template>
 <div>
-  <input type="file" style="display: none;" @change="handleUploadChange">
+  <input ref="upload" type="file" style="display: none;" @change="handleUploadChange">
   <el-icon class="avatar-uploader-icon" @click="openUpload"><Plus /></el-icon>
   <img v-if="imageUrl" :src="imageUrl" class="avatar" />
     <!-- <el-upload

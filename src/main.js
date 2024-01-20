@@ -10,7 +10,7 @@ import 'highlight.js/styles/atom-one-dark.css'
 import hljsVuePlugin from "@highlightjs/vue-plugin"
 import 'highlight.js/lib/common'
 import { stripIndent } from 'common-tags';//代码显示空格
-import socket from '@/api/websocket';//即时通讯
+// import socket from '@/api/websocket';//即时通讯
 import LanguageZH from '@/lang/zh-cn.js'
 import LanguageEN from '@/lang/en-us.js'
 import { createI18n } from 'vue-i18n'
@@ -22,7 +22,7 @@ const i18n = new createI18n({
     }
 })
 const app = createApp(App);
-app.config.globalProperties.$socket=socket;
+// app.config.globalProperties.$socket=socket;
 app.config.globalProperties.$axios=axios;
 app.config.globalProperties.$stripIndent=stripIndent;
 app.use(ElementPlus)

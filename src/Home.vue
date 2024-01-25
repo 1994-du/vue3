@@ -47,9 +47,7 @@
     <!-- 确认退出登录 -->
     <el-dialog
         v-model="dialogVisibleLoginOut"
-        width="200px"
-        :before-close="handleClose"
-    >
+        width="200px">
         <span>确认退出登录？</span>
         <template #header>
             <h6 class="dialog__headercon">提示</h6>
@@ -131,26 +129,13 @@
         proxy.$router.push('/login')
         dialogVisibleLoginOut.value=false;
     }
-    const handleClose=()=>{
-        console.log('beforeClose');
-    } 
-    onBeforeMount(()=>{
-        console.log('beforeMount');
-    })
-    onMounted(()=>{
-        console.log('mounted');
-        let token = sessionStorage.getItem('token')
-        if(token){
-            userInfo.value=JSON.parse(token)
-            console.log(userInfo);
-        }
-    })
+    onBeforeMount(()=>{})
+    onMounted(()=>{})
     onActivated(()=>{
         console.log('activated');
         let token = sessionStorage.getItem('token')
         if(token){
             userInfo.value=JSON.parse(token)
-            console.log(userInfo);
         }
     })
     onUpdated(()=>{})

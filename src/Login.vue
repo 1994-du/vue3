@@ -35,6 +35,7 @@
 <script setup>
 import { getCurrentInstance, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { toLogin ,toRegistry} from "@/api/api";
 const { proxy } = getCurrentInstance()
 let loginType=ref(0);// 当前状态
 let account = ref('');//账号
@@ -43,14 +44,17 @@ let password=ref('');//密码
 let router = useRouter()
 // 登录
 const Login=()=>{
-    // sessionStorage.setItem('token',Math.random()*100)
-    // router.push('/')
     let param={
-        // username:username.value,
         account:account.value,
         password:password.value
     }
-    proxy.$axios.post('/api/login',{...param}).then(res=>{
+    toLogin(param).then(res=>{
+        console.log('res',res);
+        let blob = new Blob(res.data.avatar.data,{type:'image/jpeg'})
+        let avatar = URL.createObjectURL(blob)
+        // res.data.avatar = avatar
+        console.log('blob',URL.createObjectURL(blob));
+        console.log('avatar',avatar);
         if(res.status==='success'){
             sessionStorage.setItem('token',JSON.stringify(res.data))
             router.push('/')
@@ -64,9 +68,7 @@ const Registry = ()=>{
         account:account.value,
         password:password.value
     }
-    proxy.$axios.post('/api/registry',{...param}).then(res=>{
-        console.log('注册',res);
-    })
+    toRegistry(param)
 }
 </script>
 <style lang="less" scoped>

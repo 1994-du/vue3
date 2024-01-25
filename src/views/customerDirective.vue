@@ -6,8 +6,6 @@
 <h4>vue3指令生命周期函数</h4>
 <highlightjs code="created:元素初始化的时候
 beforeMound:指令绑定到元素后调用，只调用一次
-created:元素初始化的时候
-beforeMound:指令绑定到元素后调用，只调用一次
 Mound:元素插入父级DOM调用
 beforeUpdate:元素被更新之前调用
 updated:在包含组件的VNode及其子组件的VNode更新后调用

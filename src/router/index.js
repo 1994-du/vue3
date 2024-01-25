@@ -1,7 +1,7 @@
-import { createWebHistory, createRouter } from "vue-router";
+import { createWebHistory,createWebHashHistory, createRouter } from "vue-router";
 import routes from './routes'
 const router =createRouter({
-    history:createWebHistory(),
+    history:createWebHashHistory(),
     routes
 })
 router.onError=(err)=>{

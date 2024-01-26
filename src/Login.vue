@@ -49,12 +49,6 @@ const Login=()=>{
         password:password.value
     }
     toLogin(param).then(res=>{
-        console.log('res',res);
-        let blob = new Blob(res.data.avatar.data,{type:'image/jpeg'})
-        let avatar = URL.createObjectURL(blob)
-        // res.data.avatar = avatar
-        console.log('blob',URL.createObjectURL(blob));
-        console.log('avatar',avatar);
         if(res.status==='success'){
             sessionStorage.setItem('token',JSON.stringify(res.data))
             router.push('/')

@@ -115,7 +115,7 @@ onActivated(()=>{
 	.el-form-item{
 		display: flex;
 		align-items: center;
-		::v-deep .el-form-item__label{
+		:deep .el-form-item__label{
 			width: 80px;
 			flex-shrink: 0;
 		}

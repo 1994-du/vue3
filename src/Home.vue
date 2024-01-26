@@ -73,7 +73,8 @@
     });//用户信息
     let dialogVisibleLoginOut = ref(false)//退出登录提示
     const menus = computed(()=>{
-        return router.getRoutes().filter(el=>el.path!='/'&&el.path!='/login')
+        let filterPath=['/','/login','/set']
+        return router.getRoutes().filter(el=>!filterPath.includes(el.path))
     })
     //搜索建议
     const querySearch=function(str,cb){

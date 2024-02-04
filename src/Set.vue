@@ -5,40 +5,9 @@ import { toUpload ,toQueryHistoryAvatar} from "@/api/api";
 const { proxy } = getCurrentInstance()
 let imageUrl = ref('')
 let historyImgs = ref([])
+let upload = ref(null)
 const handleUploadChange = (e) => {
-	let file = e.target.files[0]
-	//图片转Blob类型
-	// let imgBlob = URL.createObjectURL(file)
-	// toUpload({
-	// 	id:JSON.parse(sessionStorage.getItem('token')).id,
-	// 	file:imgBlob
-	// }).then(res => {
-	// 	if (res.status == 'success') {
-	// 		imageUrl.value = res.url;
-	// 		let token = JSON.parse(sessionStorage.getItem('token'))
-	// 		token.avatar = res.url;
-	// 		sessionStorage.setItem('token',JSON.stringify(token))
-	// 	}
-	// })
-	// 图片转base64--sql暂时存不了（妈的 不会）
-	// let reader = new FileReader();
-	// reader.readAsDataURL(file);
-	// reader.onload = function(e){
-	// 	console.log(reader.result);
-	// 	toUpload({
-	// 		id:JSON.parse(sessionStorage.getItem('token')).id,
-	// 		file:reader.result
-	// 	}).then(res => {
-	// 		if (res.status == 'success') {
-	// 			imageUrl.value = res.url;
-	// 			let token = JSON.parse(sessionStorage.getItem('token'))
-	// 			token.avatar = res.url;
-	// 			sessionStorage.setItem('token',JSON.stringify(token))
-	// 		}
-	// 	})
-	// }
-
-	// 使用formData传参
+	let file = e.target.files[0];
 	let formData = new FormData()
 	formData.append('file', file)
 	formData.append('id', JSON.parse(sessionStorage.getItem('token')).id)
@@ -52,26 +21,33 @@ const handleUploadChange = (e) => {
 		}
 	})
 }
-
 const openUpload = function () {
-	let ipt = document.getElementsByTagName('input')[0]
-	ipt.click()
+	upload.value.click()
 }
 const getHistory=function(){
 	toQueryHistoryAvatar({
 		id:JSON.parse(sessionStorage.getItem('token')).id
 	}).then(res=>{
-		console.log('rs',res);
 		historyImgs.value=res.list;
 	})
 }
 onActivated(()=>{
 	imageUrl.value = JSON.parse(sessionStorage.getItem('token')).avatar;
 	getHistory()
+	
 })
 </script>
 <template>
+	<div ref="testref"></div>
 	<el-form>
+		<el-form-item label="用户名">
+			<el-input placeholder="用户名"></el-input>
+		</el-form-item>
+		<el-form-item label="等级">
+			<el-select>
+				<el-option value="1">1</el-option>
+			</el-select>
+		</el-form-item>
 		<el-form-item label="头像">
 			<div style="display: flex;flex-direction: column;">
 				<div class="upload_box" @click="openUpload">
@@ -88,6 +64,7 @@ onActivated(()=>{
 				</div>
 			</div>
 		</el-form-item>
+		
 	</el-form>
 </template>
 <style scoped>

@@ -55,14 +55,14 @@ $animationTime:2s;
         position: absolute;
         left: 50%;
         top: 0;
-        margin-left: - $inWidth / 2;
-        margin-top: - $inWidth / 2;
+        margin-left: - calc($inWidth / 2);
+        margin-top: - calc($inWidth / 2);
         transform-style: preserve-3d;
-        transform-origin: center ($width+$inWidth) / 2;
+        transform-origin: center calc($width + $inWidth) / 2;
         perspective: 160px;
         @for $i from 1 through $n{
             &:nth-child(#{$i}){
-                transform: rotate(#{360deg / $n * $i});
+                transform: rotate(#{calc(360deg / $n) * $i});
                 &::after,&::before{
                     animation-delay: - calc($animationTime / $n * ($i - 1) * 6);
                 }

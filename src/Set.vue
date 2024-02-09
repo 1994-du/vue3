@@ -1,29 +1,11 @@
 <script setup>
 import { ref, getCurrentInstance,onActivated } from 'vue';
-import { Plus } from '@element-plus/icons-vue';
-import { toUpload ,toQueryHistoryAvatar} from "@/api/api";
-const { proxy } = getCurrentInstance()
+import { toQueryHistoryAvatar} from "@/api/api";
+import fileUpload from "@/components/fileUpload.vue"
 let imageUrl = ref('')
+let userName = ref('')
 let historyImgs = ref([])
-let upload = ref(null)
-const handleUploadChange = (e) => {
-	let file = e.target.files[0];
-	let formData = new FormData()
-	formData.append('file', file)
-	formData.append('id', JSON.parse(sessionStorage.getItem('token')).id)
-	toUpload(formData).then(res => {
-		if (res.status == 'success') {
-			imageUrl.value = res.url;
-			let token = JSON.parse(sessionStorage.getItem('token'))
-			token.avatar = res.url;
-			sessionStorage.setItem('token',JSON.stringify(token))
-			getHistory()
-		}
-	})
-}
-const openUpload = function () {
-	upload.value.click()
-}
+
 const getHistory=function(){
 	toQueryHistoryAvatar({
 		id:JSON.parse(sessionStorage.getItem('token')).id
@@ -32,16 +14,24 @@ const getHistory=function(){
 	})
 }
 onActivated(()=>{
-	imageUrl.value = JSON.parse(sessionStorage.getItem('token')).avatar;
+	let sessionStorageObj = JSON.parse(sessionStorage.getItem('token'))
+	imageUrl.value = sessionStorageObj.avatar;
+	userName.value = sessionStorageObj.name;
 	getHistory()
-	
 })
+const uploadSuccess=function(res){
+	getHistory()
+	imageUrl.value = res.url;
+	let token = JSON.parse(sessionStorage.getItem('token'))
+	token.avatar = res.url;
+	sessionStorage.setItem('token',JSON.stringify(token))
+}
 </script>
 <template>
 	<div ref="testref"></div>
 	<el-form>
 		<el-form-item label="用户名">
-			<el-input placeholder="用户名"></el-input>
+			<el-input placeholder="用户名" v-model="userName"></el-input>
 		</el-form-item>
 		<el-form-item label="等级">
 			<el-select>
@@ -50,13 +40,7 @@ onActivated(()=>{
 		</el-form-item>
 		<el-form-item label="头像">
 			<div style="display: flex;flex-direction: column;">
-				<div class="upload_box" @click="openUpload">
-					<input ref="upload" type="file" style="display: none;" @change="handleUploadChange">
-					<img v-if="imageUrl" :src="imageUrl" class="avatar" />
-					<el-icon v-else class="avatar-uploader-icon">
-						<Plus />
-					</el-icon>
-				</div>
+				<fileUpload :url="imageUrl" @success="uploadSuccess"></fileUpload>
 				<div class="history_list">
 					<div v-for="(item,index) in historyImgs">
 						<img :src="item.avatar" alt="">
@@ -64,7 +48,6 @@ onActivated(()=>{
 				</div>
 			</div>
 		</el-form-item>
-		
 	</el-form>
 </template>
 <style scoped>

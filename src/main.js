@@ -10,6 +10,7 @@ import 'highlight.js/styles/atom-one-dark.css'
 import hljsVuePlugin from "@highlightjs/vue-plugin"
 import 'highlight.js/lib/common'
 import { stripIndent } from 'common-tags';//代码显示空格
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 // import socket from '@/api/websocket';//即时通讯
 import LanguageZH from '@/lang/zh-cn.js'
 import LanguageEN from '@/lang/en-us.js'
@@ -22,6 +23,9 @@ const i18n = new createI18n({
     }
 })
 const app = createApp(App);
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+    app.component(key, component)
+}
 // app.config.globalProperties.$socket=socket;
 app.config.globalProperties.$axios=axios;
 app.config.globalProperties.$stripIndent=stripIndent;

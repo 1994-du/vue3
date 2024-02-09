@@ -31,10 +31,11 @@ export function toRegistry(data){
         })
     })
 }
-export function toUpload(data){
+
+export function toQueryHistoryAvatar(data){
     return new Promise((resolve,reject)=>{
         Axios({
-            url:`${baseUrl}/toupload`,
+            url:`${baseUrl}/historyAvatar`,
             method:'post',
             data
         }).then(res=>{
@@ -44,10 +45,10 @@ export function toUpload(data){
         })
     })
 }
-export function toQueryHistoryAvatar(data){
+export function toUpload(data){
     return new Promise((resolve,reject)=>{
         Axios({
-            url:`${baseUrl}/historyAvatar`,
+            url:`${baseUrl}/toupload`,
             method:'post',
             data
         }).then(res=>{

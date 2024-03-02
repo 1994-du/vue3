@@ -3,7 +3,7 @@ let baseUrl;
 if(process.env.NODE_ENV=='development'){
     baseUrl='/api'
 }else{
-    baseUrl=''
+    baseUrl='http://localhost:1234'
 }
 export function toLogin(data){
     return new Promise((resolve,reject)=>{
@@ -50,7 +50,22 @@ export function toUpload(data){
         Axios({
             url:`${baseUrl}/toupload`,
             method:'post',
-            data
+            data,
+            
+        }).then(res=>{
+            resolve(res)
+        }).catch(err=>{
+            reject(err)
+        })
+    })
+}
+export function toDelayTest(data,params){
+    return new Promise((resolve,reject)=>{
+        Axios({
+            url:`${baseUrl}/delaytest`,
+            method:'post',
+            data,
+            ...params,
         }).then(res=>{
             resolve(res)
         }).catch(err=>{

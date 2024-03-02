@@ -2,6 +2,7 @@
 import Axios from "@/api";
 import { getCurrentInstance, ref, watchEffect } from "vue"
 import { Plus } from '@element-plus/icons-vue';
+import {toUpload} from "@/api/api.js"
 const {proxy} = getCurrentInstance()
 let upload = ref()
 let props = defineProps(['url'])
@@ -11,12 +12,6 @@ watchEffect(()=>{
     imageUrl = ref(props.url)
 })
 
-let baseUrl;
-if(process.env.NODE_ENV=='development'){
-    baseUrl='/api'
-}else{
-    baseUrl=''
-}
 const openUpload = function(){
     let ipt = upload.value;
     ipt.click()
@@ -26,18 +21,7 @@ const handleUploadChange = function(e){
 	let formData = new FormData()
 	formData.append('file', file)
 	formData.append('id', JSON.parse(sessionStorage.getItem('token')).id)
-	Axios({
-        url:`${baseUrl}/toupload`,
-        method:'POST',
-        data:formData
-        // data:{
-        //     file:file,
-        //     id:JSON.parse(sessionStorage.getItem('token')).id
-        // },
-        // headers:{
-        //     'Content-Type':'multipart/form-data;charset=UTF-8'
-        // }
-    }).then(res=>{
+    toUpload(formData).then(res=>{
         if (res.status == 'success') {
 			imageUrl.value = res.url;
 			emit('success',res)

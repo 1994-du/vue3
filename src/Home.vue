@@ -133,7 +133,6 @@
     onBeforeMount(()=>{})
     onMounted(()=>{})
     onActivated(()=>{
-        console.log('activated');
         let token = sessionStorage.getItem('token')
         if(token){
             userInfo.value=JSON.parse(token)

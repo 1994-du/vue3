@@ -15,6 +15,7 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import LanguageZH from '@/lang/zh-cn.js'
 import LanguageEN from '@/lang/en-us.js'
 import { createI18n } from 'vue-i18n'
+import dxUI from "dxtestui"
 const i18n = new createI18n({
     locale:'zh-cn',
     messages:{
@@ -30,6 +31,7 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 app.config.globalProperties.$axios=axios;
 app.config.globalProperties.$stripIndent=stripIndent;
 app.use(ElementPlus)
+app.use(dxUI)
 app.use(store)
 app.use(router)
 app.use(hljsVuePlugin)

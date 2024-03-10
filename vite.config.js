@@ -21,6 +21,11 @@ export default defineConfig({
         target: 'http://localhost:1234/',// node服务
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '') // 不可以省略rewrite
+      },
+      '/javaapi': {
+        target: 'http://localhost:9999/',// node服务
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/javaapi/, '') // 不可以省略rewrite
       }
     }
   }

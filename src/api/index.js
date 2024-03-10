@@ -3,7 +3,7 @@ import { ElMessage } from 'element-plus'
 const Axios = axios.create({
     timeout:300000,
     headers:{
-        'Token':JSON.parse(sessionStorage.getItem('token')).id
+        'Token':JSON.parse(sessionStorage.getItem('token'))?.id||''
     }
 })
 Axios.interceptors.request.use(req=>{

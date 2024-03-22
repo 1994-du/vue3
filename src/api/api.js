@@ -5,6 +5,10 @@ if(process.env.NODE_ENV=='development'){
 }else{
     baseUrl='http://localhost:1234'
 }
+/**
+ * @description 登录
+ * @data 
+*/
 export function toLogin(data){
     return new Promise((resolve,reject)=>{
         Axios({
@@ -18,6 +22,11 @@ export function toLogin(data){
         })
     })
 }
+
+/**
+ * @description 注册
+ * @data 
+*/
 export function toRegistry(data){
     return new Promise((resolve,reject)=>{
         Axios({
@@ -32,6 +41,10 @@ export function toRegistry(data){
     })
 }
 
+/**
+ * @description 获取历史头像
+ * @data 
+*/
 export function toQueryHistoryAvatar(data){
     return new Promise((resolve,reject)=>{
         Axios({
@@ -45,6 +58,11 @@ export function toQueryHistoryAvatar(data){
         })
     })
 }
+
+/**
+ * @description 上传头像
+ * @data 
+*/
 export function toUpload(data){
     return new Promise((resolve,reject)=>{
         Axios({
@@ -59,6 +77,11 @@ export function toUpload(data){
         })
     })
 }
+
+/**
+ * @description 测试接口
+ * @data 
+*/
 export function toDelayTest(data,params){
     return new Promise((resolve,reject)=>{
         Axios({

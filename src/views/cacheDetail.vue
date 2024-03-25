@@ -41,7 +41,7 @@
         </el-card>
     </div>
     
-    <table border cellspacing="0">
+    <table border cellspacing="0" style="table-layout: fixed;">
         <tr>
             <th style="width:80px">缓存类型</th>
             <th style="width:150px">头字段</th>
@@ -98,7 +98,7 @@
     <h6>缺点：过期后，资源未变化还是会请求服务器，过期时间依赖客户端时间，时间不准确或者被改动，缓存也随之受影响</h6> -->
     <h2>Cache-Control:请求/响应头，缓存控制字段，精确控制缓存策略；HTTP1.1新增字段，既能出现在请求头，也能出现在相应头，不同值代表不同意思</h2>
     <h5>服务端参数</h5>
-    <table border>
+    <table border cellspacing="0">
         <tr>
             <th>值</th>
             <th>含义</th>
@@ -129,7 +129,7 @@
         </tr>
     </table>
     <h5>客户端参数</h5>
-    <table border>
+    <table border cellspacing="0">
         <tr>
             <th>值</th>
             <th>含义</th>

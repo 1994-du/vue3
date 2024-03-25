@@ -208,6 +208,13 @@ export default[
                     name:'Promise'
                 },
                 component:()=>import('@/views/promise.vue')
+            },
+            {
+                path:'/bus',
+                meta:{
+                    name:'$Bus'
+                },
+                component:()=>import('@/views/busEvent.vue')
             }
         ]
     },

@@ -12,10 +12,10 @@ import 'highlight.js/lib/common'
 import { stripIndent } from 'common-tags';//代码显示空格
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 // import socket from '@/api/websocket';//即时通讯
+
 import LanguageZH from '@/lang/zh-cn.js'
 import LanguageEN from '@/lang/en-us.js'
 import { createI18n } from 'vue-i18n'
-import dxUI from "dxtestui"
 const i18n = new createI18n({
     locale:'zh-cn',
     messages:{
@@ -23,15 +23,18 @@ const i18n = new createI18n({
         'zh-cn':LanguageZH
     }
 })
+
 const app = createApp(App);
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)
 }
+import mitt from 'mitt'
+const bus = new mitt()
+app.config.globalProperties.$bus = bus
 // app.config.globalProperties.$socket=socket;
 app.config.globalProperties.$axios=axios;
 app.config.globalProperties.$stripIndent=stripIndent;
 app.use(ElementPlus)
-app.use(dxUI)
 app.use(store)
 app.use(router)
 app.use(hljsVuePlugin)

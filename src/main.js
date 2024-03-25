@@ -12,7 +12,7 @@ import 'highlight.js/lib/common'
 import { stripIndent } from 'common-tags';//代码显示空格
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 // import socket from '@/api/websocket';//即时通讯
-
+///
 import LanguageZH from '@/lang/zh-cn.js'
 import LanguageEN from '@/lang/en-us.js'
 import { createI18n } from 'vue-i18n'

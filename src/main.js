@@ -12,7 +12,10 @@ import 'highlight.js/lib/common'
 import { stripIndent } from 'common-tags';//代码显示空格
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 // import socket from '@/api/websocket';//即时通讯
-///
+
+import { renderWithQiankun,qiankunWindow,QiankunProps } from "vite-plugin-qiankun/dist/helper"
+
+import mitt from 'mitt'
 import LanguageZH from '@/lang/zh-cn.js'
 import LanguageEN from '@/lang/en-us.js'
 import { createI18n } from 'vue-i18n'
@@ -23,30 +26,40 @@ const i18n = new createI18n({
         'zh-cn':LanguageZH
     }
 })
-
-const app = createApp(App);
-for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
-    app.component(key, component)
-}
-import mitt from 'mitt'
 const bus = new mitt()
-app.config.globalProperties.$bus = bus
-// app.config.globalProperties.$socket=socket;
-app.config.globalProperties.$axios=axios;
-app.config.globalProperties.$stripIndent=stripIndent;
-app.use(ElementPlus)
-app.use(store)
-app.use(router)
-app.use(hljsVuePlugin)
-app.use(i18n)
-app.mount('#app')
-
-//全局自定义指令
-directive(app)
-// 或者直接写
-// app.directive('focus',{
-//     mounted(el){
-//         el.focus()
-//     }
-// })
-
+// render 函数
+let instance=null
+const render = (props={}) => {
+    instance = createApp(App)
+    for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+        instance.component(key, component)
+    }
+    instance.config.globalProperties.$axios = axios
+    instance.config.globalProperties.$bus = bus
+    instance.config.globalProperties.$stripIndent = stripIndent
+    instance.use(router)
+    instance.use(store)
+    instance.use(ElementPlus)
+    instance.use(hljsVuePlugin)
+    instance.use(i18n)
+    instance.mount('#subapp-viewport')
+    directive(instance)
+}
+renderWithQiankun({
+    bootstrap(){
+        console.log('child2 bootstrap');
+    },
+    mount(props){
+        render(props)
+        console.log('child2 mount');
+    },
+    unmount(props){
+        console.log('child2 unmount');
+    },
+    updata(props){
+        console.log('child2 updata');
+    }
+})
+if(!qiankunWindow.__POWERED_BY_QIANKUN__){
+    render()
+}

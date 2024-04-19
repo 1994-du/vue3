@@ -13,7 +13,7 @@ import { onBeforeRouteUpdate } from 'vue-router';
 // })
 </script>
 <style lang="less">
-#app{
+#subapp-viewport{
     height: 100%;
 }
 </style>

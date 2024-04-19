@@ -2,12 +2,16 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import path from 'path'
 import alias from "@rollup/plugin-alias"
+import qiankun  from 'vite-plugin-qiankun'
+const name="qiankun-child2"
 export default defineConfig({
-  base:'./',
   publicDir:'./public',
   plugins: [
     alias(),
-    vue()
+    vue(),
+    qiankun(name,{
+      useDevMode:true
+    })
   ],
   resolve:{
     alias:{
@@ -16,6 +20,9 @@ export default defineConfig({
   },
   server: {
     port: '3000',
+    headers:{
+      'Access-Control-Allow-Origin':'*'
+    },
     proxy: {
       '/api': {
         target: 'http://localhost:1234/',// node服务

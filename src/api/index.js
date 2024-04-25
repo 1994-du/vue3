@@ -7,7 +7,6 @@ const Axios = axios.create({
     }
 })
 Axios.interceptors.request.use(req=>{
-    console.log('req',req);
     return req
 })
 Axios.interceptors.response.use(res=>{

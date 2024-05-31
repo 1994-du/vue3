@@ -58,7 +58,7 @@ $animationTime:2s;
         margin-left: - calc($inWidth / 2);
         margin-top: - calc($inWidth / 2);
         transform-style: preserve-3d;
-        transform-origin: center calc($width + $inWidth) / 2;
+        transform-origin: center calc(($width + $inWidth) / 2);
         perspective: 160px;
         @for $i from 1 through $n{
             &:nth-child(#{$i}){

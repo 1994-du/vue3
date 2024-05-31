@@ -54,6 +54,9 @@
                 <div class="light_ball"></div>
                 <bg :width="100"></bg>
                 <animationDemo1/>
+                <eight style="margin-bottom: 40px;">
+                    <bg :width="70" style="position: absolute;left: 50%;top: 50%;transform:translateX(-50%) translateY(-50%);"></bg>
+                </eight>
             </div>
         </el-drawer>
     </div>
@@ -63,6 +66,7 @@ import bg from '@/components/animations/bg.vue'
 import animations from "@/json/animation.json"
 import { onActivated, onDeactivated, onUnmounted, ref } from "vue";
 import animationDemo1 from '@/components/animations/animationDemo1.vue';
+import eight from '@/components/animations/eight.vue';
 let animation = ref(animations)
 let drawer = ref(false)
 let direction = ref('rtl')

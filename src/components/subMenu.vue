@@ -12,7 +12,7 @@
     </el-menu-item>
 </template>
 <script setup>
-import { Location, Menu } from '@element-plus/icons-vue'
+// import { Location, Menu } from '@element-plus/icons-vue'
 import SubMenu from './subMenu.vue'
 import { ref } from 'vue'
 const props = defineProps(['menus'])

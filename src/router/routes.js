@@ -215,6 +215,13 @@ export default[
                     name:'$Bus'
                 },
                 component:()=>import('@/views/busEvent.vue')
+            },
+            {
+                path:'/element-tree',
+                meta:{
+                    name:'element-tree'
+                },
+                component:()=>import('@/views/elementui/el-tree.vue')
             }
         ]
     },

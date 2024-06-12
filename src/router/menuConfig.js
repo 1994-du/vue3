@@ -1,15 +1,41 @@
 export default[
     {
         path:'0',
-        title:'路由',
+        title:'Vue',
         children:[
             {
-                path:'/useRouter',
-                title:'路由'
+                path:'/componentImp',
+                title:'组件引入'
             },
             {
-                path:'/routerLazyLoad',
-                title:'路由懒加载'
+                path:'/useProps',
+                title:'props'
+            },
+            {
+                path:'/refReactiveTorefs',
+                title:'ref与reactive与torefs'
+            },
+            {
+                path:'/watch',
+                title:'watch'
+            },
+            {
+                path:'/bus',
+                title:'bus'
+            },
+            {
+                path:'0-1',
+                title:'路由',
+                children:[
+                    {
+                        path:'/useRouter',
+                        title:'路由'
+                    },
+                    {
+                        path:'/routerLazyLoad',
+                        title:'路由懒加载'
+                    }
+                ]
             }
         ]
     },
@@ -140,32 +166,6 @@ export default[
         title:'nvm'
     },
     {
-        path:'10',
-        title:'Vue',
-        children:[
-            {
-                path:'/componentImp',
-                title:'组件引入'
-            },
-            {
-                path:'/useProps',
-                title:'props'
-            },
-            {
-                path:'/refReactiveTorefs',
-                title:'ref与reactive与torefs'
-            },
-            {
-                path:'/watch',
-                title:'watch'
-            },
-            {
-                path:'/bus',
-                title:'bus'
-            }
-        ]
-    },
-    {
         path:'/horizontallyAndVerticallyCentered',
         title:'div水平垂直居中'
     },
@@ -180,5 +180,15 @@ export default[
     {
         path:'/set',
         title:'设置'
+    },
+    {
+        path:'10',
+        title:'ElementUI',
+        children:[
+            {
+                path:'/element-tree',
+                title:'el-tree'
+            }
+        ]
     }
 ]

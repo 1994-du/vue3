@@ -16,9 +16,6 @@ h1,.hljs{
 .el-scrollbar__bar{
     z-index:2!important;
 }
-// ::v-deep .el-scrollbar__thumb {
-//     background-color: #ff0000; /* 红色示例 */
-// }
 h4{
     width: fit-content;
     position: relative;
@@ -134,10 +131,14 @@ h4::before{
                 height: calc(100% - 40px);
                 overflow: hidden auto;
                 border-right: none;
+                .menu_title{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
                 .el-sub-menu{
-                    
                     .el-sub-menu__title{
-                        
+                        padding-right: unset;
                     }
                 }
                 .el-menu-item{
@@ -148,6 +149,9 @@ h4::before{
                     span{
                         height: 40px;
                         line-height: 40px;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
                     }
                 }
                 .is-active{
@@ -178,6 +182,7 @@ h4::before{
             padding: 20px;
             overflow-x: hidden;
             overflow-y: auto;
+            background-color: #e1e5e6;
             &::-webkit-scrollbar{
               display: none;
             }

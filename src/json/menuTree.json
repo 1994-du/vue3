@@ -1,0 +1,30 @@
+[
+    {
+        "menuName":"系统管理",
+        "menuId":0,
+        "actions":null,
+        "children":[
+            {
+                "menuName":"角色管理",
+                "menuId":1,
+                "actions":null,
+                "children":null
+            },
+            {
+                "menuName":"用户管理",
+                "menuId":2,
+                "actions":[
+                    {
+                        "authName":"新增",
+                        "authId":"1001"
+                    },
+                    {
+                        "authName":"删除",
+                        "authId":"1002"
+                    }
+                ],
+                "children":null
+            }
+        ]
+    }
+]

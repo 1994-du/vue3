@@ -24,7 +24,6 @@
                 <div class="collapse_btn" @click="collapse">
                     <el-icon v-if="!isCollapse"><DArrowLeft/></el-icon>
                     <el-icon v-if="isCollapse"><DArrowRight/></el-icon>
-                    <span v-if="isCollapse">展开</span>
                     <span v-if="!isCollapse">收起</span>
                 </div>
             </div>
@@ -52,18 +51,22 @@
 <script setup>
     import menuConfig from './router/menuConfig'
     import SubMenu from './components/subMenu.vue'
+    import BreadCrumb from './components/breadCrumb.vue'
     import { useRouter, useRoute} from 'vue-router'
     import {computed, onMounted, onBeforeMount, onUpdated, onUnmounted, onBeforeUnmount,getCurrentInstance,ref,watch,watchEffect, reactive, onActivated} from 'vue'
     import { DArrowLeft, DArrowRight } from '@element-plus/icons-vue'
     import {useStore} from 'vuex'
+    const breadCrumbRef = ref()
     const router=useRouter()
     const route = useRoute()
     const onRoutes = computed(()=>{
         return route.path
     })
     const isCollapse=ref(false)
-    const handleMenuSelect=function(e){
-        router.push(e)
+    // 菜单
+    const handleMenuSelect=function(index,indexPath){
+        router.push(index)
+        breadCrumbRef.value.getPath(indexPath)
     }
     const collapse = function(){
         isCollapse.value=!isCollapse.value
@@ -80,7 +83,7 @@
     // 退出登录
     const toLoginOut=()=>{
         sessionStorage.removeItem('token')
-        proxy.$router.push('/login')
+        router.push('/login')
         dialogVisibleLoginOut.value=false;
     }
     onActivated(()=>{
@@ -89,6 +92,11 @@
             userInfo.value=JSON.parse(token)
         }
     })
+    
+    // onMounted(()=>{
+        
+    //     console.log('breadCrumbRef',breadCrumbRef.value);
+    // })
 </script>
 
 <style lang="less">

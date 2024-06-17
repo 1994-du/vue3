@@ -56,7 +56,6 @@
     import {computed, onMounted, onBeforeMount, onUpdated, onUnmounted, onBeforeUnmount,getCurrentInstance,ref,watch,watchEffect, reactive, onActivated} from 'vue'
     import { DArrowLeft, DArrowRight } from '@element-plus/icons-vue'
     import {useStore} from 'vuex'
-    const breadCrumbRef = ref()
     const router=useRouter()
     const route = useRoute()
     const onRoutes = computed(()=>{
@@ -66,7 +65,6 @@
     // 菜单
     const handleMenuSelect=function(index,indexPath){
         router.push(index)
-        breadCrumbRef.value.getPath(indexPath)
     }
     const collapse = function(){
         isCollapse.value=!isCollapse.value
@@ -92,11 +90,6 @@
             userInfo.value=JSON.parse(token)
         }
     })
-    
-    // onMounted(()=>{
-        
-    //     console.log('breadCrumbRef',breadCrumbRef.value);
-    // })
 </script>
 
 <style lang="less">

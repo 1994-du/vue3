@@ -13,27 +13,6 @@
                 </template>
             </el-table-column>
         </el-table>
-
-        <h4>keyframes:关键帧</h4>
-<highlightjs code="
-@keyframes animationName{
-    from{}
-    percentage{}
-    to{}
-    //或者
-    0%{}
-    percentage{}
-    100%{}
-}
-// sass 使用for循环
-@for $i from 1 through $n{
-    &:nth-child(#{$i}){
-        transform: rotate(#{360deg / $n * $i});
-        &::after,&::before{
-            animation-delay: - calc($animationTime / $n * ($i - 1) * 6);
-        }
-    }
-}"></highlightjs>
         <el-button @click="drawer = true" style="position: fixed;bottom: 20px;">展开{{ drawer }}</el-button>
     </div>
     <div class="el-drawer-wrap">

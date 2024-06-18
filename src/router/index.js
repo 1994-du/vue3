@@ -1,8 +1,7 @@
 import { createWebHistory,createWebHashHistory, createRouter } from "vue-router";
-import { qiankunWindow } from 'vite-plugin-qiankun/dist/helper'
 import routes from './routes'
 const router =createRouter({
-    history:createWebHistory(qiankunWindow.__POWERED_BY_QIANKUN__?'/child2':'/'),
+    history:createWebHistory(),
     routes
 })
 router.onError=(err)=>{

@@ -49,6 +49,7 @@ const Login=()=>{
         password:password.value
     }
     toLogin(param).then(res=>{
+        console.log('res',res);
         if(res.status==='success'){
             sessionStorage.setItem('token',JSON.stringify(res.data))
             router.push('/')

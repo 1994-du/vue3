@@ -222,6 +222,13 @@ export default[
                     name:'element-tree'
                 },
                 component:()=>import('@/views/elementui/el-tree.vue')
+            },
+            {
+                path:'/mysql',
+                meta:{
+                    name:'Mysql'
+                },
+                component:()=>import('@/views/mysql.vue')
             }
         ]
     },

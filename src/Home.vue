@@ -90,6 +90,9 @@
             userInfo.value=JSON.parse(token)
         }
     })
+    onMounted(()=>{
+        console.log('router.getRoutes()',router.getRoutes());
+    })
 </script>
 
 <style lang="less">

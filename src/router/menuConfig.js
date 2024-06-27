@@ -190,5 +190,9 @@ export default[
                 title:'el-tree'
             }
         ]
+    },
+    {
+        path:'/mysql',
+        title:'MySQL'
     }
 ]

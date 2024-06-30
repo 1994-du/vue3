@@ -2,28 +2,10 @@ export default[
     {
         path:'/',
         meta:{
-            name:'首页',
-            level:0
+            name:'首页'
         },
         component:()=>import('@/Home.vue'),
         children:[
-            {
-                path:'/Vue3',
-                meta:{
-                    name:'Vue3',
-                    level:1
-                },
-                children:[
-                    {
-                        path:'/Vue3/useVuex',
-                        meta:{
-                            name:'Vuex',
-                            level:2
-                        },
-                        component:()=>import('@/views/useVuex.vue')
-                    }
-                ]
-            },
             {
                 path:'/useNpm',
                 meta:{
@@ -253,9 +235,15 @@ export default[
     {
         path:'/login',
         meta:{
-            name:'登录',
-            level:0
+            name:'登录'
         },
         component:()=>import('@/Login.vue')
+    },
+    {
+        path:'/set',
+        meta:{
+            name:'设置'
+        },
+        component:()=>import('@/Set.vue')
     }
 ]

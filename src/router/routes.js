@@ -8,28 +8,18 @@ export default[
         component:()=>import('@/Home.vue'),
         children:[
             {
-                path:'/Vue3',
+                path:'/useVuex',
                 meta:{
-                    name:'Vue3',
-                    level:1
+                    name:'Vuex',
                 },
-                children:[
-                    {
-                        path:'/Vue3/useVuex',
-                        meta:{
-                            name:'Vuex',
-                            level:2
-                        },
-                        component:()=>import('@/views/useVuex.vue')
-                    }
-                ]
+                component:()=>import('@/views/vue3/vuex.vue')
             },
             {
                 path:'/useNpm',
                 meta:{
-                    name:'npm命令行'
+                    name:'npm命令行',
                 },
-                component:()=>import('@/views/useNpm.vue')
+                component:()=>import('@/views/npm/useNpm.vue')
             },
             {
                 path:'/animation',

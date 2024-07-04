@@ -1,3 +1,4 @@
+// 路由分组
 export default[
     {
         path:'/',
@@ -11,6 +12,7 @@ export default[
                 path:'/useVuex',
                 meta:{
                     name:'Vuex',
+                    groupName:'vue3'
                 },
                 component:()=>import('@/views/vue3/vuex.vue')
             },
@@ -18,6 +20,7 @@ export default[
                 path:'/useNpm',
                 meta:{
                     name:'npm命令行',
+                    groupName:'npm'
                 },
                 component:()=>import('@/views/npm/useNpm.vue')
             },
@@ -28,33 +31,36 @@ export default[
                 },
                 component:()=>import('@/views/animation.vue')
             },
-            // {
-            //     path:'/browsercore',
-            //     meta:{
-            //         name:'浏览器内核'
-            //     },
-            //     component:()=>import('@/views/browserCore.vue')
-            // },
+            {
+                path:'/browsercore',
+                meta:{
+                    name:'浏览器内核'
+                },
+                component:()=>import('@/views/browserCore.vue')
+            },
             {
                 path:'/gitLine',
                 meta:{
-                    name:'git命令行'
+                    name:'git命令行',
+                    groupName:'git'
                 },
-                component:()=>import('@/views/gitLine.vue')
+                component:()=>import('@/views/git/gitLine.vue')
             },
             {
                 path:'/useStore',
                 meta:{
-                    name:'Store'
+                    name:'Store',
+                    groupName:'vue3'
                 },
-                component:()=>import('@/views/useStore.vue')
+                component:()=>import('@/views/vue3/useStore.vue')
             },
             {
                 path:'/useRouter',
                 meta:{
-                    name:'Router路由'
+                    name:'Router路由',
+                    groupName:'vue3'
                 },
-                component:()=>import('@/views/useRouter.vue')
+                component:()=>import('@/views/vue3/useRouter.vue')
             },
             {
                 path:'/useAxios',
@@ -73,16 +79,18 @@ export default[
             {
                 path:"/httpVersion",
                 meta:{
-                    name:"HTTP版本"
+                    name:"HTTP版本",
+                    groupName:'http'
                 },
-                component:()=>import('@/views/HttpVersion.vue')
+                component:()=>import('@/views/http/HttpVersion.vue')
             },
             {
                 path:"/httpHand",
                 meta:{
-                    name:"HTTP握手"
+                    name:"HTTP握手",
+                    groupName:'http'
                 },
-                component:()=>import('@/views/httpHand.vue')
+                component:()=>import('@/views/http/httpHand.vue')
             },
             {
                 path:"/customerDirective",
@@ -171,9 +179,10 @@ export default[
             {
                 path:'/useProps',
                 meta:{
-                    name:'使用props'
+                    name:'使用props',
+                    groupName:'vue3'
                 },
-                component:()=>import('@/views/propsUse.vue')
+                component:()=>import('@/views/vue3/propsUse.vue')
             },
             {
                 path:'/refReactiveTorefs',
@@ -199,17 +208,18 @@ export default[
             {
                 path:'/watch',
                 meta:{
-                    name:'watch监听'
+                    name:'watch监听',
+                    groupName:'vue3'
                 },
                 component:()=>import('@/views/vue3/watch.vue')
             },
-            // {
-            //     path:'/websocket',
-            //     meta:{
-            //         name:'即时通讯'
-            //     },
-            //     component:()=>import('@/views/websocket.vue')
-            // },
+            {
+                path:'/websocket',
+                meta:{
+                    name:'即时通讯'
+                },
+                component:()=>import('@/views/websocket.vue')
+            },
             {
                 path:'/promise',
                 meta:{
@@ -220,9 +230,10 @@ export default[
             {
                 path:'/bus',
                 meta:{
-                    name:'$Bus'
+                    name:'$Bus',
+                    groupName:'vue3'
                 },
-                component:()=>import('@/views/busEvent.vue')
+                component:()=>import('@/views/vue3/busEvent.vue')
             },
             {
                 path:'/element-tree',
@@ -236,7 +247,7 @@ export default[
                 meta:{
                     name:'Mysql'
                 },
-                component:()=>import('@/views/mysql.vue')
+                component:()=>import('@/views/mysql/mysql.vue')
             }
         ]
     },

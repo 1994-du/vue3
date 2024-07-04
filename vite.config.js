@@ -3,6 +3,9 @@ import vue from '@vitejs/plugin-vue'
 import path from 'path'
 import alias from "@rollup/plugin-alias"
 export default defineConfig({
+  define: {
+    '__VUE_PROD_HYDRATION_MISMATCH_DETAILS__': true, // 根据需要设置为 true 或 false
+  },
   publicDir:'./public',
   plugins: [
     alias(),

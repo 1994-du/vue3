@@ -49,9 +49,9 @@
     </el-dialog>
 </template>
 <script setup>
-    import menuConfig from './router/menuConfig'
+    // import menuConfig from './router/menuConfig'
     import SubMenu from './components/subMenu.vue'
-    import BreadCrumb from './components/breadCrumb.vue'
+    // import BreadCrumb from './components/breadCrumb.vue'
     import { useRouter, useRoute} from 'vue-router'
     import {computed, onMounted, onBeforeMount, onUpdated, onUnmounted, onBeforeUnmount,getCurrentInstance,ref,watch,watchEffect, reactive, onActivated} from 'vue'
     import { DArrowLeft, DArrowRight } from '@element-plus/icons-vue'
@@ -62,6 +62,7 @@
         return route.path
     })
     const isCollapse=ref(false)
+    const menuConfig = ref([])
     // 菜单
     const handleMenuSelect=function(index,indexPath){
         router.push(index)
@@ -92,6 +93,31 @@
     })
     onMounted(()=>{
         console.log('router.getRoutes()',router.getRoutes());
+        let allRoute = router.getRoutes()
+        let menus=[]
+        allRoute.forEach((item,index)=>{
+            if(item.meta.groupName){
+                if(menus.filter(el=>el.meta.name==item.meta.groupName).length==0){
+                    menus.push({
+                        path:index,
+                        meta:{
+                            name:item.meta.groupName,
+                        },
+                        children:[item]
+                    })
+                }else{
+
+                    menus.forEach(el=>{
+                        if(el.meta.name==item.meta.groupName){
+                            el.children.push(item)
+                        }
+                    })
+                }
+            }
+        })
+        console.log('menus',menus);
+        
+        menuConfig.value=menus
     })
 </script>
 

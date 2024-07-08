@@ -49,13 +49,26 @@
     </el-dialog>
 </template>
 <script setup>
-    // import menuConfig from './router/menuConfig'
     import SubMenu from './components/subMenu.vue'
-    // import BreadCrumb from './components/breadCrumb.vue'
-    import { useRouter, useRoute} from 'vue-router'
-    import {computed, onMounted, onBeforeMount, onUpdated, onUnmounted, onBeforeUnmount,getCurrentInstance,ref,watch,watchEffect, reactive, onActivated} from 'vue'
-    import { DArrowLeft, DArrowRight } from '@element-plus/icons-vue'
-    import {useStore} from 'vuex'
+    import { 
+        useRouter,
+        useRoute
+    } from 'vue-router'
+    import {
+        computed,
+        onMounted, 
+        onBeforeMount, 
+        onUpdated, 
+        onUnmounted, 
+        onBeforeUnmount,
+        getCurrentInstance,
+        ref,
+        watch,
+        watchEffect, 
+        reactive, 
+        onActivated
+    } from 'vue'
+    import { useStore } from 'vuex'
     const router=useRouter()
     const route = useRoute()
     const onRoutes = computed(()=>{
@@ -70,11 +83,7 @@
     const collapse = function(){
         isCollapse.value=!isCollapse.value
     }
-
-    const store = useStore()
-    const { proxy } = getCurrentInstance()
     
-    let searchKey = ref('');//搜索关键字
     let userInfo = reactive({
         value:{}
     });//用户信息
@@ -91,10 +100,10 @@
             userInfo.value=JSON.parse(token)
         }
     })
-    onMounted(()=>{
-        console.log('router.getRoutes()',router.getRoutes());
-        let allRoute = router.getRoutes()
+    // 根据路由获取菜单
+    const getMenuInRoutes = ()=>{
         let menus=[]
+        let allRoute = router.getRoutes()
         allRoute.forEach((item,index)=>{
             if(item.meta.groupName){
                 if(menus.filter(el=>el.meta.name==item.meta.groupName).length==0){
@@ -106,7 +115,6 @@
                         children:[item]
                     })
                 }else{
-
                     menus.forEach(el=>{
                         if(el.meta.name==item.meta.groupName){
                             el.children.push(item)
@@ -115,9 +123,10 @@
                 }
             }
         })
-        console.log('menus',menus);
-        
         menuConfig.value=menus
+    }
+    onMounted(()=>{
+        getMenuInRoutes()
     })
 </script>
 

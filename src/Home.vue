@@ -50,26 +50,11 @@
 </template>
 <script setup>
     import SubMenu from './components/subMenu.vue'
-    import { 
-        useRouter,
-        useRoute
-    } from 'vue-router'
-    import {
-        computed,
-        onMounted, 
-        onBeforeMount, 
-        onUpdated, 
-        onUnmounted, 
-        onBeforeUnmount,
-        getCurrentInstance,
-        ref,
-        watch,
-        watchEffect, 
-        reactive, 
-        onActivated
-    } from 'vue'
+    import { useRouter, useRoute } from 'vue-router'
+    import { computed, onMounted, onBeforeMount, onUpdated, onUnmounted, onBeforeUnmount, getCurrentInstance, ref, watch, watchEffect, reactive, onActivated } from 'vue'
     import { useStore } from 'vuex'
-    const router=useRouter()
+    const store = useStore()
+    const router = useRouter()
     const route = useRoute()
     const onRoutes = computed(()=>{
         return route.path
@@ -102,31 +87,47 @@
     })
     // 根据路由获取菜单
     const getMenuInRoutes = ()=>{
-        let menus=[]
-        let allRoute = router.getRoutes()
-        allRoute.forEach((item,index)=>{
-            if(item.meta.groupName){
-                if(menus.filter(el=>el.meta.name==item.meta.groupName).length==0){
-                    menus.push({
-                        path:index,
-                        meta:{
-                            name:item.meta.groupName,
-                        },
-                        children:[item]
-                    })
-                }else{
-                    menus.forEach(el=>{
-                        if(el.meta.name==item.meta.groupName){
-                            el.children.push(item)
-                        }
-                    })
-                }
-            }
-        })
-        menuConfig.value=menus
+        // let menus=[]
+        // let allRoute = router.getRoutes()
+        // allRoute.forEach((item,index)=>{
+        //     if(item.meta.groupName){
+        //         if(menus.filter(el=>el.meta.name==item.meta.groupName).length==0){
+        //             menus.push({
+        //                 path:index,
+        //                 meta:{
+        //                     name:item.meta.groupName,
+        //                 },
+        //                 children:[item]
+        //             })
+        //         }else{
+        //             menus.forEach(el=>{
+        //                 if(el.meta.name==item.meta.groupName){
+        //                     el.children.push(item)
+        //                 }
+        //             })
+        //         }
+        //     }
+        // })
+        // menuConfig.value=menus
+
+
+        menuConfig.value=store.state.menuData
+
+        console.log(store.state,menuConfig.value);
+    }
+    watch(()=>store.state,(newVal,oldVal)=>{
+        console.log('watch');
+        store.commit('READ_STATE')
+    })
+    const saveState = ()=>{
+        store.commit('SAVE_STATE')
     }
     onMounted(()=>{
         getMenuInRoutes()
+        window.addEventListener('beforeunload',saveState)
+    })
+    onUnmounted(()=>{
+        window.removeEventListener('beforeunload',saveState)
     })
 </script>
 

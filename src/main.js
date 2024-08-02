@@ -35,6 +35,7 @@ const render = (props={}) => {
         instance.component(key, component)
     }
     registryComponents(instance)
+    store.commit('READ_STATE')
     instance.config.globalProperties.$axios = axios
     instance.config.globalProperties.$bus = bus
     instance.use(router)

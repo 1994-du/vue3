@@ -1,0 +1,31 @@
+[
+    {
+        "menuName":"首页",
+        "menuId":"CNM_HOME",
+        "menuLink":"/home",
+        "menuPid":null,
+        "children":null
+    },
+    {
+        "menuName":"系统管理",
+        "menuId":"CNM_SYS",
+        "menuLink":"/systemManagement",
+        "menuPid":null,
+        "children":[
+            {
+                "menuName":"用户管理",
+                "menuId":"CNM_SYS_USER",
+                "menuLink":"/systemManagement/userManagement",
+                "menuPid":"CNM_SYS",
+                "children":null
+            },
+            {
+                "menuName":"角色管理",
+                "menuId":"CNM_SYS_ROLE",
+                "menuLink":"/systemManagement/roleManagement",
+                "menuPid":"CNM_SYS",
+                "children":null
+            }
+        ]
+    }
+]

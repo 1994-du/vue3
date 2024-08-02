@@ -36,6 +36,9 @@
 import { getCurrentInstance, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { toLogin ,toRegistry} from "@/api/api";
+import { useStore } from 'vuex'
+const store = useStore()
+// 获取当前实例
 const { proxy } = getCurrentInstance()
 let loginType=ref(0);// 当前状态
 let account = ref('');//账号
@@ -50,7 +53,18 @@ const Login=()=>{
     }
     toLogin(param).then(res=>{
         if(res.status==='success'){
-            sessionStorage.setItem('token',JSON.stringify(res.data))
+            let userInfo={
+                name:res.data.name,
+                id:res.data.id,
+                avatar:res.data.avatar
+            }
+            // 菜单数据
+            store.commit('SYNC_SET_MENUDATA',res.data.navList)
+            // 用户信息
+            store.dispatch('ASYNC_SET_USERINFO',userInfo)
+            // 保存状态
+            store.commit('SAVE_STATE')
+            // 跳转
             router.push('/')
         }
     })

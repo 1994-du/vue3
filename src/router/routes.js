@@ -9,6 +9,10 @@ export default[
         component:()=>import('@/Home.vue'),
         children:[
             {
+                path:'/home',
+                component:()=>import('@/views/HomePage.vue')
+            },
+            {
                 path:'/useVuex',
                 meta:{
                     name:'Vuex',

@@ -11,10 +11,12 @@
     "websocketServer": "node websocketServer/index.js"
   },
   "dependencies": {
+    "@antv/g2": "^5.2.2",
     "@rollup/plugin-alias": "^5.0.0",
     "axios": "^1.4.0",
     "common-tags": "^1.8.2",
     "dxtestui": "^0.2.10",
+    "echarts": "^5.5.1",
     "element-plus": "^2.3.4",
     "less": "^4.1.3",
     "mitt": "^3.0.1",

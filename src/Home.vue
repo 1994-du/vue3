@@ -49,19 +49,18 @@
     </el-dialog>
 </template>
 <script setup>
-    import menuConfig from './router/menuConfig'
     import SubMenu from './components/subMenu.vue'
-    import BreadCrumb from './components/breadCrumb.vue'
-    import { useRouter, useRoute} from 'vue-router'
-    import {computed, onMounted, onBeforeMount, onUpdated, onUnmounted, onBeforeUnmount,getCurrentInstance,ref,watch,watchEffect, reactive, onActivated} from 'vue'
-    import { DArrowLeft, DArrowRight } from '@element-plus/icons-vue'
-    import {useStore} from 'vuex'
-    const router=useRouter()
+    import { useRouter, useRoute } from 'vue-router'
+    import { computed, onMounted, onBeforeMount, onUpdated, onUnmounted, onBeforeUnmount, getCurrentInstance, ref, watch, watchEffect, reactive, onActivated } from 'vue'
+    import { useStore } from 'vuex'
+    const store = useStore()
+    const router = useRouter()
     const route = useRoute()
     const onRoutes = computed(()=>{
         return route.path
     })
     const isCollapse=ref(false)
+    const menuConfig = ref([])
     // 菜单
     const handleMenuSelect=function(index,indexPath){
         router.push(index)
@@ -69,11 +68,7 @@
     const collapse = function(){
         isCollapse.value=!isCollapse.value
     }
-
-    const store = useStore()
-    const { proxy } = getCurrentInstance()
     
-    let searchKey = ref('');//搜索关键字
     let userInfo = reactive({
         value:{}
     });//用户信息
@@ -90,8 +85,49 @@
             userInfo.value=JSON.parse(token)
         }
     })
+    // 根据路由获取菜单
+    const getMenuInRoutes = ()=>{
+        // let menus=[]
+        // let allRoute = router.getRoutes()
+        // allRoute.forEach((item,index)=>{
+        //     if(item.meta.groupName){
+        //         if(menus.filter(el=>el.meta.name==item.meta.groupName).length==0){
+        //             menus.push({
+        //                 path:index,
+        //                 meta:{
+        //                     name:item.meta.groupName,
+        //                 },
+        //                 children:[item]
+        //             })
+        //         }else{
+        //             menus.forEach(el=>{
+        //                 if(el.meta.name==item.meta.groupName){
+        //                     el.children.push(item)
+        //                 }
+        //             })
+        //         }
+        //     }
+        // })
+        // menuConfig.value=menus
+
+
+        menuConfig.value=store.state.menuData
+
+        console.log(store.state,menuConfig.value);
+    }
+    watch(()=>store.state,(newVal,oldVal)=>{
+        console.log('watch');
+        store.commit('READ_STATE')
+    })
+    const saveState = ()=>{
+        store.commit('SAVE_STATE')
+    }
     onMounted(()=>{
-        console.log('router.getRoutes()',router.getRoutes());
+        getMenuInRoutes()
+        window.addEventListener('beforeunload',saveState)
+    })
+    onUnmounted(()=>{
+        window.removeEventListener('beforeunload',saveState)
     })
 </script>
 

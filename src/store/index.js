@@ -2,41 +2,62 @@ import {createStore} from 'vuex';
 export default createStore({
     //全局变量
     state:{
-        islogin:0,
-        name:'dxx',
-        age:28,
-        message:[]
+        userInfo:{},//用户信息
+        menuRoute:null,//菜单路由
+        menuData:[],//菜单数据
+        breadCrumb:[],//面包屑
     },
     //同步操作
     mutations:{
-        addMessage(state,arg){
+        // 菜单数据
+        SYNC_SET_MENUDATA(state,arg){
             console.log('arg',arg);
-            state.message.push(arg.msg)
+            state.menuData=arg
         },
-        clearMessage(state,arg){
-            state.message=[]
+        // 添加面包屑
+        SYNC_PUSH_BREADCRUMB(state,arg){
+            state.breadCrumb.push(arg)
         },
-        changAge(state,arg){
-            state.age+=arg.num
+        // 移除面包屑
+        SYNC_POP_BREADCRUMB(state){
+            state.breadCrumb.pop()
         },
-        changLogin(state,arg){
-            state.islogin=arg.val
+        // 重置面包屑
+        SYNC_SET_BREADCRUMB(state,arg){
+            state.breadCrumb=arg
+        },
+        // 保存状态
+        SAVE_STATE(state){
+            console.log('保存状态',state);
+            localStorage.setItem('store',JSON.stringify(state))
+        },
+        // 读取状态
+        READ_STATE(state){
+            let local = JSON.parse(localStorage.getItem('store'))  
+            state = Object.assign(state,local)
+        },
+        // 初始化状态
+        SYNC_INIT_STATE(state){
+            state = Object.assign(state,{
+                userInfo:{},//用户信息
+                menuRoute:null,
+                menuData:[],//菜单数据
+                breadCrumb:[],//面包屑
+            })
+        },
+        // 设置用户信息
+        SYNC_SET_USERINFO(state,arg){
+            state.userInfo=arg
         }
     },
     //异步操作
     actions:{
-        asyncChangeAge(context,arg){
-            console.log(context)
-            return new Promise(()=>{
-                setTimeout(()=>{
-                    context.commit('changAge',{num:arg.num})
-                },1000)
-            })
+        ASYNC_SET_USERINFO({commit},arg){
+            commit('SYNC_SET_USERINFO',arg)
         }
     },
     // 计算属性
     getters:{
-        
         info:(state)=>state.age+state.name,
         moreinfo:(state,gettets)=>state.age+state.name+gettets.info,
         setName:(state=>((p)=>state.name+p))

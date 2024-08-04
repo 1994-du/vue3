@@ -28,20 +28,17 @@ import { registryComponents } from './components/index.js'
 const bus = new mitt()
 // render 函数
 let instance=null
-const render = (props={}) => {
-    instance = createApp(App)
-    // 全局注册图标
-    for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
-        instance.component(key, component)
-    }
-    registryComponents(instance)
-    instance.config.globalProperties.$axios = axios
-    instance.config.globalProperties.$bus = bus
-    instance.use(router)
-    instance.use(store)
-    instance.use(ElementPlus)
-    instance.use(i18n)
-    instance.mount('#subapp-viewport')
-    directive(instance)
+instance = createApp(App)
+// 全局注册图标
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+    instance.component(key, component)
 }
-render()
+registryComponents(instance)
+instance.config.globalProperties.$axios = axios
+instance.config.globalProperties.$bus = bus
+instance.use(router)
+instance.use(store)
+instance.use(ElementPlus)
+instance.use(i18n)
+instance.mount('#subapp-viewport')
+directive(instance)

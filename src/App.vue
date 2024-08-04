@@ -1,9 +1,10 @@
 <template>
-    <router-view v-slot="{Component}">
+    <!-- <router-view v-slot="{Component}">
         <keep-alive>
             <component :is="Component"></component>
         </keep-alive>
-    </router-view>
+    </router-view> -->
+    <router-view></router-view>
 </template>
 <script setup>
 import { onBeforeRouteUpdate } from 'vue-router';

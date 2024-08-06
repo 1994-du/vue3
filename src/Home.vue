@@ -53,6 +53,7 @@
     import { useRouter, useRoute } from 'vue-router'
     import { computed, onMounted, onBeforeMount, onUpdated, onUnmounted, onBeforeUnmount, getCurrentInstance, ref, watch, watchEffect, reactive, onActivated } from 'vue'
     import { useStore } from 'vuex'
+    import menuData from './mock/menuData.js'
     const store = useStore()
     const router = useRouter()
     const route = useRoute()
@@ -63,7 +64,9 @@
     const menuConfig = ref([])
     // 菜单
     const handleMenuSelect=function(index,indexPath){
-        router.push(index)
+        console.log('111',index);
+        
+        // router.push(index)
     }
     const collapse = function(){
         isCollapse.value=!isCollapse.value
@@ -87,36 +90,12 @@
     })
     // 根据路由获取菜单
     const getMenuInRoutes = ()=>{
-        // let menus=[]
-        // let allRoute = router.getRoutes()
-        // allRoute.forEach((item,index)=>{
-        //     if(item.meta.groupName){
-        //         if(menus.filter(el=>el.meta.name==item.meta.groupName).length==0){
-        //             menus.push({
-        //                 path:index,
-        //                 meta:{
-        //                     name:item.meta.groupName,
-        //                 },
-        //                 children:[item]
-        //             })
-        //         }else{
-        //             menus.forEach(el=>{
-        //                 if(el.meta.name==item.meta.groupName){
-        //                     el.children.push(item)
-        //                 }
-        //             })
-        //         }
-        //     }
-        // })
-        // menuConfig.value=menus
-
-
-        menuConfig.value=store.state.menuData
-
-        console.log(store.state,menuConfig.value);
+        console.log('menuData',menuData);
+        
+        // menuConfig.value=store.state.menuData
+        menuConfig.value=menuData
     }
     watch(()=>store.state,(newVal,oldVal)=>{
-        console.log('watch');
         store.commit('READ_STATE')
     })
     const saveState = ()=>{

@@ -9,6 +9,10 @@ export default[
         component:()=>import('@/Home.vue'),
         children:[
             {
+                path:'/bulletChart',
+                component:()=>import('@/views/Echarts/bulletChart.vue')
+            },
+            {
                 path:'/home',
                 component:()=>import('@/views/HomePage.vue')
             },

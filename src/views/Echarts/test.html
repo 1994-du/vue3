@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <style>
+        #main {
+            width: 800px;
+            height: 600px;
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+   <div class="testDemo">
+    aaaaaa
+    <div id="main"></div>
+   </div>
+    <button id="downloadBtn">下载图片</button>
+    <script>
+        var chart = echarts.init(document.getElementById('main'));
+        var option = {
+            title: {
+                text: "子弹图示例"
+            },
+            yAxis: [
+                {
+                    type: 'category',
+                    data: [''],
+                    axisLine: {
+                        show: false
+                    },
+                    axisTick: {
+                        show: false
+                    }
+                },
+                {
+                    type: 'category',
+                    data: [''],
+                    axisLine: {
+                        show: false
+                    },
+                    axisTick: {
+                        show: false
+                    }
+                }
+            ],
+            xAxis: {
+                type: 'value',
+                axisLine: {
+                    show: false
+                },
+                axisTick: {
+                    show: false
+                }
+            },
+            tooltip: {
+                formatter: '{a}: {c}'
+            },
+            legend: {
+                data: ['实际值', {
+                    name: '目标值',
+                    icon: 'path://M0 0M443.733333 0 h145.066667 v1024 H443.733333z'
+                }],
+                selectedMode: false
+            },
+            grid: {
+                containLabel: true,
+                width: "99%",
+                height: 120,
+                left: 0,
+                top: 50
+            },
+            series: [
+                {
+                    name: "差",
+                    data: [100],
+                    type: 'bar',
+                    yAxisIndex: 0,
+                    stack: "range",
+                    silent: true,
+                    barWidth: 90,
+                    color: "#F5B4AE"
+                },
+                {
+                    name: "实际值",
+                    data: [75],
+                    type: 'bar',
+                    yAxisIndex: 1,
+                    barWidth: 60,
+                    color: "#434778",
+                    z: 3,
+                },
+                {
+                    name: "目标值",
+                    type: "scatter",
+                    symbol: "rect",
+                    symbolSize: [8, 90],
+                    data: [
+                        { value: 85, label: { show: true, position: 'top', formatter: '上方描述', color: '#000000', fontSize: 14 } },
+                        { value: 85, label: { show: true, position: 'bottom', formatter: '下方描述', color: '#000000', fontSize: 14 } }
+                    ],
+                    color: "#000000",
+                    hoverAnimation: false,
+                    z: 4
+                }
+            ]
+        };
+
+        chart.setOption(option);
+
+        window.addEventListener('resize', function () {
+            chart.resize();
+        });
+
+        document.getElementById('downloadBtn').addEventListener('click', function () {
+            html2canvas(document.getElementsByClassName('testDemo')[0]).then(function(canvas) {
+                var link = document.createElement('a');
+                link.href = canvas.toDataURL('image/png');
+                link.download = 'chart.png';
+                link.click();
+            });
+        });
+    </script>
+</body>
+</html>

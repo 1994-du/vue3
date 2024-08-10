@@ -40,5 +40,4 @@
 </script>
 
 <style lang="less" scoped>
-@import "@/styles/use_npm.less";
 </style>

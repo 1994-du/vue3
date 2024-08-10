@@ -18,9 +18,6 @@
     <div class="el-drawer-wrap">
         <el-drawer :withHeader="false" v-model="drawer" :direction="direction" size="50%">
             <div class="container">
-                <div class="img_transform">
-                    <img src="/static/image/smallportal.webp" alt="">
-                </div>
                 <div class="icon1"></div>
                 <div class="login">
                     <span></span>

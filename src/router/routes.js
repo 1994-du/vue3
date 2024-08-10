@@ -24,17 +24,21 @@ export default[
                 },
                 component:()=>import('@/views/vue/vuex.vue')
             },
-
-
-
-            
             {
-                path:'/useNpm',
+                path:'/vue-router',
+                meta:{
+                    name:'VueRouter',
+                    groupName:'vue3'
+                },
+                component:()=>import('@/views/vue/router.vue')
+            },
+            {
+                path:'/npm',
                 meta:{
                     name:'npm命令行',
                     groupName:'npm'
                 },
-                component:()=>import('@/views/npm/useNpm.vue')
+                component:()=>import('@/views/npm.vue')
             },
             {
                 path:'/animation',
@@ -44,12 +48,18 @@ export default[
                 component:()=>import('@/views/animation.vue')
             },
             {
-                path:'/browsercore',
+                path:'/busEvent',
                 meta:{
-                    name:'浏览器内核'
+                    name:'$Bus',
+                    groupName:'vue3'
                 },
-                component:()=>import('@/views/browserCore.vue')
+                component:()=>import('@/views/vue/busEvent.vue')
             },
+
+
+
+
+            
             {
                 path:'/gitLine',
                 meta:{
@@ -65,14 +75,6 @@ export default[
                     groupName:'vue3'
                 },
                 component:()=>import('@/views/vue3/useStore.vue')
-            },
-            {
-                path:'/useRouter',
-                meta:{
-                    name:'Router路由',
-                    groupName:'vue3'
-                },
-                component:()=>import('@/views/vue3/useRouter.vue')
             },
             {
                 path:'/useAxios',
@@ -239,14 +241,7 @@ export default[
                 },
                 component:()=>import('@/views/promise.vue')
             },
-            {
-                path:'/bus',
-                meta:{
-                    name:'$Bus',
-                    groupName:'vue3'
-                },
-                component:()=>import('@/views/vue3/busEvent.vue')
-            },
+            
             {
                 path:'/element-tree',
                 meta:{

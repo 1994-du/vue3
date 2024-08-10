@@ -15,7 +15,12 @@ export default[
             },
             {
                 menuName:'VueRouter',
-                menuLink:'/vueRouter',
+                menuLink:'/vue-router',
+                children:null
+            },
+            {
+                menuName:'BusEvent',
+                menuLink:'/busEvent',
                 children:null
             }
         ]
@@ -23,6 +28,16 @@ export default[
     {
         menuName:'Echart',
         menuLink:'/echart',
+        children:null
+    },
+    {
+        menuName:'NPM',
+        menuLink:'/npm',
+        children:null
+    },
+    {
+        menuName:'动画',
+        menuLink:'/animation',
         children:null
     }
 ]

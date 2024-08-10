@@ -9,21 +9,25 @@ export default[
         component:()=>import('@/Home.vue'),
         children:[
             {
-                path:'/bulletChart',
-                component:()=>import('@/views/Echarts/bulletChart.vue')
-            },
-            {
                 path:'/home',
                 component:()=>import('@/views/HomePage.vue')
             },
             {
-                path:'/useVuex',
+                path:'/echart',
+                component:()=>import('@/views/Echarts.vue')
+            },
+            {
+                path:'/vuex',
                 meta:{
                     name:'Vuex',
                     groupName:'vue3'
                 },
-                component:()=>import('@/views/vue3/vuex.vue')
+                component:()=>import('@/views/vue/vuex.vue')
             },
+
+
+
+            
             {
                 path:'/useNpm',
                 meta:{

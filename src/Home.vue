@@ -1,15 +1,5 @@
 <template>
     <div class="layout">
-        <header>
-            <div class="userinfo">
-                <span>{{ userInfo.value.name }}</span>
-                <img :src="userInfo.value.avatar" alt="">
-            </div>
-            <div class="operation">
-                <img class="set" src="/static/image/set.png" alt="" @click="$router.push('/set')">
-                <img class="set" src="/static/image/logout.png" alt="" @click="dialogVisibleLoginOut=true">
-            </div>
-        </header>
         <div class="container">
             <div class="layout_menu">
                 <el-menu
@@ -32,21 +22,6 @@
             </div>
         </div>
     </div>
-    <!-- 确认退出登录 -->
-    <el-dialog
-        v-model="dialogVisibleLoginOut"
-        width="200px">
-        <span>确认退出登录？</span>
-        <template #header>
-            <h6 class="dialog__headercon">提示</h6>
-        </template>
-        <template #footer>
-            <span class="dialog-footer">
-                <el-button type="primary" @click="toLoginOut">{{$t('common.confirm')}}</el-button>
-                <el-button @click="dialogVisibleLoginOut = false">{{ $t('common.cancel') }}</el-button>
-            </span>
-        </template>
-    </el-dialog>
 </template>
 <script setup>
     import SubMenu from './components/subMenu.vue'
@@ -64,49 +39,17 @@
     const menuConfig = ref([])
     // 菜单
     const handleMenuSelect=function(index,indexPath){
-        console.log('111',index);
-        
-        // router.push(index)
+        router.push(index)
     }
     const collapse = function(){
         isCollapse.value=!isCollapse.value
     }
-    
-    let userInfo = reactive({
-        value:{}
-    });//用户信息
-    let dialogVisibleLoginOut = ref(false)//退出登录提示
-    // 退出登录
-    const toLoginOut=()=>{
-        sessionStorage.removeItem('token')
-        router.push('/login')
-        dialogVisibleLoginOut.value=false;
-    }
-    onActivated(()=>{
-        let token = sessionStorage.getItem('token')
-        if(token){
-            userInfo.value=JSON.parse(token)
-        }
-    })
     // 根据路由获取菜单
     const getMenuInRoutes = ()=>{
-        console.log('menuData',menuData);
-        
-        // menuConfig.value=store.state.menuData
         menuConfig.value=menuData
-    }
-    watch(()=>store.state,(newVal,oldVal)=>{
-        store.commit('READ_STATE')
-    })
-    const saveState = ()=>{
-        store.commit('SAVE_STATE')
     }
     onMounted(()=>{
         getMenuInRoutes()
-        window.addEventListener('beforeunload',saveState)
-    })
-    onUnmounted(()=>{
-        window.removeEventListener('beforeunload',saveState)
     })
 </script>
 

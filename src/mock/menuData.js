@@ -23,17 +23,6 @@ export default[
     {
         menuName:'Echart',
         menuLink:'/echart',
-        children:[
-            {
-                menuName:'子弹图',
-                menuLink:'/bulletChart',
-                children:null
-            },
-            {
-                menuName:'折线图',
-                menuLink:'/lineChart',
-                children:null
-            }
-        ]
+        children:null
     }
 ]

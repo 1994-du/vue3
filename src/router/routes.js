@@ -58,23 +58,13 @@ export default[
 
 
 
-
-            
-            {
-                path:'/gitLine',
-                meta:{
-                    name:'git命令行',
-                    groupName:'git'
-                },
-                component:()=>import('@/views/git/gitLine.vue')
-            },
             {
                 path:'/useStore',
                 meta:{
                     name:'Store',
                     groupName:'vue3'
                 },
-                component:()=>import('@/views/vue3/useStore.vue')
+                component:()=>import('@/views/useStore.vue')
             },
             {
                 path:'/useAxios',
@@ -96,7 +86,7 @@ export default[
                     name:"HTTP版本",
                     groupName:'http'
                 },
-                component:()=>import('@/views/http/HttpVersion.vue')
+                component:()=>import('@/views/HttpVersion.vue')
             },
             {
                 path:"/httpHand",
@@ -104,7 +94,7 @@ export default[
                     name:"HTTP握手",
                     groupName:'http'
                 },
-                component:()=>import('@/views/http/httpHand.vue')
+                component:()=>import('@/views/httpHand.vue')
             },
             {
                 path:"/customerDirective",
@@ -196,7 +186,7 @@ export default[
                     name:'使用props',
                     groupName:'vue3'
                 },
-                component:()=>import('@/views/vue3/propsUse.vue')
+                component:()=>import('@/views/propsUse.vue')
             },
             {
                 path:'/refReactiveTorefs',
@@ -217,7 +207,7 @@ export default[
                 meta:{
                     name:'打开文件管理器'
                 },
-                component:()=>import('@/views/file/fileUpload.vue')
+                component:()=>import('@/views/fileUpload.vue')
             },
             {
                 path:'/watch',
@@ -225,7 +215,7 @@ export default[
                     name:'watch监听',
                     groupName:'vue3'
                 },
-                component:()=>import('@/views/vue3/watch.vue')
+                component:()=>import('@/views/watch.vue')
             },
             {
                 path:'/websocket',
@@ -247,14 +237,14 @@ export default[
                 meta:{
                     name:'element-tree'
                 },
-                component:()=>import('@/views/elementui/el-tree.vue')
+                component:()=>import('@/views/el-tree.vue')
             },
             {
                 path:'/mysql',
                 meta:{
                     name:'Mysql'
                 },
-                component:()=>import('@/views/mysql/mysql.vue')
+                component:()=>import('@/views/mysql.vue')
             }
         ]
     },

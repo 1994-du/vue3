@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue'
-import dataSource from "../../json/menuTree.json"
-import backData from "../../json/resJson.json"
+// import dataSource from "../../json/menuTree.json"
+// import backData from "../../json/resJson.json"
 const treeRef = ref()
 const props = ref({
   label:"menuName",

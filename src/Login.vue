@@ -80,5 +80,4 @@ const Registry = ()=>{
 }
 </script>
 <style lang="less" scoped>
-@import '@/styles/login.less';
 </style>

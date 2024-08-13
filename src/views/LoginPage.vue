@@ -69,7 +69,6 @@ const isShowPassword=ref(true)
     .login_img{
         flex: 1;
         height: 100%;
-        background-image: url('./../../public/static/image/login_img.png');
         background-size: cover;
     }
     .login_box{

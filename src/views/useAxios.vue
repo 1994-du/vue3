@@ -1,13 +1,9 @@
 <template>
     <div class="use_axios">
         <h2>一、依赖引入</h2>
-        <img src="/static/image/useAxios-install.png" alt="">
         <h2>二、创建axios文件</h2>
-        <img src="/static/image/useAxios-create.png" alt="">
         <h2>三、绑定到全局</h2>
-        <img src="/static/image/useAxios-main.png" alt="">
         <h2>四、使用$axios</h2>
-        <img src="/static/image/useAxios-use.png" alt="">
         <h2>
             请求方法：get、post、delete、put、patch、options、head
         </h2>

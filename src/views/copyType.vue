@@ -8,37 +8,20 @@
         </div>
         <div class="item">
             <p>Array.concat()</p>
-            <img src="/static/image/copy_array.concat.png" alt="">
         </div>
         
         <div class="item">
             <p>Object.assign()</p>
-            <img src="/static/image/copy_object.assign.png" alt="">
         </div>
         <div class="item">
             <p>解构赋值</p>
-            <img src="/static/image/copy_3.png" alt="">
         </div>
     </div>
     <h4>深拷贝方法</h4>
     <div class="deep_copy">
         <div class="item">
             <p>JSON.parse(JSON.stringify())</p>
-            <img src="/static/image/copy_deep_json.png">
         </div>
-        <!-- <div class="item">
-            <p>Array.concat()</p>
-            <img src="/static/image/copy_array.concat.png" alt="">
-        </div>
-        
-        <div class="item">
-            <p>Object.assign()</p>
-            <img src="/static/image/copy_object.assign.png" alt="">
-        </div>
-        <div class="item">
-            <p>解构赋值</p>
-            <img src="/static/image/copy_3.png" alt="">
-        </div> -->
     </div>
 </template>
 

@@ -55,6 +55,18 @@ export default[
                 },
                 component:()=>import('@/views/vue/busEvent.vue')
             },
+            {
+                path:'/ComponentCommunication',
+                meta:{
+                    name:'组件通信',
+                    groupName:'vue3'
+                },
+                component:()=>import('@/views/vue/busEvent.vue')
+            },
+
+            
+
+
 
 
 

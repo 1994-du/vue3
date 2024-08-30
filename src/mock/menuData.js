@@ -22,6 +22,11 @@ export default[
                 menuName:'BusEvent',
                 menuLink:'/busEvent',
                 children:null
+            },
+            {
+                menuName:'ComponentCommunication',
+                menuLink:'/ComponentCommunication',
+                children:null
             }
         ]
     },

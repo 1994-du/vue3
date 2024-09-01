@@ -44,5 +44,16 @@ export default[
         menuName:'动画',
         menuLink:'/animation',
         children:null
+    },
+    {
+        menuName:'ElementPlus',
+        menuLink:'/animation',
+        children:[
+            {
+                menuName:'分配用户',
+                menuLink:'/assignUser',
+                children:null
+            }
+        ]
     }
 ]

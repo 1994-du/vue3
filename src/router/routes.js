@@ -61,7 +61,15 @@ export default[
                     name:'组件通信',
                     groupName:'vue3'
                 },
-                component:()=>import('@/views/vue/busEvent.vue')
+                component:()=>import('@/views/vue/ComponentCommunication.vue')
+            },
+            {
+                path:'/assignUser',
+                meta:{
+                    name:'分配经办人',
+                    groupName:'ElementPlus'
+                },
+                component:()=>import('@/views/ElementPlus/assignUser.vue')
             },
 
             

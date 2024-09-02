@@ -2,11 +2,47 @@
     <div class="main">
         <h4>子弹图</h4>
         <div id="echart_1" style="width:400px;height:400px;"></div>
+
+
+        <el-form :model="formData" :rules="formRules">
+            <el-form-item label="金额" prop="input3">
+                <el-input
+                    v-model="formData.input3"
+                    style="max-width: 600px"
+                    placeholder="Please input"
+                    class="input-with-select"
+                    >
+                    <template #prepend>
+                        <el-select v-model="formData.select" placeholder="Select" style="width: 115px">
+                        <el-option label="Restaurant" value="1" />
+                        <el-option label="Order No." value="2" />
+                        <el-option label="Tel" value="3" />
+                        </el-select>
+                    </template>
+                </el-input>
+            </el-form-item>
+        </el-form>
+        
     </div>
 </template>
 <script setup>
 import * as echarts from 'echarts'
-import { onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
+
+let formData = ref({
+    input3: '',
+    select: ''
+})
+let formRules = ref({
+    input3: [
+        { required: true, message: '请输入金额', trigger: 'blur' },
+    ],
+    select: [
+        { required: true, message: '请选择单位', trigger: 'change' },
+    ]
+})
+
+
 let echart1=null;
 const initEchart1=()=>{
     if(echart1!==null){

@@ -1,23 +1,25 @@
 <template>
-  <div>
+  <div v-click-outside="onClickOutSide">
     <!-- 绑定到按钮上的el-popover -->
     <el-popover
-      ref="popover"
+      ref="popoverRef"
       placement="top"
       title="标题"
       width="200"
-      trigger="hover"
-      content="这是一段内容, 这是一段内容, 这是一段内容。"
-    >
+      virtual-triggering
+      trigger="click">
+      <span> Some content </span>
     </el-popover>
-    
     <!-- 触发popover的按钮 -->
-    <el-button v-popover:popover>悬停我</el-button>
+    <el-button v-popover="popoverRef">悬停我</el-button>
   </div>
 </template>
  
-<script>
-export default {
-  // 你的组件数据和方法
-};
+<script setup>
+import { ref } from 'vue'
+import { ClickOutside as vClickOutside } from 'element-plus'
+let popoverRef = ref(null)
+const onClickOutSide = () => {
+  popoverRef.value.hide()
+}
 </script>

@@ -16,7 +16,7 @@
                 </el-checkbox-group>
             </div>
             <div class="user_footer">
-                <el-button>取消</el-button>
+                <el-button @click.stop="closePopover">取消</el-button>
                 <el-button @click.stop="handleChoose" type="primary">确定</el-button>
             </div>
         </div>
@@ -57,7 +57,6 @@ watch(()=>userForm.chooseUser,(val,oldVal)=>{
         userForm.chooseUser = [val[val.length-1]]
     }
     if(!props.cancel){
-        console.log(val,oldVal);
         if(val.length==0){
             userForm.chooseUser = [oldVal[0]]
         }

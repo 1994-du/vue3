@@ -71,7 +71,14 @@ export default[
                 },
                 component:()=>import('@/views/ElementPlus/assignUser.vue')
             },
-
+            {
+                path:'/selectQuarter',
+                meta:{
+                    name:'季度选择器',
+                    groupName:'ElementPlus'
+                },
+                component:()=>import('@/views/ElementPlus/selectQuarter.vue')
+            },
             
 
 

@@ -53,6 +53,11 @@ export default[
                 menuName:'分配用户',
                 menuLink:'/assignUser',
                 children:null
+            },
+            {
+                menuName:'季度选择器',
+                menuLink:'/selectQuarter',
+                children:null
             }
         ]
     }

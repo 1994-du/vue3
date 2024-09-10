@@ -16,7 +16,7 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom', // 使用 jsdom 模拟浏览器环境
     // setupFiles: './vitest.config.js', // 如果需要初始化配置
-    exclude: [...configDefaults.exclude, 'e2e/*'], // 排除的测试目录
+    // exclude: [...configDefaults.exclude, 'e2e/*'], // 排除的测试目录
   },
   resolve:{
     alias:{

@@ -4,6 +4,8 @@
         <div id="echart_1" style="width:400px;height:400px;"></div>
         <h4>柱状图</h4>        
         <div id="echart_2" style="width:400px;height:400px;"></div>
+        <h4>组合图</h4>
+        <div id="echart_3" style="width: 400px;height:400px;"></div>
     </div>
 </template>
 <script setup>
@@ -201,9 +203,110 @@ const initEchart2=()=>{
 
     echart2.setOption(option);
 }
+let echart3=null;
+const initEchart3=()=>{
+    echart3 = echarts.init(document.getElementById('echart_3'));
+    let option = {
+  title: {
+    text: '上下分开的散点图和柱状图',
+  },
+  tooltip: {
+    trigger: 'axis',
+    axisPointer: {
+      type: 'cross',
+    },
+  },
+  legend: {
+    data: ['散点图', '柱状图'],
+  },
+  grid: [
+    {
+      left: '10%',
+      right: '10%',
+      top: '10%',
+      height: '35%',  // 设置上半部分网格的高度
+    },
+    {
+      left: '10%',
+      right: '10%',
+      top: '55%',     // 设置下半部分网格的位置
+      height: '35%',  // 设置下半部分网格的高度
+    },
+  ],
+  xAxis: [
+    {
+      type: 'category',
+      data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月'],
+      gridIndex: 0, // 对应第一个 grid
+      axisLine: { onZero: true },  // 显示轴线
+      axisTick: { show: true },    // 显示刻度
+      axisLabel: { show: true },   // 显示标签
+      position: 'top',             // 把 X 轴放到图表顶部
+    },
+    {
+      type: 'category',
+      data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月'],
+      gridIndex: 1, // 对应第二个 grid
+      axisLine: { onZero: true },  // 显示轴线
+      axisTick: { show: true },    // 显示刻度
+      axisLabel: { show: true },   // 显示标签
+      position: 'bottom',          // 把 X 轴放到图表底部
+    },
+  ],
+  yAxis: [
+    {
+      type: 'value',
+      name: '百分比 (%)',
+      position: 'left',
+      axisLine: {
+        lineStyle: {
+          color: '#EE6666',
+        },
+      },
+      axisLabel: {
+        formatter: '{value} %',
+      },
+      gridIndex: 0, // 对应第一个 grid
+    },
+    {
+      type: 'value',
+      name: '金额 (亿元)',
+      position: 'left',
+      axisLine: {
+        lineStyle: {
+          color: '#5470C6',
+        },
+      },
+      axisLabel: {
+        formatter: '{value} 亿',
+      },
+      gridIndex: 1, // 对应第二个 grid
+    },
+  ],
+  series: [
+    {
+      name: '散点图',
+      type: 'scatter',
+      xAxisIndex: 0,
+      yAxisIndex: 0,
+      data: [10, 12, 15, 20, 25, 30, 35, 40],
+      symbolSize: 10,
+    },
+    {
+      name: '柱状图',
+      type: 'bar',
+      xAxisIndex: 1,
+      yAxisIndex: 1,
+      data: [1.05, 2.78, 3.06, 3.23, 2.49, 3.12, 2.55, 2.90],
+    },
+  ],
+};
+    echart3.setOption(option);
+}
 onMounted(()=>{
     initEchart1()
     initEchart2()
+    initEchart3()
 })
 </script>
 <style lang='scss' scoped>

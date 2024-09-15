@@ -9,10 +9,10 @@
                     <el-input type="password" placeholder="密码" v-model="password" @keydown.enter="Login"></el-input>
                     <span class="forget_password">忘记密码？</span>
                 </div>
-                <el-button @click="Login">登录</el-button>
+                <el-button @click="Login" class="login_btn">登录</el-button>
             </div>
             <div class="login_d" v-else>
-                <el-button @click="loginType=0">登录</el-button>
+                <el-button @click="loginType=0" class="login_btn">登录</el-button>
             </div>
         </div>
         <div class="registry_box" :class="loginType==1?'active':'disactive'">

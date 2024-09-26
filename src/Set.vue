@@ -42,7 +42,7 @@ const uploadSuccess=function(res){
 			<div style="display: flex;flex-direction: column;">
 				<fileUpload :url="imageUrl" @success="uploadSuccess"></fileUpload>
 				<div class="history_list">
-					<div v-for="(item,index) in historyImgs">
+					<div v-for="(item,index) in historyImgs" :key="'a'+index">
 						<img :src="item.avatar" alt="">
 					</div>
 				</div>

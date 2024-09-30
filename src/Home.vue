@@ -54,5 +54,5 @@
 </script>
 
 <style lang="less">
-@import "@/styles/home.less";
+@import "@/styles/home.scss";
 </style>

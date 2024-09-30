@@ -4,13 +4,12 @@ import router from "./router"
 import store from "./store"
 import axios from "@/api"
 //全局自定义指令
-import directive from "./globalDirective";
+import directive from "./utils/globalDirective.js";
 // elementPlus
 import ElementPlus from 'element-plus'
 import './styles/element_plus.scss'
 // elementPlus图标
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
-// 中央事件
 import mitt from 'mitt'
 // 国际化
 import LanguageZH from '@/lang/zh-cn.js'
@@ -23,8 +22,9 @@ const i18n = new createI18n({
         'zh-cn':LanguageZH
     }
 })
+// 全局组件
 import { registryComponents } from './components/index.js'
-
+// 中央事件
 const bus = new mitt()
 // render 函数
 let instance=null

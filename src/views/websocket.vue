@@ -90,5 +90,5 @@ const sendMsg = ()=>{
   </div>
 </template>
 <style lang="less" scoped>
-@import "@/styles/websocket.less";
+@import "@/styles/websocket.scss";
 </style>

@@ -7,7 +7,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom', // 使用 jsdom 模拟浏览器环境
-    // setupFiles: './vitest.setup.js', // 如果需要初始化配置，可以在这里设置路径
+    setupFiles: './vitest.setup.js', // 如果需要初始化配置，可以在这里设置路径
     coverage: {
       enabled:true,
       provider: 'v8',  // 使用 c8 生成覆盖率报告

@@ -70,6 +70,9 @@ vi.mock("vue-router", () => {
         },
       })),
     })),
+	useRoute:vi.fn(() => ({
+	    path:vi.fn()
+	})),
     createRouter: vi.fn(() => ({
       push: vi.fn(),
       replace: vi.fn(),

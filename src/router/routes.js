@@ -13,8 +13,20 @@ export default[
                 component:()=>import('@/views/HomePage.vue')
             },
             {
-                path:'/echart',
-                component:()=>import('@/views/Echarts.vue')
+                path:'/echart-bar',
+                meta:{
+                    name:'Echart-Bar',
+                    groupName:'Echarts'
+                },
+                component:()=>import('@/views/Echarts/echart-bar.vue')
+            },
+            {
+                path:'/echart-bullet',
+                meta:{
+                    name:'Echart-Bullet',
+                    groupName:'Echarts'
+                },
+                component:()=>import('@/views/Echarts/echart-bullet.vue')
             },
             {
                 path:'/vuex',

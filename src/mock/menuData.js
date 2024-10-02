@@ -31,9 +31,20 @@ export default[
         ]
     },
     {
-        menuName:'Echart',
-        menuLink:'/echart',
-        children:null
+        menuName:'Echarts',
+        menuLink:'/echarts',
+        children:[
+            {
+                menuName:'Echart-Bar',
+                menuLink:'/echart-bar',
+                children:null
+            },
+            {
+                menuName:'Echart-Bullet',
+                menuLink:'/echart-bullet',
+                children:null
+            }
+        ]
     },
     {
         menuName:'NPM',

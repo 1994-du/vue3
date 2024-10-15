@@ -7,5 +7,4 @@ npm run websocketServer
 "@testing-library/jest-dom": "^6.5.0",
 "@testing-library/vue": "^8.1.0",
 # vitest转jest
-npm install --save-dev jest @vue/test-utils jest-transform-stub vue-jest babel-jest
-npm install --save-dev jest @vue/test-utils babel-jest vue-jest @testing-library/jest-dom
+npm install --save-dev jest @vue/test-utils babel-jest vue-jest 

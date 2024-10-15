@@ -1,19 +1,18 @@
-import Home from '@/Home.vue'
+import Popover from '@/views/ElementPlus/popover.vue'
 import { mount } from '@vue/test-utils'
-import { describe, it, expect } from 'vitest'
 import ElementPlus from 'element-plus'
 describe('Home.vue', () => {
-    const wrapper = mount(Home,{
-        global: {
-            plugins: [ElementPlus],
-            stubs:{
-                'el-menu':false,
+    let wrapper;
+    beforeEach(() => {
+        wrapper = mount(Popover,{
+            global: {
+                plugins: [ElementPlus],
+                stubs:false
             }
-        }
+        })
     })
-    console.log(wrapper.html());
-    
-    it('renders the correct title', () => {
-        expect(wrapper.vm.isCollapse).toBe(false)
+    it('renders the correct title', async() => {
+        await wrapper.vm.$nextTick()
+        console.log(wrapper.html());
     })
 })

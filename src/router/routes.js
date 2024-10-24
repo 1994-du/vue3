@@ -4,144 +4,213 @@ export default[
         path:'/',
         meta:{
             name:'首页',
-            level:0
         },
         component:()=>import('@/Home.vue'),
         children:[
+            // 首页
             {
                 path:'/home',
                 component:()=>import('@/views/HomePage.vue')
             },
+            // Echarts
             {
-                path:'/echart-bar',
+                path:'/echart',
                 meta:{
-                    name:'Echart-Bar',
-                    groupName:'Echarts'
+                    name:'Echarts',
                 },
-                component:()=>import('@/views/Echarts/echart-bar.vue')
+                children:[
+                    {
+                        path:'/bar',
+                        meta:{
+                            name:'Echart-Bar',
+                        },
+                        component:()=>import('@/views/Echarts/echart-bar.vue')
+                    },
+                    {
+                        path:'/bullet',
+                        meta:{
+                            name:'Echart-Bullet',
+                        },
+                        component:()=>import('@/views/Echarts/echart-bullet.vue')
+                    },
+                ]
             },
+            // Vue3
             {
-                path:'/echart-bullet',
+                path:'/vue3',
                 meta:{
-                    name:'Echart-Bullet',
-                    groupName:'Echarts'
+                    name:'Vue3',
                 },
-                component:()=>import('@/views/Echarts/echart-bullet.vue')
+                children:[
+                    {
+                        path:'/vuex',
+                        meta:{
+                            name:'Vuex',
+                        },
+                        component:()=>import('@/views/Vue3/vuex.vue')
+                    },
+                    {
+                        path:'/vue-router',
+                        meta:{
+                            name:'VueRouter',
+                        },
+                        component:()=>import('@/views/Vue3/router.vue')
+                    },
+                    {
+                        path:'/busEvent',
+                        meta:{
+                            name:'$Bus',
+                        },
+                        component:()=>import('@/views/Vue3/busEvent.vue')
+                    },
+                    {
+                        path:'/ComponentCommunication',
+                        meta:{
+                            name:'组件通信',
+                        },
+                        component:()=>import('@/views/Vue3/ComponentCommunication.vue')
+                    },
+                    {
+                        path:'/routerLazyLoad',
+                        meta:{
+                            name:'路由懒加载'
+                        },
+                        component:()=>import('@/views/Vue3/routerLazyLoad.vue')
+                    },
+                    {
+                        path:"/directive",
+                        meta:{
+                            name:"自定义指令"
+                        },
+                        component:()=>import('@/views/Vue3/customerDirective.vue')
+                    },
+                    {
+                        path:'/componentImp',
+                        meta:{
+                            name:'组件引入'
+                        },
+                        component:()=>import('@/views/Vue3/importComponent.vue')
+                    },
+                    {
+                        path:'/props',
+                        meta:{
+                            name:'使用props',
+                            groupName:'vue3'
+                        },
+                        component:()=>import('@/views/Vue3/propsUse.vue')
+                    },
+                    {
+                        path:'/watch',
+                        meta:{
+                            name:'watch监听',
+                        },
+                        component:()=>import('@/views/Vue3/watch.vue')
+                    },
+                ]
             },
-            {
-                path:'/vuex',
-                meta:{
-                    name:'Vuex',
-                    groupName:'vue3'
-                },
-                component:()=>import('@/views/vue/vuex.vue')
-            },
-            {
-                path:'/vue-router',
-                meta:{
-                    name:'VueRouter',
-                    groupName:'vue3'
-                },
-                component:()=>import('@/views/vue/router.vue')
-            },
-            {
-                path:'/npm',
-                meta:{
-                    name:'npm命令行',
-                    groupName:'npm'
-                },
-                component:()=>import('@/views/npm.vue')
-            },
+            // Animation
             {
                 path:'/animation',
                 meta:{
                     name:'动画'
                 },
-                component:()=>import('@/views/animation.vue')
+                component:()=>import('@/views/Animation/animation.vue')
             },
+            // Npm
             {
-                path:'/busEvent',
+                path:'/npm',
                 meta:{
-                    name:'$Bus',
-                    groupName:'vue3'
+                    name:'Npm',
                 },
-                component:()=>import('@/views/vue/busEvent.vue')
+                component:()=>import('@/views/npm.vue')
             },
+            // ElementPlus
             {
-                path:'/ComponentCommunication',
+                path:'/element-plus',
                 meta:{
-                    name:'组件通信',
-                    groupName:'vue3'
+                    name:'ElementPlus'
                 },
-                component:()=>import('@/views/vue/ComponentCommunication.vue')
+                children:[
+                    {
+                        path:'/assignUser',
+                        meta:{
+                            name:'分配人'
+                        },
+                        component:()=>import('@/views/ElementPlus/assignUser.vue')
+                    },
+                    {
+                        path:'/popover',
+                        meta:{
+                            name:'Popover'
+                        },
+                        component:()=>import('@/views/ElementPlus/popover.vue')
+                    },
+                    {
+                        path:'/quarter',
+                        meta:{
+                            name:'季度选择器'
+                        },
+                        component:()=>import('@/views/ElementPlus/selectQuarter.vue')
+                    },
+                    {
+                        path:'/tree',
+                        meta:{
+                            name:'element-tree'
+                        },
+                        component:()=>import('@/views/ElementPlus/el-tree.vue')
+                    }
+                ]
             },
+            // Axios
             {
-                path:'/assignUser',
-                meta:{
-                    name:'分配经办人',
-                    groupName:'ElementPlus'
-                },
-                component:()=>import('@/views/ElementPlus/assignUser.vue')
-            },
-            {
-                path:'/selectQuarter',
-                meta:{
-                    name:'季度选择器',
-                    groupName:'ElementPlus'
-                },
-                component:()=>import('@/views/ElementPlus/selectQuarter.vue')
-            },
-            
-
-
-
-
-
-            {
-                path:'/useStore',
-                meta:{
-                    name:'Store',
-                    groupName:'vue3'
-                },
-                component:()=>import('@/views/useStore.vue')
-            },
-            {
-                path:'/useAxios',
+                path:'/axios',
                 meta:{
                     name:'Axios'
                 },
-                component:()=>import('@/views/useAxios.vue')
+                component:()=>import('@/views/Axios/useAxios.vue')
             },
+            // Http
             {
-                path:'/routerLazyLoad',
+                path:'/http',
                 meta:{
-                    name:'路由懒加载'
+                    name:'HTTP'
                 },
-                component:()=>import('@/views/routerLazyLoad.vue')
+                children:[
+                    {
+                        path:"/httpVersion",
+                        meta:{
+                            name:"HTTP版本",
+                        },
+                        component:()=>import('@/views/Http/HttpVersion.vue')
+                    },
+                    {
+                        path:"/httpHand",
+                        meta:{
+                            name:"HTTP握手",
+                        },
+                        component:()=>import('@/views/Http/httpHand.vue')
+                    },
+                    {
+                        path:"/stateCode",
+                        meta:{
+                            name:"请求状态码"
+                        },
+                        component:()=>import('@/views/Http/StateCode.vue')
+                    },
+                ]
             },
+            // Promise
             {
-                path:"/httpVersion",
+                path:'/promise',
                 meta:{
-                    name:"HTTP版本",
-                    groupName:'http'
+                    name:'Promise'
                 },
-                component:()=>import('@/views/HttpVersion.vue')
+                component:()=>import('@/views/Promise/promise.vue')
             },
-            {
-                path:"/httpHand",
-                meta:{
-                    name:"HTTP握手",
-                    groupName:'http'
-                },
-                component:()=>import('@/views/httpHand.vue')
-            },
-            {
-                path:"/customerDirective",
-                meta:{
-                    name:"自定义指令"
-                },
-                component:()=>import('@/views/customerDirective.vue')
-            },
+            
+            
+            
+            
             {
                 path:"/cacheDetail",
                 meta:{
@@ -177,13 +246,7 @@ export default[
                 },
                 component:()=>import('@/views/dataTypeJudge.vue')
             },
-            {
-                path:"/stateCode",
-                meta:{
-                    name:"请求状态码"
-                },
-                component:()=>import('@/views/StateCode.vue')
-            },
+            
             {
                 path:'/elementShow',
                 meta:{
@@ -212,21 +275,8 @@ export default[
                 },
                 component:()=>import('@/views/nvmUse.vue')
             },
-            {
-                path:'/componentImp',
-                meta:{
-                    name:'组件引入'
-                },
-                component:()=>import('@/views/importComponent.vue')
-            },
-            {
-                path:'/useProps',
-                meta:{
-                    name:'使用props',
-                    groupName:'vue3'
-                },
-                component:()=>import('@/views/propsUse.vue')
-            },
+            
+            
             {
                 path:'/refReactiveTorefs',
                 meta:{
@@ -248,14 +298,7 @@ export default[
                 },
                 component:()=>import('@/views/fileUpload.vue')
             },
-            {
-                path:'/watch',
-                meta:{
-                    name:'watch监听',
-                    groupName:'vue3'
-                },
-                component:()=>import('@/views/watch.vue')
-            },
+            
             {
                 path:'/websocket',
                 meta:{
@@ -263,21 +306,9 @@ export default[
                 },
                 component:()=>import('@/views/websocket.vue')
             },
-            {
-                path:'/promise',
-                meta:{
-                    name:'Promise'
-                },
-                component:()=>import('@/views/promise.vue')
-            },
             
-            {
-                path:'/element-tree',
-                meta:{
-                    name:'element-tree'
-                },
-                component:()=>import('@/views/el-tree.vue')
-            },
+            
+            
             {
                 path:'/mysql',
                 meta:{

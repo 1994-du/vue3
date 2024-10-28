@@ -28,10 +28,40 @@
     import { useRouter, useRoute } from 'vue-router'
     import { computed, onMounted, onBeforeMount, onUpdated, onUnmounted, onBeforeUnmount, getCurrentInstance, ref, watch, watchEffect, reactive, onActivated } from 'vue'
     import { useStore } from 'vuex'
-    import menuData from './mock/menuData.js'
     const store = useStore()
     const router = useRouter()
     const route = useRoute()
+    // 路由分组
+    const routesGroup = (list)=>{
+        let res = {}
+        list.forEach((item)=>{
+            if(item.meta.groupName){
+                if(!res[item.meta.groupName]){
+                    res[item.meta.groupName] = []
+                    res[item.meta.groupName].push({
+                        menuName: item.name,
+                        menuLink: item.path,
+                    })
+                }else{
+                    res[item.meta.groupName].push({
+                        menuName: item.name,
+                        menuLink: item.path,
+                    })
+                }
+                
+            }
+        })
+        return res
+    }
+    let routeRes = routesGroup(router.getRoutes())
+    // 菜单数据
+    const menuData = Object.keys(routeRes).map((item)=>{
+        return {
+            menuName: item,
+            menuLink: routeRes[item].length>1?'':routeRes[item][0].menuLink,
+            children: routeRes[item].length>1?routeRes[item]:null
+        }
+    })
     const onRoutes = computed(()=>{
         return route.path
     })
@@ -44,12 +74,8 @@
     const collapse = function(){
         isCollapse.value=!isCollapse.value
     }
-    // 根据路由获取菜单
-    const getMenuInRoutes = ()=>{
-        menuConfig.value=menuData
-    }
     onMounted(()=>{
-        getMenuInRoutes()
+        menuConfig.value=menuData
     })
 </script>
 

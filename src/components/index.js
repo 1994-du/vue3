@@ -4,6 +4,4 @@ const registryComponents = (app)=>{
         return key.replace(/(\.\/|\.vue)/g,'');
     });
 }
-export{
-    registryComponents
-}
+export default registryComponents;

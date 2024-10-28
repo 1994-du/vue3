@@ -23,7 +23,7 @@ const i18n = new createI18n({
     }
 })
 // 全局组件
-import { registryComponents } from './components/index.js'
+import registryComponents from './components/index.js'
 // 中央事件
 const bus = new mitt()
 // render 函数

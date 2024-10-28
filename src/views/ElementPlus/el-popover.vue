@@ -1,22 +1,10 @@
 <template>
     <div>
-        <h4>组件通信</h4>
-        <UserChoose 
-            ref="userBtnRef1"
-            :data="userList"
-            :cancel="false" 
-            @select="userSelect" 
-            @click="testOne1">
-            经办人
-        </UserChoose>
-        <UserChoose 
-            ref="userBtnRef2"
-            :data="userList"
-            :cancel="true" 
-            @select="userSelect" 
-            @click="testOne2">
-            复核人
-        </UserChoose>
+        <h4>el-popover</h4>
+
+        <popButton>测试</popButton>
+
+
         <el-table :data="tableData" @selection-change="handleSelectionChange">
             <el-table-column type="selection"></el-table-column>
             <el-table-column prop="handler" label="经办人"></el-table-column>
@@ -26,7 +14,7 @@
 
 <script setup>
 import { ref,reactive } from 'vue'
-import UserChoose from '../../components/userChoose.vue';
+import popButton from '../../components/popButton.vue';
 import { ElMessage } from 'element-plus';
 let userList = ref([
     {id:1,name:'张三'},

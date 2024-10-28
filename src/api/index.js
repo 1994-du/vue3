@@ -1,6 +1,24 @@
 import axios from 'axios'
-import { ElMessage } from 'element-plus'
+import { ElMessage,ElLoading } from 'element-plus'
 import router from '../router/index'
+let loadingInstance = null
+let requestCount = 0
+const showLoading = () => {
+    if(requestCount === 0){
+        loadingInstance = ElLoading.service({
+            lock:true,
+            text:'加载中...',
+            background:'rgba(0,0,0,0.7)'
+        })
+    }
+    requestCount++
+}
+const hideLoading = () => {
+    requestCount--
+    if(requestCount === 0 && loadingInstance){
+        loadingInstance.close()
+    }
+}
 // 创建axios实例
 const Axios = axios.create({
     timeout:300000,
@@ -8,8 +26,10 @@ const Axios = axios.create({
         'Token':JSON.parse(sessionStorage.getItem('token'))?.id||''
     }
 })
-Axios.interceptors.request.use(req=>{
-    return req
+Axios.interceptors.request.use(config=>{
+    showLoading()
+    config.headers['Content-Type'] = 'application/json'
+    return config
 })
 Axios.interceptors.response.use(res=>{
     if(res.data.status){

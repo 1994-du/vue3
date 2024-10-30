@@ -85,7 +85,7 @@ const req=()=>{
     })
 }
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 h2,p{
     text-align: left;
 }
@@ -97,17 +97,4 @@ img {
     width: 100px;
     transition: all 2s;
 }  
-</style>
-<style scoped>
-.code{
-    background-color: #181803;
-    width: max-content;
-    margin: 10px 0;
-    padding: 10px;
-    pre{
-        
-        color: white;
-        text-align: left;
-    }
-}
 </style>

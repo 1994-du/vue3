@@ -42,110 +42,110 @@
     </div>
     
     <table border cellspacing="0">
-        <tr>
-            <th style="width:80px">缓存类型</th>
-            <th style="width:150px">头字段</th>
-            <th>字段含义</th>
-            <th>优点</th>
-            <th>缺点</th>
-        </tr>
-        <tr>
-            <td rowspan="2">强缓存</td>
-            <td>Cache-Control</td>
-            <td>请求/响应头，缓存控制字段，精确控制缓存策略；HTTP1.1新增字段，既能出现在请求头，也能出现在相应头，不同值代表不同意思</td>
-            <td >\</td>
-            <td>\</td>
-        </tr>
-        <tr>
-            <td>Expires</td>
-            <td>Expires:响应头，表示资源过期时间</td>
-            <td>在过期时间内请求，不需要请求服务器，直接在缓存里面拿，为用户节省流量，减少服务器重复读取磁盘文件压力</td>
-            <td>过期后，资源未变化还是会请求服务器，过期时间依赖客户端时间，时间不准确或者被改动，缓存也随之受影响</td>
-        </tr>
-        <tr>
-            <td rowspan="4">协商缓存</td>
-            <td rowspan="2">Etag <br> if-None-Match</td>
-            <td>Etag：响应头，资源标识，有服务器告诉浏览器，Etag由文件修改时间和大小计算而成</td>
-            <td  rowspan="2">当缓存有效时，服务器不会返回文件，直接返回304状态码，让客户端从缓存中获取文件，节省流量和宽带及服务器压力。并且解决了一秒内修改并读取文件的问题</td>
-            <td rowspan="2">/</td>
-        </tr>
-        <tr>
-            <td>if-None-Match:请求头，缓存资源标识，由浏览器告诉服务器，即第一次访问服务器时返回的Etag的值</td>
-            
-        </tr>
-        <tr>
-            <td rowspan="2">Last-modified <br> if-Modified-Since、</td>
-            <td>Last-modified：响应头，资源最近修改时间，由服务器告诉浏览器</td>
-            <td rowspan="2">当缓存有效时，服务器不会返回文件，直接返回304状态码，让客户端从缓存中获取文件。节省流量和宽带及服务器压力</td>
-            <td rowspan="2">过期时间只能精确到秒，如果同一秒即修改又获取了文件，客户端拿不到最新的文件</td>
-        </tr>
-        <tr>
-            <td>if-Modified-Since：请求头，资源最近修改时间。即第一次访问服务器时返回的Last-Modified的值</td>
-        </tr>
+        <thead>
+            <tr>
+                <th style="width:80px">缓存类型</th>
+                <th style="width:150px">头字段</th>
+                <th>字段含义</th>
+                <th>优点</th>
+                <th>缺点</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td rowspan="2">强缓存</td>
+                <td>Cache-Control</td>
+                <td>请求/响应头，缓存控制字段，精确控制缓存策略；HTTP1.1新增字段，既能出现在请求头，也能出现在相应头，不同值代表不同意思</td>
+                <td >\</td>
+                <td>\</td>
+            </tr>
+            <tr>
+                <td>Expires</td>
+                <td>Expires:响应头，表示资源过期时间</td>
+                <td>在过期时间内请求，不需要请求服务器，直接在缓存里面拿，为用户节省流量，减少服务器重复读取磁盘文件压力</td>
+                <td>过期后，资源未变化还是会请求服务器，过期时间依赖客户端时间，时间不准确或者被改动，缓存也随之受影响</td>
+            </tr>
+            <tr>
+                <td rowspan="4">协商缓存</td>
+                <td rowspan="2">Etag <br> if-None-Match</td>
+                <td>Etag：响应头，资源标识，有服务器告诉浏览器，Etag由文件修改时间和大小计算而成</td>
+                <td  rowspan="2">当缓存有效时，服务器不会返回文件，直接返回304状态码，让客户端从缓存中获取文件，节省流量和宽带及服务器压力。并且解决了一秒内修改并读取文件的问题</td>
+                <td rowspan="2">/</td>
+            </tr>
+            <tr>
+                <td>if-None-Match:请求头，缓存资源标识，由浏览器告诉服务器，即第一次访问服务器时返回的Etag的值</td>
+                
+            </tr>
+            <tr>
+                <td rowspan="2">Last-modified <br> if-Modified-Since、</td>
+                <td>Last-modified：响应头，资源最近修改时间，由服务器告诉浏览器</td>
+                <td rowspan="2">当缓存有效时，服务器不会返回文件，直接返回304状态码，让客户端从缓存中获取文件。节省流量和宽带及服务器压力</td>
+                <td rowspan="2">过期时间只能精确到秒，如果同一秒即修改又获取了文件，客户端拿不到最新的文件</td>
+            </tr>
+            <tr>
+                <td>if-Modified-Since：请求头，资源最近修改时间。即第一次访问服务器时返回的Last-Modified的值</td>
+            </tr>
+        </tbody>
     </table>
-    <!-- <h2>缓存</h2>
-    <h4>协商缓存</h4>
-    <h5>主要有四个头字段，if-Modefied-Since/Last-Modified，if-None-Match/Etag，两两组合配合使用，同时存在时if-None-Match和Etag为主。协商缓存服务器会返回状态码304，让客户端直接从本地缓存里面读取文件</h5>
-    <h5>if-Modefied-Since：请求头，资源最近修改时间。即第一次访问服务器时返回的Last-Modified的值 <br> Last-Modified：响应头，资源最近修改时间，由服务器告诉浏览器</h5>
-    <h5>优点：当缓存有效时，服务器不会返回文件，直接返回304状态码，让客户端从缓存中获取文件。节省流量和宽带及服务器压力</h5>
-    <h5>缺点：过期时间只能精确到秒，如果同一秒即修改又获取了文件，客户端拿不到最新的文件</h5>
-    <h5>if-None-Match:请求头，缓存资源标识，由浏览器告诉服务器，即第一次访问服务器时返回的Etag的值 <br> Etag：响应头，资源标识，有服务器告诉浏览器，Etag由文件修改时间和大小计算而成</h5>
-    <h5>优点：当缓存有效时，服务器不会返回文件，直接返回304状态码，让客户端从缓存中获取文件，节省流量和宽带及服务器压力。并且解决了一秒内修改并读取文件的问题</h5>
-    <h4>强缓存</h4>
-    <h5>主要有两个头字段：Expires、Cache-Control；两者同时存在时，Cache-Control优先级更高。强缓存服务器会返回状态码200</h5>
-    <h5>Expires:响应头，表示资源过期时间</h5>
-    <h6>优点：在过期时间内请求，不需要请求服务器，直接在缓存里面拿，为用户节省流量，减少服务器重复读取磁盘文件压力</h6>
-    <h6>缺点：过期后，资源未变化还是会请求服务器，过期时间依赖客户端时间，时间不准确或者被改动，缓存也随之受影响</h6> -->
     <h2>Cache-Control:请求/响应头，缓存控制字段，精确控制缓存策略；HTTP1.1新增字段，既能出现在请求头，也能出现在相应头，不同值代表不同意思</h2>
     <h5>服务端参数</h5>
     <table border>
-        <tr>
-            <th>值</th>
-            <th>含义</th>
-        </tr>
-        <tr>
-            <td>max-age</td>
-            <td>在多少秒内有效，是一个相对时间，比Expires更精确</td>
-        </tr>
-        <tr>
-            <td>s-maxage</td>
-            <td>表示缓存服务器上的缓存的有效时间，并只对public缓存有效</td>
-        </tr>
-        <tr>
-            <td>no-cache</td>
-            <td>不使用本地强缓存，需要使用协商缓存</td>
-        </tr>
-        <tr>
-            <td>no-store</td>
-            <td>直接禁止浏览器缓存数据，每次请求都会向服务器发送一个请求，每次都会下载完整资源</td>
-        </tr>
-        <tr>
-            <td>public</td>
-            <td>可以被所有用户缓存，包括终端用户和中间代理服务器</td>
-        </tr>
-        <tr>
-            <td>private</td>
-            <td>只能被终端用户的浏览器缓存，不允许中间缓存代理进行缓存</td>
-        </tr>
+        <thead>
+            <tr>
+                <th>值</th>
+                <th>含义</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>max-age</td>
+                <td>在多少秒内有效，是一个相对时间，比Expires更精确</td>
+            </tr>
+            <tr>
+                <td>s-maxage</td>
+                <td>表示缓存服务器上的缓存的有效时间，并只对public缓存有效</td>
+            </tr>
+            <tr>
+                <td>no-cache</td>
+                <td>不使用本地强缓存，需要使用协商缓存</td>
+            </tr>
+            <tr>
+                <td>no-store</td>
+                <td>直接禁止浏览器缓存数据，每次请求都会向服务器发送一个请求，每次都会下载完整资源</td>
+            </tr>
+            <tr>
+                <td>public</td>
+                <td>可以被所有用户缓存，包括终端用户和中间代理服务器</td>
+            </tr>
+            <tr>
+                <td>private</td>
+                <td>只能被终端用户的浏览器缓存，不允许中间缓存代理进行缓存</td>
+            </tr>
+        </tbody>
+        
     </table>
     <h5>客户端参数</h5>
     <table border>
-        <tr>
-            <th>值</th>
-            <th>含义</th>
-        </tr>
-        <tr>
-            <td>max-stale</td>
-            <td>例如：5;表示客户端到代理服务器上拿缓存的时候，即使代理缓存过期了也不要紧，只要在过期时间5秒内，还是可以从代理中获取</td>
-        </tr>
-        <tr>
-            <td>min-fresh</td>
-            <td>表示代理缓存需要一定的新鲜度，一定要在缓存到期前5秒之前的时间拿，否则拿不到</td>
-        </tr>
-        <tr>
-            <td>only-if-cached</td>
-            <td>表示客户端只会接受代理缓存，而不会接收源服务器的响应。如果代理缓存失效，则返回50</td>
-        </tr>
+        <thead>
+            <tr>
+                <th>值</th>
+                <th>含义</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>max-stale</td>
+                <td>例如：5;表示客户端到代理服务器上拿缓存的时候，即使代理缓存过期了也不要紧，只要在过期时间5秒内，还是可以从代理中获取</td>
+            </tr>
+            <tr>
+                <td>min-fresh</td>
+                <td>表示代理缓存需要一定的新鲜度，一定要在缓存到期前5秒之前的时间拿，否则拿不到</td>
+            </tr>
+            <tr>
+                <td>only-if-cached</td>
+                <td>表示客户端只会接受代理缓存，而不会接收源服务器的响应。如果代理缓存失效，则返回50</td>
+            </tr>
+        </tbody>
     </table>
 </template>
 

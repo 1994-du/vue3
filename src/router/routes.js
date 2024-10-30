@@ -249,19 +249,19 @@ export default[
             },     
             {
                 path:'/refReactiveTorefs',
-                name:'ref、reactive、toRefs',
+                name:'变量声明函数',
                 meta:{
-                    groupName:'ref、reactive、toRefs'
+                    groupName:'变量声明函数'
                 },
                 component:()=>import('@/views/refReactiveTorefs.vue')
             },
             {
-                path:'/horizontallyAndVerticallyCentered',
+                path:'/divCenter',
                 name:'div水平垂直居中',
                 meta:{
                     groupName:'div水平垂直居中'
                 },
-                component:()=>import('@/views/horizontallyAndVerticallyCentered.vue')
+                component:()=>import('@/views/divCenter.vue')
             },
             {
                 path:'/fileUpload',

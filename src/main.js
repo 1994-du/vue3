@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from "./router"
 import store from "./store"
 import axios from "@/api"
+import "@/styles/common.scss"
 //全局自定义指令
 import directive from "./utils/globalDirective.js";
 // elementPlus

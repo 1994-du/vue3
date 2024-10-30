@@ -1,18 +1,26 @@
 <template>
    <h4>ref</h4>
-   <highlightjs code="创建响应式的Number或String类型状态
-例如：const str=ref('')"></highlightjs>
-<highlightjs code="获取dom节点
-<div ref='testRef' style='width: 20px;height: 20px;'></div>
-<script setup>
-    const testRef =ref()
+   <codePre>
     onMounted(()=>{
-        testRef.value.style.background='red'
         console.log(testRef.value)
     })
-</script>">
-</highlightjs>
+    创建响应式的Number或String类型状态
+    例如：const str=ref('')
+   </codePre>
+   <codePre>
+    获取dom节点
+    <!-- <div ref='testRef' style='width: 20px;height: 20px;'></div> -->
+    
+        const testRef =ref()
+        onMounted(()=>{
+            testRef.value.style.background='red'
+            console.log(testRef.value)
+        })
+    
+   </codePre>
 <div ref="testRef" style="width: 20px;height: 20px;"></div>
+
+
    <h4>reactive</h4>
 <highlightjs code="创建响应式的引用类型对象
 例如：const obj=reactive({

@@ -104,6 +104,14 @@ export default[
                 },
                 component:()=>import('@/views/Vue3/watch.vue')
             },
+            {
+                path:'/ref',
+                name:'ref的使用',
+                meta:{
+                    groupName:'Vue3'
+                },
+                component:()=>import('@/views/ref.vue')
+            },
             // Animation
             {
                 path:'/animation',
@@ -247,14 +255,7 @@ export default[
                 },
                 component:()=>import('@/views/nvmUse.vue')
             },     
-            {
-                path:'/refReactiveTorefs',
-                name:'变量声明函数',
-                meta:{
-                    groupName:'变量声明函数'
-                },
-                component:()=>import('@/views/refReactiveTorefs.vue')
-            },
+            
             {
                 path:'/divCenter',
                 name:'div水平垂直居中',

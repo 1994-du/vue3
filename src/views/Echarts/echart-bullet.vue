@@ -86,13 +86,28 @@ const initEchart1=()=>{
                 z: 3,
             },
             {
-                name: "目标值",
+                name: "目标值1",
                 type: "scatter",
                 symbol: "rect",
                 symbolSize: [2, 90],
                 data: [
-                    { value: 85, label: { show: true, position: 'top', formatter: '目标值', color: '#000000', fontSize: 14 } },
-                    { value: 85, label: { show: true, position: 'bottom', formatter: '85', color: '#000000', fontSize: 14 } }
+                    { value: 45, label: { show: true, position: 'top', formatter: '目标值1', color: '#000000', fontSize: 14 } },
+                    { value: 45, label: { show: true, position: 'bottom', formatter: '45', color: '#000000', fontSize: 14 } }
+                ],
+                color: "#000000",
+                emphasis: {
+                    disabled:true
+                },
+                z: 4
+            },
+            {
+                name: "目标值2",
+                type: "scatter",
+                symbol: "rect",
+                symbolSize: [2, 90],
+                data: [
+                    { value: 95, label: { show: true, position: 'top', formatter: '目标值2', color: '#000000', fontSize: 14 } },
+                    { value: 95, label: { show: true, position: 'bottom', formatter: '95', color: '#000000', fontSize: 14 } }
                 ],
                 color: "#000000",
                 emphasis: {

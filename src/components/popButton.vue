@@ -36,7 +36,6 @@ const userForm = reactive({
 })
 const handleCheckedChange = (val) => {
     console.log(val);
-    
 }
 </script>
 

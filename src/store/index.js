@@ -2,6 +2,8 @@ import {createStore} from 'vuex';
 export default createStore({
     //全局变量
     state:{
+        name:'张三',
+        age:0,
         userInfo:{},//用户信息
         menuRoute:null,//菜单路由
         menuData:[],//菜单数据
@@ -11,7 +13,6 @@ export default createStore({
     mutations:{
         // 菜单数据
         SYNC_SET_MENUDATA(state,arg){
-            console.log('arg',arg);
             state.menuData=arg
         },
         // 添加面包屑
@@ -28,7 +29,6 @@ export default createStore({
         },
         // 保存状态
         SAVE_STATE(state){
-            console.log('保存状态',state);
             localStorage.setItem('store',JSON.stringify(state))
         },
         // 读取状态
@@ -48,12 +48,18 @@ export default createStore({
         // 设置用户信息
         SYNC_SET_USERINFO(state,arg){
             state.userInfo=arg
+        },
+        CHANGE_AGE(state,arg){
+            state.age+=arg.num
         }
     },
     //异步操作
     actions:{
         ASYNC_SET_USERINFO({commit},arg){
             commit('SYNC_SET_USERINFO',arg)
+        },
+        ASYNC_CHANGE_AGE({commit},arg){
+            commit('CHANGE_AGE',arg)
         }
     },
     // 计算属性

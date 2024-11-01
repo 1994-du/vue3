@@ -1,91 +1,119 @@
 <template>
-    <div id="echart_bat" style="width:400px;height:400px;"></div>
+    <div class="echart_bar">
+        <!-- line -->
+        <div class="echart_item">
+            <div class="img">
+                <img src="/img/echart_line.png" alt="">
+            </div>
+            <div class="echart">
+                <div id="echart_line" style="width:400px;height:400px;"></div>
+            </div>
+            <div class="img">
+                <img src="/img/echart_line2.png" alt="">
+            </div>
+        </div>
+        <!-- bar -->
+        <div class="echart_item">
+            <div class="img">
+                <img src="/img/echart_bar.png" alt="">
+            </div>
+            <div class="echart">
+                <div id="echart_bar" style="width:400px;height:400px;"></div>
+            </div>
+        </div>
+    </div>
 </template>
 <script setup>
 import * as echarts from 'echarts'
 import { ref, onMounted } from 'vue'
 
-let echart2=null;
-const initEchart2=()=>{
-    echart2 = echarts.init(document.getElementById('echart_bat'));
-
-    // 示例数据
-    var data = [2.4, 1.2, 9.4, 16992.44, 6.3];
-
-    // 计算数据的最大最小值
-    var minValue = Math.min(...data);
-    var maxValue = Math.max(...data);
-
-    // 自定义函数来生成刻度值
-    function generateCustomTicks(min, max) {
-        var ticks = [];
-        var diffPartEnd = 100; // 等差部分的结束值
-        var diffStep = 50;     // 等差部分的步长
-
-        // 生成等差部分
-        for (var i = min; i <= diffPartEnd; i += diffStep) {
-            ticks.push(i);
-        }
-
-        // 生成等比部分
-        var ratio = 2;        // 等比部分的倍率
-        var value = diffPartEnd;
-        while (value < max) {
-            value *= ratio;
-            ticks.push(value);
-        }
-
-        return ticks;
-    }
-
-    // 根据数据范围生成自定义刻度
-    var customTicks = generateCustomTicks(minValue, maxValue);
-    console.log('customTicks',customTicks);
-    const interval = Math.ceil((maxValue - minValue) / 5);
-    const option = {
-        label: {
-            show: true,
+let echartLine=null;
+let echartBar=null;
+const initEchartLine=()=>{
+    echartLine = echarts.init(document.getElementById('echart_line'));
+    
+    let option = {
+        grid:{
+            left:'60px',
+            right:'60px'
+        },
+        tooltip:{
+            show:true
         },
         xAxis: {
             type: 'category',
-            data: ['A', 'B', 'C', 'D', 'E']
+            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
         },
         yAxis: {
+            name:'Y轴名称',
+            nameLocation:'end',
+            nameTextStyle:{
+                color:'red',
+                fontSize:12,
+                align:'right'
+            },
             type: 'value',
-            min: 0,
-            max: maxValue,
-            // splitNumber: 10, // 刻度数量
-            axisLine: {
-                show: false
+            // 刻度
+            axisTick:{
+                show:true
             },
-            axisLabel: {
-                formatter: function (value) {
-                    if (value >= 1000) {
-                    return value / 1000 + 'k'; // 格式化刻度
-                    }
-                    return value;
-                }
-            },
-            splitLine: {
-                show: true,
-                lineStyle: {
-                    type: 'dashed'
-                }
+            // 线
+            axisLine:{
+                show:true
             }
         },
         series: [
             {
-            type: 'bar',
-            data: data
+                data: [120, 200, 150, 80, 70, 110, 130],
+                type: 'line'
             }
         ]
     };
 
-    echart2.setOption(option);
+    echartLine.setOption(option);
+}
+const initEchartBar=()=>{
+    echartBar = echarts.init(document.getElementById('echart_bar'));
+
+    let option = {
+        tooltip:{
+            show:true
+        },
+        xAxis: {
+            type: 'category',
+            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [
+            {
+                data: [120, 200, 150, 80, 70, 110, 130],
+                type: 'bar'
+            }
+        ]
+    };
+
+    echartBar.setOption(option);
 }
 onMounted(()=>{
-    initEchart2()
+    initEchartLine()
+    initEchartBar()
 })
 </script>
 <style lang='scss' scoped>
+.echart_bar{
+    display: flex;
+    flex-direction: column;
+    .echart_item{
+        display: flex;
+        align-items: center;
+        .img{
+            img{
+                width: 400px;
+                height: 400px;
+            }
+        }
+    }
+}
 </style>

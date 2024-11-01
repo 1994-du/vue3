@@ -2,10 +2,8 @@
     <div class="command_line">
         <h1>npm命令</h1>
         <h4>npm版本更新</h4>
-        <pre>
-            <code>npm version [name]</code>
-            <code>name:major、minor、patch</code>   
-        </pre>
+        <p>npm version [name]</p>
+        <p>name:major、minor、patch</p>
         
         <h4>发布npm</h4>
         <pre>

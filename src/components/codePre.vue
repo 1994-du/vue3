@@ -13,7 +13,6 @@
     const segments = content.trim().split(' ');
     const formattedLines = [];
     segments.forEach((segment, index) => {
-        // console.log('segment',segment);
         if(index > 0){
             if(segments[index -1].includes('{')&&segments[index+1].includes('}')){
                 formattedLines.push(`  ${segment}`)
@@ -37,9 +36,6 @@
     });
     // 计算属性，将格式化后的内容返回
     const formattedContent = computed(() => formatCode(getSlotContent.value));
-    console.log('slots.default()[0].children',slots.default());
-    
-    
 </script>
   
 <style lang="scss" scoped>

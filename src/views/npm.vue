@@ -4,7 +4,7 @@
         <h4>npm版本更新</h4>
         <p>npm version [name]</p>
         <p>name:major、minor、patch</p>
-        
+        <p>npm version patch</p>
         <h4>发布npm</h4>
         <pre>
             <code>npm login</code>

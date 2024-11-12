@@ -1,14 +1,8 @@
 <template>
-    <div class="use_axios">
-        <h2>一、依赖引入</h2>
-        <h2>二、创建axios文件</h2>
-        <h2>三、绑定到全局</h2>
-        <h2>四、使用$axios</h2>
-        <h2>
-            请求方法：get、post、delete、put、patch、options、head
-        </h2>
-    </div>
-    <div class="code">
+    <h2>请求方法：get、post、delete、put、patch、options、head</h2>
+    <button @click="req">请求</button>
+    <button @click="cancleReq">取消所有请求</button>
+    <code>
         <pre>import axios from 'axios'</pre>
         <pre>controller = new AbortController();// 1</pre>
         <pre>cancelToken = axios.CancelToken.source();// 2</pre>
@@ -22,9 +16,9 @@
         <pre>// 取消请求</pre>
         <pre>controller.abort();// 1</pre>
         <pre>cancelToken.cancel('取消请求');// 2</pre>
-    </div>
-    <div class="code">
-        <pre>获取接口请求上传、下载进度</pre>
+    </code>
+    <code>
+        <pre>// 获取接口请求上传、下载进度</pre>
         <pre>onUploadProgress:(provessEvt)=>{</pre>
         <pre>   const percentProcess = Math.round((provessEvt.loaded / provessEvt.total) * 100)</pre>
         <pre>   console.log('upload',percentProcess)</pre>
@@ -33,9 +27,8 @@
         <pre>   const percentProcess = Math.round((provessEvt.loaded / provessEvt.total) * 100)</pre>
         <pre>   console.log('download',percentProcess)</pre>
         <pre>}</pre>
-    </div>
-    <button @click="req">请求</button>
-    <button @click="cancleReq">取消所有请求</button>
+    </code>
+    
 </template>
 <script setup>
 import { toDelayTest } from '@/api/api'

@@ -1,10 +1,24 @@
-.code{
+code{
+    display: block;
     background-color: #181803;
     width: max-content;
     margin: 10px 0;
     padding: 10px;
+    border-radius: 5px;
     pre{
-        color: white;
+        color: #ccf0fa;
         text-align: left;
+        font-family: monospace;
+        margin: 0;
+        .keyword{
+            // color: #9cdcf0;
+            color: #348cd6;
+        }
+        .comment{
+            color: #6a9955;
+        }
+        .variable{
+            color: #dcdcaa;
+        }
     }
 }

@@ -288,6 +288,22 @@ export default[
                     groupName:'数据库'
                 },
                 component:()=>import('@/views/mysql.vue')
+            },
+            {
+                path:'/this',
+                name:'this指向',
+                meta:{
+                    groupName:'Js'
+                },
+                component:()=>import('@/views/Js/this.vue')
+            },
+            {
+                path:'/currying',
+                name:'函数柯里化',
+                meta:{
+                    groupName:'Js'
+                },
+                component:()=>import('@/views/Js/currying.vue')
             }
         ]
     }

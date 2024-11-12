@@ -1,6 +1,6 @@
 <!--  -->
 <template>
-     <h2>http（Hypertext Transfer Protocol）超文本传输协议，最近的版本变化</h2>
+    <h2>http（Hypertext Transfer Protocol）超文本传输协议，最近的版本变化</h2>
     <p><strong>http 0.9</strong>:1991年发布，
         没有header，只支持Get，单词TCP连接只接收一次请求，请求完毕后TCP连接关闭</p>
     <p><strong>http 1.0</strong>:1996年发布，
@@ -17,27 +17,30 @@
     <p><strong>http 3</strong>:2018年发布，</p>
     <h2>网络传输的层级：应用层、传输层、网络层、数据链路层、物理层</h2>
     <table cellspacing="0" cellpadding="10px 0">
-        <tr>
-            <th>层级</th>
-            <th>应用层</th>
-            <th>表示层</th>
-            <th>会话层</th>
-            <th>传输层</th>
-            <th>网络层</th>
-            <th>数据链路层</th>
-            <th>物理层</th>
-        </tr>
-        <tr>
-            <td>协议/技术</td>
-            <td>HTTP、NNTP、IRC、SMTP、Telent、Gopher、FTP、Whois、Finger</td>
-            <td>LPP</td>
-            <td>SSL、TLS、DAP、LDAP、RPC</td>
-            <td>TCP、UDP</td>
-            <td>ICMP</td>
-            <td>XTP、DCAP、MPLS、PPTP、L2TP、CDP</td>
-            <td>3</td>
-        </tr>
-        
+        <thead>
+            <tr>
+                <th>层级</th>
+                <th>应用层</th>
+                <th>表示层</th>
+                <th>会话层</th>
+                <th>传输层</th>
+                <th>网络层</th>
+                <th>数据链路层</th>
+                <th>物理层</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>协议/技术</td>
+                <td>HTTP、NNTP、IRC、SMTP、Telent、Gopher、FTP、Whois、Finger</td>
+                <td>LPP</td>
+                <td>SSL、TLS、DAP、LDAP、RPC</td>
+                <td>TCP、UDP</td>
+                <td>ICMP</td>
+                <td>XTP、DCAP、MPLS、PPTP、L2TP、CDP</td>
+                <td>3</td>
+            </tr> 
+        </tbody>
     </table>
 </template>
 
@@ -53,6 +56,12 @@ table{
     border: 1px solid #aaa;
     margin: 0;
     padding: 0;
+    thead{
+        tr{
+            background: black;
+            color: white;
+        }
+    }
     th{
         border: 1px solid #aaa;
     }

@@ -138,6 +138,13 @@ export default[
                     groupName:'ElementPlus'
                 },
                 component:()=>import('@/views/ElementPlus/el-popover.vue')
+            },{
+                path:'/upload',
+                name:'Upload',
+                meta:{
+                    groupName:'ElementPlus'
+                },
+                component:()=>import('@/views/ElementPlus/el-upload.vue')
             },
             // Axios
             {

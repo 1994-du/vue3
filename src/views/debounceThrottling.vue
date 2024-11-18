@@ -90,7 +90,6 @@
 
 <script setup>
 import {onMounted, ref, getCurrentInstance} from "vue"
-import heighCode from "@/utils/highCode"
 const debounceVal =ref('')
 const throttleVal = ref('')
 let debounceValShow=ref('')
@@ -122,14 +121,7 @@ const throttleHandle=function(delay){
     }
 }
 onMounted(()=>{
-    // let {proxy}=getCurrentInstance()
-    // const codeElement = document.getElementsByTagName("pre");
-    // console.log('codeElement',Array.from(codeElement),Array.from(codeElement).length);
-    // Array.from(codeElement).forEach(element => {
-    //     console.log(element);  
-    //     element.innerHTML = proxy.$highlightCode(element.innerText);
-    // })
-    heighCode()
+    console.log('debounceThrottling.vue');
 })
 </script>
 <style lang="less" scoped>

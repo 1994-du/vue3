@@ -19,13 +19,29 @@
     <pre>let newFun = getDate.bind({year:2024})(1,1)</pre>
     <pre>newFun() // 2024-1-1</pre>
 </code>
+
+
+<!-- <el-form :model="formModel" :rules="formRules">
+    <el-table :data="maintainNodeData">
+        <el-table-column label="序号" prop="nodeNum"></el-table-column>
+        <el-table-column label="节点名称">
+            <template #default="scope">
+                <el-form-item
+                    draggable="true"
+                    @dragstart="maintainNodeDragStart(scope.row)"
+                    @dragover.prevent
+                    @drop="maintainNodeDrop(scope.row)">
+                    <el-input v-model="maintainNodeData[scope.$index].nodeName"></el-input>
+                </el-form-item>
+            </template>
+        </el-table-column>
+    </el-table>
+</el-form> -->
+
+
+
 </template>
 <script setup>
-import heighCode from "@/utils/highCode"
-import { onMounted } from "vue"
-onMounted(()=>{
-    heighCode()
-})
 </script>
 <style lang='scss' scoped>
 </style>

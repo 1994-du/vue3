@@ -31,6 +31,22 @@ export default[
                 },
                 component:()=>import('@/views/Echarts/echart-bullet.vue')
             },
+            {
+                path:'/lineBar',
+                name:'Echart-LineBar',
+                meta:{
+                    groupName:'Echarts'
+                },
+                component:()=>import('@/views/Echarts/echart-lineBar.vue')
+            },
+            {
+                path:'/scatterBar',
+                name:'Echart-ScatterBar',
+                meta:{
+                    groupName:'Echarts'
+                },
+                component:()=>import('@/views/Echarts/echart-scatterBars.vue')
+            },
             // Vue3
             {
                 path:'/vuex',

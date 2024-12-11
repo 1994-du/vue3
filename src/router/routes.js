@@ -136,24 +136,6 @@ export default[
                 },
                 component:()=>import('@/views/ref.vue')
             },
-            // Animation
-            {
-                path:'/animation',
-                name:'动画',
-                meta:{
-                    groupName:'动画'
-                },
-                component:()=>import('@/views/Animation/animation.vue')
-            },
-            // Npm
-            {
-                path:'/npm',
-                name:'Npm',
-                meta:{
-                    groupName:'Npm',
-                },
-                component:()=>import('@/views/npm.vue')
-            },
             // ElementPlus
             {
                 path:'/popover',
@@ -169,15 +151,6 @@ export default[
                     groupName:'ElementPlus'
                 },
                 component:()=>import('@/views/ElementPlus/el-upload.vue')
-            },
-            // Axios
-            {
-                path:'/axios',
-                name:'Axios',
-                meta:{
-                    groupName:'Axios'
-                },
-                component:()=>import('@/views/Axios/useAxios.vue')
             },
             // Http
             {
@@ -203,6 +176,50 @@ export default[
                     groupName:"HTTP"
                 },
                 component:()=>import('@/views/Http/StateCode.vue')
+            },
+            // Js
+            {
+                path:'/this',
+                name:'this指向',
+                meta:{
+                    groupName:'Js'
+                },
+                component:()=>import('@/views/Js/this.vue')
+            },
+            {
+                path:'/currying',
+                name:'函数柯里化',
+                meta:{
+                    groupName:'Js'
+                },
+                component:()=>import('@/views/Js/currying.vue')
+            },
+            // Axios
+            {
+                path:'/axios',
+                name:'Axios',
+                meta:{
+                    groupName:'Axios'
+                },
+                component:()=>import('@/views/Axios/useAxios.vue')
+            },
+            // Animation
+            {
+                path:'/animation',
+                name:'动画',
+                meta:{
+                    groupName:'动画'
+                },
+                component:()=>import('@/views/Animation/animation.vue')
+            },
+            // Npm
+            {
+                path:'/npm',
+                name:'Npm',
+                meta:{
+                    groupName:'Npm',
+                },
+                component:()=>import('@/views/npm.vue')
             },
             // Promise
             {
@@ -319,22 +336,6 @@ export default[
                     groupName:'数据库'
                 },
                 component:()=>import('@/views/mysql.vue')
-            },
-            {
-                path:'/this',
-                name:'this指向',
-                meta:{
-                    groupName:'Js'
-                },
-                component:()=>import('@/views/Js/this.vue')
-            },
-            {
-                path:'/currying',
-                name:'函数柯里化',
-                meta:{
-                    groupName:'Js'
-                },
-                component:()=>import('@/views/Js/currying.vue')
             },
             {
                 path:'/git',

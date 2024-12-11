@@ -1,5 +1,5 @@
 <template>
-<div id="chart" style="width:400px;height:400px;"></div>
+<div id="chart" style="width:100%;height:100%;"></div>
 </template>
 <script setup>
 import * as echarts from 'echarts';
@@ -21,8 +21,6 @@ const initChart = () => {
             if(params[0].axisIndex === 0) return
             let result = `${params[0].axisValue}<br>`;
             params.forEach(item => {
-                console.log(item);
-                
                 if (item.seriesType === 'bar') { // 只处理柱状图数据
                     result += `${item.marker} ${item.seriesName}: ${item.value}<br>`;
                 }
@@ -39,16 +37,16 @@ const initChart = () => {
             left: '55px',
             right: '10%',
             top: '40px',
-            // bottom: , // 为底部的 X 轴留出空间
-            height:chartConfig.height*0.3,
+            bottom: '50%', // 为底部的 X 轴留出空间
+            height:'35%',
             containLabel: false
         },
         {
             left: '55px',
             right: '10%',
-            top: '200px',
-            // bottom: '20px', // 为底部的 X 轴留出空间
-            height:chartConfig.height*0.5,
+            // top: '200px',
+            bottom: '30px', // 为底部的 X 轴留出空间
+            height:'50%',
             containLabel: false
         }
     ],
@@ -137,13 +135,26 @@ const initChart = () => {
             emphasis:{
                 label:{
                     show:true,
-                    backgroundColor:'rgba(0,0,0,0.6)',
-                    padding:[5,10],
-                    borderRadius:5,
-                    color:'#fff',
-                    formatter:(params)=>{
-                        return params.value+'%'
-                    }
+                    position: 'top',
+                    formatter: (params) => {
+                        return `{value|${params.value}%}\n{triangle|\u25BC}`;
+                    },
+                    rich: {
+                        value:{
+                            color: '#fff',
+                            backgroundColor: '#595959',
+                            borderRadius: 2,
+                            padding: [5, 10],
+                            lineHeight: 12,
+                            fontSize:12,
+                        },
+                        triangle: {
+                            color: '#595959',
+                            align: 'center',
+                            fontSize:12,
+                            lineHeight: 12,
+                        },
+                    },
                 }
             },
             labelLayout:{

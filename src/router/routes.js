@@ -47,6 +47,14 @@ export default[
                 },
                 component:()=>import('@/views/Echarts/echart-scatterBars.vue')
             },
+            {
+                path:'/bars',
+                name:'Echart-bars',
+                meta:{
+                    groupName:'Echarts'
+                },
+                component:()=>import('@/views/Echarts/echart-bars.vue')
+            },
             // Vue3
             {
                 path:'/vuex',

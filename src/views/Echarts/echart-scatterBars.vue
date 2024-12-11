@@ -20,10 +20,28 @@ const initEchart = () => {
             trigger: 'axis',
             formatter: function (params) {
                 if(params[0].axisIndex === 0) return
-                let result = `${params[0].axisValue}<br>`;
+                let result = `${params[0].axisValue}<br>
+                <div style="display:flex;justify-content:space-between;">
+                    <span>名称</span><span>值</span> 
+                </div>
+                `;
                 params.forEach(item => {
-                    if (item.seriesType === 'bar') { // 只处理柱状图数据
-                        result += `${item.marker} ${item.seriesName}: ${item.value}<br>`;
+                    // if (item.seriesType === 'bar') { // 只处理柱状图数据
+                    if(item.axisIndex === 1){
+                        let aa = `<div style="display:flex;align-items: center; justify-content: space-between; width: 100%;">
+
+                        <div style="display:flex;flex-direction:column;">
+                            
+                            <span>${item.seriesName}</span>    
+                        </div>
+                        <div style="display:flex;flex-direction:column;">
+                            
+                            <span>${item.value}</span>    
+                        </div> 
+                        </div>`
+                        result += `${aa}`;
+                        console.log(result);
+                        
                     }
                 });
                 return result;
@@ -75,6 +93,12 @@ const initEchart = () => {
             [
                 {
                     gridIndex: 0,
+                    nameRotate:-90,
+                    nameLocation:'middle',
+                    nameGap:40,
+                    nameTextStyle:{
+                        padding:[0,0,0,-120]
+                    },
                     type: 'value',
                     name: '水量',
                     min: 0,
@@ -99,6 +123,12 @@ const initEchart = () => {
                 },
                 {
                     gridIndex: 1,
+                    nameRotate:-90,
+                    nameLocation:'middle',
+                    nameGap:40,
+                    nameTextStyle:{
+                        padding:[0,0,0,-120]
+                    },
                     type: 'value',
                     name: '温度',
                     min: 0,
@@ -149,6 +179,13 @@ const initEchart = () => {
                     yAxisIndex: 1,
                     name: '平均温度',
                     type: 'bar',
+                    yAxisIndex: 1, data: [2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2]
+                },
+                {
+                    xAxisIndex: 1,
+                    yAxisIndex: 1,
+                    name: '测试',
+                    type: 'line',
                     yAxisIndex: 1, data: [2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2]
                 }
             ]

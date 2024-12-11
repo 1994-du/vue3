@@ -335,6 +335,14 @@ export default[
                     groupName:'Js'
                 },
                 component:()=>import('@/views/Js/currying.vue')
+            },
+            {
+                path:'/git',
+                name:'Git命令',
+                meta:{
+                    groupName:'Git'
+                },
+                component:()=>import('@/views/Git/index.vue')
             }
         ]
     }

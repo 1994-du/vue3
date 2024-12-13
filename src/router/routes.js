@@ -302,8 +302,7 @@ export default[
                     groupName:'nvm的使用'
                 },
                 component:()=>import('@/views/nvmUse.vue')
-            },     
-            
+            },
             {
                 path:'/divCenter',
                 name:'div水平垂直居中',

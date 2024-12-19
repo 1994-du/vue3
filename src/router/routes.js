@@ -194,6 +194,14 @@ export default[
                 },
                 component:()=>import('@/views/Js/currying.vue')
             },
+            {
+                path:"/copyType",
+                name:"深浅拷贝",
+                meta:{
+                    groupName:"Js"
+                },
+                component:()=>import('@/views/Js/copyType.vue')
+            },
             // Axios
             {
                 path:'/axios',
@@ -253,14 +261,6 @@ export default[
                     groupName:"双向绑定原理"
                 },
                 component:()=>import('@/views/twoWayBinding.vue')
-            },
-            {
-                path:"/copyType",
-                name:"深浅拷贝",
-                meta:{
-                    groupName:"深浅拷贝"
-                },
-                component:()=>import('@/views/copyType.vue')
             },
             {
                 path:"/dataTypeJudge",

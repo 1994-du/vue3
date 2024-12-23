@@ -135,9 +135,10 @@ const initChart = () => {
             emphasis:{
                 label:{
                     show:true,
-                    position: 'top',
+                    position: 'left',
+                    offset:[0,0],
                     formatter: (params) => {
-                        return `{value|${params.value}%}\n{triangle|\u25BC}`;
+                        return `{value|${params.value}%}{triangle|\u25B6}`;
                     },
                     rich: {
                         value:{
@@ -149,10 +150,8 @@ const initChart = () => {
                             fontSize:12,
                         },
                         triangle: {
+                            padding: [0, -3],
                             color: '#595959',
-                            align: 'center',
-                            fontSize:12,
-                            lineHeight: 12,
                         },
                     },
                 }

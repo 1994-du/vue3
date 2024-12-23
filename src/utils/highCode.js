@@ -1,3 +1,4 @@
+import { nextTick } from "vue";
 const keywords = ["if", "const", "let", "var", "return", "function"];
 
 function highlightCode(code) {
@@ -18,9 +19,11 @@ function highlightCode(code) {
     return code;
 }
 function highCode(){
-    const codeElement = document.getElementsByTagName("pre");
-    Array.from(codeElement).forEach(element => {
-        element.innerHTML = highlightCode(element.innerText);
+    nextTick(()=>{
+        const codeElement = document.getElementsByTagName("pre");
+        Array.from(codeElement).forEach(element => {
+            element.innerHTML = highlightCode(element.innerText);
+        })
     })
 }
 

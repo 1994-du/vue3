@@ -4,6 +4,9 @@
         <a href="https://github.com/coreybutler/nvm-windows/releases" target="_blank">下载地址</a>
         选择下载nvm-setup.zip。
     </h4>
+    <code>
+        <pre><a href="https://github.com/coreybutler/nvm-windows/releases" target="_blank">下载地址</a></pre>
+    </code>
     <h4>查看可在线安装的node版本(LTS:长期支持)</h4>
     <p>nvm list available</p>
     <p>|   CURRENT    |     LTS      |  OLD STABLE  | OLD UNSTABLE |</p>
@@ -26,7 +29,14 @@
 <script setup name="nvmuse">
 </script>
 <style scoped>
-*{
-    text-align: left;
+.masonry {
+	display: flex;
+	flex-wrap: wrap;
+	gap:0 10px; /* 设置间距 */
+}
+code {
+	flex: 1 1 auto;
+    margin: 0;
+	margin-bottom: 10px;
 }
 </style>

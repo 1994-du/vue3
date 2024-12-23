@@ -3,6 +3,7 @@ export default[
     {
         path:'/',
         meta:{},
+        redirect:'/home',
         component:()=>import('@/Home.vue'),
         children:[
             // 首页

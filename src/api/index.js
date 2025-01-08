@@ -41,6 +41,14 @@ Axios.interceptors.response.use(res=>{
             return res.data
         }
     }
-})
+    
+},err=>{
+    ElMessage({
+        message:err,
+        type:'error'
+    })
+    hideLoading()
+}
+)
 
 export default Axios;

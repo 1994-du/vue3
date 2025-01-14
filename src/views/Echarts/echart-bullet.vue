@@ -86,7 +86,7 @@ const initEchart1=()=>{
                 z: 3,
             },
             {
-                name: "目标值1",
+                name: "目标值",
                 type: "scatter",
                 symbol: "rect",
                 symbolSize: [2, 90],
@@ -101,7 +101,7 @@ const initEchart1=()=>{
                 z: 4
             },
             {
-                name: "目标值2",
+                name: "目标值",
                 type: "scatter",
                 symbol: "rect",
                 symbolSize: [2, 90],

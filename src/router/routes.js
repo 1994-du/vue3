@@ -202,6 +202,22 @@ export default[
                     groupName:"Js"
                 },
                 component:()=>import('@/views/Js/copyType.vue')
+            }, 
+            {
+                path:"/xhrTime",
+                name:"最小RTT",
+                meta:{
+                    groupName:"Js"
+                },
+                component:()=>import('@/views/Js/xhrTime.vue')
+            },
+            {
+                path:"/debounceThrottling",
+                name:"防抖节流",
+                meta:{
+                    groupName:"Js"
+                },
+                component:()=>import('@/views/Js/debounceThrottling.vue')
             },
             // Axios
             {
@@ -246,14 +262,6 @@ export default[
                     groupName:"浏览器缓存"
                 },
                 component:()=>import('@/views/cacheDetail.vue')
-            },
-            {
-                path:"/debounceThrottling",
-                name:"防抖节流",
-                meta:{
-                    groupName:"防抖节流"
-                },
-                component:()=>import('@/views/debounceThrottling.vue')
             },
             {
                 path:"/twoWayBinding",

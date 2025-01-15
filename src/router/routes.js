@@ -17,7 +17,7 @@ export default[
             },
             // Echarts
             {
-                path:'/bar',
+                path:'/echarts/bar/base',
                 name:'Echart-Bar',
                 meta:{
                     groupName:'Echarts',
@@ -25,7 +25,7 @@ export default[
                 component:()=>import('@/views/Echarts/echart-bar.vue')
             },
             {
-                path:'/bullet',
+                path:'/echarts/bar/bullet',
                 name:'Echart-Bullet',
                 meta:{
                     groupName:'Echarts',
@@ -33,7 +33,7 @@ export default[
                 component:()=>import('@/views/Echarts/echart-bullet.vue')
             },
             {
-                path:'/lineBar',
+                path:'/echarts/multiAxis/lineBar',
                 name:'Echart-LineBar',
                 meta:{
                     groupName:'Echarts'
@@ -41,7 +41,7 @@ export default[
                 component:()=>import('@/views/Echarts/echart-lineBar.vue')
             },
             {
-                path:'/scatterBar',
+                path:'/echarts/multiAxis/scatterBar',
                 name:'Echart-ScatterBar',
                 meta:{
                     groupName:'Echarts'
@@ -49,7 +49,7 @@ export default[
                 component:()=>import('@/views/Echarts/echart-scatterBars.vue')
             },
             {
-                path:'/bars',
+                path:'/echarts/bar/overShow',
                 name:'Echart-bars',
                 meta:{
                     groupName:'Echarts'
@@ -58,7 +58,7 @@ export default[
             },
             // Vue3
             {
-                path:'/vuex',
+                path:'/vue3/vuex',
                 name:'Vuex',
                 meta:{
                     groupName:'Vue3',
@@ -66,7 +66,7 @@ export default[
                 component:()=>import('@/views/Vue3/vuex.vue')
             },
             {
-                path:'/vue-router',
+                path:'/vue3/router/use',
                 name:'VueRouter',
                 meta:{
                     groupName:'Vue3',
@@ -74,7 +74,7 @@ export default[
                 component:()=>import('@/views/Vue3/router.vue')
             },
             {
-                path:'/busEvent',
+                path:'/vue3/communication/busEvent',
                 name:'$Bus',
                 meta:{
                     groupName:'Vue3',
@@ -82,7 +82,7 @@ export default[
                 component:()=>import('@/views/Vue3/busEvent.vue')
             },
             {
-                path:'/ComponentCommunication',
+                path:'/vue3/communication',
                 name:'组件通信',
                 meta:{
                     groupName:'Vue3',
@@ -90,7 +90,7 @@ export default[
                 component:()=>import('@/views/Vue3/ComponentCommunication.vue')
             },
             {
-                path:'/routerLazyLoad',
+                path:'/vue3/router/lazyLoad',
                 name:'路由懒加载',
                 meta:{
                     groupName:'Vue3',
@@ -98,23 +98,23 @@ export default[
                 component:()=>import('@/views/Vue3/routerLazyLoad.vue')
             },
             {
-                path:"/directive",
+                path:"/vue3/directive",
                 name:"自定义指令",
                 meta:{
                     groupName:'Vue3',
                 },
                 component:()=>import('@/views/Vue3/customerDirective.vue')
             },
+            // {
+            //     path:'/componentImp',
+            //     name:'组件引入',
+            //     meta:{
+            //         groupName:'Vue3',
+            //     },
+            //     component:()=>import('@/views/Vue3/importComponent.vue')
+            // },
             {
-                path:'/componentImp',
-                name:'组件引入',
-                meta:{
-                    groupName:'Vue3',
-                },
-                component:()=>import('@/views/Vue3/importComponent.vue')
-            },
-            {
-                path:'/props',
+                path:'/vue3/communication/props',
                 name:'使用props',
                 meta:{
                     groupName:'Vue3'
@@ -122,31 +122,31 @@ export default[
                 component:()=>import('@/views/Vue3/propsUse.vue')
             },
             {
-                path:'/watch',
+                path:'/vue3/watch',
                 name:'watch监听',
                 meta:{
                     groupName:'Vue3'
                 },
                 component:()=>import('@/views/Vue3/watch.vue')
             },
-            {
-                path:'/ref',
-                name:'ref的使用',
-                meta:{
-                    groupName:'Vue3'
-                },
-                component:()=>import('@/views/ref.vue')
-            },
+            // {
+            //     path:'/ref',
+            //     name:'ref的使用',
+            //     meta:{
+            //         groupName:'Vue3'
+            //     },
+            //     component:()=>import('@/views/ref.vue')
+            // },
             // ElementPlus
             {
-                path:'/popover',
+                path:'/elementPlus/popover',
                 name:'Popover',
                 meta:{
                     groupName:'ElementPlus'
                 },
                 component:()=>import('@/views/ElementPlus/el-popover.vue')
             },{
-                path:'/upload',
+                path:'/elementPlus/upload',
                 name:'Upload',
                 meta:{
                     groupName:'ElementPlus'
@@ -155,7 +155,7 @@ export default[
             },
             // Http
             {
-                path:"/httpVersion",
+                path:"/http/version",
                 name:"HTTP版本",
                 meta:{
                     groupName:"HTTP"
@@ -163,7 +163,7 @@ export default[
                 component:()=>import('@/views/Http/HttpVersion.vue')
             },
             {
-                path:"/httpHand",
+                path:"/http/handshake",
                 name:"HTTP握手",
                 meta:{
                     groupName:"HTTP"
@@ -171,7 +171,7 @@ export default[
                 component:()=>import('@/views/Http/httpHand.vue')
             },
             {
-                path:"/stateCode",
+                path:"/http/statusCode",
                 name:"请求状态码",
                 meta:{
                     groupName:"HTTP"
@@ -180,7 +180,7 @@ export default[
             },
             // Js
             {
-                path:'/this',
+                path:'/javaScript/this',
                 name:'this指向',
                 meta:{
                     groupName:'Js'
@@ -204,7 +204,7 @@ export default[
                 component:()=>import('@/views/Js/copyType.vue')
             }, 
             {
-                path:"/xhrTime",
+                path:"/javaScript/rtt",
                 name:"最小RTT",
                 meta:{
                     groupName:"Js"
@@ -212,30 +212,38 @@ export default[
                 component:()=>import('@/views/Js/xhrTime.vue')
             },
             {
-                path:"/debounceThrottling",
+                path:"/javaScript/debounceThrottle",
                 name:"防抖节流",
                 meta:{
                     groupName:"Js"
                 },
                 component:()=>import('@/views/Js/debounceThrottling.vue')
             },
+            // CSS
+            {
+                path:'/css/center',
+                name:'div水平垂直居中',
+                meta:{
+                    groupName:'CSS'
+                },
+                component:()=>import('@/views/divCenter.vue')
+            },
+            {
+                path:'/css/animation',
+                name:'动画',
+                meta:{
+                    groupName:'CSS'
+                },
+                component:()=>import('@/views/Animation/animation.vue')
+            },
             // Axios
             {
-                path:'/axios',
+                path:'/javaScript/axios',
                 name:'Axios',
                 meta:{
                     groupName:'Axios'
                 },
                 component:()=>import('@/views/Axios/useAxios.vue')
-            },
-            // Animation
-            {
-                path:'/animation',
-                name:'动画',
-                meta:{
-                    groupName:'动画'
-                },
-                component:()=>import('@/views/Animation/animation.vue')
             },
             // Npm
             {
@@ -248,7 +256,7 @@ export default[
             },
             // Promise
             {
-                path:'/promise',
+                path:'/javaScript/promise',
                 name:'Promise',
                 meta:{
                     groupName:'Promise'
@@ -256,7 +264,7 @@ export default[
                 component:()=>import('@/views/Promise/promise.vue')
             },
             {
-                path:"/cacheDetail",
+                path:"/javaScript/cache",
                 name:"浏览器缓存",
                 meta:{
                     groupName:"浏览器缓存"
@@ -264,7 +272,7 @@ export default[
                 component:()=>import('@/views/cacheDetail.vue')
             },
             {
-                path:"/twoWayBinding",
+                path:"/javaScript/doubleBind",
                 name:"双向绑定原理",
                 meta:{
                     groupName:"双向绑定原理"
@@ -272,7 +280,7 @@ export default[
                 component:()=>import('@/views/twoWayBinding.vue')
             },
             {
-                path:"/dataTypeJudge",
+                path:"/javaScript/type",
                 name:"数据类型判断",
                 meta:{
                     groupName:"数据类型判断"
@@ -281,7 +289,7 @@ export default[
             },
             
             {
-                path:'/elementShow',
+                path:'/css/display',
                 name:'display、visibility、opacity的区别',
                 meta:{
                     groupName:'display、visibility、opacity的区别'
@@ -289,7 +297,7 @@ export default[
                 component:()=>import('@/views/elementShow.vue')
             },
             {
-                path:'/domCssRender',
+                path:'/css/tree',
                 name:'dom树、css树、render树的区别',
                 meta:{
                     groupName:'dom树、css树、render树的区别'
@@ -297,7 +305,7 @@ export default[
                 component:()=>import('@/views/domCssRender.vue')
             },
             {
-                path:'/prototypeProto',
+                path:'/javaScript/proto',
                 name:'原型和原型链',
                 meta:{
                     groupName:'原型和原型链'
@@ -305,7 +313,7 @@ export default[
                 component:()=>import('@/views/prototype.vue')
             },
             {
-                path:'/useNvm',
+                path:'/nvm',
                 name:'nvm的使用',
                 meta:{
                     groupName:'nvm的使用'
@@ -313,15 +321,7 @@ export default[
                 component:()=>import('@/views/nvmUse.vue')
             },
             {
-                path:'/divCenter',
-                name:'div水平垂直居中',
-                meta:{
-                    groupName:'div水平垂直居中'
-                },
-                component:()=>import('@/views/divCenter.vue')
-            },
-            {
-                path:'/fileUpload',
+                path:'/upload',
                 name:'文件上传',
                 meta:{
                     groupName:'打开文件管理器'

@@ -16,3 +16,8 @@ import SubMenu from './subMenu.vue'
 const props = defineProps(['menus'])
 const menus = props.menus;
 </script>
+<style lang="scss" scoped>
+:deep(.el-sub-menu__title){
+    user-select: none;
+}
+</style>

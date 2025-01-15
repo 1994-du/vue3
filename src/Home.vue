@@ -7,7 +7,7 @@
                     router
                     :default-active="onRoutes"
                     :collapse="isCollapse"
-                    :style="{width:!isCollapse?'200px':''}"
+                    :style="{width:!isCollapse?'280px':''}"
                     :collapse-transition="false">
                     <SubMenu v-for="(item,index) in menuConfig" :key="index" :menus="item"/>
                 </el-menu>
@@ -28,40 +28,45 @@
     import { useRouter, useRoute } from 'vue-router'
     import { computed, onMounted, onBeforeMount, onUpdated, onUnmounted, onBeforeUnmount, getCurrentInstance, ref, watch, watchEffect, reactive, onActivated } from 'vue'
     import { useStore } from 'vuex'
+    import menuRoutes from '@/utils/menuRoutes'
     const store = useStore()
     const router = useRouter()
     const route = useRoute()
     // 路由分组
-    const routesGroup = (list)=>{
-        let res = {}
-        list.forEach((item)=>{
-            if(item.meta.groupName){
-                if(!res[item.meta.groupName]){
-                    res[item.meta.groupName] = []
-                    res[item.meta.groupName].push({
-                        menuName: item.name,
-                        menuLink: item.path,
-                    })
-                }else{
-                    res[item.meta.groupName].push({
-                        menuName: item.name,
-                        menuLink: item.path,
-                    })
-                }
+    // const routesGroup = (list)=>{
+    //     console.log(menuRoutes);
+        
+    //     let res = {}
+    //     list.forEach((item)=>{
+    //         if(item.meta.groupName){
+    //             if(!res[item.meta.groupName]){
+    //                 res[item.meta.groupName] = []
+    //                 res[item.meta.groupName].push({
+    //                     menuName: item.name,
+    //                     menuLink: item.path,
+    //                 })
+    //             }else{
+    //                 res[item.meta.groupName].push({
+    //                     menuName: item.name,
+    //                     menuLink: item.path,
+    //                 })
+    //             }
                 
-            }
-        })
-        return res
-    }
-    let routeRes = routesGroup(router.getRoutes())
-    // 菜单数据
-    const menuData = Object.keys(routeRes).map((item)=>{
-        return {
-            menuName: item,
-            menuLink: routeRes[item].length>1?'':routeRes[item][0].menuLink,
-            children: routeRes[item].length>1?routeRes[item]:null
-        }
-    })
+    //         }
+    //     })
+    //     return res
+    // }
+    // let routeRes = routesGroup(router.getRoutes())
+    // console.log(routeRes);
+    
+    // // 菜单数据
+    // const menuData = Object.keys(routeRes).map((item)=>{
+    //     return {
+    //         menuName: item,
+    //         menuLink: routeRes[item].length>1?'':routeRes[item][0].menuLink,
+    //         children: routeRes[item].length>1?routeRes[item]:null
+    //     }
+    // })
     const onRoutes = computed(()=>{
         return route.path
     })
@@ -75,7 +80,8 @@
         isCollapse.value=!isCollapse.value
     }
     onMounted(()=>{
-        menuConfig.value=menuData
+        // menuConfig.value=menuData
+        menuConfig.value = menuRoutes
     })
 </script>
 

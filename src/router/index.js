@@ -9,10 +9,6 @@ router.onError=(err)=>{
     console.log('路由错误',err)
 }
 router.afterEach((to,from)=>{
-    console.log(to,from);
-    
-    console.log('路由跳转完成');
-    
     heighCode()
 })
 export default router;

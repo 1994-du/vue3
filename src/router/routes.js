@@ -129,14 +129,14 @@ export default[
                 },
                 component:()=>import('@/views/Vue3/watch.vue')
             },
-            // {
-            //     path:'/ref',
-            //     name:'ref的使用',
-            //     meta:{
-            //         groupName:'Vue3'
-            //     },
-            //     component:()=>import('@/views/ref.vue')
-            // },
+            {
+                path:'/vue3/communication/provideInject',
+                name:'provide/inject',
+                meta:{
+                    groupName:'Vue3'
+                },
+                component:()=>import('@/views/Vue3/communication/provideInject.vue')
+            },
             // ElementPlus
             {
                 path:'/elementPlus/popover',
@@ -179,6 +179,14 @@ export default[
                 component:()=>import('@/views/Http/StateCode.vue')
             },
             // Js
+            {
+                path:'/javaScript/setInterval',
+                name:'SetInterval不精确',
+                meta:{
+                    groupName:'Js'
+                },
+                component:()=>import('@/views/Js/setInterval.vue')
+            },
             {
                 path:'/javaScript/this',
                 name:'this指向',

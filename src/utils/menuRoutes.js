@@ -165,6 +165,11 @@ export default[
         menuLink:'/javaScript',
         children:[
             {
+                menuName:'setInterval不精确',
+                menuLink:'/javaScript/setInterval',
+                children:null
+            },
+            {
                 menuName:'Axios',
                 menuLink:'/javaScript/axios',
                 children:null

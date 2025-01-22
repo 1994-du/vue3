@@ -362,5 +362,10 @@ export default[
                 component:()=>import('@/views/Git/index.vue')
             }
         ]
+    },
+    {
+        path:'/login',
+        name:'login',
+        component:()=>import('@/views/LoginPage.vue')
     }
 ]

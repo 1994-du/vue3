@@ -32,16 +32,24 @@ Axios.interceptors.request.use(config=>{
     return config
 })
 Axios.interceptors.response.use(res=>{
-    if(res.data.status){
-        if(res.data.status == 'success'){
+    console.log('index',res);
+    
+    if(res.status===200){
+        if(res.data.status==200){
             ElMessage({
                 message:res.data.message,
-                type:res.data.status
+                type:'success'
             })
-            return res.data
+        }else{
+            ElMessage({
+                message:res.data.message,
+                type:'error'
+            })
         }
     }
-    
+    hideLoading()
+    return res.data
+   
 },err=>{
     ElMessage({
         message:err,

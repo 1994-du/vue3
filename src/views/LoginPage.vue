@@ -35,19 +35,17 @@ let {proxy}=getCurrentInstance()
 const store = useStore()
 const router = useRouter()
 const toLogin=function(){
-    // proxy.$axios.post('/api/login',JSON.stringify(loginObj)).then(res=>{
-    //     console.log('请求登录',res)
-    //     if(res.data.success==1){
-    //         router.replace('/')
-    //         store.commit('changLogin',{val:1})
-    //         sessionStorage.setItem('islogin',1)
-    //     }else{
-    //         alert('登录失败')
-    //     }
-    // })
-    router.replace('/')
-    store.commit('changLogin',{val:1})
-    sessionStorage.setItem('islogin',1)
+    proxy.$axios.post('/api/login',JSON.stringify(loginObj)).then(res=>{
+        console.log('请求登录',res)
+        if(res.status==200){
+            router.replace('/')
+            store.commit('changLogin',{val:1})
+            sessionStorage.setItem('islogin',1)
+        }
+    })
+    // router.replace('/')
+    // store.commit('changLogin',{val:1})
+    // sessionStorage.setItem('islogin',1)
 }
 const isShowPassword=ref(true)
 </script>

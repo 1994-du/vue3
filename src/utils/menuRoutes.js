@@ -180,7 +180,7 @@ export default[
                 children:null
             },
             {
-                menuName:'原型链',
+                menuName:'原型和原型链',
                 menuLink:'/javaScript/proto',
                 children:null
             },

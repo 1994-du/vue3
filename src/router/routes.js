@@ -227,6 +227,14 @@ export default[
                 },
                 component:()=>import('@/views/Js/debounceThrottling.vue')
             },
+            {
+                path:"/javaScript/closure",
+                name:"闭包",
+                meta:{
+                    groupName:"Js"
+                },
+                component:()=>import('@/views/Js/closure.vue')
+            },
             // CSS
             {
                 path:'/css/center',
@@ -318,7 +326,7 @@ export default[
                 meta:{
                     groupName:'原型和原型链'
                 },
-                component:()=>import('@/views/prototype.vue')
+                component:()=>import('@/views/Js/prototype.vue')
             },
             {
                 path:'/nvm',

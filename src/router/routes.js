@@ -71,7 +71,7 @@ export default[
                 meta:{
                     groupName:'Vue3',
                 },
-                component:()=>import('@/views/Vue3/router.vue')
+                component:()=>import('@/views/Vue3/router/router.vue')
             },
             {
                 path:'/vue3/communication/busEvent',
@@ -95,7 +95,7 @@ export default[
                 meta:{
                     groupName:'Vue3',
                 },
-                component:()=>import('@/views/Vue3/routerLazyLoad.vue')
+                component:()=>import('@/views/Vue3/router/routerLazyLoad.vue')
             },
             {
                 path:"/vue3/directive",

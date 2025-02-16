@@ -11,7 +11,12 @@
                     :collapse-transition="false">
                     <SubMenu v-for="(item,index) in menuConfig" :key="index" :menus="item"/>
                 </el-menu>
-                <div class="collapse_btn" @click="collapse">
+                <div class="custome_menu_btn" @click="router.push('/set')">
+                    <el-icon v-if="!isCollapse"><Setting /></el-icon>
+                    <el-icon v-if="isCollapse"><Setting /></el-icon>
+                    <span v-if="!isCollapse">设置</span>
+                </div>
+                <div class="custome_menu_btn" @click="collapse">
                     <el-icon v-if="!isCollapse"><DArrowLeft/></el-icon>
                     <el-icon v-if="isCollapse"><DArrowRight/></el-icon>
                     <span v-if="!isCollapse">收起</span>

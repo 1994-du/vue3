@@ -375,5 +375,10 @@ export default[
         path:'/login',
         name:'login',
         component:()=>import('@/views/LoginPage.vue')
+    },
+    {
+        path:'/set',
+        name:'set',
+        component:()=>import('@/views/SetPage.vue')
     }
 ]

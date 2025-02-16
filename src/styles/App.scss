@@ -8,3 +8,27 @@ html,body{
     margin: 0;
     padding: 0;
 }
+h4{
+    width: fit-content;
+    position: relative;
+    text-align: left;
+    background-color: #f2f5fc;
+    color: #252b3a;
+    padding:  10px;
+    margin: 5px 0;
+    background-image: -webkit-linear-gradient(0deg,rgb(176, 176, 176),rgb(50, 50, 50));
+    background-clip: text;
+    -webkit-background-clip:text;
+    color: transparent;
+    font-size: 20px;
+}
+h4::before{
+    display: inline-block;
+    content: '';
+    width: 5px;
+    height: 41px;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    background-color: #5e7ce0;
+}

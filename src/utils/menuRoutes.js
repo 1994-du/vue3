@@ -255,6 +255,11 @@ export default[
                 children:null
             },
             {
+                menuName:'发布订阅者模式',
+                menuLink:'/javaScript/pubSub',
+                children:null
+            },
+            {
                 menuName:'数据类型判断',
                 menuLink:'/javaScript/type',
                 children:null
@@ -283,6 +288,11 @@ export default[
             {
                 menuName:'dom树、css树、render树的区别',
                 menuLink:'/css/tree',
+                children:null
+            },
+            {
+                menuName:'轮播图',
+                menuLink:'/css/carousel',
                 children:null
             }
         ]

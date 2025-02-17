@@ -204,13 +204,29 @@ export default[
                 component:()=>import('@/views/Js/currying.vue')
             },
             {
-                path:"/copyType",
+                path:"/javaScript/copy",
                 name:"深浅拷贝",
                 meta:{
                     groupName:"Js"
                 },
-                component:()=>import('@/views/Js/copyType.vue')
-            }, 
+                component:()=>import('@/views/Js/deepCopy.vue')
+            },
+            {
+                path:'/javaScript/pubSub',
+                name:'发布订阅',
+                meta:{
+                    groupName:'Js'
+                },
+                component:()=>import('@/views/Js/PublishSubscribePattern.vue')
+            },
+            {
+                path:'/javaScript/eventLoop',
+                name:'事件循环',
+                meta:{
+                    groupName:'Js'
+                },
+                component:()=>import('@/views/Js/eventLoop.vue')
+            },
             {
                 path:"/javaScript/rtt",
                 name:"最小RTT",
@@ -251,6 +267,14 @@ export default[
                     groupName:'CSS'
                 },
                 component:()=>import('@/views/Animation/animation.vue')
+            },
+            {
+                path:'/css/carousel',
+                name:'轮播图',
+                meta:{
+                    groupName:'CSS'
+                },
+                component:()=>import('@/views/Animation/carousel.vue')
             },
             // Axios
             {

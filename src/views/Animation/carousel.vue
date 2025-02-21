@@ -3,13 +3,13 @@
 <div class="carousel_warp">
     <div class="carousel_list">
         <div class="carousel__item">
-            <img src="/public/img/echart_bar.png" alt="">
+            <img src="./public/img/echart_bar.png" alt="">
         </div>
         <div class="carousel__item">1</div>
         <div class="carousel__item">2</div>
         <div class="carousel__item">3</div>
         <div class="carousel__item">
-            <img src="/public/img/echart_bar.png" alt="">
+            <img src="./public/img/echart_bar.png" alt="">
         </div>
         <div class="carousel__item">1</div>
     </div>
@@ -21,12 +21,10 @@
 
 let currentIndex=1;
 function prev() {
-    console.log('上一张')
     currentIndex--;
     updateCarousel();
 }
 function next() {
-    console.log('下一张')
     currentIndex++;
     updateCarousel();
 }
@@ -38,7 +36,6 @@ function updateCarousel() {
     const offset = -currentIndex * imageWidth;
     images.style.transform = `translateX(${offset}px)`;
     if(currentIndex === images.children.length -1){
-        console.log('返回第二个');
         currentIndex = 1;
         const offset = -currentIndex * imageWidth;
         setTimeout(() => {
@@ -47,7 +44,6 @@ function updateCarousel() {
         },500)
     }
     if(currentIndex === 0){
-        console.log('返回倒数第二个');
         currentIndex = images.children.length -2;
         const offset = -currentIndex * imageWidth;
         setTimeout(() => {

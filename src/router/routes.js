@@ -66,12 +66,28 @@ export default[
                 component:()=>import('@/views/Vue3/vuex.vue')
             },
             {
+                path:'/vue3/router/principle',
+                name:'路由原理',
+                meta:{
+                    groupName:'Vue3',
+                },
+                component:()=>import('@/views/Vue3/router/routerPrinciple.vue')
+            },
+            {
                 path:'/vue3/router/use',
                 name:'VueRouter',
                 meta:{
                     groupName:'Vue3',
                 },
                 component:()=>import('@/views/Vue3/router/router.vue')
+            },
+            {
+                path:'/vue3/router/lazyLoad',
+                name:'路由懒加载',
+                meta:{
+                    groupName:'Vue3',
+                },
+                component:()=>import('@/views/Vue3/router/routerLazyLoad.vue')
             },
             {
                 path:'/vue3/communication/busEvent',
@@ -89,14 +105,7 @@ export default[
                 },
                 component:()=>import('@/views/Vue3/ComponentCommunication.vue')
             },
-            {
-                path:'/vue3/router/lazyLoad',
-                name:'路由懒加载',
-                meta:{
-                    groupName:'Vue3',
-                },
-                component:()=>import('@/views/Vue3/router/routerLazyLoad.vue')
-            },
+           
             {
                 path:"/vue3/directive",
                 name:"自定义指令",

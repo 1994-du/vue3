@@ -69,6 +69,11 @@ export default[
                 menuLink:'/vue3/router',
                 children:[
                     {
+                        menuName:'原理',
+                        menuLink:'/vue3/router/principle',
+                        children:null
+                    },
+                    {
                         menuName:'路由使用',
                         menuLink:'/vue3/router/use',
                         children:null

@@ -401,6 +401,14 @@ export default[
                     groupName:'Git'
                 },
                 component:()=>import('@/views/Git/index.vue')
+            },
+            {
+                path:'/javaScript/arrayFilter',
+                name:'数组去重',
+                meta:{
+                    groupName:'javaScript'
+                },
+                component:()=>import('@/views/Js/arrayFilter.vue')
             }
         ]
     },

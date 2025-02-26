@@ -170,6 +170,11 @@ export default[
         menuLink:'/javaScript',
         children:[
             {
+                menuName:'数组去重',
+                menuLink:'/javaScript/arrayFilter',
+                children:null
+            },
+            {
                 menuName:'setInterval不精确',
                 menuLink:'/javaScript/setInterval',
                 children:null

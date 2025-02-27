@@ -16,7 +16,7 @@
             
             <div class="login_buttons">
                 <button class="login" @click="toLogin">登录</button>
-                <button  class="register">注册</button>
+                <button  class="register" @click="toRegister">注册</button>
                 <button type="text" class="forget">忘记密码？</button>
             </div>
         </div>
@@ -24,9 +24,11 @@
 </template>
 
 <script setup>
+import indexedDB from '../utils/indexedDB';
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex';
-import {ref,getCurrentInstance, reactive} from 'vue'
+import {ref,getCurrentInstance, reactive, onMounted} from 'vue'
+import { ElDialog, ElMessage } from 'element-plus';
 let loginObj=reactive({
     username:"",
     password:""
@@ -34,20 +36,74 @@ let loginObj=reactive({
 let {proxy}=getCurrentInstance()
 const store = useStore()
 const router = useRouter()
-const toLogin=function(){
-    proxy.$axios.post('/api/login',JSON.stringify(loginObj)).then(res=>{
-        console.log('请求登录',res)
-        if(res.status==200){
+
+// 事务
+let db = null;
+const toLogin=async function(){
+    if(!db){
+        console.error('数据库未打开');
+        return
+    }
+    // proxy.$axios.post('/api/login',JSON.stringify(loginObj)).then(res=>{
+    //     console.log('请求登录',res)
+    //     if(res.status==200){
+    //         router.replace('/')
+    //         store.commit('changLogin',{val:1})
+    //         sessionStorage.setItem('islogin',1)
+    //     }
+    // })
+    // // router.replace('/')
+    // // store.commit('changLogin',{val:1})
+    // // sessionStorage.setItem('islogin',1)
+    try{
+        let queryRes = await indexedDB.queryCustomers(db,loginObj.username)
+        console.log('查询结果',queryRes);
+        if(!queryRes){
+            ElMessage({
+                message:'查询不到当前用户，是否注册？',
+                type:'warning',
+            })
+        }else{
+            ElMessage({
+                message:'登录成功',
+                type:'success',
+            })
             router.replace('/')
-            store.commit('changLogin',{val:1})
-            sessionStorage.setItem('islogin',1)
         }
-    })
-    // router.replace('/')
-    // store.commit('changLogin',{val:1})
-    // sessionStorage.setItem('islogin',1)
+        
+    }
+    catch(err){
+        console.log('查询用户失败',err);
+    }
+    
 }
+const toRegister = async function(){
+    const newUser={
+        username:loginObj.username,
+        password:loginObj.password
+    }
+    try{
+        await indexedDB.addCustomer(db,newUser)
+    }
+    catch(err){
+        ElMessage({
+            message:`添加用户失败:${err}`,
+            type:'error',
+        })
+    }
+    
+}
+
 const isShowPassword=ref(true)
+
+onMounted(async()=>{
+    try{
+        db =  await indexedDB.openDatabase() 
+    }
+    catch(err){
+        console.log('打开数据库失败',err);
+    }
+})
 </script>
 <style lang="less" scoped>
 .login_inner{

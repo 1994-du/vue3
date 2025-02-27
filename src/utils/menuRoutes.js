@@ -170,6 +170,11 @@ export default[
         menuLink:'/javaScript',
         children:[
             {
+                menuName:'判断空对象',
+                menuLink:'/javaScript/isEmptyObject',
+                children:null
+            },
+            {
                 menuName:'数组去重',
                 menuLink:'/javaScript/arrayFilter',
                 children:null

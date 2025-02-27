@@ -409,6 +409,14 @@ export default[
                     groupName:'javaScript'
                 },
                 component:()=>import('@/views/Js/arrayFilter.vue')
+            },
+            {
+                path:'/javaScript/isEmptyObject',
+                name:'判断对象是否为空',
+                meta:{
+                    groupName:'javaScript'
+                },
+                component:()=>import('@/views/Js/isEmptyObject.vue')
             }
         ]
     },

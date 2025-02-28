@@ -170,6 +170,11 @@ export default[
         menuLink:'/javaScript',
         children:[
             {
+                menuName:'数组转树',
+                menuLink:'/javaScript/arrayToTree',
+                children:null
+            },
+            {
                 menuName:'判断空对象',
                 menuLink:'/javaScript/isEmptyObject',
                 children:null
@@ -279,6 +284,23 @@ export default[
                 menuLink:'/javaScript/type',
                 children:null
             }
+        ]
+    },
+    // IndexedDB
+    {
+        menuName:'IndexedDB',
+        menuLink:'/indexedDB',
+        children:[
+            {
+                menuName:'基本使用',
+                menuLink:'/indexedDB/base',
+                children:null
+            },
+            // {
+            //     menuName:'事务',
+            //     menuLink:'/indexedDB/transaction',
+            //     children:null
+            // },
         ]
     },
     {

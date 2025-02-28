@@ -14,11 +14,11 @@ $h3_indent: 30px;
 $h4_indent: 40px;
 $h5_indent: 50px;
 $h6_indent: 60px;
-$h1_tagcolor: #ff0000;
-$h2_tagcolor: #eaff00;
+$h1_tagcolor: #3939bb;
+$h2_tagcolor: #15e21f;
 $h3_tagcolor: #0048ff;
-$h4_tagcolor: #a200ff;
-$h5_tagcolor: #ff156f;
+$h4_tagcolor: #ac3aee;
+$h5_tagcolor: #5a69cb;
 $h6_tagcolor: #00ff62;
 h1,h2,h3,h4,h5,h6{
     position: relative;
@@ -28,7 +28,7 @@ h1,h2,h3,h4,h5,h6{
     padding:  10px;
     margin: 5px 0;
     font-size: 20px;
-    text-indent: 50px;
+    // text-indent: 50px;
 }
 h1{
     background-image: -webkit-linear-gradient(0deg,$h1_tagcolor,rgb(255, 255, 255));
@@ -58,25 +58,25 @@ h1::before,h2::before,h3::before,h4::before,h5::before,h6::before{
 }
 h1::before{
     background-color: $h1_tagcolor;
-    content: '一、';
+    // content: '一、';
 }
 h2::before{
     background-color: $h2_tagcolor;
-    content: '二、';
+    // content: '二、';
 }
 h3::before{
     background-color: $h3_tagcolor;
-    content: '三、';
+    // content: '三、';
 }
 h4::before{
     background-color: $h4_tagcolor;
-    content: '四、';
+    // content: '四、';
 }
 h5::before{
     background-color: $h5_tagcolor;
-    content: '五、';
+    // content: '五、';
 }
 h6::before{
     background-color: $h6_tagcolor;
-    content: '六、';
+    // content: '六、';
 }

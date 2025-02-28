@@ -13,12 +13,18 @@ export default {
         request.onupgradeneeded = (event) => {
           const db = event.target.result;
           if (!db.objectStoreNames.contains('customers')) {
-            const objectStore = db.createObjectStore('customers', {
+            const objectStore = db.createObjectStore(['customers'], {
               keyPath: 'username',
               autoIncrement: false
             });
             // objectStore.createIndex('nameIndex', 'name', { unique: false });
             // objectStore.createIndex('ageIndex', 'age', { unique: false });
+          }
+          if(!db.objectStoreNames.contains('menus')){
+            const objectStore = db.createObjectStore('menus', {
+              keyPath: 'menuLink',
+              autoIncrement: true
+            });
           }
         };
   

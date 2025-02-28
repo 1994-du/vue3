@@ -417,6 +417,31 @@ export default[
                     groupName:'javaScript'
                 },
                 component:()=>import('@/views/Js/isEmptyObject.vue')
+            },
+            {
+                path:'/javaScript/arrayToTree',
+                name:'数组转树',
+                meta:{
+                    groupName:'javaScript'
+                },
+                component:()=>import('@/views/Js/arrayToTree.vue')
+            },
+            // IndexedDB
+            {
+                path:'/indexedDB/base',
+                name:'基础使用',
+                meta:{
+                    groupName:'indexedDB'
+                },
+                component:()=>import('@/views/indexedDB/base.vue')
+            },
+            {
+                path:'/indexedDB/transaction',
+                name:'事务',
+                meta:{
+                    groupName:'indexedDB'
+                },
+                component:()=>import('@/views/indexedDB/transaction.vue')
             }
         ]
     },

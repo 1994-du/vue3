@@ -1,40 +1,7 @@
 // src/services/indexedDBService.js
 export default {
-  // 打开数据库
-    openDatabase() {
-      return new Promise((resolve, reject) => {
-        const request = indexedDB.open('DataBaseDemo1', 1);
-  
-        request.onerror = (event) => {
-          console.error('打开数据库失败:', event.target.error);
-          reject(event.target.error);
-        };
-  
-        request.onupgradeneeded = (event) => {
-          const db = event.target.result;
-          if (!db.objectStoreNames.contains('customers')) {
-            const objectStore = db.createObjectStore(['customers'], {
-              keyPath: 'username',
-              autoIncrement: false
-            });
-            // objectStore.createIndex('nameIndex', 'name', { unique: false });
-            // objectStore.createIndex('ageIndex', 'age', { unique: false });
-          }
-          if(!db.objectStoreNames.contains('menus')){
-            const objectStore = db.createObjectStore('menus', {
-              keyPath: 'menuLink',
-              autoIncrement: true
-            });
-          }
-        };
-  
-        request.onsuccess = (event) => {
-          resolve(event.target.result);
-        };
-      });
-    },
-  // 添加用户数据
-    addCustomer(db, customer) {
+    // 添加用户数据
+    addCustomer(customer) {
       return new Promise((resolve, reject) => {
         const transaction = db.transaction('customers', 'readwrite');
         const objectStore = transaction.objectStore('customers');
@@ -42,7 +9,7 @@ export default {
         const addRequest = objectStore.add(customer);
         addRequest.onsuccess = () => {
           console.log(`数据 ${customer.username} 添加成功`);
-          resolve();
+          resolve(true);
         };
         addRequest.onerror = (e) => {
           console.error(`数据 ${customer.username} 添加失败:`, e.target.error);
@@ -56,7 +23,7 @@ export default {
       });
     },
     // 查询用户数据
-    queryCustomers(db, username) {
+    queryCustomers(username) {
         return new Promise((resolve, reject) => {
           const transaction = db.transaction('customers', 'readonly');
           const objectStore = transaction.objectStore('customers');

@@ -1,8 +1,9 @@
 export default {
+    // 打开数据库
     openDatabase() {
         return new Promise((resolve, reject) => {
           const request = indexedDB.open('DataBaseDemo', 1);
-
+          
           request.onupgradeneeded = (event) => {
             const db = event.target.result;
             if (!db.objectStoreNames.contains('customers')) {
@@ -22,6 +23,8 @@ export default {
           };
     
           request.onsuccess = (event) => {
+            // 保存数据库实例到window对象上，方便全局使用
+            window.db = event.target.result;
             resolve(event.target.result);
           };
 
@@ -31,5 +34,12 @@ export default {
           };
 
         });
-    },   
+    },
+    // 关闭数据库
+    closeDatabase() {
+        if (window.db) {
+          window.db.close();
+          window.db = null;
+        }
+    }
 }

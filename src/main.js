@@ -4,8 +4,9 @@ import router from "./router"
 import store from "./store"
 import axios from "@/api"
 import "@/styles/common.scss"
-// 将菜单数据存入本地IndexDB
-import '@/utils/menuToIndexDB'
+// 全局打开数据库
+import startIndexedDB from '@/utils/startIndexedDB'
+startIndexedDB.openDatabase()
 //全局自定义指令
 import directive from "./utils/globalDirective.js";
 // elementPlus

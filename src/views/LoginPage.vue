@@ -37,10 +37,8 @@ let {proxy}=getCurrentInstance()
 const store = useStore()
 const router = useRouter()
 
-// 事务
-let db = null;
-const toLogin=async function(){
-    if(!db){
+const toLogin= function(){
+    if(!window.db){
         console.error('数据库未打开');
         return
     }
@@ -52,13 +50,8 @@ const toLogin=async function(){
     //         sessionStorage.setItem('islogin',1)
     //     }
     // })
-    // // router.replace('/')
-    // // store.commit('changLogin',{val:1})
-    // // sessionStorage.setItem('islogin',1)
-    try{
-        let queryRes = await indexedDB.queryCustomers(db,loginObj.username)
-        console.log('查询结果',queryRes);
-        if(!queryRes){
+    indexedDB.queryCustomers(loginObj.username).then(res=>{
+        if(!res){
             ElMessage({
                 message:'查询不到当前用户，是否注册？',
                 type:'warning',
@@ -70,40 +63,32 @@ const toLogin=async function(){
             })
             router.replace('/')
         }
-        
-    }
-    catch(err){
-        console.log('查询用户失败',err);
-    }
-    
+    })
 }
-const toRegister = async function(){
+const toRegister = function(){
     const newUser={
         username:loginObj.username,
         password:loginObj.password
     }
-    try{
-        await indexedDB.addCustomer(db,newUser)
-    }
-    catch(err){
-        ElMessage({
-            message:`添加用户失败:${err}`,
-            type:'error',
-        })
-    }
-    
+    indexedDB.addCustomer(newUser).then(res=>{
+        console.log('res',res);
+        
+        if(res){
+            ElMessage({
+                message:'注册成功',
+                type:'success',
+            })
+        }else{
+            ElMessage({
+                message:'注册失败',
+                type:'error',
+            })
+        }
+    })
 }
 
 const isShowPassword=ref(true)
 
-onMounted(async()=>{
-    try{
-        db =  await indexedDB.openDatabase() 
-    }
-    catch(err){
-        console.log('打开数据库失败',err);
-    }
-})
 </script>
 <style lang="less" scoped>
 .login_inner{

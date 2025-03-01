@@ -3,21 +3,17 @@
     <el-button @click="saveMenuBtn">保存菜单</el-button>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue'
-import { openMenu,saveMenu } from '@/utils/menuToIndexDB'
-let db=null;
+import menuRoutes from '@/utils/menuRoutes';
 const saveMenuBtn = async () => {
-    const menu = await saveMenu(db)
-    console.log(menu)
-}
-onMounted(async () => {
-    try{
-        db =  await openMenu() 
+    try {
+        const transaction = window.db.transaction(['menus'], 'readwrite');
+        const objectStore = transaction.objectStore('menus');
+        const request = await objectStore.add(menuRoutes);
     }
-    catch(err){
-        console.log('打开数据库失败',err);
-    } 
-})
+    catch (e) {
+        console.log('菜单保存失败',e);
+    }
+}
 </script>
 <style lang='scss' scoped>
 </style>

@@ -4,6 +4,10 @@ import router from "./router"
 import store from "./store"
 import axios from "@/api"
 import "@/styles/common.scss"
+// ant-design-vue
+import Antd from 'ant-design-vue';
+import 'ant-design-vue/dist/reset.css';
+
 // 全局打开数据库
 import startIndexedDB from '@/utils/startIndexedDB'
 startIndexedDB.openDatabase()
@@ -43,6 +47,7 @@ instance.config.globalProperties.$bus = bus
 instance.use(router)
 instance.use(store)
 instance.use(ElementPlus)
+instance.use(Antd)
 instance.use(i18n)
 instance.mount('#subapp-viewport')
 directive(instance)

@@ -12,6 +12,7 @@
   "dependencies": {
     "@antv/g2": "^5.2.2",
     "@rollup/plugin-alias": "^5.0.0",
+    "ant-design-vue": "^4.2.6",
     "axios": "^1.4.0",
     "echarts": "^5.5.1",
     "element-plus": "^2.3.4",

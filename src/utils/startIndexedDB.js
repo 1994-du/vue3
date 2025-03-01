@@ -17,7 +17,7 @@ export default {
             if(!db.objectStoreNames.contains('menus')){
               const menuStore = db.createObjectStore('menus', {
                 keyPath: 'menuLink',
-                autoIncrement: true
+                autoIncrement: false
               });
             }
           };

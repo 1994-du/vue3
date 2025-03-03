@@ -334,7 +334,7 @@ export default[
                 meta:{
                     groupName:"数据类型判断"
                 },
-                component:()=>import('@/views/dataTypeJudge.vue')
+                component:()=>import('@/views/Js/dataTypeJudge.vue')
             },
             
             {
@@ -442,6 +442,14 @@ export default[
                     groupName:'indexedDB'
                 },
                 component:()=>import('@/views/indexedDB/transaction.vue')
+            },
+            {
+                path:'/html/canvas',
+                name:'canvas',
+                meta:{
+                    groupName:'canvas'
+                },
+                component:()=>import('@/views/Canvas/demo1.vue')
             }
         ]
     },

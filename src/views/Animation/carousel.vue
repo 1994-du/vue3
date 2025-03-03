@@ -3,13 +3,13 @@
 <div class="carousel_warp">
     <div class="carousel_list">
         <div class="carousel__item">
-            <img src="./public/img/echart_bar.png" alt="">
+            <img src="/img/echart_bar.png" alt="">
         </div>
         <div class="carousel__item">1</div>
         <div class="carousel__item">2</div>
         <div class="carousel__item">3</div>
         <div class="carousel__item">
-            <img src="./public/img/echart_bar.png" alt="">
+            <img src="/img/echart_bar.png" alt="">
         </div>
         <div class="carousel__item">1</div>
     </div>

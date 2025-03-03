@@ -36,6 +36,11 @@
     <code>
         <pre>const objectStore = transaction.objectStore(storeName);</pre>
         <pre>// storeName：对象存储。类型：字符串</pre>
+        <pre>objectStore.add(data); // 添加数据</pre>
+        <pre>objectStore.put(data); // 修改数据</pre>
+        <pre>objectStore.delete(key); // 删除数据</pre>
+        <pre>objectStore.get(key); // 获取数据</pre>
+        <pre>objectStore.getAll(); // 获取所有数据</pre>
     </code>
 </template>
 <script setup>

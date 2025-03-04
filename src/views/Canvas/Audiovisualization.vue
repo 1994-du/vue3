@@ -47,7 +47,6 @@ const registerEvent = () => {
 };
 // 绘画
 const draw = () => {
-  console.log('画画');
   animationFrameId = requestAnimationFrame(draw);
   if(!isInit) return;
   // 清空画布

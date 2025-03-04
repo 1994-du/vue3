@@ -61,6 +61,22 @@ export default[
         ]
     },
     {
+        menuName:'Canvas',
+        menuLink:'/canvas',
+        children:[
+            {
+                menuName:'雪花',
+                menuLink:'/canvas/snowflake',
+                children:null
+            },
+            {
+                menuName:'音频可视化',
+                menuLink:'/canvas/audioVisualization',
+                children:null
+            }
+        ]
+    },
+    {
         menuName:'Vue3',
         menuLink:'/vue3',
         children:[

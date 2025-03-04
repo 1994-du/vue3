@@ -443,13 +443,22 @@ export default[
                 },
                 component:()=>import('@/views/indexedDB/transaction.vue')
             },
+            // Canvas
             {
-                path:'/html/canvas',
+                path:'/canvas/snowflake',
                 name:'canvas',
                 meta:{
-                    groupName:'canvas'
+                    groupName:'Canvas'
                 },
-                component:()=>import('@/views/Canvas/demo1.vue')
+                component:()=>import('@/views/Canvas/snowflake.vue')
+            },
+            {
+                path:'/canvas/audioVisualization',
+                name:'音频可视化',
+                meta:{
+                    groupName:'Canvas'
+                },
+                component:()=>import('@/views/Canvas/AudioVisualization.vue')
             }
         ]
     },

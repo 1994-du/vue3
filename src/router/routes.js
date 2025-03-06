@@ -189,6 +189,14 @@ export default[
             },
             // Js
             {
+                path:'/javaScript/new',
+                name:"new",
+                meta:{
+                    groupName:"JavaScript"
+                },
+                component:()=>import('@/views/Js/customNew.vue')
+            },
+            {
                 path:'/javaScript/setInterval',
                 name:'SetInterval不精确',
                 meta:{
@@ -459,7 +467,31 @@ export default[
                     groupName:'Canvas'
                 },
                 component:()=>import('@/views/Canvas/AudioVisualization.vue')
-            }
+            },
+            {
+                path:'/network/tcp',
+                name:'tcp',
+                meta:{
+                    groupName:'Network'
+                },
+                component:()=>import('@/views/Network/TCP.vue')
+            },
+            {
+                path:"/javaScript/async",
+                name:"async和await",
+                meta:{
+                    groupName:"JavaScript"
+                },
+                component:()=>import('@/views/Js/asyncAwait.vue')
+            },
+            {
+                path:"/javaScript/generator",
+                name:"generstor",
+                meta:{
+                    groupName:"JavaScript"
+                },
+                component:()=>import('@/views/Js/Generator.vue')
+            },
         ]
     },
     {

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="audio_visualization">
     <h4>音频可视化</h4>
     <canvas width="800" height="200"></canvas>
 
@@ -12,10 +12,10 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
-let audio = null
-let canvas = null
-let ctx = null
-let isInit = false
+let audio = null; // 音频对象
+let canvas = null; // 画布对象
+let ctx = null; // 画布上下文对象
+let isInit = false; // 是否已经初始化
 
 let analyser = null
 let buffer = null
@@ -69,7 +69,6 @@ const draw = () => {
 };
 const stopDraw = () => {
   cancelAnimationFrame(animationFrameId);
-  animationFrameId = null;
 };
 onMounted(()=>{
   initCvs();
@@ -77,8 +76,18 @@ onMounted(()=>{
 </script>
 
 <style scoped lang='less'>
+.audio_visualization{
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
 canvas {
-  display: block;
-  margin: 20px auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
 }
 </style>

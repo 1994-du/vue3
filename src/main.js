@@ -8,6 +8,8 @@ import "@/styles/common.scss"
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/reset.css';
 
+// import './../scripts/generateRoutes.js'
+
 // 全局打开数据库
 import startIndexedDB from '@/utils/startIndexedDB'
 startIndexedDB.openDatabase()

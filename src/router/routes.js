@@ -503,5 +503,10 @@ export default[
         path:'/set',
         name:'set',
         component:()=>import('@/views/SetPage.vue')
+    },
+    {
+        path:'/userManagement',
+        name:'userManagement',
+        component:()=>import('@/views/UserManagement.vue')
     }
 ]

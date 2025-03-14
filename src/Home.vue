@@ -1,5 +1,9 @@
 <template>
+    <ModalSearch v-if="isShowSearch" v-model="isShowSearch"/>
     <div class="layout">
+        <header>
+            <HeaderSearch @click="openSearchModal"/>
+        </header>
         <div class="container">
             <div class="layout_menu">
                 <el-menu
@@ -11,6 +15,11 @@
                     :collapse-transition="false">
                     <SubMenu v-for="(item,index) in menuConfig" :key="index" :menus="item"/>
                 </el-menu>
+                <div class="custome_menu_btn" @click="router.push('/userManagement')">
+                    <el-icon v-if="!isCollapse"><Avatar /></el-icon>
+                    <el-icon v-if="isCollapse"><Avatar /></el-icon>
+                    <span v-if="!isCollapse">用户管理</span>
+                </div>
                 <div class="custome_menu_btn" @click="router.push('/set')">
                     <el-icon v-if="!isCollapse"><Setting /></el-icon>
                     <el-icon v-if="isCollapse"><Setting /></el-icon>
@@ -29,6 +38,8 @@
     </div>
 </template>
 <script setup>
+    import ModalSearch from '@/components/ModalSearch.vue'
+    import HeaderSearch from './components/HeaderSearch.vue'
     import SubMenu from './components/subMenu.vue'
     import { useRouter, useRoute } from 'vue-router'
     import { computed, onMounted, onBeforeMount, onUpdated, onUnmounted, onBeforeUnmount, getCurrentInstance, ref, watch, watchEffect, reactive, onActivated } from 'vue'
@@ -84,9 +95,30 @@
     const collapse = function(){
         isCollapse.value=!isCollapse.value
     }
+
+
+
+    let isShowSearch = ref(false)
+    // 打开搜索模态框
+    const openSearchModal = ()=>{
+        isShowSearch.value = true
+    }
+    // 初始化
     onMounted(()=>{
         // menuConfig.value=menuData
         menuConfig.value = menuRoutes
+
+        window.addEventListener('keydown', (e) => {
+            console.log('key',e);
+            if((e.ctrlKey||e.metaKey) && e.key === 'f'){
+                e.preventDefault()
+                // console.log('ctrl+f')
+                isShowSearch.value = true
+            }
+            if(e.key === 'Escape'){
+                isShowSearch.value = false
+            }
+        })
     })
 </script>
 

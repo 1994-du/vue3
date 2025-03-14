@@ -59,6 +59,8 @@ const arrayToTree = (arr) => {
     for(let item of arr){
         map.set(item.id,item)
     }
+    console.log('map',map);
+    
     let result=[];
     for(let item of arr){
         if(!item.parent){

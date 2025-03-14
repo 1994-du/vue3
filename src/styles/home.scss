@@ -42,6 +42,8 @@ h1,.hljs{
         justify-content: center;
     }
 }
+
+
 #subapp-viewport {
   height: 100%;
   font-family: fangsong;
@@ -58,34 +60,11 @@ h1,.hljs{
     display: flex;
     flex-direction: column;
     header{
-        padding: 10px;
-        height: 30px;
-        flex-shrink: 0;
-        background-color: #fff;
+        height: 55px;
         display: flex;
         align-items: center;
-        color: #252b3a;
-        justify-content: space-between;
-        border-bottom: 1px solid #9b9b9b;
-        .userinfo{
-            display: flex;
-            align-items: center;
-            img{
-                width: 30px;
-                height: 30px;
-                border-radius: 50%;
-                margin-left: 10px;
-            }
-        }
-        .operation{
-            display: flex;
-            align-items: center;
-            img{
-                width: 20px;
-                height: 20px;
-                margin: 0 10px;
-            }
-        }
+        background-color: black;
+        
     }
     .container{
         flex: 1;
@@ -117,7 +96,7 @@ h1,.hljs{
                     }
                 }
                 .el-menu-item{
-                    height: 40px;
+                    height: 56px;
                     border-bottom: 1px solid #eee;
                     user-select: none;
                     color: var(--menu-font-color);
@@ -135,15 +114,20 @@ h1,.hljs{
             }
             .custome_menu_btn{
                 width: 100%;
-                height: 40px;
+                height: 56px;
                 display: flex;
-                justify-content: center;
+                justify-content: flex-start;
                 align-items: center;
                 border-top: .5px solid #ccc;
                 cursor: pointer;
                 color: #6f6d6d;
+                padding: 0 20px;
+                flex-shrink: 0;
+                .el-icon{
+                    font-size: 20px;
+                }
                 span{
-                    margin-left: 5px;
+                    margin-left: 10px;
                 }
                 &:hover{
                     background-color: var(--el-menu-hover-bg-color);

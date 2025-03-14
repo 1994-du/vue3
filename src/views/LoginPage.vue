@@ -5,10 +5,10 @@
         <div class="login_box">
             <div class="input_box">
                 <div class="usename">
-                    <input v-focus type="text" placeholder="请输入账号" v-model="loginObj.username">
+                    <el-input v-focus type="text" placeholder="请输入账号" v-model="loginObj.username"></el-input>
                 </div>
                 <div class="password">
-                    <input :type="isShowPassword?'password':'text'" placeholder="请输入密码" v-model="loginObj.password">
+                    <el-input :type="isShowPassword?'password':'text'" placeholder="请输入密码" v-model="loginObj.password"></el-input>
                     <img v-show="isShowPassword" class="showpassword" src="https://s4.ax1x.com/2022/01/07/79E7dg.png" alt="" @click="isShowPassword=!isShowPassword">
                     <img v-show="!isShowPassword" class="showpassword" src="https://s4.ax1x.com/2022/01/07/79EOWn.png" alt="" @click="isShowPassword=!isShowPassword">
                 </div>
@@ -23,7 +23,7 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import indexedDB from '../utils/indexedDB';
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex';
@@ -42,48 +42,20 @@ const toLogin= function(){
         console.error('数据库未打开');
         return
     }
-    // proxy.$axios.post('/api/login',JSON.stringify(loginObj)).then(res=>{
-    //     console.log('请求登录',res)
-    //     if(res.status==200){
-    //         router.replace('/')
-    //         store.commit('changLogin',{val:1})
-    //         sessionStorage.setItem('islogin',1)
-    //     }
-    // })
-    indexedDB.queryCustomers(loginObj.username).then(res=>{
-        if(!res){
-            ElMessage({
-                message:'查询不到当前用户，是否注册？',
-                type:'warning',
-            })
-        }else{
-            ElMessage({
-                message:'登录成功',
-                type:'success',
-            })
+    proxy.$axios.post('/api/login',JSON.stringify(loginObj)).then(res=>{
+        console.log('请求登录',res)
+        if(res.status==200){
             router.replace('/')
+            store.commit('changLogin',{val:1})
+            sessionStorage.setItem('islogin',1)
         }
     })
 }
 const toRegister = function(){
-    const newUser={
-        username:loginObj.username,
-        password:loginObj.password
-    }
-    indexedDB.addCustomer(newUser).then(res=>{
-        console.log('res',res);
+    
+    proxy.$axios.post('/api/toregistry',JSON.stringify(loginObj)).then(res=>{
+        console.log('注册',res)
         
-        if(res){
-            ElMessage({
-                message:'注册成功',
-                type:'success',
-            })
-        }else{
-            ElMessage({
-                message:'注册失败',
-                type:'error',
-            })
-        }
     })
 }
 

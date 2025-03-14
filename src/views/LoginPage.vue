@@ -17,18 +17,20 @@
             <div class="login_buttons">
                 <button class="login" @click="toLogin">登录</button>
                 <button  class="register" @click="toRegister">注册</button>
-                <button type="text" class="forget">忘记密码？</button>
             </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
+import axios from 'axios'
 import indexedDB from '../utils/indexedDB';
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex';
 import {ref,getCurrentInstance, reactive, onMounted} from 'vue'
-import { ElDialog, ElMessage } from 'element-plus';
+
+const isShowPassword=ref(true)
+
 let loginObj=reactive({
     username:"",
     password:""
@@ -38,120 +40,29 @@ const store = useStore()
 const router = useRouter()
 
 const toLogin= function(){
-    if(!window.db){
+    if(!(window as any).db){
         console.error('数据库未打开');
         return
     }
-    proxy.$axios.post('/api/login',JSON.stringify(loginObj)).then(res=>{
+    axios.post('/api/login',JSON.stringify(loginObj)).then(res=>{
         console.log('请求登录',res)
         if(res.status==200){
             router.replace('/')
             store.commit('changLogin',{val:1})
-            sessionStorage.setItem('islogin',1)
+            sessionStorage.setItem('islogin','1')
         }
     })
 }
 const toRegister = function(){
     
-    proxy.$axios.post('/api/toregistry',JSON.stringify(loginObj)).then(res=>{
+    axios.post('/api/toregistry',JSON.stringify(loginObj)).then(res=>{
         console.log('注册',res)
         
     })
 }
 
-const isShowPassword=ref(true)
 
 </script>
 <style lang="less" scoped>
-.login_inner{
-    color: white;
-    width: 600px;
-    height: 250px;
-    background: rgb(255, 255, 255);
-    border-radius: 5px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin: auto;
-    padding: 20px;
-    display: flex;
-    .login_img{
-        flex: 1;
-        height: 100%;
-        background-size: cover;
-    }
-    .login_box{
-        width: 50%;
-        padding:0 0 0 10px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        .input_box{
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-            .usename,.password{
-                width: 100%;
-                margin-bottom: 10px;
-                display: flex;
-                align-items: center;
-                position: relative;
-                input{
-                    height: 30px;
-                    width: 100%;
-                    text-indent: 16px;
-                    outline: none;
-                    border: none;
-                    border-bottom: 1px solid #aaa;
-                    background: white;
-                }
-                .showpassword{
-                    display: none;
-                    position: absolute;
-                    right: 5px;
-                    top: 5px;
-                    width: 20px;
-                    height: 20px;
-                }
-            }
-            .password:hover img{
-                display: block;
-            }
-        }
-        
-        .login_buttons{
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
-            button{
-                width: 100%;
-                height: 34px;
-                outline: none;
-                padding: 5px  10px;
-                border-radius: 5px;
-                cursor: pointer;
-                border: none;
-                margin-top: 15px;
-            }
-            .login{
-                background-color: rgb(235, 229, 153);
-                color: rgb(99, 94, 94);
-                border-radius: 50px;
-            }
-            .register{
-                background-color: rgb(88, 77, 240);
-                color: rgb(255, 255, 255);
-                border-radius: 50px;
-            }
-            .forget{
-                background-color: white;
-                color: green;
-            }
-        }
-    }
-}
+@import '@/styles/Login.scss';
 </style>

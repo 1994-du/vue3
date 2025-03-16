@@ -24,7 +24,6 @@
 
 <script setup lang="ts">
 import axios from 'axios'
-import indexedDB from '../utils/indexedDB';
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex';
 import {ref,getCurrentInstance, reactive, onMounted} from 'vue'
@@ -35,7 +34,6 @@ let loginObj=reactive({
     username:"",
     password:""
 })
-let {proxy}=getCurrentInstance()
 const store = useStore()
 const router = useRouter()
 
@@ -44,7 +42,7 @@ const toLogin= function(){
         console.error('数据库未打开');
         return
     }
-    axios.post('/api/login',JSON.stringify(loginObj)).then(res=>{
+    axios.post('/api/login',loginObj).then(res=>{
         console.log('请求登录',res)
         if(res.status==200){
             router.replace('/')

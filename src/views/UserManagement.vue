@@ -22,18 +22,18 @@
     <!-- 编辑用户 -->
      <el-dialog 
         title="编辑用户"
-        :visible="editUserVisible"
+        v-model="editUserVisible"
         width="30%">
-        <div>
+        <div class="edit_user_form">
             <el-form>
                 <el-form-item label="用户名">
-                    <el-input v-model="username"></el-input>
+                    <el-input v-model="editUserObj.username"></el-input>
                 </el-form-item>
                 <el-form-item label="头像">
-                    <el-input v-model="avatar"></el-input>
+                    <img :src="editUserObj.avatar" alt="">
                 </el-form-item>
                 <el-form-item label="角色">
-                    <el-select v-model="roleName" placeholder="请选择">
+                    <el-select v-model="editUserObj.roleName" placeholder="请选择">
                         <el-option
                             v-for="item in roleList"
                             :key="item.value"
@@ -53,12 +53,21 @@ import axios from 'axios'
 
 let tableData = ref([])
 let editUserVisible = ref(false)
+let editUserObj = ref({})
 let roleList = ref([])
 const getUsers = ()=>{
     axios.get('/api/getUsers').then(res=>{
-        console.log('users---',res);
         if(res.status === 200){
             tableData.value = res.data.data
+        }
+    })
+}
+const getRoles = ()=>{
+    axios.get('/api/getRoles').then(res=>{
+        if(res.status === 200){
+            console.log('roleList',res);
+            
+            roleList.value = res.data.data
         }
     })
 }
@@ -67,10 +76,12 @@ const createRole = ()=>{
 }
 const editUser = (row)=>{
     console.log('editUser',row);
+    editUserObj.value = row
     editUserVisible.value = true
 }
 onMounted(()=>{
     getUsers()
+    getRoles()
     console.log('UserManagement.vue');
 })
 </script>
@@ -81,5 +92,16 @@ onMounted(()=>{
 .avatar{
     width: 50px;
     height: 50px;
+}
+.edit_user_form{
+    :deep(.el-form-item){
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        .el-form-item__label{
+            width: 80px;
+            flex-shrink: 0;
+        }
+    }
 }
 </style>

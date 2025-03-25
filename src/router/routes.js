@@ -508,5 +508,10 @@ export default[
         path:'/userManagement',
         name:'userManagement',
         component:()=>import('@/views/UserManagement.vue')
+    },
+    {
+        path:'/roleManagement',
+        name:'roleManagement',
+        component:()=>import('@/views/RoleManagement.vue')
     }
 ]

@@ -8,9 +8,7 @@
                     <el-input v-focus type="text" placeholder="请输入账号" v-model="loginObj.username"></el-input>
                 </div>
                 <div class="password">
-                    <el-input :type="isShowPassword?'password':'text'" placeholder="请输入密码" v-model="loginObj.password"></el-input>
-                    <img v-show="isShowPassword" class="showpassword" src="https://s4.ax1x.com/2022/01/07/79E7dg.png" alt="" @click="isShowPassword=!isShowPassword">
-                    <img v-show="!isShowPassword" class="showpassword" src="https://s4.ax1x.com/2022/01/07/79EOWn.png" alt="" @click="isShowPassword=!isShowPassword">
+                    <el-input type="password" placeholder="请输入密码" v-model="loginObj.password"></el-input>
                 </div>
             </div>
             
@@ -27,8 +25,8 @@ import axios from 'axios'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex';
 import {ref,getCurrentInstance, reactive, onMounted} from 'vue'
-
-const isShowPassword=ref(true)
+import IndexDB from '@/utils/indexedDB'
+IndexDB.openDatabase()
 
 let loginObj=reactive({
     username:"",
@@ -43,16 +41,19 @@ const toLogin= function(){
         return
     }
     axios.post('/api/login',loginObj).then(res=>{
-        console.log('请求登录',res)
+        console.log('请求登录',res.data)
         if(res.status==200){
-            router.replace('/')
-            store.commit('changLogin',{val:1})
-            sessionStorage.setItem('islogin','1')
+            IndexDB.addMenu(loginObj.username,res.data).then(res=>{
+                console.log('添加菜单成功',res)
+                router.replace('/')
+            }).catch(err=>{
+                console.error('添加菜单失败',err)
+            })
+            
         }
     })
 }
 const toRegister = function(){
-    
     axios.post('/api/toregistry',JSON.stringify(loginObj)).then(res=>{
         console.log('注册',res)
         

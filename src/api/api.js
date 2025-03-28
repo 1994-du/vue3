@@ -77,18 +77,16 @@ export function toUpload(data){
         })
     })
 }
-
 /**
- * @description 测试接口
- * @data 
+ * @description 获取所有角色
+ * @data
 */
-export function toDelayTest(data,params){
+export function getRoles(data){
     return new Promise((resolve,reject)=>{
         Axios({
-            url:`${baseUrl}/delaytest`,
+            url:`${baseUrl}/getRoles`,
             method:'post',
-            data,
-            ...params,
+            data
         }).then(res=>{
             resolve(res)
         }).catch(err=>{

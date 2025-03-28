@@ -16,7 +16,7 @@
 import { ref ,watch} from 'vue';
 import { useRouter } from 'vue-router';
 import menuRoutes from '@/utils/menuRoutes';
-import indexedDB from '@/utils/startIndexedDB';
+import indexedDB from '@/utils/indexedDB';
 const router = useRouter();
 const gData = ref([]);
 const defaultProps = {

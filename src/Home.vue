@@ -55,41 +55,6 @@
     const store = useStore()
     const router = useRouter()
     const route = useRoute()
-    // 路由分组
-    // const routesGroup = (list)=>{
-    //     console.log(menuRoutes);
-        
-    //     let res = {}
-    //     list.forEach((item)=>{
-    //         if(item.meta.groupName){
-    //             if(!res[item.meta.groupName]){
-    //                 res[item.meta.groupName] = []
-    //                 res[item.meta.groupName].push({
-    //                     menuName: item.name,
-    //                     menuLink: item.path,
-    //                 })
-    //             }else{
-    //                 res[item.meta.groupName].push({
-    //                     menuName: item.name,
-    //                     menuLink: item.path,
-    //                 })
-    //             }
-                
-    //         }
-    //     })
-    //     return res
-    // }
-    // let routeRes = routesGroup(router.getRoutes())
-    // console.log(routeRes);
-    
-    // // 菜单数据
-    // const menuData = Object.keys(routeRes).map((item)=>{
-    //     return {
-    //         menuName: item,
-    //         menuLink: routeRes[item].length>1?'':routeRes[item][0].menuLink,
-    //         children: routeRes[item].length>1?routeRes[item]:null
-    //     }
-    // })
     const onRoutes = computed(()=>{
         return route.path
     })
@@ -112,14 +77,11 @@
     }
     // 初始化
     onMounted(()=>{
-        // menuConfig.value=menuData
         menuConfig.value = menuRoutes
 
         window.addEventListener('keydown', (e) => {
-            console.log('key',e);
             if((e.ctrlKey||e.metaKey) && e.key === 'f'){
                 e.preventDefault()
-                // console.log('ctrl+f')
                 isShowSearch.value = true
             }
             if(e.key === 'Escape'){

@@ -44,8 +44,6 @@ function generateRoutes(dir, parentPath = '', groupName = '') {
 
 // 生成路由配置并写入文件
 const routes = generateRoutes(viewsDir);
-console.log('routes', routes);
-
 const routesContent = `export default [
     ${routes.map(route => `{
         path: '${route.path}',

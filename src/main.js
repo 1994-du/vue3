@@ -7,9 +7,6 @@ import "@/styles/common.scss"
 // ant-design-vue
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/reset.css';
-// 全局打开数据库
-import startIndexedDB from '@/utils/startIndexedDB'
-startIndexedDB.openDatabase()
 //全局自定义指令
 import directive from "./utils/globalDirective.js";
 // elementPlus

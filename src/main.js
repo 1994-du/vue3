@@ -17,7 +17,6 @@ import ElementPlus from 'element-plus'
 import './styles/element_plus.scss'
 // elementPlus图标
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
-import emitter from '@/utils/emitter.js'
 // 国际化
 import LanguageZH from '@/lang/zh-cn.js'
 import LanguageEN from '@/lang/en-us.js'

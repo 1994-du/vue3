@@ -321,12 +321,12 @@ export default[
                 component:()=>import('@/views/Promise/promise.vue')
             },
             {
-                path:"/javaScript/cache",
+                path:"/http/cache",
                 name:"浏览器缓存",
                 meta:{
                     groupName:"浏览器缓存"
                 },
-                component:()=>import('@/views/cacheDetail.vue')
+                component:()=>import('@/views/Http/cacheDetail.vue')
             },
             {
                 path:"/javaScript/doubleBind",
@@ -491,6 +491,14 @@ export default[
                     groupName:"JavaScript"
                 },
                 component:()=>import('@/views/Js/Generator.vue')
+            },
+            {
+                path:"/browser/principle",
+                name:"浏览器渲染原理",
+                meta:{
+                    groupName:"浏览器"
+                },
+                component:()=>import('@/views/Browser/Principle.vue')
             },
         ]
     },

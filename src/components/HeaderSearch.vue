@@ -32,7 +32,6 @@ onMounted(()=>{
     align-items: center;
     height: 100%;
     padding: 0 32px;
-    border-bottom: 1px solid rgba(84, 84, 84, .48);
     .header_search{
         height: 100%;
         border: none;
@@ -44,7 +43,7 @@ onMounted(()=>{
             display: flex;
             align-items: center;
             font-size: 13px;
-            color: @headerTextColor;
+            color: var(--fontColor);
             .el-icon{
                 margin-right: 10px;
             }
@@ -59,14 +58,14 @@ onMounted(()=>{
             padding: 0 6px;
             border-width: 1px;
             border-style: solid;
-            border-color: rgba(235, 235, 235, .38);
+            border-color: var(--borderColor);
             border-radius: 4px;
             font-size: 12px;
         }
         &:hover{
             color: #42b883;
             .search_icon{
-                color: white;
+                color: var(--fontColor);
             }
             .search_btn{
                 border-color: #42b883;

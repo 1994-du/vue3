@@ -3,6 +3,7 @@
     <div class="layout">
         <header>
             <HeaderSearch @click="openSearchModal"/>
+            <ThemeSwitch/>
         </header>
         <div class="container">
             <div class="layout_menu">
@@ -45,6 +46,7 @@
 <script setup>
     import ModalSearch from '@/components/ModalSearch.vue'
     import HeaderSearch from './components/HeaderSearch.vue'
+    import ThemeSwitch from '@/components/ThemeSwitch.vue'
     import SubMenu from './components/subMenu.vue'
     import { useRouter, useRoute } from 'vue-router'
     import { computed, onMounted, onBeforeMount, onUpdated, onUnmounted, onBeforeUnmount, getCurrentInstance, ref, watch, watchEffect, reactive, onActivated } from 'vue'

@@ -24,7 +24,7 @@ h1,h2,h3,h4,h5,h6{
     position: relative;
     text-align: left;
     background-color: #f2f5fc;
-    color: #252b3a;
+    color: var(--fontColor);
     padding:  10px;
     margin: 5px 0;
     font-size: 20px;

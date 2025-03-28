@@ -1,3 +1,24 @@
+:root {
+    --maskBg:rgba(101,108,133,.8);
+    --background:#fff;
+    --h4label:#409eff;
+    --menu-font-color:#6f6d6d;
+    --fontColor:#000000;
+    --fontSize:14px;
+    --inputColor:white;
+    --borderColor:#eee;
+}
+[data-theme="dark"] {
+    --maskBg:rgba(0,0,0,.5);
+    --background:#000;
+    --h4label:#409eff;
+    --menu-font-color:#fff;
+    --fontColor:#ffffff;
+    --fontSize:14px;
+    --inputColor:#303133;
+    --borderColor:#fff;
+}
+
 code{
     display: block;
     background-color: #181803;

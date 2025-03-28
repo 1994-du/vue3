@@ -1,10 +1,5 @@
-:root {
-    --h4label:#409eff;
-    --menu-font-color:#6f6d6d;
-    --fontColor:#000000;
-    --fontSize:14px;
-    --inputColor:white;
-}
+
+
 h1,.hljs{
     text-align: left;
 }
@@ -63,8 +58,8 @@ h1,.hljs{
         height: 55px;
         display: flex;
         align-items: center;
-        background-color: black;
-        
+        background-color: var(--background);
+        border-bottom: 1px solid var(--borderColor);
     }
     .container{
         flex: 1;
@@ -72,10 +67,11 @@ h1,.hljs{
         display: flex;
 
         .layout_menu {
+            background-color: var(--background);
             font-size: var(--fontSize);
             font-weight: bold;
             flex-shrink: 0;
-            border: 1px solid #eee;
+            border-right: 1px solid var(--borderColor);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -85,6 +81,8 @@ h1,.hljs{
                 height: calc(100% - 40px);
                 overflow: hidden auto;
                 border-right: none;
+                background-color: var(--background);
+                color: var(--fontColor);
                 .menu_title{
                     display: flex;
                     justify-content: center;
@@ -93,13 +91,17 @@ h1,.hljs{
                 .el-sub-menu{
                     .el-sub-menu__title{
                         padding-right: unset;
+                        color: var(--fontColor);
+                    }
+                    .el-sub-menu__title:hover{
+                        color: var(--h4label);
                     }
                 }
                 .el-menu-item{
                     height: 56px;
                     border-bottom: 1px solid #eee;
                     user-select: none;
-                    color: var(--menu-font-color);
+                    color: var(--fontColor);
                     span{
                         height: 40px;
                         line-height: 40px;
@@ -107,6 +109,10 @@ h1,.hljs{
                         overflow: hidden;
                         text-overflow: ellipsis;
                     }
+                }
+                .el-menu-item:hover{
+                    background-color: var(--background);
+                    color: var(--h4label);
                 }
                 .is-active{
                     color: var(--h4label);
@@ -120,7 +126,7 @@ h1,.hljs{
                 align-items: center;
                 border-top: .5px solid #ccc;
                 cursor: pointer;
-                color: #6f6d6d;
+                color: var(--fontColor);
                 padding: 0 20px;
                 flex-shrink: 0;
                 .el-icon{
@@ -130,7 +136,7 @@ h1,.hljs{
                     margin-left: 10px;
                 }
                 &:hover{
-                    background-color: var(--el-menu-hover-bg-color);
+                    background-color: var(--background);
                     // color: var(--el-menu-hover-bg-color);
                 }
             }
@@ -148,7 +154,7 @@ h1,.hljs{
             padding: 20px;
             overflow-x: hidden;
             overflow-y: auto;
-            background-color: #e1e5e6;
+            background-color: var(--background);
             &::-webkit-scrollbar{
               display: none;
             }
@@ -167,7 +173,7 @@ h1,.hljs{
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background-color: rgb(255, 255, 255);
+    background-color: var(--background);
     color: var(--inputColor);
     font-size: var(--fontSize);
     cursor: pointer;

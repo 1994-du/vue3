@@ -178,6 +178,11 @@ export default[
                 menuName:'http状态码',
                 menuLink:'/http/statusCode',
                 children:null
+            },
+            {
+                menuName:'浏览器缓存',
+                menuLink:'/http/cache',
+                children:null
             }
         ]
     },
@@ -292,11 +297,6 @@ export default[
                 children:null
             },
             {
-                menuName:'浏览器缓存',
-                menuLink:'/javaScript/cache',
-                children:null
-            },
-            {
                 menuName:'双向绑定原理',
                 menuLink:'/javaScript/doubleBind',
                 children:null
@@ -368,6 +368,17 @@ export default[
             {
                 menuName:'轮播图',
                 menuLink:'/css/carousel',
+                children:null
+            }
+        ]
+    },
+    {
+        menuName:'浏览器',
+        menuLink:'/browser',
+        children:[
+            {
+                menuName:'渲染原理',
+                menuLink:'/browser/principle',
                 children:null
             }
         ]

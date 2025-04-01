@@ -90,24 +90,24 @@ export default {
       return new Promise((resolve, reject) => {
         const transaction = db.transaction('menus', 'readwrite');
         const objectStore = transaction.objectStore('menus');
-        const isExist = objectStore.get('admin');
-        if(isExist){
-          console.log('数据已存在');
-          resolve(true);
-          return;
+        const isExist = objectStore.get(username);
+        console.log('isExist:',isExist);
+        isExist.onsuccess = (event) => {
+          if(event.target.result){
+            resolve(true);
+            return;
+          }
+          const addRequest = objectStore.add({
+            username:username,
+            menus:menu.menus
+          });
+          addRequest.onsuccess = () => {
+            resolve(true);
+          };
+          addRequest.onerror = (e) => {
+            reject(e.target.error);
+          };
         }
-        const addRequest = objectStore.add({
-          username:username,
-          menus:menu.menus
-        });
-        addRequest.onsuccess = () => {
-          console.log(`数据 ${menu.username} 添加成功`);
-          resolve(true);
-        };
-        addRequest.onerror = (e) => {
-          console.error(`数据 ${menu.username} 添加失败:`, e.target.error);
-          reject(e.target.error);
-        };
         transaction.oncomplete = () => {
           console.log('所有数据添加完成');
         };

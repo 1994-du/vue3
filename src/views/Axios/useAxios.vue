@@ -1,6 +1,6 @@
 <template>
     <h2>请求方法：get、post、delete、put、patch、options、head</h2>
-    <button @click="req">请求</button>
+    <button>请求</button>
     <button @click="cancleReq">取消所有请求</button>
     <code>
         <pre>import axios from 'axios'</pre>
@@ -31,7 +31,6 @@
     
 </template>
 <script setup>
-import { toDelayTest } from '@/api/api'
 import axios from 'axios'
 import { getCurrentInstance } from 'vue'
 const { proxy } = getCurrentInstance()
@@ -54,28 +53,6 @@ const cancleReq=()=>{
         }
     })
     cancelTokens=[];
-}
-const req=()=>{
-    controller = new AbortController()
-    controllers.push(controller)
-    cancelToken = axios.CancelToken.source()
-    cancelTokens.push(cancelToken)
-    toDelayTest(null,{
-        signal:controller.signal,
-        cancelToken:cancelToken.token,
-        onUploadProgress:(provessEvt)=>{
-            const percentProcess = Math.round((provessEvt.loaded / provessEvt.total) * 100)
-            console.log('upload',percentProcess)
-        },
-        onDownloadProgress:(provessEvt)=>{
-            const percentProcess = Math.round((provessEvt.loaded / provessEvt.total) * 100)
-            console.log('download',percentProcess)
-        }
-    }).then(res=>{
-        console.log(res)
-    }).catch(err=>{
-        proxy.$message.error(err.message)
-    })
 }
 </script>
 <style lang="scss" scoped>

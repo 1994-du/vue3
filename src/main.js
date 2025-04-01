@@ -11,6 +11,7 @@ import 'ant-design-vue/dist/reset.css';
 import directive from "./utils/globalDirective.js";
 // elementPlus
 import ElementPlus from 'element-plus'
+import zhCn from 'element-plus/es/locale/lang/zh-cn'; // 引入中文包
 import './styles/element_plus.scss'
 // elementPlus图标
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
@@ -40,7 +41,7 @@ registryComponents(instance)
 instance.config.globalProperties.$axios = axios
 instance.use(router)
 instance.use(store)
-instance.use(ElementPlus)
+instance.use(ElementPlus, { locale: zhCn })
 instance.use(Antd)
 instance.use(i18n)
 instance.mount('#subapp-viewport')

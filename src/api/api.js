@@ -94,3 +94,61 @@ export function getRoles(data){
         })
     })
 }
+/**
+ * @description 设置角色
+ * @data
+*/
+export function setRoles(data){
+    return new Promise((resolve,reject)=>{
+        Axios({
+            url:`${baseUrl}/setRoles`,
+            method:'post',
+            data
+        }).then(res=>{
+            resolve(res)
+        }).catch(err=>{
+            reject(err)
+        })
+    })
+}
+/**
+ * @description 文件分片上传
+ * @data
+*/
+export function fragmentUpload(data){
+    return new Promise((resolve,reject)=>{
+        Axios({
+            url:`${baseUrl}/fragmentUpload`,
+            method:'post',
+            data,
+            headers:{
+                'Content-Type':'multipart/form-data'
+            }
+        }).then(res=>{
+            resolve(res)
+        }).catch(err=>{
+            reject(err)
+        })
+    })
+}
+/**
+ * @description 文件分片下载
+ * @data
+*/
+export function fragmentDownload(data){
+    return new Promise((resolve,reject)=>{
+        Axios({
+            url:`${baseUrl}/fragmentDownload`,
+            method:'post',
+            data
+        },{
+            headers:{
+                'Content-Type':'multipart/form-data'
+            }
+        }).then(res=>{
+            resolve(res)
+        }).catch(err=>{
+            reject(err)
+        })
+    })
+}

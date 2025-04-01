@@ -8,6 +8,8 @@
     --inputColor:white;
     --borderColor:#eee;
 }
+
+
 [data-theme="dark"] {
     --maskBg:rgba(0,0,0,.5);
     --background:#000;
@@ -17,6 +19,11 @@
     --fontSize:14px;
     --inputColor:#303133;
     --borderColor:#fff;
+}
+
+$background: #fff;
+[data-theme="dark"] {
+    $background: #000;
 }
 
 code{

@@ -27,18 +27,21 @@ const Axios = axios.create({
     }
 })
 Axios.interceptors.request.use(config=>{
+    console.log('请求拦截器',config);
+    
     showLoading()
-    config.headers['Content-Type'] = 'application/json'
+    config.headers['Content-Type'] = config.headers['Content-Type'] || 'application/json;charset=UTF-8'
     return config
 })
 Axios.interceptors.response.use(res=>{
     if(res.status===200){
-        if(res.data.status==200){
+        if(res.data.status==200&&!res.data.code){
             ElMessage({
                 message:res.data.message,
                 type:'success'
             })
-        }else{
+        }
+        if(res.data.status!==200){
             ElMessage({
                 message:res.data.message,
                 type:'error'

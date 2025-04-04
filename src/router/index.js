@@ -8,8 +8,14 @@ const router =createRouter({
 router.onError=(err)=>{
     console.log('路由错误',err)
 }
+
 router.beforeEach((to,from,next)=>{
-    next()
+    let username = localStorage.getItem('username')
+    if(!username && to.path !== '/login'){
+        next({path:'/login'})
+    }else{
+        next()
+    }
 })
 router.afterEach((to,from)=>{
     heighCode()

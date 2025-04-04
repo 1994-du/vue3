@@ -1,99 +1,179 @@
-<!-- <template>
-	<div class="container">
-		<div class="chat-content">
-			<template v-if="chatList && chatList.length">
-				<div
-					v-for="(chat, index) in chatList"
-					class="message-box"
-					:key="index">
-					<div class="user" :class="chat.id===userId?'isSelf':''">
-						<el-avatar class="avatar" :src="chat.avatar" shape="square"></el-avatar>
-						<div class="info">
-						<div class="name">{{chat.name}}</div>
-						<div class="message"><div class="block">{{chat.msg}}</div></div>
-						</div>
-					</div>		
-				</div>
-			</template>
-			<template v-else>
-				<div class="empty">
-				没有消息
-				</div>
-			</template>
-		</div>
-		<div class="chat-bottom">
-			<el-input v-model="chatMsg" class="chat-input" placeholder="请输入内容" @keydown.enter="sendMsg"/>
-			<el-button class="chat-btn" type="primary" @click="sendMsg">发送</el-button>
-		</div>
-	</div>
-</template>
-
-<script setup>
-import { onMounted,ref,reactive, onDeactivated, onUnmounted, onActivated,nextTick ,getCurrentInstance, computed} from "vue";
-const {proxy} = getCurrentInstance()
-const chatList = ref([])
-const chatMsg = ref('')
-// console.log('历史聊天',historyMsg);
-// 获取服务器时间
-const currentTime = function(){
-  let xmlHttp = new XMLHttpRequest()
-  if(!xmlHttp){
-    xmlHttp = new ActiveXObject("Microsoft.XMLHTTP")
-  }
-  xmlHttp.open("HEAD",location.href,false)
-  xmlHttp.send()
-  let serverTime = new Date(xmlHttp.getResponseHeader("Date"))
-  return serverTime.toLocaleString()
-}
-let userId = JSON.parse(sessionStorage.getItem('token')).id
-onMounted(()=>{
-  // 获取历史聊天记录
-  let historyMsg = computed(()=>{
-    return proxy.$store.state.message
-  })
-  if(historyMsg.value.length>0){
-    historyMsg.value.forEach(el=>{
-      chatList.value.push(el)
-      to_footer()
-    })
-  }
-  
-  proxy.$store.commit('clearMessage')
-  proxy.$socket.on('msg_res',(msg)=>{
-    // console.log('其他客户端信息',msg);
-    chatList.value.push(msg)
-    
-    to_footer()
-  })
-})
- /*滚动条到底部*/
-const to_footer = function() {
-  nextTick(()=>{
-    var div = document.getElementsByClassName('chat-content')[0];
-    div.scrollTop = div.scrollHeight;
-  })
-    
-}
-// 发送消息
-const sendMsg = ()=>{
-  let userInfo=JSON.parse(sessionStorage.getItem('token'))
-  userInfo.msg=chatMsg.value
-  userInfo.time=currentTime()
-  proxy.$socket.emit('send-message',userInfo)
-  chatList.value.push(userInfo)
-  proxy.$store.commit('addMessage',{msg:userInfo})
-  to_footer()
-  chatMsg.value = ''
-}
-</script>
-
-<style lang="less" scoped>
-@import "@/styles/websocket.scss";
-</style> -->
 <template>
-websocket
+  <div class="websocket_wrap">
+    <h4>WebSocket</h4>
+    <div ref="message_box" class="message_box">
+      <div class="message_box_item" :class="item.username===username?'active':''" v-for="(item,index) in messageList" :key="index">
+        <div v-if="item.username===username" class="message_box_item_username">{{item.username.split('')[0].toUpperCase()}}</div>
+        <div v-else class="message_box_item_username_other">{{item.username.split('')[0].toUpperCase()}}</div>
+        <div class="message_box_item_message">{{item.message}}</div>
+      </div>
+    </div>
+    <div class="websocket_ipt">
+      <el-input v-model="message" placeholder="发送消息" @keydown.enter="sendMessage"></el-input>
+      <el-button type="primary" @click="sendMessage">发送消息</el-button>
+    </div>
+  </div>
 </template>
 <script setup>
+import { ElMessage } from 'element-plus';
+import { nextTick, onMounted, onUnmounted, ref } from 'vue';
+let username = localStorage.getItem('username');
+let message_box = ref(null);
+const message = ref('');
+let messageList = ref([]);
+let socket = null;
+// 连接服务器
+const connectServer = () => {
+  socket = new WebSocket('ws://192.168.31.65:1234');
+  socket.onopen = () => {
+    console.log('WebSocket连接成功');
+    const userMessage={
+      type:'username',
+      payload:username
+    }
+    socket.send(JSON.stringify(userMessage));
+  };
+  socket.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+    console.log('收到服务器消息：', data);
+    if(data.type==='tip'){
+      ElMessage({
+        message: data.payload,
+        type: 'info'
+      });
+    }else{
+      messageList.value.push({
+        username:data.payload.split(':')[0],
+        message:data.payload.split(':')[1]
+      });
+      nextTick(()=>{
+        message_box.value.scrollTop = message_box.value.scrollHeight;
+      })
+    }
+  };
+  socket.onclose = () => {
+    console.log('WebSocket连接已关闭');
+  };
+}
+const sendMessage = () => {
+  if (socket && socket.readyState === WebSocket.OPEN) {
+    const chatMessage = {
+      type: 'chat',
+      payload: message.value
+    };
+    socket.send(JSON.stringify(chatMessage));
+    console.log('发送消息：', message.value);
+    message.value = '';
+  } else {
+    console.error('WebSocket未连接');
+  }
+}
+const disConnectServer = () => {
+  if (socket) {
+    socket.close();
+    console.log('WebSocket连接已关闭');
+  }
+}
+onMounted(() => {
+  connectServer();
+});
+onUnmounted(() => {
+  disConnectServer();
+});
 </script>
 <style lang='scss' scoped>
+.websocket_wrap{
+  display: flex;
+  flex-direction: column;
+}
+
+.message_box{
+  // flex: 1;
+  max-height: 500px;
+  overflow-y: auto;
+  border: 1px dashed var(--fontColor);
+  border-radius: 5px;
+  margin-bottom: 10px;
+  .message_box_item{
+    height: 40px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+    padding: 0 10px;
+    .message_box_item_username{
+      width: 50px;
+      height: 50px;
+      border-radius: 5px;
+      background-color: var(--background);
+      line-height: 40px;
+      font-size: 16px;
+      padding: 5px;
+      position: relative;
+      // box-shadow: 0px 2px 5px var(--fontColor);
+      filter: drop-shadow(0px 2px 5px var(--fontColor));
+      &::after{
+        content:'';
+        position:absolute;
+        left: -10px;
+        top: 40%;
+        width: 10px;
+        height: 10px;
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        border-left: 5px solid transparent;
+        border-right: 5px solid var(--background);
+        
+      }
+    }
+    .message_box_item_username_other{
+      width: 50px;
+      height: 50px;
+      border-radius: 5px;
+      background-color: var(--background);
+      line-height: 40px;
+      font-size: 16px;
+      padding: 5px;
+      position: relative;
+      // box-shadow: 0px 2px 5px var(--fontColor);
+      filter: drop-shadow(0px 2px 5px var(--fontColor));
+      &::after{
+        content:'';
+        position:absolute;
+        right: -10px;
+        top: 40%;
+        width: 10px;
+        height: 10px;
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        border-left: 5px solid var(--background);
+        border-right: 5px solid transparent;
+      }
+    }
+    .message_box_item_message{
+      font-size: 18px;
+      margin: 0 10px;
+      color: var(--fontColor);
+    }
+  }
+  .active{
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+    // align-items: flex-end;
+  }
+}
+
+.websocket_ipt{
+  height: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .el-input{
+    height: 100%;
+  }
+  .el-button{
+    height: 100%;
+    margin-left: 10px;
+  }
+}
 </style>

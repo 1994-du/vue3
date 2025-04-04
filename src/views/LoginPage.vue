@@ -49,7 +49,7 @@ const toLogin= function(){
             }).catch(err=>{
                 console.error('添加菜单失败',err)
             })
-            
+            localStorage.setItem('username',loginObj.username)
         }
     })
 }

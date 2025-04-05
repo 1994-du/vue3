@@ -13,11 +13,12 @@
       </div>
     </div>
     <div class="websocket_ipt">
+      
+      <el-input v-model="message" placeholder="发送消息" @keydown.enter="sendMessage"></el-input>
       <div class="custom-file-input">
         <input type="file" ref="fileInput" @change="sendImage" accept="image/*" style="display: none;">
         <el-button type="primary" @click="openFileSelector">选择图片</el-button>
       </div>
-      <el-input v-model="message" placeholder="发送消息" @keydown.enter="sendMessage"></el-input>
       <el-button type="primary" @click="sendMessage">发送消息</el-button>
     </div>
     <!-- 全屏预览容器 -->
@@ -246,6 +247,7 @@ onUnmounted(() => {
   justify-content: space-between;
   align-items: center;
   .custom-file-input {
+    height: 100%;
     margin-right: 10px;
   }
   .el-input{

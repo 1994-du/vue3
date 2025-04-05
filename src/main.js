@@ -4,6 +4,17 @@ import router from "./router"
 import store from "./store"
 import axios from "@/api"
 import "@/styles/common.scss"
+// 连接IndexDB
+import IndexDB from '@/utils/indexedDB';
+async function connectIndexDB(){
+    try {
+        window.db = await IndexDB.openDatabase();
+    }
+    catch (e) {
+        console.log('打开数据库失败',e);
+    }  
+}
+connectIndexDB();
 // ant-design-vue
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/reset.css';

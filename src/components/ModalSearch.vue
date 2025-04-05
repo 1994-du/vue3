@@ -86,7 +86,8 @@ const getMenuDataBtn = async () => {
         const request = await objectStore.getAll();
         request.onsuccess = (e) => {
             let result = e.target.result
-            menuData.value = transformData(result)
+            let currentMenus = result.filter(item => item.username === localStorage.getItem('username'))[0]
+            menuData.value = transformData(currentMenus.menus)
         }
     }
     catch (e) {

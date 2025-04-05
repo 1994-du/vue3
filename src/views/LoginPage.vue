@@ -24,9 +24,8 @@
 import axios from 'axios'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex';
-import {ref,getCurrentInstance, reactive, onMounted} from 'vue'
-import IndexDB from '@/utils/indexedDB'
-IndexDB.openDatabase()
+import { reactive, onMounted} from 'vue'
+import IndexDB from '@/utils/indexedDB';
 
 let loginObj=reactive({
     username:"",
@@ -59,7 +58,6 @@ const toRegister = function(){
         
     })
 }
-
 
 </script>
 <style lang="less" scoped>

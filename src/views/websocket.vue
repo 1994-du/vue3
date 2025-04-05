@@ -5,11 +5,19 @@
       <div class="message_box_item" :class="item.username===username?'active':''" v-for="(item,index) in messageList" :key="index">
         <div v-if="item.username===username" class="message_box_item_username">{{item.username.split('')[0].toUpperCase()}}</div>
         <div v-else class="message_box_item_username_other">{{item.username.split('')[0].toUpperCase()}}</div>
-        <div class="message_box_item_message">{{item.message}}</div>
+        <div class="message_box_item_message">
+          <!-- 显示图片 -->
+          <img v-if="item.isImage" :src="item.message" alt="图片">
+          <span v-else>{{item.message}}</span>
+        </div>
       </div>
     </div>
     <div class="websocket_ipt">
       <el-input v-model="message" placeholder="发送消息" @keydown.enter="sendMessage"></el-input>
+      <div class="custom-file-input">
+        <input type="file" ref="fileInput" @change="sendImage" accept="image/*" style="display: none;">
+        <el-button type="primary" @click="openFileSelector">选择图片</el-button>
+      </div>
       <el-button type="primary" @click="sendMessage">发送消息</el-button>
     </div>
   </div>
@@ -22,6 +30,7 @@ let message_box = ref(null);
 const message = ref('');
 let messageList = ref([]);
 let socket = null;
+
 // 连接服务器
 const connectServer = () => {
   socket = new WebSocket('ws://192.168.31.65:1234');
@@ -35,17 +44,32 @@ const connectServer = () => {
   };
   socket.onmessage = (event) => {
     const data = JSON.parse(event.data);
-    console.log('收到服务器消息：', data);
+    console.log('收到服务器消息：', data.payload.split(':'));
     if(data.type==='tip'){
       ElMessage({
         message: data.payload,
         type: 'info'
       });
     }else{
-      messageList.value.push({
-        username:data.payload.split(':')[0],
-        message:data.payload.split(':')[1]
-      });
+
+      let newMessage;
+      if (data.isImage) {
+        // 若为图片消息，直接使用完整的 payload
+        newMessage = {
+          username: data.payload.split(':')[0],
+          message: data.payload.split(':').slice(1).join(':'),
+          isImage: true
+        };
+      } else {
+        // 若为普通文本消息，按原逻辑处理
+        newMessage = {
+          username: data.payload.split(':')[0],
+          message: data.payload.split(':')[1],
+          isImage: false
+        };
+      }
+      messageList.value.push(newMessage);
+
       nextTick(()=>{
         message_box.value.scrollTop = message_box.value.scrollHeight;
       })
@@ -55,6 +79,7 @@ const connectServer = () => {
     console.log('WebSocket连接已关闭');
   };
 }
+
 const sendMessage = () => {
   if (socket && socket.readyState === WebSocket.OPEN) {
     const chatMessage = {
@@ -68,15 +93,46 @@ const sendMessage = () => {
     console.error('WebSocket未连接');
   }
 }
+
+const fileInput = ref(null);
+
+const openFileSelector = () => {
+  fileInput.value.click();
+};
+// 发送图片
+const sendImage = (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const imageData = e.target.result;
+      if (socket && socket.readyState === WebSocket.OPEN) {
+        const imageMessage = {
+          type: 'chat',
+          payload: `${username}:${imageData}`,
+          isImage: true
+        };
+        socket.send(JSON.stringify(imageMessage));
+        console.log('发送图片');
+      } else {
+        console.error('WebSocket未连接');
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
 const disConnectServer = () => {
   if (socket) {
     socket.close();
     console.log('WebSocket连接已关闭');
   }
 }
+
 onMounted(() => {
   connectServer();
 });
+
 onUnmounted(() => {
   disConnectServer();
 });
@@ -95,7 +151,7 @@ onUnmounted(() => {
   border-radius: 5px;
   margin-bottom: 10px;
   .message_box_item{
-    height: 40px;
+    height: auto; /* 修改高度为自适应 */
     font-size: 12px;
     display: flex;
     align-items: center;
@@ -154,6 +210,10 @@ onUnmounted(() => {
       font-size: 18px;
       margin: 0 10px;
       color: var(--fontColor);
+      img {
+        max-width: 200px; /* 设置图片最大宽度 */
+        max-height: 200px; /* 设置图片最大高度 */
+      }
     }
   }
   .active{
@@ -168,6 +228,10 @@ onUnmounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  .custom-file-input {
+    height: 100%;
+    margin-right: 10px;
+  }
   .el-input{
     height: 100%;
   }

@@ -21,8 +21,8 @@
       <el-button type="primary" @click="sendMessage">发送消息</el-button>
     </div>
     <!-- 全屏预览容器 -->
-    <div v-if="isImagePreviewVisible" class="image-preview" @click="closeImagePreview">
-      <img :src="previewImageSrc" alt="预览图片">
+    <div v-if="isImagePreviewVisible" class="image-preview" @click.stop="closeImagePreview">
+      <img :src="previewImageSrc" alt="预览图片" @click.stop>
       <div class="close-button" @click.stop="closeImagePreview">×</div>
     </div>
   </div>

@@ -7,18 +7,23 @@
         <div v-else class="message_box_item_username_other">{{item.username.split('')[0].toUpperCase()}}</div>
         <div class="message_box_item_message">
           <!-- 显示图片 -->
-          <img v-if="item.isImage" :src="item.message" alt="图片">
+          <img v-if="item.isImage" :src="item.message" alt="图片" @click="openImagePreview(item.message)">
           <span v-else>{{item.message}}</span>
         </div>
       </div>
     </div>
     <div class="websocket_ipt">
-      <el-input v-model="message" placeholder="发送消息" @keydown.enter="sendMessage"></el-input>
       <div class="custom-file-input">
         <input type="file" ref="fileInput" @change="sendImage" accept="image/*" style="display: none;">
         <el-button type="primary" @click="openFileSelector">选择图片</el-button>
       </div>
+      <el-input v-model="message" placeholder="发送消息" @keydown.enter="sendMessage"></el-input>
       <el-button type="primary" @click="sendMessage">发送消息</el-button>
+    </div>
+    <!-- 全屏预览容器 -->
+    <div v-if="isImagePreviewVisible" class="image-preview" @click="closeImagePreview">
+      <img :src="previewImageSrc" alt="预览图片">
+      <div class="close-button" @click.stop="closeImagePreview">×</div>
     </div>
   </div>
 </template>
@@ -30,6 +35,8 @@ let message_box = ref(null);
 const message = ref('');
 let messageList = ref([]);
 let socket = null;
+const isImagePreviewVisible = ref(false);
+const previewImageSrc = ref('');
 
 // 连接服务器
 const connectServer = () => {
@@ -51,7 +58,6 @@ const connectServer = () => {
         type: 'info'
       });
     }else{
-
       let newMessage;
       if (data.isImage) {
         // 若为图片消息，直接使用完整的 payload
@@ -69,7 +75,6 @@ const connectServer = () => {
         };
       }
       messageList.value.push(newMessage);
-
       nextTick(()=>{
         message_box.value.scrollTop = message_box.value.scrollHeight;
       })
@@ -127,6 +132,17 @@ const disConnectServer = () => {
     socket.close();
     console.log('WebSocket连接已关闭');
   }
+}
+
+// 打开图片预览
+const openImagePreview = (src) => {
+  previewImageSrc.value = src;
+  isImagePreviewVisible.value = true;
+}
+
+// 关闭图片预览
+const closeImagePreview = () => {
+  isImagePreviewVisible.value = false;
 }
 
 onMounted(() => {
@@ -213,6 +229,7 @@ onUnmounted(() => {
       img {
         max-width: 200px; /* 设置图片最大宽度 */
         max-height: 200px; /* 设置图片最大高度 */
+        cursor: pointer; // 添加鼠标指针样式
       }
     }
   }
@@ -229,7 +246,6 @@ onUnmounted(() => {
   justify-content: space-between;
   align-items: center;
   .custom-file-input {
-    height: 100%;
     margin-right: 10px;
   }
   .el-input{
@@ -238,6 +254,34 @@ onUnmounted(() => {
   .el-button{
     height: 100%;
     margin-left: 10px;
+  }
+}
+
+// 全屏预览样式
+.image-preview {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+
+  img {
+    max-width: 90%;
+    max-height: 90%;
+  }
+
+  .close-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
   }
 }
 </style>

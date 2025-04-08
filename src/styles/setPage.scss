@@ -1,0 +1,26 @@
+.set_page{
+    padding: 10px 20px;
+    :deep(.el-tabs){
+        .el-tabs__header{
+            margin: 0;
+            .el-tabs__nav-wrap{
+                .el-tabs__nav-scroll{
+                    .el-tabs__nav{
+                        .el-tabs__active-bar{
+                            background-color: var(--tabFontColor);
+                        }
+                        .el-tabs__item{
+                            &:hover{
+                                color: var(--tabFontColor);
+                            }
+                        }
+                        .is-active{
+                            color: var(--tabFontColor);
+                        }
+                    }
+                }
+            }
+        }
+        .el-tabs__content{}
+    }
+}

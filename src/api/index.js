@@ -34,6 +34,7 @@ Axios.interceptors.request.use(config=>{
     return config
 })
 Axios.interceptors.response.use(res=>{
+    console.log('响应拦截器',res);
     if(res.status===200){
         if(res.data.status==200&&!res.data.code){
             ElMessage({

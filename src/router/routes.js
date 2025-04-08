@@ -510,16 +510,19 @@ export default[
     {
         path:'/set',
         name:'set',
-        component:()=>import('@/views/SetPage.vue')
-    },
-    {
-        path:'/userManagement',
-        name:'userManagement',
-        component:()=>import('@/views/UserManagement.vue')
-    },
-    {
-        path:'/roleManagement',
-        name:'roleManagement',
-        component:()=>import('@/views/RoleManagement.vue')
+        component:()=>import('@/views/SetPage.vue'),
+        redirect:'/set/userManagement',
+        children:[
+            {
+                path:'userManagement',
+                name:'用户管理',
+                component:()=>import('@/views/UserManagement.vue')
+            },
+            {
+                path:'roleManagement',
+                name:'角色管理',
+                component:()=>import('@/views/RoleManagement.vue')
+            }
+        ]
     }
 ]

@@ -78,6 +78,40 @@ export function toUpload(data){
     })
 }
 /**
+ * @description 获取用户列表
+ * @data
+*/
+export function getUsers(data){
+    return new Promise((resolve,reject)=>{
+        Axios({
+            url:`${baseUrl}/getUsers`,
+            method:'post',
+            data
+        }).then(res=>{
+            resolve(res)
+        }).catch(err=>{
+            reject(err)
+        })
+    })
+}
+/**
+ * @description 编辑用户
+ * @data
+*/
+export function updateUser(data){
+    return new Promise((resolve,reject)=>{
+        Axios({
+            url:`${baseUrl}/setUser`,
+            method:'post',
+            data
+        }).then(res=>{
+            resolve(res)
+        }).catch(err=>{
+            reject(err)
+        })
+    })
+}
+/**
  * @description 获取所有角色
  * @data
 */
@@ -86,6 +120,23 @@ export function getRoles(data){
         Axios({
             url:`${baseUrl}/getRoles`,
             method:'post',
+            data
+        }).then(res=>{
+            resolve(res)
+        }).catch(err=>{
+            reject(err)
+        })
+    })
+}
+/**
+ * @description 获取角色词典
+ * @data
+*/
+export function getRolesDict(data){
+    return new Promise((resolve,reject)=>{
+        Axios({
+            url:`${baseUrl}/getRoleDict`,
+            method:'get',
             data
         }).then(res=>{
             resolve(res)

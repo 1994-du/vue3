@@ -1,15 +1,14 @@
 <template>
     <div class="role_management_wrap">
-        <h4 style="margin-bottom:0">角色管理</h4>
-        <div style="margin: 10px 0;">
-            <el-button type="primary" @click="getRoleList">查询</el-button>
-        </div>
+        <header>
+            <el-button type="primary" @click="createRole">新建角色</el-button>
+        </header>
         <el-table style="width: 100%;" border :data="tableData">
             <el-table-column label="角色名称" prop="roleName"></el-table-column>
             <el-table-column label="角色描述" prop="roleDesc"></el-table-column>
             <el-table-column label="操作">
                 <template #default="{row}">
-                    <el-button link @click="editRole(row)">编辑</el-button>
+                    <el-button link type="primary" @click="editRole(row)">编辑</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -124,31 +123,14 @@ const editRole = (row) => {
     formData.value.menus = row.menus
     dialogVisible.value = true
 }
-
+const createRole = () => {
+    console.log('创建角色')
+    // dialogVisible.value = true
+}
 onMounted(()=>{
     getRoleList()
 })
 </script>
-<style scoped lang='less'>
-.role_management_wrap{
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
-    .role_management{
-        display: flex;
-        flex: 1;
-        overflow: hidden;
-        .role_list{
-            width: 50%;
-        }
-        .role_tree{
-            flex: 1;
-            border-left: 1px solid #ccc;
-            overflow-y: auto;
-            overflow-x: hidden;
-        }
-    }
-}
-
+<style scoped lang='scss'>
+@use '@/styles/roleManagement.scss';
 </style>

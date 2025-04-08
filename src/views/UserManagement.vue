@@ -42,7 +42,15 @@
                     <el-input v-model="editUserObj.username"></el-input>
                 </el-form-item>
                 <el-form-item label="头像">
-                    <img class="edit_img" :src="editUserObj.avatar" alt="">
+                    <el-upload
+                        :on-success="handleAvatarUploadSuccess"
+                        :on-error="handleAvatarUploadError"
+                        :show-file-list="false"
+                        :before-upload="beforeAvatarUpload"
+                        :http-request="customUpload"
+                    >
+                        <img class="edit_img" :src="editUserObj.avatar" alt="">
+                    </el-upload>
                 </el-form-item>
                 <el-form-item label="角色">
                     <el-select v-model="editUserObj.roleId" placeholder="请选择" @change="changeRole">
@@ -137,6 +145,60 @@ onMounted(()=>{
     getUsersList()
     getRoleDictList()
 })
+
+// 上传地址，根据实际情况修改
+const uploadUrl = ref('/api/commonUpload')
+
+// 上传前的钩子，可用于检查文件类型和大小等
+const beforeAvatarUpload = (file) => {
+    const isJPG = file.type === 'image/jpeg' || file.type === 'image/png';
+    const isLt2M = file.size / 1024 / 1024 < 2;
+
+    if (!isJPG) {
+        ElMessage.error('上传头像图片只能是 JPG/PNG 格式!');
+    }
+    if (!isLt2M) {
+        ElMessage.error('上传头像图片大小不能超过 2MB!');
+    }
+    return isJPG && isLt2M;
+}
+
+// 上传成功回调
+const handleAvatarUploadSuccess = (response, file, fileList) => {
+    if (response.status === 200) {
+        // 更新编辑用户对象中的头像地址
+        editUserObj.value.avatar = response.filePath;
+        ElMessage.success('头像上传成功');
+    } else {
+        ElMessage.error('头像上传失败');
+    }
+}
+
+// 上传失败回调
+const handleAvatarUploadError = (err, file, fileList) => {
+    ElMessage.error('头像上传失败，请稍后重试');
+}
+
+// 自定义上传方法
+const customUpload = (param) => {
+    const formData = new FormData();
+    formData.append('file', param.file); // 将文件添加到 FormData 中
+
+    // 这里可以根据实际情况修改上传地址
+    const uploadUrl = '/api/commonUpload';
+
+    axios.post(uploadUrl, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    })
+    .then(response => {
+        param.onSuccess(response.data); // 调用成功回调
+    })
+    .catch(error => {
+        param.onError(error); // 调用失败回调
+    });
+}
 </script>
 <style scoped lang='scss'>
 @use '@/styles/userManagement.scss';

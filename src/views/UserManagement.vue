@@ -14,6 +14,13 @@
             <el-table-column label="操作">
                 <template #default="{ row }">
                     <el-button link type="primary" @click="editUser(row)">编辑</el-button>
+                    <el-popconfirm 
+                        title="确定删除此用户?"
+                        @confirm="deleteUser(row.userId)">
+                        <template #reference>
+                            <el-button link type="primary">删除</el-button>
+                        </template>
+                    </el-popconfirm>
                 </template>
             </el-table-column>
         </el-table>
@@ -71,12 +78,51 @@
             </div>
         </template>
      </el-dialog>
+     <!-- 新建用户 -->
+    <el-dialog
+        title="新建用户"
+        v-model="createUserVisible"
+        width="30%">
+        <el-form>
+            <el-form-item label="用户名">
+                <el-input v-model="createUserObj.username"></el-input>
+            </el-form-item>
+            <el-form-item label="头像">
+                <el-upload
+                    :on-success="handleAvatarUploadSuccessCreate"
+                    :on-error="handleAvatarUploadError"
+                    :show-file-list="false"
+                    :before-upload="beforeAvatarUpload"
+                    :http-request="customUpload"
+                >
+                    <img class="edit_img" :src="createUserObj.avatar" alt="">
+                </el-upload>
+            </el-form-item>
+            <el-form-item label="角色">
+                <el-select v-model="createUserObj.roleId" placeholder="请选择" @change="changeRole">
+                    <el-option
+                        v-for="item in roleList"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+        </el-form>
+        <template #footer>
+            <div class="dialog_footer">
+                <el-button type="primary" @click="handleCreateUser">确定</el-button>
+                <el-button @click="createUserVisible = false">取消</el-button>
+            </div>
+        </template>
+    </el-dialog>
 </template>
 
 <script setup>
 import { onMounted, ref } from 'vue'
 import axios from 'axios'
-import { getUsers,getRolesDict,updateUser } from '@/api/api'
+import { getUsers,getRolesDict,updateUser,addUser, delUser } from '@/api/api'
+import { ElMessage } from 'element-plus'
 let tableData = ref([])
 let editUserVisible = ref(false)
 let editUserObj = ref({})
@@ -102,11 +148,25 @@ const getRoleDictList = ()=>{
         }
     })
 }
+//新建
+let createUserVisible = ref(false)
+let createUserObj = ref({})
 const createUser = ()=>{
-    console.log('createUser');
+    createUserObj.value = {}
+    createUserVisible.value = true
 }
+const handleCreateUser = ()=>{
+    console.log('createUserObj',createUserObj.value);
+    console.log('handleCreateUser');
+    addUser(createUserObj.value).then(res=>{
+        if(res.status === 200){
+            createUserVisible.value = false
+            getUsersList()
+        }
+    })
+}
+// 编辑
 const editUser = (row)=>{
-    console.log('editUser',row);
     editUserObj.value = Object.assign({},row)
     editUserVisible.value = true
 }
@@ -123,6 +183,20 @@ const handleEditUser = ()=>{
     updateUser(editUserObj.value).then(res=>{
         if(res.status === 200){
             editUserVisible.value = false
+            getUsersList()
+        }
+    })
+}
+/**
+ * @description: 删除用户
+ * @param {*}
+ * @return {*}
+ */
+const deleteUser = (userId)=>{
+    delUser({
+        userId: userId
+    }).then(res=>{
+        if(res.status === 200){
             getUsersList()
         }
     })
@@ -173,7 +247,15 @@ const handleAvatarUploadSuccess = (response, file, fileList) => {
         ElMessage.error('头像上传失败');
     }
 }
-
+const handleAvatarUploadSuccessCreate = (response, file, fileList) => {
+    if (response.status === 200) {
+        // 更新编辑用户对象中的头像地址
+        createUserObj.value.avatar = response.filePath;
+        ElMessage.success('头像上传成功');
+    } else {
+        ElMessage.error('头像上传失败');
+    }
+}
 // 上传失败回调
 const handleAvatarUploadError = (err, file, fileList) => {
     ElMessage.error('头像上传失败，请稍后重试');

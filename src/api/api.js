@@ -3,7 +3,7 @@ let baseUrl;
 if(process.env.NODE_ENV=='development'){
     baseUrl='/api'
 }else{
-    baseUrl='http://localhost:1234'
+    baseUrl='http://192.168.31.65:1234'
 }
 /**
  * @description 登录
@@ -102,6 +102,39 @@ export function updateUser(data){
     return new Promise((resolve,reject)=>{
         Axios({
             url:`${baseUrl}/setUser`,
+            method:'post',
+            data
+        }).then(res=>{
+            resolve(res)
+        }).catch(err=>{
+            reject(err)
+        })
+    })
+}
+/**
+ * @description 新建用户
+*/
+export function addUser(data){
+    return new Promise((resolve,reject)=>{
+        Axios({
+            url:`${baseUrl}/addUser`,
+            method:'post',
+            data
+        }).then(res=>{
+            resolve(res)
+        }).catch(err=>{
+            reject(err)
+        })
+    })
+}
+/**
+ * @description 删除用户
+ * @data
+*/
+export function delUser(data){
+    return new Promise((resolve,reject)=>{
+        Axios({
+            url:`${baseUrl}/deleteUser`,
             method:'post',
             data
         }).then(res=>{

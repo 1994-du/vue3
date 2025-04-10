@@ -16,16 +16,6 @@
                     :collapse-transition="false">
                     <SubMenu v-for="(item,index) in menuConfig" :key="index" :menus="item"/>
                 </el-menu>
-                <div class="custome_menu_btn" @click="router.push('/userManagement')">
-                    <el-icon v-if="!isCollapse"><Avatar /></el-icon>
-                    <el-icon v-if="isCollapse"><Avatar /></el-icon>
-                    <span v-if="!isCollapse">用户管理</span>
-                </div>
-                <div class="custome_menu_btn" @click="router.push('/roleManagement')">
-                    <el-icon v-if="!isCollapse"><Avatar /></el-icon>
-                    <el-icon v-if="isCollapse"><Avatar /></el-icon>
-                    <span v-if="!isCollapse">角色管理</span>
-                </div>
                 <div class="custome_menu_btn" @click="router.push('/set')">
                     <el-icon v-if="!isCollapse"><Setting /></el-icon>
                     <el-icon v-if="isCollapse"><Setting /></el-icon>

@@ -2,7 +2,7 @@ import { createWebHistory,createWebHashHistory, createRouter } from "vue-router"
 import heighCode from "@/utils/highCode"
 import routes from './routes'
 const router =createRouter({
-    history:createWebHistory(),
+    history:createWebHashHistory(),
     routes
 })
 router.onError=(err)=>{

@@ -1,6 +1,6 @@
 <template>
   <div class="set_page">
-    <h4>设置</h4>
+    <h4 @click="router.back()">设置</h4>
     <el-tabs
       v-model="activeName"
       @tab-change="tabChange">
@@ -9,20 +9,6 @@
     </el-tabs>
     <router-view></router-view>
   </div>
-  <Footer/>
-
-    <!-- <h4 @click="router.back()">设置</h4>
-    <el-button @click="openDBBtn">打开IndexedDB</el-button>
-    <el-button @click="saveMenuBtn">保存菜单</el-button>
-    <el-button @click="closeDBBtn">关闭IndexedDB</el-button>
-    <el-button @click="getMenuDataBtn">获取菜单数据</el-button>
-    <el-tree
-        style="max-width: 600px"
-        :data="gData"
-        show-checkbox
-        node-key="key"
-        :props="defaultProps"
-    /> -->
 </template>
 <script setup>
 import { ref ,watch} from 'vue';

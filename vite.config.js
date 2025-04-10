@@ -12,6 +12,7 @@ import alias from "@rollup/plugin-alias";
 // });
 
 export default defineConfig({
+    base:'./',
     publicDir: './public',
     plugins: [
         alias(),

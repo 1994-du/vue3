@@ -4,5 +4,7 @@
     flex-direction: column;
     header{
         margin: 10px 0;
+        display: flex;
+        justify-content: flex-start;
     }
 }

@@ -13,8 +13,8 @@
             </div>
             
             <div class="login_buttons">
-                <button class="login" @click="toLogin">登录</button>
-                <button  class="register" @click="toRegister">注册</button>
+                <button class="login" @click="handleLogin">登录</button>
+                <button  class="register" @click="handleRegistry">注册</button>
             </div>
         </div>
     </div>
@@ -26,7 +26,7 @@ import { useRouter } from 'vue-router'
 import { useStore } from 'vuex';
 import { reactive, onMounted} from 'vue'
 import IndexDB from '@/utils/indexedDB';
-
+import { toLogin,toRegistry } from '@/api/api'
 let loginObj=reactive({
     username:"",
     password:""
@@ -34,15 +34,16 @@ let loginObj=reactive({
 const store = useStore()
 const router = useRouter()
 
-const toLogin= function(){
+const handleLogin= function(){
     if(!(window as any).db){
         console.error('数据库未打开');
         return
     }
-    axios.post('/api/login',loginObj).then(res=>{
-        console.log('请求登录',res.data)
+    toLogin(loginObj).then(res=>{
+        console.log('登录',res);
+        
         if(res.status==200){
-            IndexDB.addMenu(loginObj.username,res.data).then(res=>{
+            IndexDB.addMenu(loginObj.username,res).then(res=>{
                 console.log('添加菜单成功',res)
                 router.replace('/')
             }).catch(err=>{
@@ -52,10 +53,9 @@ const toLogin= function(){
         }
     })
 }
-const toRegister = function(){
-    axios.post('/api/toregistry',JSON.stringify(loginObj)).then(res=>{
+const handleRegistry = function(){
+    toRegistry(loginObj).then(res=>{
         console.log('注册',res)
-        
     })
 }
 

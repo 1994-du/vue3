@@ -12,7 +12,7 @@ if(process.env.NODE_ENV=='development'){
 export function toLogin(data){
     return new Promise((resolve,reject)=>{
         Axios({
-            url:`${baseUrl}/tologin`,
+            url:`${baseUrl}/login`,
             method:'post',
             data
         }).then(res=>{
@@ -30,7 +30,7 @@ export function toLogin(data){
 export function toRegistry(data){
     return new Promise((resolve,reject)=>{
         Axios({
-            url:`${baseUrl}/toregistry`,
+            url:`${baseUrl}/register`,
             method:'post',
             data
         }).then(res=>{

@@ -27,10 +27,17 @@ export default defineConfig({
         minify: 'terser', // 混淆器，terser 构建后文件体积更小
         rollupOptions: {
             output: {
-                manualChunks(id) {
-                    if (id.includes('node_modules')) {
-                        return 'vendor'; // 将所有 node_modules 中的模块打包到 vendor.js
-                    }
+                // 动态函数分包
+                // manualChunks(id) {
+                //     if (id.includes('node_modules')) {
+                //         return 'vendor'; // 将所有 node_modules 中的模块打包到 vendor.js
+                //     }
+                // }
+                // 按模块路径分包
+                manualChunks:{
+                    'vue': ['vue', 'vue-router','vuex'], // 将 vue 相关的模块打包到 vue.js
+                    'element-plus': ['element-plus'], // 将 element-plus 相关的模块打包到 element-plus.js
+                    'echarts': ['echarts'], // 将 echarts 相关的模块打包到 echarts.js
                 }
             }
         }

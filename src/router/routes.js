@@ -466,7 +466,7 @@ export default[
                 meta:{
                     groupName:'Canvas'
                 },
-                component:()=>import('@/views/Canvas/AudioVisualization.vue')
+                component:()=>import('@/views/Canvas/Audiovisualization.vue')
             },
             {
                 path:'/network/tcp',

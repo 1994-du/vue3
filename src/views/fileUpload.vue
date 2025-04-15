@@ -98,7 +98,7 @@ const openFile = ()=>{
 
 // 分片上传
 const uploadFile = (file) => {
-    const chunkSize = 1024 * 1024 * 10; // 1MB
+    const chunkSize = 1024 * 1024 * 50; // 1MB
     const totalChunks = Math.ceil(file.file.size / chunkSize);
     let currentChunk = 0;
     const uploadChunk = () => {

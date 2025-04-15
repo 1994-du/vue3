@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from '@vue/reactivity';
+import { computed } from 'vue';
 
 const props = defineProps({
     width:{

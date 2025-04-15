@@ -1,24 +1,29 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import path from 'path';
-import alias from "@rollup/plugin-alias";
-// import removeConsole from 'vite-plugin-remove-console';
-
-// const removeConsolePlugin = removeConsole({
-//     include: [/src/],
-//     exclude: [],
-//     functions: ['console.log', 'console.warn', 'console.error'],
-//     env: 'all' // 设置为 all 表示在所有环境下生效
-// });
+import legacy from '@vitejs/plugin-legacy';
 
 export default defineConfig({
     base:'./',
-    publicDir: './public',
     plugins: [
-        alias(),
         vue(),
+        legacy({
+            // 指定兼容的浏览器范围（Browserslist 语法）
+            targets: ['chrome 58', '> 1%', 'ie 11'],
+            // 为现代浏览器按需注入 Polyfill（减少体积）
+            modernPolyfills: true,
+            // 核心 Polyfill 库（默认自动注入）
+            corejs: '3.33', // 指定 core-js 版本
+        }),
     ],
     build: {
+        target:['es2015','edge88','firefox78','chrome87','safari13'],// 指定需要兼容的浏览器
+        terserOptions: {
+            compress: {
+                drop_console: true, // 生产环境去除 console
+                drop_debugger: true, // 生产环境去除 debugger
+            }
+        },
         outDir: 'dist',
         assetsDir: 'static',
         chunkSizeWarningLimit: 1500, // 限制包大小 
@@ -28,21 +33,25 @@ export default defineConfig({
         rollupOptions: {
             output: {
                 // 动态函数分包
-                // manualChunks(id) {
-                //     if (id.includes('node_modules')) {
-                //         return 'vendor'; // 将所有 node_modules 中的模块打包到 vendor.js
-                //     }
-                // }
-                // 按模块路径分包
-                manualChunks:{
-                    'vue': ['vue', 'vue-router','vuex'], // 将 vue 相关的模块打包到 vue.js
-                    'element-plus': ['element-plus'], // 将 element-plus 相关的模块打包到 element-plus.js
-                    'echarts': ['echarts'], // 将 echarts 相关的模块打包到 echarts.js
+                manualChunks(id) {
+                    if (id.includes('node_modules')) {
+                        if (id.includes('echarts')) return 'echarts'
+                        if (id.includes('vue')) return 'vue'
+                        if (id.includes('lodash')) return 'lodash'
+                        return 'vendor'
+                    }
                 }
+                // 按模块路径分包
+                // manualChunks:{
+                //     'vue': ['vue', 'vue-router','vuex'], // 将 vue 相关的模块打包到 vue.js
+                //     'element-plus': ['element-plus'], // 将 element-plus 相关的模块打包到 element-plus.js
+                //     'echarts': ['echarts'], // 将 echarts 相关的模块打包到 echarts.js
+                // }
             }
         }
     },
     css: {
+        postcss:"./postcss.config.js",
         preprocessorOptions: {
             scss: {
                 // additionalData: `@import "@/styles/variables.scss";` // 根据需要添加

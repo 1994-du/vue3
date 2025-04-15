@@ -441,7 +441,7 @@ export default[
                 meta:{
                     groupName:'indexedDB'
                 },
-                component:()=>import('@/views/indexedDB/base.vue')
+                component:()=>import('@/views/IndexedDB/base.vue')
             },
             {
                 path:'/indexedDB/transaction',
@@ -449,7 +449,7 @@ export default[
                 meta:{
                     groupName:'indexedDB'
                 },
-                component:()=>import('@/views/indexedDB/transaction.vue')
+                component:()=>import('@/views/IndexedDB/transaction.vue')
             },
             // Canvas
             {

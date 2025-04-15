@@ -36,7 +36,7 @@ export default defineConfig({
                 manualChunks(id) {
                     if (id.includes('node_modules')) {
                         if (id.includes('echarts')) return 'echarts'
-                        if (id.includes('vue')) return 'vue'
+                        // if (id.includes('vue')) return 'vue'
                         if (id.includes('lodash')) return 'lodash'
                         return 'vendor'
                     }

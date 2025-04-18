@@ -500,6 +500,14 @@ export default[
                 },
                 component:()=>import('@/views/Browser/Principle.vue')
             },
+            {
+                path:"/javaScript/virtualList",
+                name:"虚拟列表",
+                meta:{
+                    groupName:"JavaScript"
+                },
+                component:()=>import('@/views/Js/virtualList.vue')
+            }
         ]
     },
     {

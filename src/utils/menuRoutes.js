@@ -192,6 +192,11 @@ export default[
         menuLink:'/javaScript',
         children:[
             {
+                menuName:'虚拟列表',
+                menuLink:'/javaScript/virtualList',
+                children:null
+            },
+            {
                 menuName:'手写new',
                 menuLink:'/javaScript/new',
                 children:null

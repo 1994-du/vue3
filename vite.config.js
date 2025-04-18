@@ -18,6 +18,7 @@ export default defineConfig({
     ],
     build: {
         target:['es2015','edge88','firefox78','chrome87','safari13'],// 指定需要兼容的浏览器
+        minify: 'terser', // 混淆器，terser 构建后文件体积更小
         terserOptions: {
             compress: {
                 drop_console: true, // 生产环境去除 console
@@ -29,7 +30,7 @@ export default defineConfig({
         chunkSizeWarningLimit: 1500, // 限制包大小 
         cssCodeSplit: false, // 启用/禁用 CSS 代码拆分
         sourcemap: false, // 构建后是否生成 source map 文件
-        minify: 'terser', // 混淆器，terser 构建后文件体积更小
+        
         rollupOptions: {
             output: {
                 // 动态函数分包

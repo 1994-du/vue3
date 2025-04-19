@@ -102,8 +102,8 @@ export default[
                 ]
             },
             {
-                menuName:'vuex',
-                menuLink:'/vue3/vuex',
+                menuName:'状态管理',
+                menuLink:'/vue3/store',
                 children:null
             },
             {
@@ -279,11 +279,6 @@ export default[
             {
                 menuName:'generator',
                 menuLink:'/javaScript/generator',
-                children:null
-            },
-            {
-                menuName:'async/await',
-                menuLink:'/javaScript/asyncAwait',
                 children:null
             },
             {

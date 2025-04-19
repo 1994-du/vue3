@@ -4,6 +4,7 @@ import router from "./router"
 import store from "./store"
 import axios from "@/api"
 import "@/styles/common.scss"
+import { createPinia } from 'pinia'
 // 连接IndexDB
 import IndexDB from '@/utils/indexedDB';
 async function connectIndexDB(){
@@ -55,5 +56,6 @@ instance.use(store)
 instance.use(ElementPlus, { locale: zhCn })
 instance.use(Antd)
 instance.use(i18n)
+instance.use(createPinia())
 instance.mount('#subapp-viewport')
 directive(instance)

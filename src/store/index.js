@@ -64,7 +64,7 @@ export default createStore({
     },
     // 计算属性
     getters:{
-        info:(state)=>state.age+state.name,
+        info:(state)=>`姓名：${state.name},年龄：${state.age}`,
         moreinfo:(state,gettets)=>state.age+state.name+gettets.info,
         setName:(state=>((p)=>state.name+p))
     }

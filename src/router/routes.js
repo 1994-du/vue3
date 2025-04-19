@@ -58,12 +58,12 @@ export default[
             },
             // Vue3
             {
-                path:'/vue3/vuex',
+                path:'/vue3/store',
                 name:'Vuex',
                 meta:{
                     groupName:'Vue3',
                 },
-                component:()=>import('@/views/Vue3/vuex.vue')
+                component:()=>import('@/views/Vue3/store.vue')
             },
             {
                 path:'/vue3/router/principle',

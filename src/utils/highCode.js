@@ -1,5 +1,5 @@
 import { nextTick } from "vue";
-const keywords = ["if", "const", "let", "var", "return", "function"];
+const keywords = ["if", "const", "let", "var", "return", "function","import","from"];
 
 function highlightCode(code) {
     // 转义注释

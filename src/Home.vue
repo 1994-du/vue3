@@ -39,7 +39,7 @@
     import ThemeSwitch from '@/components/ThemeSwitch.vue'
     import SubMenu from './components/subMenu.vue'
     import { useRouter, useRoute } from 'vue-router'
-    import { computed, onMounted, onBeforeMount, onUpdated, onUnmounted, onBeforeUnmount, getCurrentInstance, ref, watch, watchEffect, reactive, onActivated } from 'vue'
+    import { computed, onMounted,ref } from 'vue'
     import { useStore } from 'vuex'
     import menuRoutes from '@/utils/menuRoutes'
     const store = useStore()
@@ -57,8 +57,6 @@
     const collapse = function(){
         isCollapse.value=!isCollapse.value
     }
-
-
 
     let isShowSearch = ref(false)
     // 打开搜索模态框

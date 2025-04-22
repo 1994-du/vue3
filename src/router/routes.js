@@ -507,6 +507,14 @@ export default[
                     groupName:"JavaScript"
                 },
                 component:()=>import('@/views/Js/virtualList.vue')
+            },
+            {
+                path:"/vue3/customRef",
+                name:"自定义Ref",
+                meta:{
+                    groupName:"Vue3"
+                },
+                component:()=>import('@/views/Vue3/customRef.vue')
             }
         ]
     },

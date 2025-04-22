@@ -112,6 +112,11 @@ export default[
                 children:null
             },
             {
+                menuName:'自定义Ref',
+                menuLink:'/vue3/customRef',
+                children:null
+            },
+            {
                 menuName:'组件通信',
                 menuLink:'/vue3/communication',
                 children:[

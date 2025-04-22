@@ -20,7 +20,7 @@ connectIndexDB();
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/reset.css';
 //全局自定义指令
-import directive from "./utils/globalDirective.js";
+import customDirective from "./utils/customDirective.js";
 // elementPlus
 import ElementPlus from 'element-plus'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'; // 引入中文包
@@ -58,4 +58,4 @@ instance.use(Antd)
 instance.use(i18n)
 instance.use(createPinia())
 instance.mount('#subapp-viewport')
-directive(instance)
+customDirective(instance)

@@ -23,6 +23,9 @@ export default defineConfig({
             compress: {
                 drop_console: true, // 生产环境去除 console
                 drop_debugger: true, // 生产环境去除 debugger
+            },
+            format: {
+                comments: false // 删除注释
             }
         },
         outDir: 'dist',
@@ -32,13 +35,18 @@ export default defineConfig({
         sourcemap: false, // 构建后是否生成 source map 文件
         
         rollupOptions: {
+            // external: ['vue', 'react'],
             output: {
+                // globals: {
+                //     vue: 'Vue',
+                //     react: 'React'
+                // },
                 // 动态函数分包
                 manualChunks(id) {
                     if (id.includes('node_modules')) {
-                        if (id.includes('echarts')) return 'echarts'
+                        // if (id.includes('echarts')) return 'echarts'
                         // if (id.includes('vue')) return 'vue'
-                        if (id.includes('lodash')) return 'lodash'
+                        // if (id.includes('lodash')) return 'lodash'
                         return 'vendor'
                     }
                 }

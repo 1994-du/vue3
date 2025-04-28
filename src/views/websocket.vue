@@ -31,7 +31,7 @@
     </div>
   </div>
 </template>
-<script setup lang="ts">
+<script setup>
 import { ElMessage } from 'element-plus';
 import { nextTick, onMounted, onUnmounted, ref } from 'vue';
 let username = localStorage.getItem('username');

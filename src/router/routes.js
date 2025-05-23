@@ -1,3 +1,5 @@
+import { pa } from 'element-plus/es/locales.mjs';
+
 // 路由分组
 export default[
     {
@@ -15,6 +17,14 @@ export default[
                 },
                 component:()=>import('@/views/HomePage.vue')
             },
+            {
+                path:'/webGl',
+                name:'WebGL',
+                meta:{
+                    groupName:'WebGL',
+                },
+                component:()=>import('@/views/WebGL/index.vue')
+            },
             // Echarts
             {
                 path:'/echarts/bar/base',
@@ -23,6 +33,14 @@ export default[
                     groupName:'Echarts',
                 },
                 component:()=>import('@/views/Echarts/echart-bar.vue')
+            },
+            {
+                path:'/echarts/line',
+                name:'Echart-Line',
+                meta:{
+                    groupName:'Echarts',
+                },
+                component:()=>import('@/views/Echarts/echart-line.vue')
             },
             {
                 path:'/echarts/bar/bullet',
@@ -277,13 +295,22 @@ export default[
                 },
                 component:()=>import('@/views/divCenter.vue')
             },
+            // 动画
             {
-                path:'/css/animation',
-                name:'动画',
+                path:'/css/animation/api',
+                name:'动画-api',
                 meta:{
-                    groupName:'CSS'
+                    groupName:'动画'
                 },
-                component:()=>import('@/views/Animation/animation.vue')
+                component:()=>import('@/views/CSS/Animation/index.vue')
+            },
+            {
+                path:'/css/animation/demo1',
+                name:'动画-Demo1',
+                meta:{
+                    groupName:'动画'
+                },
+                component:()=>import('@/views/CSS/Animation/Demo1.vue')
             },
             {
                 path:'/css/carousel',

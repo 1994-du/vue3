@@ -8,6 +8,11 @@ export default[
         children:null
     },
     {
+        menuName:'WebGl',
+        menuLink:'/webGl',
+        children:null
+    },
+    {
         menuName:'Echarts',
         menuLink:'/echarts',
         children:[
@@ -358,7 +363,16 @@ export default[
             {
                 menuName:'动画',
                 menuLink:'/css/animation',
-                children:null
+                children:[
+                    {
+                        menuName:'API',
+                        menuLink:'/css/animation/api'
+                    },
+                    {
+                        menuName:'Demo1',
+                        menuLink:'/css/animation/demo1'
+                    }
+                ]
             },
             {
                 menuName:'元素显示隐藏',

@@ -8,6 +8,18 @@ export default defineConfig({
     port: 3002,
     headers: {
       'Access-Control-Allow-Origin': '*'
+    },
+    proxy: {
+        '/api': {
+            target: 'http://192.168.31.65:1234/',// node服务
+            changeOrigin: true,
+            rewrite: (path) => path.replace(/^\/api/, '') // 不可以省略rewrite
+        },
+        '/javaapi': {
+            target: 'http://localhost:9999/',// node服务
+            changeOrigin: true,
+            rewrite: (path) => path.replace(/^\/javaapi/, '') // 不可以省略rewrite
+        }
     }
   },
   base:'./',

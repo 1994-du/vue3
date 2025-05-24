@@ -56,7 +56,7 @@ const getCurrentTime = () => {
 
 // 连接服务器
 const connectServer = () => {
-  socket = new WebSocket('ws://192.168.31.65:1234');
+  socket = new WebSocket(import.meta.env.VITE_WS);
   socket.onopen = () => {
     console.log('WebSocket连接成功');
     const userMessage = {

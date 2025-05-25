@@ -53,7 +53,10 @@ registryComponents(instance)
 instance.config.globalProperties.$axios = axios
 instance.use(router)
 instance.use(store)
-instance.use(ElementPlus, { locale: zhCn })
+instance.use(ElementPlus, { 
+    // namespace:'vue3',
+    locale: zhCn 
+})
 instance.use(Antd)
 instance.use(i18n)
 instance.use(createPinia())

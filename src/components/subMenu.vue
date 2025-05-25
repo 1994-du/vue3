@@ -13,6 +13,7 @@
 </template>
 <script setup>
 import SubMenu from './subMenu.vue'
+import { Folder, Document } from '@element-plus/icons-vue'
 const props = defineProps(['menus'])
 const menus = props.menus;
 </script>

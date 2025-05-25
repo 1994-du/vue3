@@ -1,4 +1,7 @@
+// @use './element_vars.scss' as *;
+// @use './element_icons.scss' as *;
 @forward "element-plus/theme-chalk/src/common/var.scss" with (
+    // $namespace: 'vue3',
     $colors:(
         "primary":(
             'base': #ac3aee,
@@ -6,3 +9,9 @@
     )
 );
 @use "element-plus/theme-chalk/src/index.scss" as *;
+// @use 'element-plus/theme-chalk/src/button.scss' as *;
+// @use 'element-plus/theme-chalk/src/input.scss' as *;
+// @use 'element-plus/theme-chalk/src/menu.scss' as *;
+// @use 'element-plus/theme-chalk/src/menu-item.scss' as *;
+// @use 'element-plus/theme-chalk/src/menu-item-group.scss' as *;
+// @use 'element-plus/theme-chalk/src/icon.scss' as *;

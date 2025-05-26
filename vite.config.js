@@ -37,6 +37,13 @@ export default defineConfig(mode => {
       alias: {
           '@': path.resolve(__dirname, './src')
       }
-    }
+    },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: `@use "@/styles/element_index.scss" as *;`,
+        },
+      },
+    },
   }
 })

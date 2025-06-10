@@ -12,7 +12,7 @@
                     router
                     :default-active="onRoutes"
                     :collapse="isCollapse"
-                    :style="{width:!isCollapse?'280px':''}"
+                    :style="{width:!isCollapse?'250px':''}"
                     :collapse-transition="false">
                     <SubMenu v-for="(item,index) in menuConfig" :key="index" :menus="item"/>
                 </el-menu>

@@ -218,7 +218,7 @@ export default[
                 path:'/javaScript/setInterval',
                 name:'SetInterval不精确',
                 meta:{
-                    groupName:'Js'
+                    groupName:'javaScript'
                 },
                 component:()=>import('@/views/Js/setInterval.vue')
             },
@@ -226,7 +226,7 @@ export default[
                 path:'/javaScript/this',
                 name:'this指向',
                 meta:{
-                    groupName:'Js'
+                    groupName:'javaScript'
                 },
                 component:()=>import('@/views/Js/this.vue')
             },
@@ -234,7 +234,7 @@ export default[
                 path:'/currying',
                 name:'函数柯里化',
                 meta:{
-                    groupName:'Js'
+                    groupName:'javaScript'
                 },
                 component:()=>import('@/views/Js/currying.vue')
             },
@@ -242,7 +242,7 @@ export default[
                 path:"/javaScript/copy",
                 name:"深浅拷贝",
                 meta:{
-                    groupName:"Js"
+                    groupName:'javaScript'
                 },
                 component:()=>import('@/views/Js/deepCopy.vue')
             },
@@ -250,7 +250,7 @@ export default[
                 path:'/javaScript/pubSub',
                 name:'发布订阅',
                 meta:{
-                    groupName:'Js'
+                    groupName:'javaScript'
                 },
                 component:()=>import('@/views/Js/PublishSubscribePattern.vue')
             },
@@ -258,7 +258,7 @@ export default[
                 path:'/javaScript/eventLoop',
                 name:'事件循环',
                 meta:{
-                    groupName:'Js'
+                    groupName:'javaScript'
                 },
                 component:()=>import('@/views/Js/eventLoop.vue')
             },
@@ -266,7 +266,7 @@ export default[
                 path:"/javaScript/rtt",
                 name:"最小RTT",
                 meta:{
-                    groupName:"Js"
+                    groupName:'javaScript'
                 },
                 component:()=>import('@/views/Js/xhrTime.vue')
             },
@@ -274,7 +274,7 @@ export default[
                 path:"/javaScript/debounceThrottle",
                 name:"防抖节流",
                 meta:{
-                    groupName:"Js"
+                    groupName:'javaScript'
                 },
                 component:()=>import('@/views/Js/debounceThrottling.vue')
             },
@@ -282,7 +282,7 @@ export default[
                 path:"/javaScript/closure",
                 name:"闭包",
                 meta:{
-                    groupName:"Js"
+                    groupName:'javaScript'
                 },
                 component:()=>import('@/views/Js/closure.vue')
             },
@@ -293,7 +293,7 @@ export default[
                 meta:{
                     groupName:'CSS'
                 },
-                component:()=>import('@/views/divCenter.vue')
+                component:()=>import('@/views/CSS/divCenter.vue')
             },
             // 动画
             {
@@ -408,11 +408,10 @@ export default[
                 path:'/upload',
                 name:'文件上传',
                 meta:{
-                    groupName:'打开文件管理器'
+                    groupName:'文件上传'
                 },
-                component:()=>import('@/views/fileUpload.vue')
+                component:()=>import('@/views/Upload/fileUpload.vue')
             },
-            
             {
                 path:'/websocket',
                 name:'即时通讯',

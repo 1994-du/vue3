@@ -76,6 +76,7 @@ h1,.hljs{
             flex-direction: column;
             align-items: center;
             position: relative;
+            overflow: auto;
             .el-menu{
                 width: 100%;
                 height: calc(100% - 40px);

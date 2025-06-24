@@ -17,8 +17,8 @@ const initCanvas = () => {
         console.error('Failed to get 2D context');
         return;
     }
-    canvas.value.width = width.value;
-    canvas.value.height = height.value;
+    canvas.value.width = 1200;
+    canvas.value.height = 400;
     // 设置 canvas 背景色为黑色
     ctx.value.fillStyle = 'black';
     ctx.value.fillRect(0, 0, width.value, height.value);

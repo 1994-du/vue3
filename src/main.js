@@ -54,7 +54,7 @@ instance.config.globalProperties.$axios = axios
 instance.use(router)
 instance.use(store)
 instance.use(ElementPlus, { 
-    // namespace:'vue3',
+    namespace:'vue3',
     locale: zhCn 
 })
 instance.use(Antd)

@@ -3,7 +3,7 @@
     <h4>音频可视化</h4>
     <canvas width="800" height="200"></canvas>
 
-    <audio controls>
+    <audio controls id="test-audio">
       <source src="@/assets/demo1.mp3" type="audio/mpeg">
       您的浏览器不支持 audio 元素。
     </audio>
@@ -90,4 +90,5 @@ canvas {
   height: 100%;
   z-index: -1;
 }
+
 </style>

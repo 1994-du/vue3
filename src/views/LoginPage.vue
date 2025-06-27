@@ -61,5 +61,5 @@ const handleRegistry = function(){
 
 </script>
 <style lang="less" scoped>
-@import '@/styles/Login.scss';
+@use '@/styles/Login.scss';
 </style>

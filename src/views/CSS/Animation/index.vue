@@ -49,5 +49,5 @@ let direction = ref('rtl')
 
 </script>
 <style lang="less" scoped>
-@import "@/styles/animation.scss";
+@use "@/styles/animation.scss";
 </style>

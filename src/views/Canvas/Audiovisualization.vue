@@ -5,8 +5,10 @@
 
     <audio controls id="test-audio">
       <source src="@/assets/demo1.mp3" type="audio/mpeg">
+      <!-- http://172.26.32.52:1234/file/demo1.mp3 -->
       您的浏览器不支持 audio 元素。
     </audio>
+    <el-button @click="toPlay">播放</el-button>
   </div>
 </template>
 
@@ -69,6 +71,12 @@ const draw = () => {
 };
 const stopDraw = () => {
   cancelAnimationFrame(animationFrameId);
+};
+// 播放
+const toPlay = () => {
+  console.log('audio', audio);
+  
+  audio.play();
 };
 onMounted(()=>{
   initCvs();

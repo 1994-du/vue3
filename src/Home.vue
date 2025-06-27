@@ -80,5 +80,5 @@
 </script>
 
 <style lang="scss">
-@import "@/styles/home.scss";
+@use "@/styles/home.scss";
 </style>

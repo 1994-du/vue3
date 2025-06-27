@@ -8,5 +8,5 @@ import { RouterView } from 'vue-router';
 
 </script>
 <style lang="scss">
-@import '@/styles/App.scss';
+@use '@/styles/App.scss';
 </style>

@@ -1,6 +1,6 @@
 <template>
     <h2>请求方法：get、post、delete、put、patch、options、head</h2>
-    <button>请求</button>
+    <button @click="sendRequest">请求</button>
     <button @click="cancleReq">取消所有请求</button>
     <code>
         <pre>import axios from 'axios'</pre>
@@ -30,14 +30,11 @@
     </code>
     
 </template>
-<script setup>
+<script setup lang="ts">
 import axios from 'axios'
-import { getCurrentInstance } from 'vue'
-const { proxy } = getCurrentInstance()
-let controller=null;
-let controllers=[];
-let cancelToken=null;
-let cancelTokens=[];
+
+let controllers: any[] = [];
+let cancelTokens: any[] = [];
 const cancleReq=()=>{
     controllers.forEach(controller=>{
         if(controller){
@@ -53,6 +50,13 @@ const cancleReq=()=>{
         }
     })
     cancelTokens=[];
+}
+const sendRequest=()=>{ 
+    axios.post('/getway/mock/user/info').then((res)=>{
+        console.log('请求成功',res);
+    }).catch((err)=>{
+        console.log('请求失败',err);
+    })
 }
 </script>
 <style lang="scss" scoped>

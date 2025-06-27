@@ -1,11 +1,17 @@
 import { defineConfig,loadEnv } from 'vite'
+import { viteMockServe } from 'vite-plugin-mock'
 import vue from '@vitejs/plugin-vue'
 import path from 'path'
 // https://vite.dev/config/
-export default defineConfig(mode => {
+export default defineConfig(({mode,command}) => {
   const env = loadEnv(mode,process.cwd())
   return{
-    plugins: [vue()],
+    plugins: [vue(),
+      viteMockServe({
+        mockPath: 'mock', // mock 文件存放目录
+        enable: command === 'serve', // 仅开发时启用
+      })
+    ],
     server: {
       port: 3002,
       headers: {

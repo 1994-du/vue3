@@ -41,7 +41,8 @@ const i18n = new createI18n({
 // 全局组件
 import registryComponents from './components/index.js'
 // 中央事件
-
+import mitt from 'mitt'
+const bus = new mitt()
 // render 函数
 let instance=null
 instance = createApp(App)
@@ -51,6 +52,7 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 }
 registryComponents(instance)
 instance.config.globalProperties.$axios = axios
+instance.config.globalProperties.$bus = bus
 instance.use(router)
 instance.use(store)
 instance.use(ElementPlus, { 
@@ -60,5 +62,5 @@ instance.use(ElementPlus, {
 instance.use(Antd)
 instance.use(i18n)
 instance.use(createPinia())
-instance.mount('#subapp-viewport')
+instance.mount('#vue3')
 customDirective(instance)

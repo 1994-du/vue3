@@ -1,7 +1,5 @@
 <template>
-    <!-- <el-config-provider namespace="vue3"> -->
-        <RouterView></RouterView>
-    <!-- </el-config-provider> -->
+    <RouterView></RouterView>
 </template>
 <script setup>
 import { RouterView } from 'vue-router';

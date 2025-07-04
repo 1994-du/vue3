@@ -64,3 +64,22 @@ instance.use(i18n)
 instance.use(createPinia())
 instance.mount('#vue3')
 customDirective(instance)
+if (window.__MICRO_APP_ENVIRONMENT__) {
+  console.log('我在微前端环境中')
+  // 监听数据变化
+  // window.microApp.addDataListener(dataListener)
+
+  // 监听数据变化，初始化时如果有数据则主动触发一次
+  window.microApp.addDataListener(dataListener, true)
+
+  // 解绑监听函数
+  // window.microApp.removeDataListener(dataListener)
+
+  // 清空当前子应用的所有绑定函数(全局数据函数除外)
+  // window.microApp.clearDataListener()
+}
+
+// 监听函数
+function dataListener (data) {
+  console.log('来自主应用的数据', data)
+}

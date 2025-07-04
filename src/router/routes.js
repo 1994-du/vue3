@@ -4,16 +4,16 @@ import { pa } from 'element-plus/es/locales.mjs';
 export default[
     {
         path:'/',
-        meta:{},
         redirect:'/home',
         component:()=>import('@/Home.vue'),
         children:[
             // 首页
             {
                 path:'/home',
-                name:'Home',
+                name:'首页',
                 meta:{
-                    groupName:'首页',
+                    index:0,
+                    groupName:'Home',
                 },
                 component:()=>import('@/views/HomePage.vue')
             },
@@ -21,6 +21,7 @@ export default[
                 path:'/webGl',
                 name:'WebGL',
                 meta:{
+                    index:1,
                     groupName:'WebGL',
                 },
                 component:()=>import('@/views/WebGL/index.vue')
@@ -30,6 +31,7 @@ export default[
                 path:'/echarts/bar/base',
                 name:'Echart-Bar',
                 meta:{
+                    index:2,
                     groupName:'Echarts',
                 },
                 component:()=>import('@/views/Echarts/echart-bar.vue')
@@ -38,6 +40,7 @@ export default[
                 path:'/echarts/line',
                 name:'Echart-Line',
                 meta:{
+                    index:2,
                     groupName:'Echarts',
                 },
                 component:()=>import('@/views/Echarts/echart-line.vue')
@@ -46,6 +49,7 @@ export default[
                 path:'/echarts/bar/bullet',
                 name:'Echart-Bullet',
                 meta:{
+                    index:2,
                     groupName:'Echarts',
                 },
                 component:()=>import('@/views/Echarts/echart-bullet.vue')
@@ -54,6 +58,7 @@ export default[
                 path:'/echarts/multiAxis/lineBar',
                 name:'Echart-LineBar',
                 meta:{
+                    index:2,    
                     groupName:'Echarts'
                 },
                 component:()=>import('@/views/Echarts/echart-lineBar.vue')
@@ -62,6 +67,7 @@ export default[
                 path:'/echarts/multiAxis/scatterBar',
                 name:'Echart-ScatterBar',
                 meta:{
+                    index:2,
                     groupName:'Echarts'
                 },
                 component:()=>import('@/views/Echarts/echart-scatterBars.vue')
@@ -70,6 +76,7 @@ export default[
                 path:'/echarts/bar/overShow',
                 name:'Echart-bars',
                 meta:{
+                    index:2,
                     groupName:'Echarts'
                 },
                 component:()=>import('@/views/Echarts/echart-bars.vue')
@@ -79,6 +86,7 @@ export default[
                 path:'/vue3/store',
                 name:'Vuex',
                 meta:{
+                    index:3,
                     groupName:'Vue3',
                 },
                 component:()=>import('@/views/Vue3/store.vue')
@@ -87,6 +95,7 @@ export default[
                 path:'/vue3/router/principle',
                 name:'路由原理',
                 meta:{
+                    index:3,
                     groupName:'Vue3',
                 },
                 component:()=>import('@/views/Vue3/router/routerPrinciple.vue')
@@ -95,6 +104,7 @@ export default[
                 path:'/vue3/router/use',
                 name:'VueRouter',
                 meta:{
+                    index:3,    
                     groupName:'Vue3',
                 },
                 component:()=>import('@/views/Vue3/router/router.vue')
@@ -103,6 +113,7 @@ export default[
                 path:'/vue3/router/lazyLoad',
                 name:'路由懒加载',
                 meta:{
+                    index:3,
                     groupName:'Vue3',
                 },
                 component:()=>import('@/views/Vue3/router/routerLazyLoad.vue')
@@ -111,6 +122,7 @@ export default[
                 path:'/vue3/communication/busEvent',
                 name:'$Bus',
                 meta:{
+                    index:3,
                     groupName:'Vue3',
                 },
                 component:()=>import('@/views/Vue3/busEvent.vue')
@@ -119,6 +131,7 @@ export default[
                 path:'/vue3/communication',
                 name:'组件通信',
                 meta:{
+                    index:3,
                     groupName:'Vue3',
                 },
                 component:()=>import('@/views/Vue3/ComponentCommunication.vue')
@@ -128,6 +141,7 @@ export default[
                 path:"/vue3/directive",
                 name:"自定义指令",
                 meta:{
+                    index:3,
                     groupName:'Vue3',
                 },
                 component:()=>import('@/views/Vue3/customerDirective.vue')
@@ -144,6 +158,7 @@ export default[
                 path:'/vue3/communication/props',
                 name:'使用props',
                 meta:{
+                    index:3,
                     groupName:'Vue3'
                 },
                 component:()=>import('@/views/Vue3/propsUse.vue')
@@ -152,6 +167,7 @@ export default[
                 path:'/vue3/watch',
                 name:'watch监听',
                 meta:{
+                    index:3,
                     groupName:'Vue3'
                 },
                 component:()=>import('@/views/Vue3/watch.vue')
@@ -160,15 +176,26 @@ export default[
                 path:'/vue3/communication/provideInject',
                 name:'provide/inject',
                 meta:{
+                    index:3,
                     groupName:'Vue3'
                 },
                 component:()=>import('@/views/Vue3/communication/provideInject.vue')
+            },
+            {
+                path:"/vue3/customRef",
+                name:"自定义Ref",
+                meta:{
+                    index:3,
+                    groupName:"Vue3"
+                },
+                component:()=>import('@/views/Vue3/customRef.vue')
             },
             // ElementPlus
             {
                 path:'/elementPlus/popover',
                 name:'Popover',
                 meta:{
+                    index:4,
                     groupName:'ElementPlus'
                 },
                 component:()=>import('@/views/ElementPlus/el-popover.vue')
@@ -176,6 +203,7 @@ export default[
                 path:'/elementPlus/upload',
                 name:'Upload',
                 meta:{
+                    index:4,
                     groupName:'ElementPlus'
                 },
                 component:()=>import('@/views/ElementPlus/el-upload.vue')
@@ -185,6 +213,7 @@ export default[
                 path:"/http/version",
                 name:"HTTP版本",
                 meta:{
+                    index:5,
                     groupName:"HTTP"
                 },
                 component:()=>import('@/views/Http/HttpVersion.vue')
@@ -193,6 +222,7 @@ export default[
                 path:"/http/handshake",
                 name:"HTTP握手",
                 meta:{
+                    index:5,
                     groupName:"HTTP"
                 },
                 component:()=>import('@/views/Http/httpHand.vue')
@@ -201,6 +231,7 @@ export default[
                 path:"/http/statusCode",
                 name:"请求状态码",
                 meta:{
+                    index:5,
                     groupName:"HTTP"
                 },
                 component:()=>import('@/views/Http/StateCode.vue')
@@ -210,6 +241,7 @@ export default[
                 path:'/javaScript/new',
                 name:"new",
                 meta:{
+                    index:6,
                     groupName:"JavaScript"
                 },
                 component:()=>import('@/views/Js/customNew.vue')
@@ -218,7 +250,8 @@ export default[
                 path:'/javaScript/setInterval',
                 name:'SetInterval不精确',
                 meta:{
-                    groupName:'javaScript'
+                    index:6,
+                    groupName:"JavaScript"
                 },
                 component:()=>import('@/views/Js/setInterval.vue')
             },
@@ -226,7 +259,8 @@ export default[
                 path:'/javaScript/this',
                 name:'this指向',
                 meta:{
-                    groupName:'javaScript'
+                    index:6,
+                    groupName:"JavaScript"
                 },
                 component:()=>import('@/views/Js/this.vue')
             },
@@ -234,7 +268,8 @@ export default[
                 path:'/currying',
                 name:'函数柯里化',
                 meta:{
-                    groupName:'javaScript'
+                    index:6,
+                    groupName:"JavaScript"
                 },
                 component:()=>import('@/views/Js/currying.vue')
             },
@@ -242,7 +277,8 @@ export default[
                 path:"/javaScript/copy",
                 name:"深浅拷贝",
                 meta:{
-                    groupName:'javaScript'
+                    index:6,
+                    groupName:"JavaScript"
                 },
                 component:()=>import('@/views/Js/deepCopy.vue')
             },
@@ -250,7 +286,8 @@ export default[
                 path:'/javaScript/pubSub',
                 name:'发布订阅',
                 meta:{
-                    groupName:'javaScript'
+                    index:6,
+                    groupName:"JavaScript"
                 },
                 component:()=>import('@/views/Js/PublishSubscribePattern.vue')
             },
@@ -258,7 +295,8 @@ export default[
                 path:'/javaScript/eventLoop',
                 name:'事件循环',
                 meta:{
-                    groupName:'javaScript'
+                    index:6,
+                    groupName:"JavaScript"
                 },
                 component:()=>import('@/views/Js/eventLoop.vue')
             },
@@ -266,7 +304,8 @@ export default[
                 path:"/javaScript/rtt",
                 name:"最小RTT",
                 meta:{
-                    groupName:'javaScript'
+                    index:6,
+                    groupName:"JavaScript"
                 },
                 component:()=>import('@/views/Js/xhrTime.vue')
             },
@@ -274,7 +313,8 @@ export default[
                 path:"/javaScript/debounceThrottle",
                 name:"防抖节流",
                 meta:{
-                    groupName:'javaScript'
+                    index:6,
+                    groupName:"JavaScript"
                 },
                 component:()=>import('@/views/Js/debounceThrottling.vue')
             },
@@ -282,84 +322,26 @@ export default[
                 path:"/javaScript/closure",
                 name:"闭包",
                 meta:{
-                    groupName:'javaScript'
+                    index:6,
+                    groupName:"JavaScript"
                 },
                 component:()=>import('@/views/Js/closure.vue')
             },
-            // CSS
             {
-                path:'/css/center',
-                name:'div水平垂直居中',
+                path:'/javaScript/proto',
+                name:'原型和原型链',
                 meta:{
-                    groupName:'CSS'
+                    index:6,
+                    groupName:'JavaScript'
                 },
-                component:()=>import('@/views/CSS/divCenter.vue')
-            },
-            // 动画
-            {
-                path:'/css/animation/api',
-                name:'动画-api',
-                meta:{
-                    groupName:'动画'
-                },
-                component:()=>import('@/views/CSS/Animation/index.vue')
-            },
-            {
-                path:'/css/animation/demo1',
-                name:'动画-Demo1',
-                meta:{
-                    groupName:'动画'
-                },
-                component:()=>import('@/views/CSS/Animation/Demo1.vue')
-            },
-            {
-                path:'/css/carousel',
-                name:'轮播图',
-                meta:{
-                    groupName:'CSS'
-                },
-                component:()=>import('@/views/Animation/carousel.vue')
-            },
-            // Axios
-            {
-                path:'/javaScript/axios',
-                name:'Axios',
-                meta:{
-                    groupName:'Axios'
-                },
-                component:()=>import('@/views/Axios/useAxios.vue')
-            },
-            // Npm
-            {
-                path:'/npm',
-                name:'Npm',
-                meta:{
-                    groupName:'Npm',
-                },
-                component:()=>import('@/views/npm.vue')
-            },
-            // Promise
-            {
-                path:'/javaScript/promise',
-                name:'Promise',
-                meta:{
-                    groupName:'Promise'
-                },
-                component:()=>import('@/views/Promise/promise.vue')
-            },
-            {
-                path:"/http/cache",
-                name:"浏览器缓存",
-                meta:{
-                    groupName:"浏览器缓存"
-                },
-                component:()=>import('@/views/Http/cacheDetail.vue')
+                component:()=>import('@/views/Js/prototype.vue')
             },
             {
                 path:"/javaScript/doubleBind",
                 name:"双向绑定原理",
                 meta:{
-                    groupName:"双向绑定原理"
+                    index:6,
+                    groupName:"JavaScript"
                 },
                 component:()=>import('@/views/twoWayBinding.vue')
             },
@@ -367,55 +349,190 @@ export default[
                 path:"/javaScript/type",
                 name:"数据类型判断",
                 meta:{
-                    groupName:"数据类型判断"
+                    index:6,
+                    groupName:"JavaScript"
                 },
                 component:()=>import('@/views/Js/dataTypeJudge.vue')
             },
-            
+            {
+                path:"/javaScript/virtualList",
+                name:"虚拟列表",
+                meta:{
+                    index:6,
+                    groupName:"JavaScript"
+                },
+                component:()=>import('@/views/Js/virtualList.vue')
+            },
+            {
+                path:"/javaScript/async",
+                name:"async和await",
+                meta:{
+                    index:6,
+                    groupName:"JavaScript"
+                },
+                component:()=>import('@/views/Js/asyncAwait.vue')
+            },
+            {
+                path:"/javaScript/generator",
+                name:"generstor",
+                meta:{
+                    index:6,
+                    groupName:"JavaScript"
+                },
+                component:()=>import('@/views/Js/Generator.vue')
+            },
+            {
+                path:'/javaScript/promise',
+                name:'Promise',
+                meta:{
+                    index:6,
+                    groupName:'JavaScript'
+                },
+                component:()=>import('@/views/Promise/promise.vue')
+            },
+            {
+                path:'/javaScript/axios',
+                name:'Axios',
+                meta:{
+                    index:6,
+                    groupName:'JavaScript'
+                },
+                component:()=>import('@/views/Axios/useAxios.vue')
+            },
+            {
+                path:'/javaScript/arrayFilter',
+                name:'数组去重',
+                meta:{
+                    index:6,
+                    groupName:"JavaScript"
+                },
+                component:()=>import('@/views/Js/arrayFilter.vue')
+            },
+            {
+                path:'/javaScript/isEmptyObject',
+                name:'判断对象是否为空',
+                meta:{
+                    index:6,
+                    groupName:"JavaScript"
+                },
+                component:()=>import('@/views/Js/isEmptyObject.vue')
+            },
+            {
+                path:'/javaScript/arrayToTree',
+                name:'数组转树',
+                meta:{
+                    index:6,
+                    groupName:"JavaScript"
+                },
+                component:()=>import('@/views/Js/arrayToTree.vue')
+            },
+            // CSS
+            {
+                path:'/css/center',
+                name:'div水平垂直居中',
+                meta:{
+                    index:7,
+                    groupName:'CSS'
+                },
+                component:()=>import('@/views/CSS/divCenter.vue')
+            },
+            {
+                path:'/css/animation/api',
+                name:'动画-api',
+                meta:{
+                    index:7,
+                    groupName:'CSS'
+                },
+                component:()=>import('@/views/CSS/Animation/index.vue')
+            },
+            {
+                path:'/css/animation/demo1',
+                name:'动画-Demo1',
+                meta:{
+                    index:7,
+                    groupName:'CSS'
+                },
+                component:()=>import('@/views/CSS/Animation/Demo1.vue')
+            },
+            {
+                path:'/css/carousel',
+                name:'轮播图',
+                meta:{
+                    index:7,
+                    groupName:'CSS'
+                },
+                component:()=>import('@/views/CSS/carousel.vue')
+            },
             {
                 path:'/css/display',
                 name:'display、visibility、opacity的区别',
                 meta:{
-                    groupName:'display、visibility、opacity的区别'
+                    index:7,
+                    groupName:'CSS'
                 },
-                component:()=>import('@/views/elementShow.vue')
+                component:()=>import('@/views/CSS/elementShow.vue')
             },
             {
                 path:'/css/tree',
                 name:'dom树、css树、render树的区别',
                 meta:{
-                    groupName:'dom树、css树、render树的区别'
+                    index:7,
+                    groupName:'CSS'
                 },
-                component:()=>import('@/views/domCssRender.vue')
+                component:()=>import('@/views/CSS/domCssRender.vue')
             },
+            // Npm
             {
-                path:'/javaScript/proto',
-                name:'原型和原型链',
+                path:'/npm',
+                name:'Npm',
                 meta:{
-                    groupName:'原型和原型链'
+                    index:8,
+                    groupName:'Npm',
                 },
-                component:()=>import('@/views/Js/prototype.vue')
+                component:()=>import('@/views/npm.vue')
+            },
+            
+            {
+                path:"/http/cache",
+                name:"浏览器缓存",
+                meta:{
+                    index:9,
+                    groupName:"浏览器缓存"
+                },
+                component:()=>import('@/views/Http/cacheDetail.vue')
             },
             {
                 path:'/nvm',
                 name:'nvm的使用',
                 meta:{
+                    index:10,
                     groupName:'nvm的使用'
                 },
                 component:()=>import('@/views/nvmUse.vue')
             },
             {
-                path:'/upload',
+                path:'/upload/fileUpload',
                 name:'文件上传',
                 meta:{
-                    groupName:'文件上传'
+                    index:11,
+                    groupName:'Upload'
                 },
                 component:()=>import('@/views/Upload/fileUpload.vue')
+            },
+            {
+                path:'/upload/dominant',
+                name:'图片主导色',
+                meta:{
+                    index:11,
+                    groupName:'Upload'
+                },
+                component:()=>import('@/views/Upload/dominant.vue')
             },
             {
                 path:'/websocket',
                 name:'即时通讯',
                 meta:{
+                    index:12,
                     groupName:'即时通讯'
                 },
                 component:()=>import('@/views/websocket.vue')
@@ -424,6 +541,7 @@ export default[
                 path:'/mysql',
                 name:'Mysql',
                 meta:{
+                    index:13,
                     groupName:'数据库'
                 },
                 component:()=>import('@/views/mysql.vue')
@@ -432,39 +550,18 @@ export default[
                 path:'/git',
                 name:'Git命令',
                 meta:{
+                    index:14,
                     groupName:'Git'
                 },
                 component:()=>import('@/views/Git/index.vue')
             },
-            {
-                path:'/javaScript/arrayFilter',
-                name:'数组去重',
-                meta:{
-                    groupName:'javaScript'
-                },
-                component:()=>import('@/views/Js/arrayFilter.vue')
-            },
-            {
-                path:'/javaScript/isEmptyObject',
-                name:'判断对象是否为空',
-                meta:{
-                    groupName:'javaScript'
-                },
-                component:()=>import('@/views/Js/isEmptyObject.vue')
-            },
-            {
-                path:'/javaScript/arrayToTree',
-                name:'数组转树',
-                meta:{
-                    groupName:'javaScript'
-                },
-                component:()=>import('@/views/Js/arrayToTree.vue')
-            },
+            
             // IndexedDB
             {
                 path:'/indexedDB/base',
                 name:'基础使用',
                 meta:{
+                    index:15,
                     groupName:'indexedDB'
                 },
                 component:()=>import('@/views/IndexedDB/base.vue')
@@ -473,6 +570,7 @@ export default[
                 path:'/indexedDB/transaction',
                 name:'事务',
                 meta:{
+                    index:15,
                     groupName:'indexedDB'
                 },
                 component:()=>import('@/views/IndexedDB/transaction.vue')
@@ -482,6 +580,7 @@ export default[
                 path:'/canvas/snowflake',
                 name:'canvas',
                 meta:{
+                    index:16,
                     groupName:'Canvas'
                 },
                 component:()=>import('@/views/Canvas/snowflake.vue')
@@ -490,6 +589,7 @@ export default[
                 path:'/canvas/audioVisualization',
                 name:'音频可视化',
                 meta:{
+                    index:16,
                     groupName:'Canvas'
                 },
                 component:()=>import('@/views/Canvas/Audiovisualization.vue')
@@ -498,50 +598,21 @@ export default[
                 path:'/network/tcp',
                 name:'tcp',
                 meta:{
+                    index:17,
                     groupName:'Network'
                 },
                 component:()=>import('@/views/Network/TCP.vue')
             },
             {
-                path:"/javaScript/async",
-                name:"async和await",
-                meta:{
-                    groupName:"JavaScript"
-                },
-                component:()=>import('@/views/Js/asyncAwait.vue')
-            },
-            {
-                path:"/javaScript/generator",
-                name:"generstor",
-                meta:{
-                    groupName:"JavaScript"
-                },
-                component:()=>import('@/views/Js/Generator.vue')
-            },
-            {
                 path:"/browser/principle",
                 name:"浏览器渲染原理",
                 meta:{
+                    index:18,
                     groupName:"浏览器"
                 },
                 component:()=>import('@/views/Browser/Principle.vue')
             },
-            {
-                path:"/javaScript/virtualList",
-                name:"虚拟列表",
-                meta:{
-                    groupName:"JavaScript"
-                },
-                component:()=>import('@/views/Js/virtualList.vue')
-            },
-            {
-                path:"/vue3/customRef",
-                name:"自定义Ref",
-                meta:{
-                    groupName:"Vue3"
-                },
-                component:()=>import('@/views/Vue3/customRef.vue')
-            }
+            
         ]
     },
     {

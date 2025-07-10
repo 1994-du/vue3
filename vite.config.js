@@ -21,7 +21,7 @@ export default defineConfig(({mode,command}) => {
           '/api': {
               target: env.VITE_PROXY,// node服务
               changeOrigin: true,
-              rewrite: (path) => path.replace(/^\/api/, '') // 不可以省略rewrite
+              rewrite: (path) => path.replace(/^\/api/, '/api') // 不可以省略rewrite
           }
       }
     },

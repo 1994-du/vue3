@@ -265,9 +265,9 @@ const handleAvatarUploadError = (err, file, fileList) => {
 const customUpload = (param) => {
     const formData = new FormData();
     formData.append('file', param.file); // 将文件添加到 FormData 中
-
+    formData.append('userId', localStorage.getItem('userid')); // 添加用户ID或其他必要参数
     // 这里可以根据实际情况修改上传地址
-    const uploadUrl = '/api/commonUpload';
+    const uploadUrl = '/api/updateAvatar';
 
     axios.post(uploadUrl, formData, {
         headers: {

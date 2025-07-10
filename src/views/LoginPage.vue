@@ -43,13 +43,16 @@ const handleLogin= function(){
         console.log('登录',res);
         
         if(res.status==200){
-            IndexDB.addMenu(loginObj.username,res).then(res=>{
-                console.log('添加菜单成功',res)
-                router.replace('/')
-            }).catch(err=>{
-                console.error('添加菜单失败',err)
-            })
             localStorage.setItem('username',loginObj.username)
+            localStorage.setItem('userid',res.userId)
+            router.replace('/')
+            // IndexDB.addMenu(loginObj.username,res).then(res=>{
+            //     console.log('添加菜单成功',res)
+            //     router.replace('/')
+            // }).catch(err=>{
+            //     console.error('添加菜单失败',err)
+            // })
+            // localStorage.setItem('username',loginObj.username)
         }
     })
 }

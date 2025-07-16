@@ -437,6 +437,15 @@ export default[
                 component:()=>import('@/views/CSS/divCenter.vue')
             },
             {
+                path:'/css/clip-path',
+                name:'clip-path',
+                meta:{
+                    index:7,
+                    groupName:'CSS'
+                },
+                component:()=>import('@/views/CSS/clip-path.vue')
+            },
+            {
                 path:'/css/animation/api',
                 name:'动画-api',
                 meta:{

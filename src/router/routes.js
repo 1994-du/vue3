@@ -604,6 +604,15 @@ export default[
                 component:()=>import('@/views/Canvas/Audiovisualization.vue')
             },
             {
+                path:'/canvas/themeImg',
+                name:'主题图片',
+                meta:{
+                    index:16,
+                    groupName:'Canvas'
+                },
+                component:()=>import('@/views/Canvas/theme-img.vue')
+            },
+            {
                 path:'/network/tcp',
                 name:'tcp',
                 meta:{

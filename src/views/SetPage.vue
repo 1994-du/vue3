@@ -1,13 +1,15 @@
 <template>
   <div class="set_page">
-    <h4 @click="router.back()">设置</h4>
-    <el-tabs
-      v-model="activeName"
-      @tab-change="tabChange">
-      <el-tab-pane label="用户设置" name="userManagement"></el-tab-pane>
-      <el-tab-pane label="角色设置" name="roleManagement"></el-tab-pane>
-    </el-tabs>
-    <router-view></router-view>
+    <div class="set_menu">
+        <el-menu  default-active="userManagement" @select="handleSelect">
+            <el-menu-item index="userManagement">用户设置</el-menu-item>
+            <el-menu-item index="roleManagement">角色设置</el-menu-item>
+        </el-menu>
+    </div>
+    <div class="set_content">
+        <router-view></router-view>
+    </div>
+    <!-- <h4 @click="router.back()">设置</h4> -->
   </div>
 </template>
 <script setup>
@@ -16,7 +18,9 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 // tab切换
 const activeName = ref('userManagement');
-const tabChange = (tab) => {
+// 菜单选择
+const handleSelect = (tab) => {
+    activeName.value = tab;
     router.replace('/set/'+tab)
 }
 </script>

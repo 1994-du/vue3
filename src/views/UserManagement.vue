@@ -7,7 +7,7 @@
             <el-table-column label="用户名" prop="username"></el-table-column>
             <el-table-column label="头像" prop="avatar">
                 <template #default="{row}">
-                    <img :src="row.avatar" alt="" class="avatar"></img>
+                    <img :src="`${baseUrl}${row.avatar}`" alt="" class="avatar"></img>
                 </template>
             </el-table-column>
             <el-table-column label="角色" prop="roleName"></el-table-column>
@@ -56,7 +56,7 @@
                         :before-upload="beforeAvatarUpload"
                         :http-request="customUpload"
                     >
-                        <img class="edit_img" :src="editUserObj.avatar" alt="">
+                        <img class="edit_img" :src="`${baseUrl}${editUserObj.avatar}`" alt="">
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="角色">
@@ -121,12 +121,14 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import axios from 'axios'
-import { getUsers,getRolesDict,updateUser,addUser, delUser } from '@/api/api'
+import { getUsers,getRolesDict,updateUser,addUser, delUser,updateAvatar } from '@/api/api'
 import { ElMessage } from 'element-plus'
 let tableData = ref([])
 let editUserVisible = ref(false)
 let editUserObj = ref({})
 let roleList = ref([])
+
+let baseUrl = import.meta.env.VITE_PROXY.slice(0,-1)
 const getUsersList = ()=>{
     getUsers({
         page: currentPage.value,
@@ -239,19 +241,22 @@ const beforeAvatarUpload = (file) => {
 
 // 上传成功回调
 const handleAvatarUploadSuccess = (response, file, fileList) => {
+    console.log('response',response);
+    
     if (response.status === 200) {
         // 更新编辑用户对象中的头像地址
-        editUserObj.value.avatar = response.filePath;
-        ElMessage.success('头像上传成功');
+        editUserObj.value.avatar = response.avatarUrl;
+        // ElMessage.success('头像上传成功1');
     } else {
         ElMessage.error('头像上传失败');
     }
 }
 const handleAvatarUploadSuccessCreate = (response, file, fileList) => {
+
     if (response.status === 200) {
         // 更新编辑用户对象中的头像地址
-        createUserObj.value.avatar = response.filePath;
-        ElMessage.success('头像上传成功');
+        createUserObj.value.avatar = response.avatarUrl;
+        // ElMessage.success('头像上传成功2');
     } else {
         ElMessage.error('头像上传失败');
     }
@@ -265,17 +270,8 @@ const handleAvatarUploadError = (err, file, fileList) => {
 const customUpload = (param) => {
     const formData = new FormData();
     formData.append('file', param.file); // 将文件添加到 FormData 中
-    formData.append('userId', localStorage.getItem('userid')); // 添加用户ID或其他必要参数
-    // 这里可以根据实际情况修改上传地址
-    const uploadUrl = '/api/updateAvatar';
-
-    axios.post(uploadUrl, formData, {
-        headers: {
-            'Content-Type': 'multipart/form-data'
-        }
-    })
-    .then(response => {
-        param.onSuccess(response.data); // 调用成功回调
+    updateAvatar(formData).then(response => {
+        param.onSuccess(response); // 调用成功回调
     })
     .catch(error => {
         param.onError(error); // 调用失败回调

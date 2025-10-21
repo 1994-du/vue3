@@ -210,11 +210,29 @@ export default[
             },
             // Http
             {
+                path:'/http/networkModel',
+                name:'网络模型',
+                meta:{
+                    index:5,
+                    groupName:"网络"
+                },
+                component:()=>import('@/views/Http/NetworkModel.vue')
+            },
+            {
+                path:'/http/protocol',
+                name:'网络协议',
+                meta:{
+                    index:5,
+                    groupName:"网络"
+                },
+                component:()=>import('@/views/Http/Protocol.vue')
+            },
+            {
                 path:"/http/version",
                 name:"HTTP版本",
                 meta:{
                     index:5,
-                    groupName:"HTTP"
+                    groupName:"网络"
                 },
                 component:()=>import('@/views/Http/HttpVersion.vue')
             },
@@ -223,7 +241,7 @@ export default[
                 name:"HTTP握手",
                 meta:{
                     index:5,
-                    groupName:"HTTP"
+                    groupName:"网络"
                 },
                 component:()=>import('@/views/Http/httpHand.vue')
             },
@@ -232,7 +250,7 @@ export default[
                 name:"请求状态码",
                 meta:{
                     index:5,
-                    groupName:"HTTP"
+                    groupName:"网络"
                 },
                 component:()=>import('@/views/Http/StateCode.vue')
             },
@@ -613,19 +631,10 @@ export default[
                 component:()=>import('@/views/Canvas/theme-img.vue')
             },
             {
-                path:'/network/tcp',
-                name:'tcp',
-                meta:{
-                    index:17,
-                    groupName:'Network'
-                },
-                component:()=>import('@/views/Network/TCP.vue')
-            },
-            {
                 path:"/browser/principle",
                 name:"浏览器渲染原理",
                 meta:{
-                    index:18,
+                    index:17,
                     groupName:"浏览器"
                 },
                 component:()=>import('@/views/Browser/Principle.vue')

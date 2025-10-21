@@ -12,8 +12,9 @@ if(process.env.NODE_ENV=='development'){
 export function toLogin(data){
     return new Promise((resolve,reject)=>{
         Axios({
-            url:`${baseUrl}/login`,
+            url:`${baseUrl}/auth/login`,
             method:'post',
+            needAuth: false, // 登录接口不需要鉴权
             data
         }).then(res=>{
             resolve(res)
@@ -30,8 +31,9 @@ export function toLogin(data){
 export function toRegistry(data){
     return new Promise((resolve,reject)=>{
         Axios({
-            url:`${baseUrl}/register`,
+            url:`${baseUrl}/auth/register`,
             method:'post',
+            needAuth: false, // 注册接口不需要鉴权
             data
         }).then(res=>{
             resolve(res)
@@ -40,16 +42,16 @@ export function toRegistry(data){
         })
     })
 }
-
 /**
- * @description 获取历史头像
+ * @description 重置密码
  * @data 
 */
-export function toQueryHistoryAvatar(data){
+export function toResetPassword(data){
     return new Promise((resolve,reject)=>{
         Axios({
-            url:`${baseUrl}/historyAvatar`,
+            url:`${baseUrl}/auth/reset-password`,
             method:'post',
+            needAuth: true, // 重置密码接口需要鉴权
             data
         }).then(res=>{
             resolve(res)
@@ -68,8 +70,8 @@ export function toUpload(data){
         Axios({
             url:`${baseUrl}/toupload`,
             method:'post',
-            data,
-            
+            needAuth: true, // 上传头像需要鉴权
+            data
         }).then(res=>{
             resolve(res)
         }).catch(err=>{
@@ -84,8 +86,9 @@ export function toUpload(data){
 export function getUsers(data){
     return new Promise((resolve,reject)=>{
         Axios({
-            url:`${baseUrl}/getUsers`,
+            url:`${baseUrl}/users/all`,
             method:'post',
+            needAuth: true, // 需要鉴权
             data
         }).then(res=>{
             resolve(res)
@@ -103,6 +106,7 @@ export function updateUser(data){
         Axios({
             url:`${baseUrl}/setUser`,
             method:'post',
+            needAuth: true, // 需要鉴权
             data
         }).then(res=>{
             resolve(res)
@@ -119,6 +123,7 @@ export function addUser(data){
         Axios({
             url:`${baseUrl}/addUser`,
             method:'post',
+            needAuth: true, // 需要鉴权
             data
         }).then(res=>{
             resolve(res)
@@ -136,6 +141,7 @@ export function delUser(data){
         Axios({
             url:`${baseUrl}/deleteUser`,
             method:'post',
+            needAuth: true, // 需要鉴权
             data
         }).then(res=>{
             resolve(res)
@@ -153,6 +159,7 @@ export function getRoles(data){
         Axios({
             url:`${baseUrl}/getRoles`,
             method:'post',
+            needAuth: true, // 需要鉴权
             data
         }).then(res=>{
             resolve(res)
@@ -170,6 +177,7 @@ export function getRolesDict(data){
         Axios({
             url:`${baseUrl}/getRoleDict`,
             method:'get',
+            needAuth: true, // 需要鉴权
             data
         }).then(res=>{
             resolve(res)
@@ -187,6 +195,7 @@ export function setRoles(data){
         Axios({
             url:`${baseUrl}/setRoles`,
             method:'post',
+            needAuth: true, // 需要鉴权
             data
         }).then(res=>{
             resolve(res)
@@ -226,6 +235,27 @@ export function fragmentDownload(data){
             method:'post',
             data
         },{
+            headers:{
+                'Content-Type':'multipart/form-data'
+            }
+        }).then(res=>{
+            resolve(res)
+        }).catch(err=>{
+            reject(err)
+        })
+    })
+}
+/**
+ * @description 更新用户头像
+ * @data
+ */
+export function updateAvatar(data){
+    return new Promise((resolve,reject)=>{
+        Axios({
+            url:`${baseUrl}/users/updateAvatar`,
+            method:'post',
+            needAuth: true, // 需要鉴权
+            data,
             headers:{
                 'Content-Type':'multipart/form-data'
             }

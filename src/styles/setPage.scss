@@ -1,5 +1,7 @@
 .set_page{
-    padding: 10px 20px;
+    // padding: 10px 20px;
+    height: 100%;
+    display: flex;
     :deep(.el-tabs){
         .el-tabs__header{
             margin: 0;
@@ -22,5 +24,12 @@
             }
         }
         .el-tabs__content{}
+    }
+    .set_menu{
+        width: 200px;
+    }
+    .set_content{
+        flex: 1;
+        padding: 15px;
     }
 }

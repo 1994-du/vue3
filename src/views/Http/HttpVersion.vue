@@ -42,6 +42,9 @@
             </tr> 
         </tbody>
     </table>
+    <h2>短链接、长链接</h2>
+    <p><strong>短链接</strong>:每次请求都创建一个新的tcp连接，请求完毕后立即关闭tcp连接</p>
+    <p><strong>长链接</strong>:一次tcp连接可以发送多个请求，每个域名浏览器最多同时开6个TCP连接</p>
 </template>
 
 <script setup>
@@ -56,6 +59,7 @@ table{
     border: 1px solid #aaa;
     margin: 0;
     padding: 0;
+    margin-bottom: 0.5em;
     thead{
         tr{
             background: black;

@@ -24,10 +24,11 @@
 import axios from 'axios'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex';
-import { reactive, onMounted} from 'vue'
+import { reactive } from 'vue'
 import IndexDB from '@/utils/indexedDB';
 import { toLogin,toRegistry } from '@/api/api'
 import { ElMessageBox } from 'element-plus';
+import { setupTokenExpiryCheck } from '@/utils/tokenManager';
 let loginObj=reactive({
     username:"",
     password:""
@@ -74,6 +75,10 @@ const handleLogin= function(){
             
             localStorage.setItem('username',loginObj.username)
             localStorage.setItem('userid',res.userId)
+            
+            // 登录成功后启动token过期监听
+            setupTokenExpiryCheck();
+            
             router.replace('/')
         }
     })
@@ -83,6 +88,8 @@ const handleRegistry = function(){
         console.log('注册',res)
     })
 }
+
+
 
 </script>
 <style lang="scss" scoped>

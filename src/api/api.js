@@ -42,24 +42,6 @@ export function toRegistry(data){
         })
     })
 }
-/**
- * @description 重置密码
- * @data 
-*/
-export function toResetPassword(data){
-    return new Promise((resolve,reject)=>{
-        Axios({
-            url:`${baseUrl}/auth/reset-password`,
-            method:'post',
-            needAuth: true, // 重置密码接口需要鉴权
-            data
-        }).then(res=>{
-            resolve(res)
-        }).catch(err=>{
-            reject(err)
-        })
-    })
-}
 
 /**
  * @description 上传头像
@@ -104,7 +86,7 @@ export function getUsers(data){
 export function updateUser(data){
     return new Promise((resolve,reject)=>{
         Axios({
-            url:`${baseUrl}/setUser`,
+            url:`${baseUrl}/users/setUser`,
             method:'post',
             needAuth: true, // 需要鉴权
             data
@@ -117,11 +99,15 @@ export function updateUser(data){
 }
 /**
  * @description 新建用户
+ * @param {Object} data - 用户数据
+ * @param {string} data.username - 用户名
+ * @param {string} data.avatar - 头像
+ * @param {number} data.roleId - 角色id
 */
 export function addUser(data){
     return new Promise((resolve,reject)=>{
         Axios({
-            url:`${baseUrl}/addUser`,
+            url:`${baseUrl}/users/addUser`,
             method:'post',
             needAuth: true, // 需要鉴权
             data
@@ -133,13 +119,32 @@ export function addUser(data){
     })
 }
 /**
+ * @description 重置用户密码
+ * @param {number} userId - 用户id
+*/
+export function toResetPassword(data){
+    return new Promise((resolve,reject)=>{
+        Axios({
+            url:`${baseUrl}/users/resetPassword`,
+            method:'post',
+            needAuth:true,
+            data
+        }).then(res=>{
+            resolve(res)
+        }).catch(err=>{
+            reject(err)
+        })
+    })
+}
+
+/**
  * @description 删除用户
  * @data
 */
 export function delUser(data){
     return new Promise((resolve,reject)=>{
         Axios({
-            url:`${baseUrl}/deleteUser`,
+            url:`${baseUrl}/users/deleteUser`,
             method:'post',
             needAuth: true, // 需要鉴权
             data
@@ -193,7 +198,7 @@ export function getRolesDict(data){
 export function setRoles(data){
     return new Promise((resolve,reject)=>{
         Axios({
-            url:`${baseUrl}/setRoles`,
+            url:`${baseUrl}/users/setRoles`,
             method:'post',
             needAuth: true, // 需要鉴权
             data

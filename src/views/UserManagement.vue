@@ -3,7 +3,7 @@
         <header>
             <el-button type="primary" @click="createUser">新建用户</el-button>
         </header>
-        <el-table style="width: 100%;" :data="tableData" border>
+        <el-table style="width: 100%;height: 500px;" :data="tableData" border>
             <el-table-column label="用户名" prop="username"></el-table-column>
             <el-table-column label="头像" prop="avatar">
                 <template #default="{row}">
@@ -16,9 +16,16 @@
                     <el-button link type="primary" @click="editUser(row)">编辑</el-button>
                     <el-popconfirm 
                         title="确定删除此用户?"
-                        @confirm="deleteUser(row.userId)">
+                        @confirm="deleteUser(row.id)">
                         <template #reference>
                             <el-button link type="primary">删除</el-button>
+                        </template>
+                    </el-popconfirm>
+                    <el-popconfirm 
+                        title="确定重置此用户的密码?"
+                        @confirm="resetPassword(row.id)">
+                        <template #reference>
+                            <el-button link type="primary">密码重置</el-button>
                         </template>
                     </el-popconfirm>
                 </template>
@@ -60,12 +67,12 @@
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="角色">
-                    <el-select v-model="editUserObj.roleId" placeholder="请选择" @change="changeRole">
+                    <el-select v-model="editUserObj.roleId" placeholder="请选择">
                         <el-option
                             v-for="item in roleList"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value">
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -95,16 +102,16 @@
                     :before-upload="beforeAvatarUpload"
                     :http-request="customUpload"
                 >
-                    <img class="edit_img" :src="createUserObj.avatar" alt="">
+                    <img class="edit_img" :src="`${baseUrl}${createUserObj.avatar}`" alt="">
                 </el-upload>
             </el-form-item>
             <el-form-item label="角色">
-                <el-select v-model="createUserObj.roleId" placeholder="请选择" @change="changeRole">
+                <el-select v-model="createUserObj.roleId" placeholder="请选择">
                     <el-option
                         v-for="item in roleList"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.id">
                     </el-option>
                 </el-select>
             </el-form-item>
@@ -121,7 +128,7 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import axios from 'axios'
-import { getUsers,getRolesDict,updateUser,addUser, delUser,updateAvatar } from '@/api/api'
+import { getUsers,getRolesDict,updateUser,addUser, delUser,updateAvatar,toResetPassword } from '@/api/api'
 import { ElMessage } from 'element-plus'
 let tableData = ref([])
 let editUserVisible = ref(false)
@@ -158,8 +165,6 @@ const createUser = ()=>{
     createUserVisible.value = true
 }
 const handleCreateUser = ()=>{
-    console.log('createUserObj',createUserObj.value);
-    console.log('handleCreateUser');
     addUser(createUserObj.value).then(res=>{
         if(res.status === 200){
             createUserVisible.value = false
@@ -172,12 +177,26 @@ const editUser = (row)=>{
     editUserObj.value = Object.assign({},row)
     editUserVisible.value = true
 }
-const changeRole = (val)=>{
-    console.log('changeRole',val);
-    let res = roleList.value.filter(item=>item.value === val)[0]
-    editUserObj.value.roleName = res.label
-    
+/**
+ * @description: 重置用户密码
+ * @param {*} userId
+ * @return {*}
+ */
+const resetPassword = (userId)=>{
+    toResetPassword({
+        id: userId
+    }).then(res=>{
+        if(res.status === 200){
+            ElMessage.success('密码重置成功');
+            // 刷新用户列表
+            getUsersList();
+        } else {
+            ElMessage.error('密码重置失败');
+        }
+    })
 }
+
+
 /**
  * 编辑用户
  */
@@ -196,7 +215,7 @@ const handleEditUser = ()=>{
  */
 const deleteUser = (userId)=>{
     delUser({
-        userId: userId
+        id: userId
     }).then(res=>{
         if(res.status === 200){
             getUsersList()

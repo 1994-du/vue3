@@ -5,6 +5,7 @@ if(process.env.NODE_ENV=='development'){
 }else{
     baseUrl='http://192.168.31.65:1234'
 }
+import './upload'
 /**
  * @description 登录
  * @data 
@@ -89,6 +90,7 @@ export function updateUser(data){
             url:`${baseUrl}/users/setUser`,
             method:'post',
             needAuth: true, // 需要鉴权
+            operationType: 'edit', // 添加操作类型标识
             data
         }).then(res=>{
             resolve(res)
@@ -110,6 +112,7 @@ export function addUser(data){
             url:`${baseUrl}/users/addUser`,
             method:'post',
             needAuth: true, // 需要鉴权
+            operationType: 'create', // 添加操作类型标识
             data
         }).then(res=>{
             resolve(res)
@@ -128,6 +131,7 @@ export function toResetPassword(data){
             url:`${baseUrl}/users/resetPassword`,
             method:'post',
             needAuth:true,
+            operationType: 'resetPassword', // 添加操作类型标识
             data
         }).then(res=>{
             resolve(res)
@@ -147,6 +151,7 @@ export function delUser(data){
             url:`${baseUrl}/users/deleteUser`,
             method:'post',
             needAuth: true, // 需要鉴权
+            operationType: 'delete', // 添加操作类型标识
             data
         }).then(res=>{
             resolve(res)
@@ -252,7 +257,7 @@ export function fragmentDownload(data){
 }
 /**
  * @description 更新用户头像
- * @data
+ * @data {FormData} data - 包含头像文件的FormData对象
  */
 export function updateAvatar(data){
     return new Promise((resolve,reject)=>{
@@ -264,6 +269,28 @@ export function updateAvatar(data){
             headers:{
                 'Content-Type':'multipart/form-data'
             }
+        }).then(res=>{
+            resolve(res)
+        }).catch(err=>{
+            reject(err)
+        })
+    })
+}
+
+/**
+ * @description 上传文件
+ * @param {FormData} data - 包含文件的FormData对象
+*/
+export function uploadFile(data){
+    return new Promise((resolve,reject)=>{
+        Axios({
+            url:`${baseUrl}/file/upload`,
+            method:'post',
+            needAuth: true, // 需要鉴权
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            },
+            data
         }).then(res=>{
             resolve(res)
         }).catch(err=>{

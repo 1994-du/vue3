@@ -6,12 +6,16 @@
         <!-- 显示时间 -->
         <div class="message_box_item_time">{{ item.time }}</div>
         <div class="message_box_item_content">
-          <div v-if="item.username === username" class="message_box_item_username">{{ item.username.split('')[0].toUpperCase() }}</div>
-          <div v-else class="message_box_item_username_other">{{ item.username.split('')[0].toUpperCase() }}</div>
+          <div v-if="item.username === username" class="message_box_item_username">
+            <img :src="`${baseUrl}${item.avatar}`" alt="">
+          </div>
+          <div v-else class="message_box_item_username_other">
+            <img :src="`${baseUrl}${item.avatar}`" alt="">
+          </div>
           <div class="message_box_item_message">
             <!-- 显示图片 -->
-            <img v-if="item.isImage" :src="item.message" alt="图片" @click="openImagePreview(item.message)">
-            <div v-else class="message_rows">{{ item.message }}</div>
+            <img v-if="item.isImage" :src="`${baseUrl}${item.image}`" alt="图片" @click="openImagePreview(item.message)">
+            <div v-else class="message_rows" :class="item.username === username ? 'me' : 'other'">{{ item.message }}</div>
           </div>
         </div>
       </div>
@@ -34,6 +38,7 @@
 <script setup>
 import { ElMessage } from 'element-plus';
 import { nextTick, onMounted, onUnmounted, ref } from 'vue';
+import { uploadFile } from '../api/api';
 let username = localStorage.getItem('username');
 let message_box = ref(null);
 const message = ref('');
@@ -41,6 +46,8 @@ let messageList = ref([]);
 let socket = null;
 const isImagePreviewVisible = ref(false);
 const previewImageSrc = ref('');
+
+let baseUrl = import.meta.env.VITE_PROXY.slice(0,-1)
 
 // 获取当前时间，包含年月日时分秒
 const getCurrentTime = () => {
@@ -63,6 +70,7 @@ const connectServer = () => {
       type: 'username',
       payload: {
         username: username,
+        userId: localStorage.getItem('userid'),
         time: getCurrentTime() // 添加时间属性
       }
     };
@@ -71,17 +79,19 @@ const connectServer = () => {
   socket.onmessage = (event) => {
     const data = JSON.parse(event.data);
     console.log('收到服务器消息：', data);
-    if (data.type === 'tip') {
+    if (data.type === 'userJoined') {
       ElMessage({
-        message: data.payload,
+        message: data.payload.message,
         type: 'info'
       });
-    } else {
+    } else if(data.type === 'chat'){
       let newMessage;
-      if (data.payload.isImage) {
+      if (data.payload.isImage&&(data.payload.isImage === true||data.payload.isImage === 'true')) {
         // 若为图片消息，直接使用完整的 payload
         newMessage = {
+          avatar: data.payload.avatar,
           username: data.payload.username,
+          image: data.payload.image,
           message: data.payload.image,
           isImage: true,
           time: data.payload.time // 从 payload 中获取时间属性
@@ -89,6 +99,7 @@ const connectServer = () => {
       } else {
         // 若为普通文本消息，按原逻辑处理
         newMessage = {
+          avatar: data.payload.avatar,
           username: data.payload.username,
           message: data.payload.message,
           isImage: false,
@@ -97,20 +108,25 @@ const connectServer = () => {
       }
       messageList.value.push(newMessage);
       nextTick(() => {
+        console.log(message_box.value.scrollHeight);
+        console.log(message_box.value.scrollTop);
+        
         message_box.value.scrollTop = message_box.value.scrollHeight;
       });
     }
   };
-  socket.onclose = () => {
-    console.log('WebSocket连接已关闭');
+  socket.onclose = (event) => {
+    console.log('WebSocket连接已关闭', event);
   };
 };
 
 const sendMessage = () => {
-  if (socket && socket.readyState === WebSocket.OPEN) {
+  if (socket && socket.readyState === WebSocket.OPEN&&message.value) {
     const chatMessage = {
       type: 'chat',
       payload: {
+        isImage: false,
+        userId: localStorage.getItem('userid'),
         username: username,
         message: message.value,
         time: getCurrentTime() // 添加时间属性
@@ -131,30 +147,47 @@ const openFileSelector = () => {
 };
 
 // 发送图片
-const sendImage = (event) => {
+const sendImage = async (event) => {
   const file = event.target.files[0];
   if (file) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const imageData = e.target.result;
-      if (socket && socket.readyState === WebSocket.OPEN) {
-        const imageMessage = {
-          type: 'chat',
-          payload: {
-            isImage: true,
-            username: username,
-            image: imageData,
-            time: getCurrentTime() // 添加时间属性
-          }
-        };
-        socket.send(JSON.stringify(imageMessage));
-        console.log('发送图片');
+    try {
+      // 创建FormData对象上传图片
+      const formData = new FormData();
+      formData.append('file', file);
+      const response = await uploadFile(formData);
+      
+      // 检查上传是否成功
+      if (response.status === 'success') {
+        // 获取返回的图片地址
+        // 假设接口返回的数据格式是 { data: { url: '图片地址' } } 或直接返回图片地址
+        const imageUrl = response.fileUrl;
+        
+        // 通过WebSocket发送图片消息，使用服务器返回的图片地址
+        if (socket && socket.readyState === WebSocket.OPEN) {
+          const imageMessage = {
+            type: 'chat',
+            payload: {
+              isImage: true,
+              userId: localStorage.getItem('userid'),
+              username: username,
+              image: imageUrl, // 使用服务器返回的图片地址
+              time: getCurrentTime() // 添加时间属性
+            }
+          };
+          socket.send(JSON.stringify(imageMessage));
+        } else {
+          ElMessage({ message: 'WebSocket未连接', type: 'error' });
+        }
       } else {
-        console.error('WebSocket未连接');
+        ElMessage({ message: '图片上传失败', type: 'error' });
       }
-    };
-    reader.readAsDataURL(file);
+    } catch (error) {
+      console.error('上传图片失败:', error);
+      ElMessage({ message: '图片上传失败，请重试', type: 'error' });
+    }
   }
+  // 清空文件输入，允许重复选择相同的文件
+  event.target.value = '';
 };
 
 const disConnectServer = () => {
@@ -166,7 +199,7 @@ const disConnectServer = () => {
 
 // 打开图片预览
 const openImagePreview = (src) => {
-  previewImageSrc.value = src;
+  previewImageSrc.value = `${baseUrl}${src}`;
   isImagePreviewVisible.value = true;
 };
 
@@ -190,13 +223,12 @@ onUnmounted(() => {
 }
 
 .message_box {
-  // flex: 1;
   height: clamp(300px, 300px, 500px);
-  // max-height: 500px;
   overflow-y: auto;
   border: 1px dashed var(--fontColor);
   border-radius: 5px;
   margin-bottom: 10px;
+  background-color: #f3f3f3;
   .message_box_item {
     display: flex;
     flex-direction: column;
@@ -208,7 +240,7 @@ onUnmounted(() => {
     }
     .message_box_item_content{
       display: flex;
-      align-items: baseline;
+      align-items: flex-start;
       flex-direction: row-reverse;
       .message_box_item_username {
         width: 50px;
@@ -218,19 +250,15 @@ onUnmounted(() => {
         line-height: 40px;
         font-size: 16px;
         padding: 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         position: relative;
         filter: drop-shadow(0px 2px 5px var(--fontColor));
-        &::after {
-          content: '';
-          position: absolute;
-          left: -10px;
-          top: 40%;
-          width: 10px;
-          height: 10px;
-          border-top: 5px solid transparent;
-          border-bottom: 5px solid transparent;
-          border-left: 5px solid transparent;
-          border-right: 5px solid var(--background);
+        img{
+          width: 100%;
+          height: 100%;
+          border-radius: 5px;
         }
       }
       .message_box_item_username_other {
@@ -242,18 +270,14 @@ onUnmounted(() => {
         font-size: 16px;
         padding: 5px;
         position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         filter: drop-shadow(0px 2px 5px var(--fontColor));
-        &::after {
-          content: '';
-          position: absolute;
-          right: -10px;
-          top: 40%;
-          width: 10px;
-          height: 10px;
-          border-top: 5px solid transparent;
-          border-bottom: 5px solid transparent;
-          border-left: 5px solid var(--background);
-          border-right: 5px solid transparent;
+        img{
+          width: 100%;
+          height: 100%;
+          border-radius: 5px;
         }
       }
       .message_box_item_message {
@@ -264,12 +288,48 @@ onUnmounted(() => {
           max-width: 200px; /* 设置图片最大宽度 */
           max-height: 200px; /* 设置图片最大高度 */
           cursor: pointer; // 添加鼠标指针样式
+          border-radius: 5px;
+          border: 1px solid #aaa;
         }
         .message_rows{
           font-size: 14px;
           max-width: 600px; /* 设置图片最大宽度 */
           text-wrap: break-word;
           text-align: left;
+          padding: 10px 15px;
+          border-radius: 5px;
+          position: relative;
+          
+        }
+        .other{
+          background: rgb(255, 255, 255);
+          &::after {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: 12px;
+            width: 10px;
+            height: 10px;
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+            border-left: 5px solid transparent;
+            border-right: 5px solid rgb(255, 255, 255);
+          }
+        }
+        .me{
+          background-color: rgb(53, 247, 53);
+          &::after {
+            content: '';
+            position: absolute;
+            right: -10px;
+            top: 12px;
+            width: 10px;
+            height: 10px;
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+            border-left: 5px solid rgb(53, 247, 53);
+            border-right: 5px solid transparent;
+          }
         }
       }
     }    
@@ -288,9 +348,11 @@ onUnmounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 10px;
   .custom-file-input {
     height: 100%;
-    margin-right: 10px;
+    display: flex;
+    align-items: center;
   }
   .el-input {
     height: 100%;

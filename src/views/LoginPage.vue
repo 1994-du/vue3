@@ -55,10 +55,10 @@ const handleLogin= function(){
         console.error('数据库未打开');
         return
     }
-    toLogin(loginObj).then(res=>{
+    toLogin(loginObj).then((res: any)=>{
         console.log('登录',res);
         
-        if(res.status==200){
+        if(res.status=='success'){
             // 保存token
             if(res.token){
                 localStorage.setItem('token', res.token);

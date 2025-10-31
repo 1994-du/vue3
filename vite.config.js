@@ -14,6 +14,7 @@ export default defineConfig(({mode,command}) => {
     ],
     server: {
       port: 3002,
+      host: '0.0.0.0', // 允许局域网访问
       headers: {
         'Access-Control-Allow-Origin': '*'
       },

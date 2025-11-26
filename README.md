@@ -19,3 +19,5 @@ npm install --save-dev jest @vue/test-utils babel-jest vue-jest
 
 
 
+### 代码格式化工具
+prettier husky lint-staged

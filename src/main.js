@@ -5,6 +5,8 @@ import store from "./store"
 import axios from "@/api"
 import "@/styles/common.scss"
 import { createPinia } from 'pinia'
+// 设置基础字体大小
+import '@/utils/fontSize.js'
 // 连接IndexDB
 import IndexDB from '@/utils/indexedDB';
 async function connectIndexDB(){

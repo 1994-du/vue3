@@ -46,6 +46,7 @@ export default defineConfig(({mode,command}) => {
       }
     },
     css: {
+      postcss: './.postcssrc.js',
       preprocessorOptions: {
         scss: {
           additionalData: `@use "@/styles/element_index.scss" as *;`,

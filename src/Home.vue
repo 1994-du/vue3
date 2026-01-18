@@ -1,32 +1,47 @@
 <template>
     <ModalSearch v-if="isShowSearch" v-model="isShowSearch"/>
     <div class="layout">
-        <header>
-            <HeaderSearch @click="openSearchModal"/>
-            <ThemeSwitch/>
-        </header>
-        <div class="container">
-            <div class="layout_menu">
-                <el-menu
-                    @select="handleMenuSelect"
-                    router
-                    :default-active="onRoutes"
-                    :collapse="isCollapse"
-                    :style="{width:!isCollapse?'250px':''}"
-                    :collapse-transition="false">
-                    <SubMenu v-for="(item,index) in menuConfig" :key="index" :menus="item"/>
-                </el-menu>
-                <div class="custome_menu_btn" @click="router.push('/set')">
-                    <el-icon v-if="!isCollapse"><Setting /></el-icon>
-                    <el-icon v-if="isCollapse"><Setting /></el-icon>
-                    <span v-if="!isCollapse">设置</span>
-                </div>
-                <div class="custome_menu_btn" @click="collapse">
-                    <el-icon v-if="!isCollapse"><DArrowLeft/></el-icon>
-                    <el-icon v-if="isCollapse"><DArrowRight/></el-icon>
-                    <span v-if="!isCollapse">收起</span>
-                </div>
+        <div class="layout_menu">
+            <el-menu
+                @select="handleMenuSelect"
+                router
+                :default-active="onRoutes"
+                :collapse="isCollapse"
+                :style="{width:!isCollapse?'250px':''}"
+                :collapse-transition="false">
+                <SubMenu v-for="(item,index) in menuConfig" :key="index" :menus="item"/>
+            </el-menu>
+            <div class="custome_menu_btn" @click="router.push('/set')">
+                <el-icon v-if="!isCollapse"><Setting /></el-icon>
+                <el-icon v-if="isCollapse"><Setting /></el-icon>
+                <span v-if="!isCollapse">设置</span>
             </div>
+            <div class="custome_menu_btn" @click="collapse">
+                <el-icon v-if="!isCollapse"><DArrowLeft/></el-icon>
+                <el-icon v-if="isCollapse"><DArrowRight/></el-icon>
+                <span v-if="!isCollapse">收起</span>
+            </div>
+        </div>
+        <div class="container">
+            
+            <header>
+                <div class="header_left">
+                    <HeaderSearch @click="openSearchModal"/>
+                    <ThemeSwitch/>
+                </div>
+                <div class="header_right">
+                    <el-avatar size="small" src="https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png"></el-avatar>
+                    
+                    <el-dropdown placement="bottom" @command="handleCommand">
+                        <span>{{ userInfoStore.userInfo.name }}</span>
+                        <template #dropdown>
+                            <el-dropdown-menu>
+                                <el-dropdown-item command="loginOut">退出登录</el-dropdown-item>
+                            </el-dropdown-menu>
+                        </template>
+                    </el-dropdown>
+                </div>
+            </header>
             <div class="layout_content">
                 <router-view></router-view>
             </div>
@@ -42,6 +57,10 @@
     import { computed, onMounted,ref } from 'vue'
     import { useStore } from 'vuex'
     import menuRoutes from '@/utils/menuRoutes'
+    import useUserInfoStore from './store/pinia/userInfo'
+    import { clearToken,clearTokenCheckTimer } from '@/utils/tokenManager'
+    import { toLoginOut } from '@/api/api'
+    const userInfoStore = useUserInfoStore()
     const store = useStore()
     const router = useRouter()
     const route = useRoute()
@@ -62,6 +81,17 @@
     // 打开搜索模态框
     const openSearchModal = ()=>{
         isShowSearch.value = true
+    }
+    const handleCommand = function(command){
+        if(command=='loginOut'){
+            toLoginOut({}).then(res=>{
+                if(res.code==200){
+                    clearToken()
+                    clearTokenCheckTimer()
+                    router.push('/login')
+                }
+            })
+        }
     }
     // 初始化
     onMounted(()=>{

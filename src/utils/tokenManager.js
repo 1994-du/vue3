@@ -18,7 +18,6 @@ export const clearToken = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('tokenExpireTime');
     localStorage.removeItem('username');
-    localStorage.removeItem('userid');
 }
 
 // token过期处理
@@ -45,22 +44,17 @@ export const handleTokenExpire = () => {
 
 // 设置token过期监听
 export const setupTokenExpiryCheck = () => {
-    console.log('设置token过期监听');
     // 清除之前可能存在的定时器
     if (tokenCheckTimer) {
         clearInterval(tokenCheckTimer);
     }
-    
     // 每10秒检查一次token是否过期
     tokenCheckTimer = setInterval(() => {
-        console.log('检查token过期');
-        
         if (isTokenExpired()) {
-            console.log('token过期');
             handleTokenExpire();
             clearInterval(tokenCheckTimer);
         }
-    }, 600000);
+    }, 10000);
 }
 
 // 清除token检查定时器

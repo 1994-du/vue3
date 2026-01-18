@@ -5,7 +5,8 @@ const useUserInfoStore = defineStore('userInfo',{
             userInfo:{
                 name:'default',
                 age:0
-            }
+            },
+            menus:[]
         }
     },
     getters:{
@@ -14,12 +15,33 @@ const useUserInfoStore = defineStore('userInfo',{
         }
     },
     actions:{
+        setMenus(menus){
+            this.menus = menus
+        },
+        setUserInfo(userInfo){
+            this.userInfo = Object.assign({},this.userInfo,userInfo)
+        },
         increment(){
             this.userInfo.age++
         },
         decrement(){
             this.userInfo.age--
         }
+    },
+    persist: {
+        enabled: true,
+        strategies: [
+            {
+                key: 'userInfo',
+                storage: localStorage,
+                paths: ['userInfo']
+            },
+            {
+                key: 'menus',
+                storage: localStorage,
+                paths: ['menus']
+            }
+        ]
     }
 })
 export default useUserInfoStore

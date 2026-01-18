@@ -11,10 +11,10 @@
                     <el-input type="password" placeholder="请输入密码" v-model="loginObj.password"></el-input>
                 </div>
             </div>
-            
+
             <div class="login_buttons">
                 <button class="login" @click="handleLogin">登录</button>
-                <button  class="register" @click="handleRegistry">注册</button>
+                <button class="register" @click="handleRegistry">注册</button>
             </div>
         </div>
     </div>
@@ -26,12 +26,14 @@ import { useRouter } from 'vue-router'
 import { useStore } from 'vuex';
 import { reactive } from 'vue'
 import IndexDB from '@/utils/indexedDB';
-import { toLogin,toRegistry } from '@/api/api'
+import { toLogin, toRegistry } from '@/api/api'
 import { ElMessageBox } from 'element-plus';
 import { setupTokenExpiryCheck } from '@/utils/tokenManager';
-let loginObj=reactive({
-    username:"",
-    password:""
+import useUserInfoStore from '../store/pinia/userInfo';
+const userInfoStore = useUserInfoStore()
+let loginObj = reactive({
+    username: "",
+    password: ""
 })
 const store = useStore()
 const router = useRouter()
@@ -50,42 +52,41 @@ const parseJWT = (token) => {
     }
 }
 
-const handleLogin= function(){
-    if(!(window as any).db){
+const handleLogin = function () {
+    if (!(window as any).db) {
         console.error('数据库未打开');
         return
     }
-    toLogin(loginObj).then((res: any)=>{
+    toLogin(loginObj).then((res: any) => {
         console.log('登录',res);
-        
-        if(res.status=='success'){
+        const { token,menus,username } = res.data
+        if (res.code == '200') {
             // 保存token
-            if(res.token){
-                localStorage.setItem('token', res.token);
-                
+            if (token) {
+                localStorage.setItem('token', token);
+                userInfoStore.setMenus(menus)
+                userInfoStore.setUserInfo({name:username})
                 // 解析JWT获取过期时间
-                const payload = parseJWT(res.token);
-                if(payload && payload.exp){
+                const payload = parseJWT(token);
+                if (payload && payload.exp) {
                     // JWT的exp是秒级时间戳，需要转换为毫秒
                     const expireTime = payload.exp * 1000;
                     localStorage.setItem('tokenExpireTime', expireTime.toString());
                     console.log('Token过期时间:', new Date(expireTime).toLocaleString());
                 }
             }
-            
-            localStorage.setItem('username',loginObj.username)
-            localStorage.setItem('userid',res.userId)
-            
+
+            localStorage.setItem('username', loginObj.username)
             // 登录成功后启动token过期监听
             setupTokenExpiryCheck();
-            
+
             router.replace('/')
         }
     })
 }
-const handleRegistry = function(){
-    toRegistry(loginObj).then(res=>{
-        console.log('注册',res)
+const handleRegistry = function () {
+    toRegistry(loginObj).then(res => {
+        console.log('注册', res)
     })
 }
 

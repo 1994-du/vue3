@@ -16,6 +16,22 @@ export function toLogin(data){
             url:`${baseUrl}/auth/login`,
             method:'post',
             needAuth: false, // 登录接口不需要鉴权
+            operationType:'operate', // 添加操作类型标识
+            data
+        }).then(res=>{
+            resolve(res)
+        }).catch(err=>{
+            reject(err)
+        })
+    })
+}
+export function toLoginOut(data){
+    return new Promise((resolve,reject)=>{
+        Axios({
+            url:`${baseUrl}/auth/logout`,
+            method:'post',
+            needAuth: false, // 登录接口不需要鉴权
+            operationType:'operate', // 添加操作类型标识
             data
         }).then(res=>{
             resolve(res)
@@ -35,6 +51,7 @@ export function toRegistry(data){
             url:`${baseUrl}/auth/register`,
             method:'post',
             needAuth: false, // 注册接口不需要鉴权
+            operationType:'operate', // 添加操作类型标识
             data
         }).then(res=>{
             resolve(res)
@@ -54,6 +71,7 @@ export function toUpload(data){
             url:`${baseUrl}/toupload`,
             method:'post',
             needAuth: true, // 上传头像需要鉴权
+            operationType:'operate', // 添加操作类型标识
             data
         }).then(res=>{
             resolve(res)
@@ -90,7 +108,7 @@ export function updateUser(data){
             url:`${baseUrl}/users/setUser`,
             method:'post',
             needAuth: true, // 需要鉴权
-            operationType: 'edit', // 添加操作类型标识
+            operationType: 'operate', // 添加操作类型标识
             data
         }).then(res=>{
             resolve(res)
@@ -112,7 +130,7 @@ export function addUser(data){
             url:`${baseUrl}/users/addUser`,
             method:'post',
             needAuth: true, // 需要鉴权
-            operationType: 'create', // 添加操作类型标识
+            operationType: 'operate', // 添加操作类型标识
             data
         }).then(res=>{
             resolve(res)
@@ -131,7 +149,7 @@ export function toResetPassword(data){
             url:`${baseUrl}/users/resetPassword`,
             method:'post',
             needAuth:true,
-            operationType: 'resetPassword', // 添加操作类型标识
+            operationType: 'operate', // 添加操作类型标识
             data
         }).then(res=>{
             resolve(res)
@@ -151,7 +169,7 @@ export function delUser(data){
             url:`${baseUrl}/users/deleteUser`,
             method:'post',
             needAuth: true, // 需要鉴权
-            operationType: 'delete', // 添加操作类型标识
+            operationType: 'operate', // 添加操作类型标识
             data
         }).then(res=>{
             resolve(res)
@@ -206,6 +224,7 @@ export function setRoles(data){
             url:`${baseUrl}/users/setRoles`,
             method:'post',
             needAuth: true, // 需要鉴权
+            operationType: 'operate', // 添加操作类型标识
             data
         }).then(res=>{
             resolve(res)
@@ -268,7 +287,8 @@ export function updateAvatar(data){
             data,
             headers:{
                 'Content-Type':'multipart/form-data'
-            }
+            },
+            operationType: 'operate' // 添加操作类型标识
         }).then(res=>{
             resolve(res)
         }).catch(err=>{
@@ -290,6 +310,7 @@ export function uploadFile(data){
             headers: {
                 'Content-Type': 'multipart/form-data'
             },
+            operationType: 'operate',
             data
         }).then(res=>{
             resolve(res)

@@ -141,19 +141,24 @@ const getUsersList = ()=>{
         page: currentPage.value,
         pageSize: pageSize4.value
     }).then(res=>{
-        console.log('getUsersList',res);
-        
-        if(res.status === 'success'){
-            tableData.value = res.data
-            total.value = res.total
+        const { code, data, msg } = res
+        if(code !== 200){
+            ElMessage({
+                message:msg,
+                type:'error'
+            })
+        }
+        if(code === 200){
+            tableData.value = data.list
+            total.value = data.total
         }
     })
 }
 const getRoleDictList = ()=>{
     getRolesDict().then(res=>{
-        console.log('getRoleDictList',res);
-        if(res.status === 'success'){
-            roleList.value = res.data
+        const { code, data, msg } = res
+        if(code===200){
+            roleList.value = data
         }
     })
 }
@@ -166,7 +171,7 @@ const createUser = ()=>{
 }
 const handleCreateUser = ()=>{
     addUser(createUserObj.value).then(res=>{
-        if(res.status === 'success'){
+        if(res.code===200){
             createUserVisible.value = false
             getUsersList()
         }
@@ -186,7 +191,7 @@ const resetPassword = (userId)=>{
     toResetPassword({
         id: userId
     }).then(res=>{
-        if(res.status === 'success'){
+        if(res.code===200){
             ElMessage.success('密码重置成功');
             // 刷新用户列表
             getUsersList();
@@ -202,7 +207,7 @@ const resetPassword = (userId)=>{
  */
 const handleEditUser = ()=>{
     updateUser(editUserObj.value).then(res=>{
-        if(res.status === 'success'){
+        if(res.code===200){
             editUserVisible.value = false
             getUsersList()
         }
@@ -217,7 +222,7 @@ const deleteUser = (userId)=>{
     delUser({
         id: userId
     }).then(res=>{
-        if(res.status === 'success'){
+        if(res.code===200){
             getUsersList()
         }
     })
@@ -258,26 +263,16 @@ const beforeAvatarUpload = (file) => {
     return isJPG && isLt2M;
 }
 
-// 上传成功回调
+// 编辑上传成功回调
 const handleAvatarUploadSuccess = (response, file, fileList) => {
-    console.log('response',response);
-    
-    if (response.status === 'success') {
-        // 更新编辑用户对象中的头像地址
-        editUserObj.value.avatar = response.avatarUrl;
-        // ElMessage.success('头像上传成功1');
-    } else {
-        ElMessage.error('头像上传失败');
+    if (response.code === 200) {
+        editUserObj.value.avatar = response.data.avatarUrl;
     }
 }
+// 新建上传成功回调
 const handleAvatarUploadSuccessCreate = (response, file, fileList) => {
-
-    if (response.status === 'success') {
-        // 更新编辑用户对象中的头像地址
-        createUserObj.value.avatar = response.avatarUrl;
-        // ElMessage.success('头像上传成功2');
-    } else {
-        ElMessage.error('头像上传失败');
+    if (response.code===200) {
+        createUserObj.value.avatar = response.data.avatarUrl;
     }
 }
 // 上传失败回调

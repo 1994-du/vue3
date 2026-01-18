@@ -67,21 +67,21 @@ Axios.interceptors.response.use(res=>{
     const operationType = res.config.operationType || '';
     
     // 需要显示消息的操作类型列表
-    const showMessageOperations = ['edit', 'delete', 'resetPassword', 'update', 'create'];
+    const showMessageOperations = ['operate','edit', 'delete', 'resetPassword', 'update', 'create','logout'];
     console.log('响应',res);
     
     if(res.status===200){
         // 只有在特定操作类型时才显示成功消息
-        if(res.data.status==='success' && showMessageOperations.includes(operationType)){
+        if(res.data.code===200 && showMessageOperations.includes(operationType)){
             ElMessage({
-                message:res.data.message,
+                message:res.data.msg,
                 type:'success'
             })
         }
         // 错误消息仍然全部显示，以便用户了解错误
-        if(res.data.status!=='success'){
+        if(res.data.code!==200){
             ElMessage({
-                message:res.data.message,
+                message:res.data.msg,
                 type:'error'
             })
         }

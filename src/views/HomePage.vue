@@ -5,6 +5,11 @@
 	<el-button @click="incrementCounter">增加</el-button>
 	<el-button @click="decrementCounter">减少</el-button>
 	<SvgIcon name="zhibo" />
+	<picture>
+		<!-- <source srcset="@/assets/1.webp" type="image/webp"></source> -->
+		<source srcset="@/assets/1.jpg" type="image/jpeg"></source>
+		<img src="@/assets/1.jpg" type="image/jpeg" alt="">
+	</picture>
 </template>
 <script setup>
 import useCounterStore from '@/store/pinia/counter'

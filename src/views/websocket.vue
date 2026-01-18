@@ -70,7 +70,7 @@ const connectServer = () => {
       type: 'username',
       payload: {
         username: username,
-        userId: localStorage.getItem('userid'),
+        token: localStorage.getItem('token'),
         time: getCurrentTime() // 添加时间属性
       }
     };
@@ -126,7 +126,7 @@ const sendMessage = () => {
       type: 'chat',
       payload: {
         isImage: false,
-        userId: localStorage.getItem('userid'),
+        token:localStorage.getItem('token'),
         username: username,
         message: message.value,
         time: getCurrentTime() // 添加时间属性
@@ -168,7 +168,7 @@ const sendImage = async (event) => {
             type: 'chat',
             payload: {
               isImage: true,
-              userId: localStorage.getItem('userid'),
+              token:localStorage.getItem('token'),
               username: username,
               image: imageUrl, // 使用服务器返回的图片地址
               time: getCurrentTime() // 添加时间属性

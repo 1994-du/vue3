@@ -5,6 +5,8 @@
     --h4label:#409eff;
     --menu-font-color:#6f6d6d;
     --fontColor:#000000;
+    --menuFontColorActive:#5DBAAB;
+    --menuFontColor:#000;
     --fontSize:14px;
     --inputColor:white;
     --borderColor:#eee;
@@ -14,19 +16,21 @@
 
 [data-theme="dark"] {
     --maskBg:rgba(0,0,0,.5);
-    --background:#000;
+    --background:#17191c;
     --h4label:#409eff;
     --menu-font-color:#fff;
     --fontColor:#ffffff;
+    --menuFontColorActive:#5DBAAB;
+    --menuFontColor:#97A2B6;
     --fontSize:14px;
     --inputColor:#303133;
-    --borderColor:#fff;
+    --borderColor:#202837;
     --tabFontColor:#ac3aee;
 }
 
 $background: #fff;
 [data-theme="dark"] {
-    $background: #000;
+    $background: #17191c;
 }
 
 code{

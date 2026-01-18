@@ -64,6 +64,14 @@ h1,.hljs{
         align-items: center;
         position: relative;
         overflow: hidden;
+        .layout_menu_logo{
+            height: 55px;
+            line-height: 55px;
+            font-size: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            overflow: hidden;
+            border-bottom: .5px dashed #AADAFB;
+        }
         .vue3-menu{
             width: 100%;
             flex: 1;
@@ -114,8 +122,8 @@ h1,.hljs{
             display: flex;
             justify-content: flex-start;
             align-items: center;
-            // border-top: .5px solid #AADAFB;
-            box-shadow: 0px 0px 1px #aadafb;
+            border-top: .5px dashed #AADAFB;
+            // box-shadow: 0px 0px 1px #aadafb;
             cursor: pointer;
             color: var(--fontColor);
             padding: 0 20px;

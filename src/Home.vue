@@ -2,6 +2,9 @@
     <ModalSearch v-if="isShowSearch" v-model="isShowSearch"/>
     <div class="layout">
         <div class="layout_menu">
+            <div class="layout_menu_logo" :style="{width:!isCollapse?'250px':'0px'}">
+                <span>KNOWLEDGE ENGINE</span>
+            </div>
             <el-menu
                 @select="handleMenuSelect"
                 router
@@ -26,16 +29,18 @@
             
             <header>
                 <div class="header_left">
-                    <HeaderSearch @click="openSearchModal"/>
-                    <ThemeSwitch/>
+                    
                 </div>
                 <div class="header_right">
-                    <el-avatar size="small" src="https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png"></el-avatar>
+                    <HeaderSearch @click="openSearchModal"/>
+                    <ThemeSwitch/>
+                    
                     
                     <el-dropdown placement="bottom" @command="handleCommand">
-                        <span>{{ userInfoStore.userInfo.name }}</span>
+                        <el-avatar size="default" src="https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png"></el-avatar>
                         <template #dropdown>
                             <el-dropdown-menu>
+                                <el-dropdown-item disabled>{{ userInfoStore.userInfo.name }}</el-dropdown-item>
                                 <el-dropdown-item command="loginOut">退出登录</el-dropdown-item>
                             </el-dropdown-menu>
                         </template>

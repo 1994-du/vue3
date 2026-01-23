@@ -31,7 +31,6 @@ onMounted(()=>{
     display: flex;
     align-items: center;
     height: 100%;
-    padding: 0 32px;
     .header_search{
         height: 100%;
         border: none;
@@ -44,8 +43,9 @@ onMounted(()=>{
             align-items: center;
             font-size: 13px;
             color: var(--fontColor);
-            .el-icon{
-                margin-right: 10px;
+            .vue3-icon{
+                // margin-right: 10px;
+                color: var(--fontColor);
             }
             .search_text{
                 margin-right: 10px;
@@ -63,13 +63,16 @@ onMounted(()=>{
             font-size: 12px;
         }
         &:hover{
-            color: #42b883;
             .search_icon{
-                color: var(--fontColor);
+                color: var(--color);
+                font-weight: bold;
+                .vue3-icon{
+                    color: var(--color);
+                }
             }
             .search_btn{
-                border-color: #42b883;
-                color: #42b883;
+                border-color: var(--color);
+                color: var(--color);
             }
         }
     }

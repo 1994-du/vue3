@@ -21,6 +21,7 @@ let isInit = false; // 是否已经初始化
 let analyser = null
 let buffer = null
 let animationFrameId = null
+const ys = getComputedStyle(document.documentElement).getPropertyValue('--color').trim();
 // 初始化
 const initCvs = () => {
   audio = document.querySelector('audio');
@@ -57,7 +58,7 @@ const draw = () => {
   const len = buffer.length / 2.5;
   const count = len * 2;
   const barWidth = width / count;
-  ctx.fillStyle = 'rgb(0, 0, 255)';
+  ctx.fillStyle = ys;
   for (let i = 0; i < len; i++) {
     const barHeight = buffer[i] / 255 * height;
     const x1 = i * barWidth + width / 2;

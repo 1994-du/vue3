@@ -4,7 +4,8 @@ const useUserInfoStore = defineStore('userInfo',{
         return {
             userInfo:{
                 name:'default',
-                age:0
+                age:0,
+                avatar:''
             },
             menus:[]
         }
@@ -19,13 +20,9 @@ const useUserInfoStore = defineStore('userInfo',{
             this.menus = menus
         },
         setUserInfo(userInfo){
+            console.log('setUserInfo',userInfo);
+            
             this.userInfo = Object.assign({},this.userInfo,userInfo)
-        },
-        increment(){
-            this.userInfo.age++
-        },
-        decrement(){
-            this.userInfo.age--
         }
     },
     persist: {

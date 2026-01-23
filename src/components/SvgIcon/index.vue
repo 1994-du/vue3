@@ -1,7 +1,7 @@
 <template>
     <svg v-if="loaded" class="svg-icon" aria-hidden="true">
         <use :xlink:href="`#icon-${name}`"></use>
-    </svg>>
+    </svg>
 </template>
 
 <script setup>

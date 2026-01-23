@@ -5,6 +5,7 @@ import store from "./store"
 import axios from "@/api"
 import "@/styles/common.scss"
 import { createPinia } from 'pinia'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 // 设置基础字体大小
 import '@/utils/fontSize.js'
 // 连接IndexDB
@@ -18,6 +19,8 @@ async function connectIndexDB(){
     }  
 }
 connectIndexDB();
+// 
+document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'light')
 // ant-design-vue
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/reset.css';
@@ -63,7 +66,9 @@ instance.use(ElementPlus, {
 })
 instance.use(Antd)
 instance.use(i18n)
-instance.use(createPinia())
+const pinia = createPinia()
+pinia.use(piniaPluginPersistedstate)
+instance.use(pinia)
 instance.mount('#vue3')
 customDirective(instance)
 if (window.__MICRO_APP_ENVIRONMENT__) {

@@ -1,5 +1,9 @@
 :root {
+    --x:50%;
+    --y:50%;
+    --color:#5DBAAB;
     --background2:#d75959;
+    --transitionBg:#000;
     --maskBg:rgba(101,108,133,.8);
     --background:#fff;
     --h4label:#409eff;
@@ -11,10 +15,14 @@
     --inputColor:white;
     --borderColor:#eee;
     --tabFontColor:#ac3aee;
+    --codeBackground:#fff;
+    --logoShadow:rgba(0,0,0,0.3);
 }
 
 
 [data-theme="dark"] {
+    --color:#5DBAAB;
+    --transitionBg:#fff;
     --maskBg:rgba(0,0,0,.5);
     --background:#17191c;
     --h4label:#409eff;
@@ -26,16 +34,12 @@
     --inputColor:#303133;
     --borderColor:#202837;
     --tabFontColor:#ac3aee;
+    --codeBackground:#17191c;
+    --logoShadow:rgba(255,255,255,1);
 }
-
-$background: #fff;
-[data-theme="dark"] {
-    $background: #17191c;
-}
-
 code{
     display: block;
-    background-color: #181803;
+    background-color: var(--codeBackground);
     width: max-content;
     margin: 10px 0;
     padding: 10px;

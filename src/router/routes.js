@@ -664,5 +664,10 @@ export default[
                 component:()=>import('@/views/RoleManagement.vue')
             }
         ]
+    },
+    {
+        path:'/userInfo',
+        name:'userInfo',
+        component:()=>import('@/Home.vue')
     }
 ]

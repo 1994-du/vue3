@@ -7,76 +7,77 @@ html,body{
     overflow: hidden;
     margin: 0;
     padding: 0;
+    background-color: var(--background);
 }
-$h1_indent: 10px;
-$h2_indent: 20px;
-$h3_indent: 30px;
-$h4_indent: 40px;
-$h5_indent: 50px;
-$h6_indent: 60px;
-$h1_tagcolor: #3939bb;
-$h2_tagcolor: #15e21f;
-$h3_tagcolor: #0048ff;
-$h4_tagcolor: #ac3aee;
-$h5_tagcolor: #5a69cb;
-$h6_tagcolor: #00ff62;
-h1,h2,h3,h4,h5,h6{
-    position: relative;
-    text-align: left;
-    background-color: #f2f5fc;
-    color: var(--fontColor);
-    padding:  10px;
-    margin: 5px 0;
-    font-size: 20px;
-    // text-indent: 50px;
-}
-h1{
-    background-image: -webkit-linear-gradient(0deg,$h1_tagcolor,rgb(255, 255, 255));
-}
-h2{
-    background-image: -webkit-linear-gradient(0deg,$h2_tagcolor,rgb(255, 255, 255));
-}
-h3{
-    background-image: -webkit-linear-gradient(0deg,$h3_tagcolor,rgb(255, 255, 255));
-}
-h4{
-    background-image: -webkit-linear-gradient(0deg,$h4_tagcolor,rgb(255, 255, 255));
-}
-h5{
-    background-image: -webkit-linear-gradient(0deg,$h5_tagcolor,rgb(255, 255, 255));
-}
-h6{
-    background-image: -webkit-linear-gradient(0deg,$h6_tagcolor,rgb(255, 255, 255));
-}
-h1::before,h2::before,h3::before,h4::before,h5::before,h6::before{
-    display: block;
-    content: '';
-    position: absolute;
-    left: 0px;
-    top:25%;
-    text-indent: 10px;
-}
-h1::before{
-    background-color: $h1_tagcolor;
-    // content: '一、';
-}
-h2::before{
-    background-color: $h2_tagcolor;
-    // content: '二、';
-}
-h3::before{
-    background-color: $h3_tagcolor;
-    // content: '三、';
-}
-h4::before{
-    background-color: $h4_tagcolor;
-    // content: '四、';
-}
-h5::before{
-    background-color: $h5_tagcolor;
-    // content: '五、';
-}
-h6::before{
-    background-color: $h6_tagcolor;
-    // content: '六、';
-}
+// $h1_indent: 10px;
+// $h2_indent: 20px;
+// $h3_indent: 30px;
+// $h4_indent: 40px;
+// $h5_indent: 50px;
+// $h6_indent: 60px;
+// $h1_tagcolor: #3939bb;
+// $h2_tagcolor: #15e21f;
+// $h3_tagcolor: #0048ff;
+// $h4_tagcolor: #ac3aee;
+// $h5_tagcolor: #5a69cb;
+// $h6_tagcolor: #00ff62;
+// h1,h2,h3,h4,h5,h6{
+//     position: relative;
+//     text-align: left;
+//     background-color: #f2f5fc;
+//     color: var(--fontColor);
+//     padding:  10px;
+//     margin: 5px 0;
+//     font-size: 20px;
+//     // text-indent: 50px;
+// }
+// h1{
+//     background-image: -webkit-linear-gradient(0deg,$h1_tagcolor,rgb(255, 255, 255));
+// }
+// h2{
+//     background-image: -webkit-linear-gradient(0deg,$h2_tagcolor,rgb(255, 255, 255));
+// }
+// h3{
+//     background-image: -webkit-linear-gradient(0deg,$h3_tagcolor,rgb(255, 255, 255));
+// }
+// h4{
+//     background-image: -webkit-linear-gradient(0deg,$h4_tagcolor,rgb(255, 255, 255));
+// }
+// h5{
+//     background-image: -webkit-linear-gradient(0deg,$h5_tagcolor,rgb(255, 255, 255));
+// }
+// h6{
+//     background-image: -webkit-linear-gradient(0deg,$h6_tagcolor,rgb(255, 255, 255));
+// }
+// h1::before,h2::before,h3::before,h4::before,h5::before,h6::before{
+//     display: block;
+//     content: '';
+//     position: absolute;
+//     left: 0px;
+//     top:25%;
+//     text-indent: 10px;
+// }
+// h1::before{
+//     background-color: $h1_tagcolor;
+//     // content: '一、';
+// }
+// h2::before{
+//     background-color: $h2_tagcolor;
+//     // content: '二、';
+// }
+// h3::before{
+//     background-color: $h3_tagcolor;
+//     // content: '三、';
+// }
+// h4::before{
+//     background-color: $h4_tagcolor;
+//     // content: '四、';
+// }
+// h5::before{
+//     background-color: $h5_tagcolor;
+//     // content: '五、';
+// }
+// h6::before{
+//     background-color: $h6_tagcolor;
+//     // content: '六、';
+// }

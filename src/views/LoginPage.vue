@@ -1,20 +1,22 @@
 <!--  -->
 <template>
     <div class="login_inner">
-        <div class="login_img"></div>
+        <div class="login_logo">
+            KNOWLEDGE ENGINE
+        </div>
         <div class="login_box">
             <div class="input_box">
                 <div class="usename">
-                    <el-input v-focus type="text" placeholder="请输入账号" v-model="loginObj.username"></el-input>
+                    <el-input size="large" v-focus type="text" placeholder="请输入账号" v-model="loginObj.username"></el-input>
                 </div>
                 <div class="password">
-                    <el-input type="password" placeholder="请输入密码" v-model="loginObj.password"></el-input>
+                    <el-input size="large" type="password" placeholder="请输入密码" v-model="loginObj.password"></el-input>
                 </div>
             </div>
 
             <div class="login_buttons">
-                <button class="login" @click="handleLogin">登录</button>
-                <button class="register" @click="handleRegistry">注册</button>
+                <el-button size="large" type="primary" @click="handleLogin">登录</el-button>
+                <el-button size="large" type="default" @click="handleRegistry">注册</el-button>
             </div>
         </div>
     </div>
@@ -59,13 +61,13 @@ const handleLogin = function () {
     }
     toLogin(loginObj).then((res: any) => {
         console.log('登录',res);
-        const { token,menus,username } = res.data
-        if (res.code == '200') {
+        const { token,menus,username,avatar } = res.data
+        if (res.code === 200) {
             // 保存token
             if (token) {
                 localStorage.setItem('token', token);
                 userInfoStore.setMenus(menus)
-                userInfoStore.setUserInfo({name:username})
+                userInfoStore.setUserInfo({name:username,avatar:avatar})
                 // 解析JWT获取过期时间
                 const payload = parseJWT(token);
                 if (payload && payload.exp) {

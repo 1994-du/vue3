@@ -20,6 +20,7 @@
     "mockjs": "^1.1.0",
     "ping": "^0.4.4",
     "pinia": "^3.0.2",
+    "pinia-plugin-persistedstate": "^4.7.1",
     "postcss-px-to-viewport": "^1.1.1",
     "socket.io-client": "^4.6.1",
     "vite-plugin-mock": "^3.0.2",

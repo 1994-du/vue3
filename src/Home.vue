@@ -2,8 +2,9 @@
     <ModalSearch v-if="isShowSearch" v-model="isShowSearch"/>
     <div class="layout">
         <div class="layout_menu">
-            <div class="layout_menu_logo" :style="{width:!isCollapse?'250px':'0px'}">
-                <span>KNOWLEDGE ENGINE</span>
+            <div class="layout_menu_logo" @click="router.push('/home')">
+                <span v-show="!isCollapse">KNOWLEDGE ENGINE</span>
+                <span v-show="isCollapse">K&E</span>
             </div>
             <el-menu
                 @select="handleMenuSelect"
@@ -34,13 +35,12 @@
                 <div class="header_right">
                     <HeaderSearch @click="openSearchModal"/>
                     <ThemeSwitch/>
-                    
-                    
                     <el-dropdown placement="bottom" @command="handleCommand">
-                        <el-avatar size="default" src="https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png"></el-avatar>
+                        <el-avatar size="default" :src="`${baseUrl}${userInfoStore.userInfo.avatar}`"></el-avatar>
                         <template #dropdown>
                             <el-dropdown-menu>
                                 <el-dropdown-item disabled>{{ userInfoStore.userInfo.name }}</el-dropdown-item>
+                                <el-dropdown-item command="userInfo">个人信息</el-dropdown-item>
                                 <el-dropdown-item command="loginOut">退出登录</el-dropdown-item>
                             </el-dropdown-menu>
                         </template>
@@ -59,7 +59,7 @@
     import ThemeSwitch from '@/components/ThemeSwitch.vue'
     import SubMenu from './components/subMenu.vue'
     import { useRouter, useRoute } from 'vue-router'
-    import { computed, onMounted,ref } from 'vue'
+    import { computed, onMounted,ref, nextTick, watch } from 'vue'
     import { useStore } from 'vuex'
     import menuRoutes from '@/utils/menuRoutes'
     import useUserInfoStore from './store/pinia/userInfo'
@@ -74,6 +74,11 @@
     })
     const isCollapse=ref(false)
     const menuConfig = ref([])
+    const baseUrl = computed(()=>{
+        return import.meta.env.VITE_PROXY.replace(/\/+$/, '')
+    })
+    console.log('baseUrl',baseUrl.value);
+    
     // 菜单
     const handleMenuSelect=function(index,indexPath){
         router.push(index)
@@ -96,6 +101,8 @@
                     router.push('/login')
                 }
             })
+        }else if(command=='userInfo'){
+            router.push('/userInfo')
         }
     }
     // 初始化
@@ -140,7 +147,52 @@
                 isShowSearch.value = false
             }
         })
+        
+        // 初始加载时滚动到当前菜单
+        nextTick(() => {
+            scrollToActiveMenu()
+        })
     })
+    
+    // 监听路由变化，滚动到当前菜单
+    watch(
+        () => route.path,
+        () => {
+            nextTick(() => {
+                scrollToActiveMenu()
+            })
+        }
+    )
+    
+    // 滚动到当前激活的菜单
+    const scrollToActiveMenu = () => {
+        try {
+            // 增加小延迟，确保DOM完全渲染
+            setTimeout(() => {
+                // 查找当前激活的菜单项
+                const activeMenu = document.querySelector('.vue3-menu-item.is-active')
+                
+                if (activeMenu) {
+                    // 查找真正的菜单滚动容器 (.vue3-menu)
+                    const menuContainer = document.querySelector('.vue3-menu')
+                    if (menuContainer) {
+                        // 计算菜单项相对于滚动容器的位置
+                        const menuRect = activeMenu.getBoundingClientRect()
+                        menuContainer.scrollTo({
+                            top: menuRect.top,
+                            behavior: 'smooth'
+                        })
+                    } else {
+                        console.warn('Menu container not found')
+                    }
+                } else {
+                    console.warn('Active menu item not found')
+                }
+            }, 300)
+        } catch (error) {
+            console.error('Error scrolling to active menu:', error)
+        }
+    }
 </script>
 
 <style lang="scss">

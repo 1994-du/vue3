@@ -1,5 +1,6 @@
 export default{
     plugins: {
+        '@tailwindcss/postcss': {},
         'postcss-px-to-viewport': {
             viewportWidth: 1920, // 设计稿宽度
             viewportHeight: 1080, // 设计稿高度

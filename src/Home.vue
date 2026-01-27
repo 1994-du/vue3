@@ -179,7 +179,7 @@
                         // 计算菜单项相对于滚动容器的位置
                         const menuRect = activeMenu.getBoundingClientRect()
                         menuContainer.scrollTo({
-                            top: menuRect.top,
+                            top: menuRect.top - 200,
                             behavior: 'smooth'
                         })
                     } else {

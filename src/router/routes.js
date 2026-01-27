@@ -446,6 +446,15 @@ export default[
             },
             // CSS
             {
+                path:'/css/preprocessor',
+                name:'预处理器',
+                meta:{
+                    index:7,
+                    groupName:'CSS'
+                },
+                component:()=>import('@/views/CSS/index.vue')
+            },
+            {
                 path:'/css/center',
                 name:'div水平垂直居中',
                 meta:{

@@ -17,6 +17,7 @@
         font-weight: bold;
         text-shadow: 0 0 10px #bfffe7;
         padding: 15px 0;
+        margin-bottom: 30px;
     }
     .login_box{
         width: 100%;
@@ -27,6 +28,12 @@
             display: flex;
             flex-direction: column;
             justify-content: space-around;
+            :deep(.vue3-form-item__label:before,){
+                color: transparent;
+            }
+            :deep(.vue3-form-item__error){
+                color: var(--errorColor);
+            }
             .usename,.password{
                 width: 100%;
                 margin-bottom: 10px;
@@ -58,11 +65,11 @@
         
         .login_buttons{
             display: flex;
-            flex-direction: column;
+            // flex-direction: column;
             align-items: center;
             justify-content: space-between;
             .vue3-button{
-                width: 100%;
+                width: 180px;
                 // height: 34px;
                 outline: none;
                 padding: 5px  10px;

@@ -1,12 +1,14 @@
 <template>
-<h4>发布订阅者模式</h4>
-<code>
-    <pre>发布者</pre>
-    <pre>订阅者</pre>
-    <pre>时间收集器</pre>
-</code>
+<div class="flex flex-col items-start justify-start">
+    <el-text type="primary" size="large">发布者</el-text>
+    <el-text type="primary" size="large">订阅者</el-text>
+    <el-text type="primary" size="large">事件中心</el-text>
+</div>
 </template>
 <script setup>
 </script>
 <style lang='scss' scoped>
+.vue3-text{
+    align-self: flex-start;
+}
 </style>

@@ -6,12 +6,14 @@
         </div>
         <div class="login_box">
             <div class="input_box">
-                <div class="usename">
-                    <el-input size="large" v-focus type="text" placeholder="请输入账号" v-model="loginObj.username"></el-input>
-                </div>
-                <div class="password">
-                    <el-input size="large" type="password" placeholder="请输入密码" v-model="loginObj.password"></el-input>
-                </div>
+                <el-form :model="loginObj" ref="loginFormRef" :rules="rules">
+                    <el-form-item label="账号" prop="username">
+                        <el-input size="large" v-focus type="text" placeholder="请输入账号" v-model="loginObj.username"></el-input>
+                    </el-form-item>
+                    <el-form-item label="密码" prop="password">
+                        <el-input size="large" type="password" placeholder="请输入密码" v-model="loginObj.password" @keyup.enter="handleLogin"></el-input>
+                    </el-form-item>
+                </el-form>
             </div>
 
             <div class="login_buttons">
@@ -26,7 +28,7 @@
 import axios from 'axios'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex';
-import { reactive } from 'vue'
+import { ref,reactive } from 'vue'
 import IndexDB from '@/utils/indexedDB';
 import { toLogin, toRegistry } from '@/api/api'
 import { ElMessageBox } from 'element-plus';
@@ -39,7 +41,15 @@ let loginObj = reactive({
 })
 const store = useStore()
 const router = useRouter()
-
+const rules = reactive({
+    username: [
+        { required: true, message: '请输入账号', trigger: 'blur' }
+    ],
+    password: [
+        { required: true, message: '请输入密码', trigger: 'blur' }
+    ]
+})
+const loginFormRef = ref(null)
 // JWT解析函数
 const parseJWT = (token) => {
     try {
@@ -87,8 +97,10 @@ const handleLogin = function () {
     })
 }
 const handleRegistry = function () {
-    toRegistry(loginObj).then(res => {
-        console.log('注册', res)
+    loginFormRef.value.validate().then(() => {
+        toRegistry(loginObj).then(res => {
+            console.log('注册', res)
+        })
     })
 }
 

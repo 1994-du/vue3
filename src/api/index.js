@@ -56,7 +56,7 @@ Axios.interceptors.request.use(config=>{
     return config
 })
 Axios.interceptors.response.use(res=>{
-    
+    console.log('响应',res);
     // 处理token过期的特定状态码（例如401或特定的错误码）
     if (res.status === 401 || res.data.code === 401 || res.data.status === 401) {
         handleTokenExpire();
@@ -68,7 +68,7 @@ Axios.interceptors.response.use(res=>{
     
     // 需要显示消息的操作类型列表
     const showMessageOperations = ['operate','edit', 'delete', 'resetPassword', 'update', 'create','logout'];
-    console.log('响应',res);
+    
     
     if(res.status===200){
         // 只有在特定操作类型时才显示成功消息
@@ -94,12 +94,13 @@ Axios.interceptors.response.use(res=>{
     return res.data
    
 },err=>{
+    console.log('错误',err);
     // 处理网络错误中的401情况
     if (err.response && err.response.status === 401) {
         handleTokenExpire();
     } else {
         ElMessage({
-            message: err.message || '请求失败',
+            message: err.response.data.msg || '请求失败',
             type: 'error'
         });
     }

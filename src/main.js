@@ -3,7 +3,7 @@ import App from './App.vue'
 import router from "./router"
 import store from "./store"
 import axios from "@/api"
-import "@/styles/common.scss"
+
 import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 // 设置基础字体大小
@@ -30,6 +30,7 @@ import customDirective from "./utils/customDirective.js";
 import ElementPlus from 'element-plus'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'; // 引入中文包
 import './styles/element_plus.scss'
+import "@/styles/common.scss"
 // elementPlus图标
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 // 国际化

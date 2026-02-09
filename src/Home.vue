@@ -107,8 +107,6 @@
     }
     // 初始化
     onMounted(()=>{
-        // menuConfig.value = menuRoutes
-        console.log(router.getRoutes());
         let arr = []
         router.getRoutes().forEach(el=>{
             if(el.meta.groupName){
@@ -155,14 +153,14 @@
     })
     
     // 监听路由变化，滚动到当前菜单
-    watch(
-        () => route.path,
-        () => {
-            nextTick(() => {
-                scrollToActiveMenu()
-            })
-        }
-    )
+    // watch(
+    //     () => route.path,
+    //     () => {
+    //         nextTick(() => {
+    //             scrollToActiveMenu()
+    //         })
+    //     }
+    // )
     
     // 滚动到当前激活的菜单
     const scrollToActiveMenu = () => {

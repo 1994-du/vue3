@@ -83,6 +83,24 @@ export default[
             },
             // Vue3
             {
+                path:'/vue3/shallowRef',
+                name:'shallowRef',
+                meta:{
+                    index:3,
+                    groupName:'Vue3',
+                },
+                component:()=>import('@/views/Vue3/shallowRef.vue')
+            },
+            {
+                path:'/vue3/toRefs',
+                name:'toRefs',
+                meta:{
+                    index:3,
+                    groupName:'Vue3',
+                },
+                component:()=>import('@/views/Vue3/toRefs.vue')
+            },
+            {
                 path:'/vue3/store',
                 name:'Vuex',
                 meta:{

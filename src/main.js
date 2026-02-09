@@ -8,6 +8,9 @@ import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 // 设置基础字体大小
 import '@/utils/fontSize.js'
+// 引入组件库
+import '@1994-du/vue3-ui/lib/style.css'
+import '@1994-du/vue3-ui/lib/theme.css'
 // 连接IndexDB
 import IndexDB from '@/utils/indexedDB';
 async function connectIndexDB(){
@@ -61,6 +64,7 @@ instance.config.globalProperties.$axios = axios
 instance.config.globalProperties.$bus = bus
 instance.use(router)
 instance.use(store)
+// instance.use(Vue3UI)
 instance.use(ElementPlus, { 
     namespace:'vue3',
     locale: zhCn 

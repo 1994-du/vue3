@@ -5,6 +5,8 @@
 	<el-button @click="incrementCounter">增加</el-button>
 	<el-button @click="decrementCounter">减少</el-button>
 	<SvgIcon name="zhibo" /> -->
+	<dx-button type="default">按钮</dx-button>
+	<dx-switch v-model="switchValue" />
 	<div class="home_wrap" ref="homeWrap">
 		<el-card>
 			<div style="height: 100px;">
@@ -120,6 +122,9 @@
 import useCounterStore from '@/store/pinia/counter'
 import { storeToRefs } from 'pinia'
 import { ref, onMounted, onUnmounted } from 'vue'
+import { dxButton,dxSwitch } from '@1994-du/vue3-ui'
+
+const switchValue = ref(false)
 
 const counter = useCounterStore()
 const { count, doubleCount } = storeToRefs(counter)

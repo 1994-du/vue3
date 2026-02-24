@@ -1,12 +1,4 @@
 <template>
-	<!-- <h4>Home</h4>
-	<el-button>浏览器渲染原理</el-button>
-	{{ count }}--{{ doubleCount }}
-	<el-button @click="incrementCounter">增加</el-button>
-	<el-button @click="decrementCounter">减少</el-button>
-	<SvgIcon name="zhibo" /> -->
-	<dx-button type="default">按钮</dx-button>
-	<dx-switch v-model="switchValue" />
 	<div class="home_wrap" ref="homeWrap">
 		<el-card>
 			<div style="height: 100px;">
@@ -52,7 +44,6 @@
 				<p>页面加载优化：懒加载、预加载</p>
 			</div>
 		</el-card>
-		<!-- 新增不同高度的卡片 -->
 		<el-card>
 			<div style="height: 200px;">
 				<span>前端框架</span>
@@ -122,7 +113,7 @@
 import useCounterStore from '@/store/pinia/counter'
 import { storeToRefs } from 'pinia'
 import { ref, onMounted, onUnmounted } from 'vue'
-import { dxButton,dxSwitch } from '@1994-du/vue3-ui'
+// import { dxButton,dxSwitch } from '@1994-du/vue3-ui'
 
 const switchValue = ref(false)
 

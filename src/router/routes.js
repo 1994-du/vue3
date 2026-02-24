@@ -227,6 +227,16 @@ export default[
                 component:()=>import('@/views/ElementPlus/el-upload.vue')
             },
             // Http
+
+            {
+                path:'/http/axios',
+                name:'Axios',
+                meta:{
+                    index:5,
+                    groupName:'网络'
+                },
+                component:()=>import('@/views/Axios/useAxios.vue')
+            },
             {
                 path:'/http/networkModel',
                 name:'网络模型',
@@ -425,15 +435,6 @@ export default[
                     groupName:'JavaScript'
                 },
                 component:()=>import('@/views/Promise/promise.vue')
-            },
-            {
-                path:'/javaScript/axios',
-                name:'Axios',
-                meta:{
-                    index:6,
-                    groupName:'JavaScript'
-                },
-                component:()=>import('@/views/Axios/useAxios.vue')
             },
             {
                 path:'/javaScript/arrayFilter',

@@ -30,8 +30,7 @@ h1,.hljs{
 .el-dialog__body{
     padding: 10px;
 }
-.el-dialog__footer{
-    
+.el-dialog__footer{  
     .dialog-footer{
         display: flex;
         justify-content: center;
@@ -157,7 +156,7 @@ h1,.hljs{
             z-index: 2;
         }
     }
-    .container{
+    .layout_container{
         flex: 1;
         overflow: hidden;
         display: flex;

@@ -17,7 +17,8 @@
     --inputColor:white;
     --borderColor:#eee;
     --tabFontColor:#ac3aee;
-    --codeBackground:#fff;
+    --codeBackground:#17191c;
+    --codeFontColor:#ffffff;
     --logoShadow:rgba(0,0,0,0.3);
 }
 
@@ -36,7 +37,8 @@
     --inputColor:#303133;
     --borderColor:#202837;
     --tabFontColor:#ac3aee;
-    --codeBackground:#17191c;
+    --codeBackground:#fff;
+    --codeFontColor:#000000;
     --logoShadow:rgba(255,255,255,1);
 }
 code{
@@ -47,7 +49,7 @@ code{
     padding: 10px;
     border-radius: 5px;
     pre{
-        color: #ccf0fa;
+        color: var(--codeFontColor);
         text-align: left;
         font-family: monospace;
         margin: 0;

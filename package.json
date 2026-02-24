@@ -11,7 +11,8 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@1994-du/vue3-ui": "^0.0.10",
+    "@1994-du/vue3-ui": "^0.0.13",
+    "@guolao/vue-monaco-editor": "^1.6.0",
     "@rollup/plugin-alias": "^5.0.0",
     "ant-design-vue": "^4.2.6",
     "axios": "^1.4.0",
@@ -19,6 +20,7 @@
     "element-plus": "^2.3.4",
     "mitt": "^3.0.1",
     "mockjs": "^1.1.0",
+    "monaco-editor": "^0.55.1",
     "ping": "^0.4.4",
     "pinia": "^3.0.2",
     "pinia-plugin-persistedstate": "^4.7.1",

@@ -26,8 +26,7 @@
                 <span v-if="!isCollapse">收起</span>
             </div>
         </div>
-        <div class="container">
-            
+        <div class="layout_container">
             <header>
                 <div class="header_left">
                     

@@ -39,7 +39,8 @@ export default defineConfig(({mode,command}) => {
     },
     base:'./',
     build:{
-      outDir:path.resolve(__dirname,'../../../dist/vue3'),
+      // outDir:path.resolve(__dirname,'../../../dist/vue3'),
+      outDir:path.resolve(__dirname,'./dist'),
       emptyOutDir:false,
       rollupOptions:{
         output:{

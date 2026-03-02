@@ -1,5 +1,4 @@
 import { createWebHistory,createWebHashHistory, createRouter } from "vue-router";
-import heighCode from "@/utils/highCode"
 import routes from './routes'
 const router =createRouter({
     history:createWebHashHistory(),
@@ -16,8 +15,5 @@ router.onError=(err)=>{
 //     }else{
 //         next()
 //     }
-// })
-// router.afterEach((to,from)=>{
-//     heighCode()
 // })
 export default router;

@@ -2,11 +2,22 @@ import { defineConfig,loadEnv } from 'vite'
 import { viteMockServe } from 'vite-plugin-mock'
 import vue from '@vitejs/plugin-vue'
 import path from 'path'
+import AutoImport from 'unplugin-auto-import/vite'
+import Components from 'unplugin-vue-components/vite'
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 // https://vite.dev/config/
 export default defineConfig(({mode,command}) => {
   const env = loadEnv(mode,process.cwd())
   return{
     plugins: [vue(),
+      AutoImport({
+        resolvers: [ElementPlusResolver()],
+      }),
+      Components({
+        resolvers: [ElementPlusResolver({
+          importStyle: 'css',
+        })],
+      }),
       viteMockServe({
         mockPath: 'mock', // mock 文件存放目录
         enable: command === 'serve', // 仅开发时启用

@@ -38,6 +38,13 @@ const editorOptions = {
   automaticLayout: true, // 🔥 关闭自动布局
   minimap: { enabled: false },
   scrollBeyondLastLine: false,
+  padding:{
+    top: 20,
+    bottom: 20
+  },
+  scrollbar: {
+    handleMouseWheel:false
+  }
 }
 
 const handleMount = (editor: monaco.editor.IStandaloneCodeEditor) => {
@@ -45,7 +52,7 @@ const handleMount = (editor: monaco.editor.IStandaloneCodeEditor) => {
 
   const updateHeight = () => {
     const contentHeight = editor.getContentHeight()
-    containerRef.value!.style.height = contentHeight + 20 + "px"
+    containerRef.value!.style.height = contentHeight + "px"
     editor.layout()
   }
 

@@ -285,12 +285,21 @@ export default[
             // Js
             {
                 path:'/javaScript/new',
-                name:"new",
+                name:"手写new",
                 meta:{
                     index:6,
                     groupName:"JavaScript"
                 },
                 component:()=>import('@/views/Js/customNew.vue')
+            },
+            {
+                path:'/javaScript/promise',
+                name:"手写Promise",
+                meta:{
+                    index:6,
+                    groupName:"JavaScript"
+                },
+                component:()=>import('@/views/Js/customPromise.vue')
             },
             {
                 path:'/javaScript/setInterval',

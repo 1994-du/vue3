@@ -21,16 +21,16 @@ html,body{
 // $h4_tagcolor: #ac3aee;
 // $h5_tagcolor: #5a69cb;
 // $h6_tagcolor: #00ff62;
-// h1,h2,h3,h4,h5,h6{
-//     position: relative;
-//     text-align: left;
-//     background-color: #f2f5fc;
-//     color: var(--fontColor);
-//     padding:  10px;
-//     margin: 5px 0;
-//     font-size: 20px;
-//     // text-indent: 50px;
-// }
+h1,h2,h3,h4,h5,h6{
+    position: relative;
+    text-align: left;
+    background-color: #5DBAAB;
+    color: var(--fontColor);
+    padding:  10px;
+    margin: 5px 0;
+    font-size: 20px;
+    // text-indent: 50px;
+}
 // h1{
 //     background-image: -webkit-linear-gradient(0deg,$h1_tagcolor,rgb(255, 255, 255));
 // }

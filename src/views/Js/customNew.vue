@@ -5,15 +5,11 @@
         <el-text type="primary">2.绑定构造函数的this，并且执行构造函数</el-text>
         <el-text type="primary">3.如果构造函数返回的是一个对象，则返回这个对象，否则返回创建的对象</el-text>
     </div>
-    <code>
-        <pre>function myNew(constructor,...args){
+<CodeEditor class="my-[10px]" code="function myNew(constructor,...args){
     let obj = Object.create(constructor.prototype) // 创建一个对象，对象.__proto__ = constructor.prototype
-
     let result = constructor.apply(obj,args) // 绑定构造函数的this，并且执行
-    
-    return result instanceof Object ? result : {} // 如果构造函数返回的是一个对象，则返回这个对象，否则返回创建的对象
+    return result instanceof Object ? result : obj
 }
-
 const Person = function(name){
     this.name = name
     this.getName = function(){
@@ -21,12 +17,10 @@ const Person = function(name){
     }
     return this
 }
-
 let p1 = myNew(Person,'zhangsan')
 console.log(p1);
 console.log(p1.getName());
-</pre>
-    </code>
+"/>
 </template>
 
 <script setup>

@@ -1,91 +1,70 @@
 <!--  -->
 <template>
     <h4>防抖</h4>
-    <el-input clearable type="text" v-model="debounceVal" @input="debounceHandle(1000)"></el-input>
-    <el-row>
-        <el-col :span="8">
-            <code>
-                <pre>// 防抖</pre>
-                <pre>let debounceTimer;</pre>
-                <pre>const debounceHandle = function(fn,delay){</pre>
-                <pre>   if(debounceTimer){</pre>
-                <pre>       clearTimeout(debounceTimer)</pre>
-                <pre>   }</pre>
-                <pre>   debounceTimer=setTimeout(()=>{</pre>
-                <pre>       fn()</pre>
-                <pre>   },delay)</pre>
-                <pre>}</pre>
-            </code>
-        </el-col>
-        <el-col :span="8">
-            <code>
-                <pre>function debounce(func, delay) {</pre>
-                <pre>   let timer;</pre>
-                <pre>   return function (...args) {</pre>
-                <pre>       const context = this;</pre>
-                <pre>       clearTimeout(timer);</pre>
-                <pre>       timer = setTimeout(() => {</pre>
-                <pre>           func.apply(context, args);</pre>
-                <pre>       }, delay);</pre>
-                <pre>   };</pre>
-                <pre>}</pre>
-            </code>
-        </el-col>
-        <el-col :span="8">
-            <code>
-                <pre>function debounce(func, delay, immediate = false) {</pre>
-                <pre>   let timer;</pre>
-                <pre>   return function(...args) {</pre>
-                <pre>       const context = this;</pre>
-                <pre>       const callNow = immediate && !timer;</pre>
-                <pre>       clearTimeout(timer);</pre>
-                <pre>       timer = setTimeout(()=>{</pre>
-                <pre>           timer = null;</pre>
-                <pre>           if(!immediate) func.apply(context, args);</pre>
-                <pre>       },delay)</pre>
-                <pre>       if(callNow) func.apply(context, args);</pre>
-                <pre>   }</pre>
-                <pre>}</pre>
-            </code>
-        </el-col>
-    </el-row>
-    <h4>节流</h4>
-    <el-input v-focus clearable type="text" v-model="throttleVal" @input="throttleHandle(1000)"></el-input>
-    <el-row>
-        <el-col :span="8">
-            <code>
-                <pre>let throttleTimer;</pre>
-                <pre>const throttleHandle=function(fn,delay){</pre>
-                <pre>   if(!throttleTimer){</pre>
-                <pre>       throttleTimer = setTimeout(()=>{</pre>
-                <pre>           fn()</pre>
-                <pre>           throttleTimer=null</pre>
-                <pre>       },delay)</pre>
-                <pre>   }</pre>
-                <pre>}</pre>
-            </code>
-        </el-col>
-        <el-col :span="8">
-            <code>
-                <pre>function throttleFn(func, delay) {</pre>
-                <pre>   let timer;</pre>
-                <pre>   return function(...args) {</pre>
-                <pre>       const context = this;</pre>
-                <pre>       if(!timer) {</pre>
-                <pre>           timer = setTimeout(()=>{</pre>
-                <pre>               func.apply(context, args);</pre>
-                <pre>               timer=null</pre>
-                <pre>           },delay)</pre>
-                <pre>       }</pre>
-                <pre>   }</pre>
-                <pre>}</pre>
-            </code>
-        </el-col>
-        <el-col :span="8">
-            
-        </el-col>
-    </el-row>
-    
+<CodeEditor code="function debounceHandle(fn,delay){
+    let debounceTimer;
+    return function(...args){
+        const context = this;
+        if(debounceTimer){
+            clearTimeout(debounceTimer)
+        }
+        debounceTimer=setTimeout(()=>{
+            fn.apply(context, args)
+        },delay)
+    }
+}
+"/>
+<CodeEditor class="my-[10px]" code="// 立即执行
+function debounce(fn, delay, immediate = false) {
+  let timer = null
+  return function (...args) {
+    const context = this
+    if (immediate) {
+      const callNow = !timer  // 第一次触发时为 true
+
+      timer = setTimeout(() => {
+        timer = null
+      }, delay)
+
+      if (callNow) {
+        fn.apply(context, args)
+      }
+    } else {
+      clearTimeout(timer)
+      timer = setTimeout(() => {
+        fn.apply(context, args)
+      }, delay)
+    }
+  }
+}"/>
+<el-input class="my-[10px]" clearable type="text" v-model="debounceVal" @input="debounceHandle(1000)"></el-input>
+<el-text class="block text-left text-lg mb-[10px]!">{{debounceValShow}}</el-text>
+    <h4>节流</h4>   
+<CodeEditor class="my-[10px]" code="function throttleFn(fn,delay){
+    let timer;
+    return function(...args){
+        const context = this;
+        if(!timer) {
+            timer = setTimeout(()=>{
+                fn.apply(context, args)
+                timer=null
+            },delay)
+        }
+    }
+}"/>
+<CodeEditor code="function throttleFn(fn,delay){
+    let last = 0;
+    return function(...args){
+        const context = this;
+        const now = Date.now()
+        if(now-last>=delay) {
+            last=now
+            fn.apply(context, args)
+        }
+    }
+}"/>
+<el-input class="my-[10px]" clearable type="text" v-model="throttleVal" @input="throttleHandle(1000)"></el-input>
+<el-text class="block text-left text-lg mb-[10px]!">{{throttleValShow}}</el-text> 
 </template>
 
 <script setup>

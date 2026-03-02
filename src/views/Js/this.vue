@@ -123,8 +123,6 @@ getDate.apply({year:2023},[1,1]) // 2023-1-1"/>
 newFun() // 2024-1-1"/>
 </template>
 <script setup>
-import CodeEditor from '../../components/codeEditor.vue';
-
 </script>
 <style lang='scss' scoped>
 p{

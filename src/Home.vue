@@ -35,7 +35,7 @@
                     <HeaderSearch @click="openSearchModal"/>
                     <ThemeSwitch/>
                     <el-dropdown placement="bottom" @command="handleCommand">
-                        <el-avatar size="default" :src="`${baseUrl}${userInfoStore.userInfo.avatar}`"></el-avatar>
+                        <el-avatar size="default" :src="`${userInfoStore.userInfo.avatar}`"></el-avatar>
                         <template #dropdown>
                             <el-dropdown-menu>
                                 <el-dropdown-item disabled>{{ userInfoStore.userInfo.name }}</el-dropdown-item>
@@ -73,10 +73,6 @@
     })
     const isCollapse=ref(false)
     const menuConfig = ref([])
-    const baseUrl = computed(()=>{
-        return import.meta.env.VITE_PROXY.replace(/\/+$/, '')
-    })
-    console.log('baseUrl',baseUrl.value);
     
     // 菜单
     const handleMenuSelect=function(index,indexPath){
@@ -132,7 +128,6 @@
                 }
             }
         })
-        console.log('arr',arr);
         menuConfig.value = arr
         
         window.addEventListener('keydown', (e) => {

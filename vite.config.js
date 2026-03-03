@@ -37,8 +37,9 @@ export default defineConfig(({mode,command}) => {
           }
       }
     },
-    base:'/vue3/',
+    base:'/',
     build:{
+      sourcemap:true,
       // outDir:path.resolve(__dirname,'../../../dist/vue3'),
       outDir:path.resolve(__dirname,'./dist'),
       emptyOutDir:false,

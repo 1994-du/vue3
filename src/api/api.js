@@ -1,10 +1,6 @@
 import Axios from "./index";
 let baseUrl;
-if(process.env.NODE_ENV=='development'){
-    baseUrl='/api'
-}else{
-    baseUrl='http://192.168.31.65:1234'
-}
+baseUrl = '/api'
 import './upload'
 /**
  * @description 登录

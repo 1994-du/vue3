@@ -1,7 +1,7 @@
 import {io} from "socket.io-client"
 import store from '@/store'
 import router from "@/router"
-let websocketSrc = 'http://localhost:1234'
+let websocketSrc = 'http://106.15.207.57:1234'
 let socket = io(websocketSrc)
 socket.on('connect',()=>{
     // let userInfo=JSON.parse(sessionStorage.getItem('token'))

@@ -7,7 +7,7 @@
             <el-table-column label="用户名" prop="username"></el-table-column>
             <el-table-column label="头像" prop="avatar">
                 <template #default="{row}">
-                    <img :src="`${baseUrl}${row.avatar}`" alt="" class="avatar"></img>
+                    <img :src="`${row.avatar}`" alt="" class="avatar"></img>
                 </template>
             </el-table-column>
             <el-table-column label="角色" prop="roleName"></el-table-column>
@@ -63,7 +63,7 @@
                         :before-upload="beforeAvatarUpload"
                         :http-request="customUpload"
                     >
-                        <img class="edit_img" :src="`${baseUrl}${editUserObj.avatar}`" alt="">
+                        <img class="edit_img" :src="`${editUserObj.avatar}`" alt="">
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="角色">
@@ -102,7 +102,7 @@
                     :before-upload="beforeAvatarUpload"
                     :http-request="customUpload"
                 >
-                    <img class="edit_img" :src="`${baseUrl}${createUserObj.avatar}`" alt="">
+                    <img class="edit_img" :src="`${createUserObj.avatar}`" alt="">
                 </el-upload>
             </el-form-item>
             <el-form-item label="角色">
@@ -134,8 +134,6 @@ let tableData = ref([])
 let editUserVisible = ref(false)
 let editUserObj = ref({})
 let roleList = ref([])
-
-let baseUrl = import.meta.env.VITE_PROXY.slice(0,-1)
 const getUsersList = ()=>{
     getUsers({
         page: currentPage.value,

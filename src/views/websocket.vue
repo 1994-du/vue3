@@ -7,14 +7,14 @@
         <div class="message_box_item_time">{{ item.time }}</div>
         <div class="message_box_item_content">
           <div v-if="item.username === username" class="message_box_item_username">
-            <img :src="`${baseUrl}${item.avatar}`" alt="">
+            <img :src="`${item.avatar}`" alt="">
           </div>
           <div v-else class="message_box_item_username_other">
-            <img :src="`${baseUrl}${item.avatar}`" alt="">
+            <img :src="`${item.avatar}`" alt="">
           </div>
           <div class="message_box_item_message">
             <!-- 显示图片 -->
-            <img v-if="item.isImage" :src="`${baseUrl}${item.image}`" alt="图片" @click="openImagePreview(item.message)">
+            <img v-if="item.isImage" :src="`${item.image}`" alt="图片" @click="openImagePreview(item.message)">
             <div v-else class="message_rows" :class="item.username === username ? 'me' : 'other'">{{ item.message }}</div>
           </div>
         </div>
@@ -46,8 +46,6 @@ let messageList = ref([]);
 let socket = null;
 const isImagePreviewVisible = ref(false);
 const previewImageSrc = ref('');
-
-let baseUrl = import.meta.env.VITE_PROXY.slice(0,-1)
 
 // 获取当前时间，包含年月日时分秒
 const getCurrentTime = () => {
@@ -199,7 +197,7 @@ const disConnectServer = () => {
 
 // 打开图片预览
 const openImagePreview = (src) => {
-  previewImageSrc.value = `${baseUrl}${src}`;
+  previewImageSrc.value = `${src}`;
   isImagePreviewVisible.value = true;
 };
 

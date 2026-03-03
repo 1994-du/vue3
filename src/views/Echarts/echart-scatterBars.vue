@@ -40,8 +40,6 @@ const initEchart = () => {
                         </div> 
                         </div>`
                         result += `${aa}`;
-                        console.log(result);
-                        
                     }
                 });
                 return result;

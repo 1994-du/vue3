@@ -688,8 +688,13 @@ export default[
         path:'/set',
         name:'set',
         component:()=>import('@/views/SetPage.vue'),
-        redirect:'/set/userManagement',
+        redirect:'/set/menuManagement',
         children:[
+            {
+                path:'menuManagement',
+                name:'菜单管理',
+                component:()=>import('@/views/MenuManagement.vue')
+            },
             {
                 path:'userManagement',
                 name:'用户管理',

@@ -56,7 +56,6 @@ Axios.interceptors.request.use(config=>{
     return config
 })
 Axios.interceptors.response.use(res=>{
-    console.log('响应',res);
     // 处理token过期的特定状态码（例如401或特定的错误码）
     if (res.status === 401 || res.data.code === 401 || res.data.status === 401) {
         handleTokenExpire();
@@ -94,7 +93,6 @@ Axios.interceptors.response.use(res=>{
     return res.data
    
 },err=>{
-    console.log('错误',err);
     // 处理网络错误中的401情况
     if (err.response && err.response.status === 401) {
         handleTokenExpire();

@@ -4,7 +4,7 @@
             <el-button type="primary" @click="createRole">新建角色</el-button>
         </header>
         <el-table style="width: 100%;" border :data="tableData">
-            <el-table-column label="角色名称" prop="roleName"></el-table-column>
+            <el-table-column label="角色名称" prop="name"></el-table-column>
             <el-table-column label="角色描述" prop="roleDesc"></el-table-column>
             <el-table-column label="操作">
                 <template #default="{row}">
@@ -37,7 +37,7 @@
             <el-form-item label="角色描述">
                 <el-input v-model="formData.roleDesc"></el-input>
             </el-form-item>
-            <el-form-item label="角色权限">
+            <!-- <el-form-item label="角色权限">
                 <el-tree
                     ref="formTree"
                     :data="formData.menus"
@@ -45,7 +45,7 @@
                     node-key="menuLink"
                     :props="defaultProps"
                 />
-            </el-form-item>
+            </el-form-item> -->
         </el-form>
         <template #footer>
             <el-button type="primary" @click="closeDialog">确定</el-button>
@@ -82,8 +82,8 @@ const getRoleList = () => {
         page: currentPage4.value,
         pageSize: pageSize4.value
     }).then(res=>{
-        tableData.value = res.data
-        total.value = res.total
+        tableData.value = res.data.list || []
+        total.value = res.data.total || 0
     }).catch(err=>{
         console.error('获取角色数据失败',err)
     })
@@ -97,16 +97,16 @@ let formData = ref({
     menus: []
 })
 const closeDialog = () => {
-    let checkNodes = formTree.value.getCheckedNodes()
+    // let checkNodes = formTree.value.getCheckedNodes()
     
-    console.log('关闭弹窗', checkNodes)
+    // console.log('关闭弹窗', checkNodes)
     // dialogVisible.value = false
     setRoles({
         roleId: formData.value.roleId,
         roleName: formData.value.roleName,
         roleDesc: formData.value.roleDesc,
         menus: JSON.stringify(formData.value.menus),
-        checked: JSON.stringify(checkNodes)
+        // checked: JSON.stringify(checkNodes)
     }).then(res=>{
         console.log('设置角色成功', res)
         // dialogVisible.value = false
@@ -124,8 +124,7 @@ const editRole = (row) => {
     dialogVisible.value = true
 }
 const createRole = () => {
-    console.log('创建角色')
-    // dialogVisible.value = true
+    dialogVisible.value = true
 }
 onMounted(()=>{
     getRoleList()

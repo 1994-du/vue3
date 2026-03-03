@@ -20,9 +20,7 @@ import type * as monaco from "monaco-editor"
 const props = defineProps({
   code: {
     type: String,
-    default: `function hello() {
-      console.log("Hello Monaco")
-    }`
+    default: ``
   },
   readOnly: {
     type: Boolean,

@@ -19,7 +19,7 @@ async function connectIndexDB(){
         window.db = await IndexDB.openDatabase();
     }
     catch (e) {
-        console.log('打开数据库失败',e);
+        console.error('打开数据库失败',e);
     }  
 }
 connectIndexDB();
@@ -78,7 +78,7 @@ instance.use(pinia)
 instance.mount('#vue3')
 customDirective(instance)
 if (window.__MICRO_APP_ENVIRONMENT__) {
-  console.log('我在微前端环境中')
+  console.info('我在微前端环境中')
   // 监听数据变化
   // window.microApp.addDataListener(dataListener)
 
@@ -94,5 +94,5 @@ if (window.__MICRO_APP_ENVIRONMENT__) {
 
 // 监听函数
 function dataListener (data) {
-  console.log('来自主应用的数据', data)
+  console.info('来自主应用的数据', data)
 }

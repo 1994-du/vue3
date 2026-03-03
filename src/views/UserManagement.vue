@@ -7,7 +7,7 @@
             <el-table-column label="用户名" prop="username"></el-table-column>
             <el-table-column label="头像" prop="avatar">
                 <template #default="{row}">
-                    <img :src="`${row.avatar}`" alt="" class="avatar"></img>
+                    <img :src="`${preUrl}${row.avatar}`" alt="" class="avatar"></img>
                 </template>
             </el-table-column>
             <el-table-column label="角色" prop="roleName"></el-table-column>
@@ -134,6 +134,7 @@ let tableData = ref([])
 let editUserVisible = ref(false)
 let editUserObj = ref({})
 let roleList = ref([])
+const preUrl = `${import.meta.env.VITE_BASE_URL}`
 const getUsersList = ()=>{
     getUsers({
         page: currentPage.value,

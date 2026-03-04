@@ -1,7 +1,5 @@
 import Axios from "./index";
-let baseUrl;
-baseUrl = '/api'
-import './upload'
+let baseUrl = '/api';
 /**
  * @description 登录
  * @data 

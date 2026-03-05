@@ -53,6 +53,8 @@ import registryComponents from './components/index.js'
 // 中央事件
 import mitt from 'mitt'
 const bus = new mitt()
+import { setupTokenExpiryCheck } from '@/utils/tokenManager.js'
+setupTokenExpiryCheck();
 // render 函数
 let instance=null
 instance = createApp(App)

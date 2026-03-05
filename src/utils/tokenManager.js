@@ -5,6 +5,7 @@ let tokenCheckTimer = null; // 定时器引用
 
 // 检查token是否过期
 export const isTokenExpired = () => {
+    console.log('检查token是否过期');
     const token = localStorage.getItem('token');
     const expireTime = localStorage.getItem('tokenExpireTime');
     

@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { ElMessage,ElLoading } from 'element-plus'
-import router from '../router/index'
-import { isTokenExpired, clearToken, handleTokenExpire } from '../utils/tokenManager'
+import { handleTokenExpire } from '@/utils/tokenManager'
 let loadingInstance = null
 let requestCount = 0
 const showLoading = () => {
@@ -29,28 +28,16 @@ const Axios = axios.create({
 
 // 请求拦截器
 Axios.interceptors.request.use(config=>{
-    
-    // 根据needAuth标识判断是否需要鉴权
-    // 默认需要鉴权，除非明确设置needAuth: false
     const needAuth = config.needAuth !== false; // 默认值为true
-    
     if (needAuth) {
-        // 需要鉴权的接口，检查token是否过期
-        if (isTokenExpired()) {
-            handleTokenExpire();
-            return Promise.reject(new Error('token已过期，请重新登录'));
-        }
-        
         // 添加token到请求头
         const token = localStorage.getItem('token');
         if (token) {
             config.headers['Authorization'] = `Bearer ${token}`;
         }
     }
-    
     // 清理自定义参数，不传递给服务器
-    delete config.needAuth;
-    
+    delete config.needAuth; 
     showLoading()
     config.headers['Content-Type'] = config.headers['Content-Type'] || 'application/json;charset=UTF-8'
     return config
@@ -61,14 +48,9 @@ Axios.interceptors.response.use(res=>{
         handleTokenExpire();
         return Promise.reject(new Error('token已过期'));
     }
-    
-    // 获取操作类型，默认为空字符串
-    const operationType = res.config.operationType || '';
-    
+    const operationType = res.config.operationType || '';   
     // 需要显示消息的操作类型列表
-    const showMessageOperations = ['operate','edit', 'delete', 'resetPassword', 'update', 'create','logout'];
-    
-    
+    const showMessageOperations = ['operate','query'];
     if(res.status===200){
         // 只有在特定操作类型时才显示成功消息
         if(res.data.code===200 && showMessageOperations.includes(operationType)){

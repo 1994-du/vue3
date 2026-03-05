@@ -172,24 +172,7 @@ export function delUser(data){
         })
     })
 }
-/**
- * @description 获取所有角色
- * @data
-*/
-export function getRoles(data){
-    return new Promise((resolve,reject)=>{
-        Axios({
-            url:`${baseUrl}/getRoles`,
-            method:'post',
-            needAuth: true, // 需要鉴权
-            data
-        }).then(res=>{
-            resolve(res)
-        }).catch(err=>{
-            reject(err)
-        })
-    })
-}
+
 /**
  * @description 获取角色词典
  * @data
@@ -208,25 +191,7 @@ export function getRolesDict(data){
         })
     })
 }
-/**
- * @description 设置角色
- * @data
-*/
-export function setRoles(data){
-    return new Promise((resolve,reject)=>{
-        Axios({
-            url:`${baseUrl}/users/setRoles`,
-            method:'post',
-            needAuth: true, // 需要鉴权
-            operationType: 'operate', // 添加操作类型标识
-            data
-        }).then(res=>{
-            resolve(res)
-        }).catch(err=>{
-            reject(err)
-        })
-    })
-}
+
 /**
  * @description 文件分片上传
  * @data

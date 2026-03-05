@@ -3,7 +3,7 @@
         <header>
             <el-button type="primary" @click="createRole">新建角色</el-button>
         </header>
-        <el-table style="width: 100%;" border :data="tableData">
+        <el-table class="my-[10px]" border :data="tableData">
             <el-table-column label="角色名称" prop="name"></el-table-column>
             <el-table-column label="角色描述" prop="roleDesc"></el-table-column>
             <el-table-column label="操作">
@@ -13,13 +13,9 @@
             </el-table-column>
         </el-table>
         <el-pagination
-            style="margin-top: 10px;"
             v-model:current-page="currentPage4"
             v-model:page-size="pageSize4"
             :page-sizes="[10, 20, 30, 40]"
-            :size="size"
-            :disabled="disabled"
-            :background="background"
             layout="total, sizes, prev, pager, next, jumper"
             :total="total"
             @size-change="handleSizeChange"
@@ -28,46 +24,59 @@
     </div>
     <el-dialog
         v-model="dialogVisible"
-        title="编辑角色"
+        :title="dialogTitle"
         width="50%">
-        <el-form :model="formData" label-width="auto">
-            <el-form-item label="角色名称">
-                <el-input v-model="formData.roleName"></el-input>
+        <el-form ref="formRef"  :model="formData" :rules="rules" label-width="auto">
+            <el-form-item label="角色名称" prop="name">
+                <el-input v-model="formData.name"></el-input>
             </el-form-item>
-            <el-form-item label="角色描述">
+            <el-form-item label="角色描述" prop="roleDesc">
                 <el-input v-model="formData.roleDesc"></el-input>
             </el-form-item>
-            <!-- <el-form-item label="角色权限">
+            <el-form-item label="角色权限" prop="menus">
                 <el-tree
                     ref="formTree"
-                    :data="formData.menus"
+                    :data="allMenus"
+                    node-key="id"
                     show-checkbox
-                    node-key="menuLink"
+                    :default-expand-all="true"
                     :props="defaultProps"
+                    :check-strictly="true"
                 />
-            </el-form-item> -->
+            </el-form-item>
         </el-form>
         <template #footer>
-            <el-button type="primary" @click="closeDialog">确定</el-button>
+            <el-button type="primary" @click="handleRole">确定</el-button>
         </template>
     </el-dialog>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { getRoles, setRoles} from '../api/api'
+import { ref, onMounted, nextTick } from 'vue'
+import { getRoles,setRole } from '../api/role'
+import { getMenuTree } from '../api/menus'
+let allMenus = ref([])
+onMounted(()=>{
+    getMenuTree().then(res=>{
+        if(res.code===200){
+            allMenus.value = res.data
+        }
+    })
+})
 const defaultProps = {
   children: 'children',
-  label: 'menuName',
+  label: 'name',
 }
-
+let dialogType = ref('add')
+let dialogTitle = ref('新建角色')
 let tableData = ref([])
 let currentPage4 = ref(1)
 let pageSize4 = ref(10)
 let total = ref(0)
-let size = ref('small')
-let disabled = ref(false)
-let background = ref(false)
+// const handleCheckChange = (checkedKeys, checkedNodes) => {
+//     console.log('checkedKeys', checkedKeys)
+//     console.log('checkedNodes', checkedNodes)
+// }
 const handleSizeChange = (val) => {
     pageSize4.value = val
     getRoleList()
@@ -88,7 +97,7 @@ const getRoleList = () => {
         console.error('获取角色数据失败',err)
     })
 }
-
+let formRef = ref(null)
 let formTree = ref(null)
 let dialogVisible = ref(false)
 let formData = ref({
@@ -96,34 +105,54 @@ let formData = ref({
     roleDesc: '',
     menus: []
 })
-const closeDialog = () => {
-    // let checkNodes = formTree.value.getCheckedNodes()
-    
-    // console.log('关闭弹窗', checkNodes)
-    // dialogVisible.value = false
-    setRoles({
-        roleId: formData.value.roleId,
-        roleName: formData.value.roleName,
-        roleDesc: formData.value.roleDesc,
-        menus: JSON.stringify(formData.value.menus),
-        // checked: JSON.stringify(checkNodes)
-    }).then(res=>{
-        console.log('设置角色成功', res)
-        // dialogVisible.value = false
-        // getRoleList()
-    }).catch(err=>{
-        console.error('设置角色失败', err)
+const rules = ref({
+    name: [
+        { required: true, message: '请输入角色名称', trigger: 'blur' }
+    ],
+    roleDesc: [
+        { required: true, message: '请输入角色描述', trigger: 'blur' }
+    ]
+})
+const handleRole = () => {
+    let checkKeys = formTree.value.getCheckedKeys()
+    let checkHalfKeys = formTree.value.getHalfCheckedKeys()
+    console.log('关闭弹窗', checkKeys, checkHalfKeys)
+    formRef.value.validate((valid)=>{
+        if(valid){
+            if(dialogType.value === 'add'){
+                // 新增角色
+            }else{
+                // 编辑角色
+                setRole({
+                    ...formData.value,
+                    menus: checkKeys.concat(checkHalfKeys)
+                }).then(res=>{
+                    console.log('设置角色成功', res)
+                    if(res.code===200){
+                        dialogVisible.value = false
+                        getRoleList()
+                    }
+                }).catch(err=>{
+                    console.error('设置角色失败', err)
+                })
+            }
+        }
     })
 }
 const editRole = (row) => {
-    console.log('编辑角色', row)
-    formData.value.roleId = row.roleId
-    formData.value.roleName = row.roleName
-    formData.value.roleDesc = row.roleDesc
-    formData.value.menus = row.menus
     dialogVisible.value = true
+    dialogType.value = 'edit'
+    dialogTitle.value = '编辑角色'
+    console.log('编辑角色', row)
+    formData.value = Object.assign({},row)
+    console.log('formData',formData.value);
+    nextTick(()=>{
+        formTree.value.setCheckedKeys(formData.value.menus)
+    })
 }
 const createRole = () => {
+    dialogType.value = 'add'
+    dialogTitle.value = '新建角色'
     dialogVisible.value = true
 }
 onMounted(()=>{

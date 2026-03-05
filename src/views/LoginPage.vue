@@ -25,14 +25,10 @@
 </template>
 
 <script setup lang="ts">
-import axios from 'axios'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex';
 import { ref,reactive } from 'vue'
-import IndexDB from '@/utils/indexedDB';
 import { toLogin, toRegistry } from '@/api/api'
-import { ElMessageBox } from 'element-plus';
-import { setupTokenExpiryCheck } from '@/utils/tokenManager';
 import useUserInfoStore from '../store/pinia/userInfo';
 const userInfoStore = useUserInfoStore()
 let loginObj = reactive({
@@ -89,8 +85,7 @@ const handleLogin = function () {
             }
 
             localStorage.setItem('username', loginObj.username)
-            // 登录成功后启动token过期监听
-            setupTokenExpiryCheck();
+            
 
             router.replace('/')
         }

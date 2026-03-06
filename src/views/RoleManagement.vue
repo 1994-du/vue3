@@ -166,6 +166,9 @@ const createRole = () => {
     dialogTitle.value = '新建角色'
     dialogVisible.value = true
     formData.value = {}
+    nextTick(()=>{
+        formTree.value.setCheckedKeys([])
+    })
 }
 onMounted(()=>{
     getRoleList()

@@ -37,3 +37,41 @@ export function setRole(data){
         })
     })
 }
+/**
+ * @description 新增角色
+ * @data
+*/
+export function addRole(data){
+    return new Promise((resolve,reject)=>{
+        Axios({
+            url:`${baseUrl}/addRole`,
+            method:'post',
+            needAuth: true, // 需要鉴权
+            operationType: 'operate', // 添加操作类型标识
+            data
+        }).then(res=>{
+            resolve(res)
+        }).catch(err=>{
+            reject(err)
+        })
+    })
+}
+/**
+ * @description 删除角色
+ * @data
+*/
+export function delRole(data){
+    return new Promise((resolve,reject)=>{
+        Axios({
+            url:`${baseUrl}/delRole`,
+            method:'post',
+            needAuth: true, // 需要鉴权
+            operationType: 'operate', // 添加操作类型标识
+            data
+        }).then(res=>{
+            resolve(res)
+        }).catch(err=>{
+            reject(err)
+        })
+    })
+}

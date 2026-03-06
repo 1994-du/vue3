@@ -41,7 +41,6 @@
                     show-checkbox
                     :default-expand-all="true"
                     :props="defaultProps"
-                    :check-strictly="true"
                 />
             </el-form-item>
         </el-form>
@@ -53,8 +52,8 @@
 
 <script setup>
 import { ref, onMounted, nextTick } from 'vue'
-import { getRoles,setRole } from '../api/role'
-import { getMenuTree } from '../api/menus'
+import { getRoles,setRole,addRole } from '../api/role'
+import { addMenu, getMenuTree } from '../api/menus'
 let allMenus = ref([])
 onMounted(()=>{
     getMenuTree().then(res=>{
@@ -121,11 +120,23 @@ const handleRole = () => {
         if(valid){
             if(dialogType.value === 'add'){
                 // 新增角色
+                addRole({
+                    ...formData.value,
+                    menus: checkKeys
+                }).then(res=>{
+                    console.log('新增角色成功', res)
+                    if(res.code===200){
+                        dialogVisible.value = false
+                        getRoleList()
+                    }
+                }).catch(err=>{
+                    console.error('新增角色失败', err)
+                })
             }else{
                 // 编辑角色
                 setRole({
                     ...formData.value,
-                    menus: checkKeys.concat(checkHalfKeys)
+                    menus: checkKeys
                 }).then(res=>{
                     console.log('设置角色成功', res)
                     if(res.code===200){
@@ -154,6 +165,7 @@ const createRole = () => {
     dialogType.value = 'add'
     dialogTitle.value = '新建角色'
     dialogVisible.value = true
+    formData.value = {}
 }
 onMounted(()=>{
     getRoleList()

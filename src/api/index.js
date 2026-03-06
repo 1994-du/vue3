@@ -50,7 +50,7 @@ Axios.interceptors.response.use(res=>{
     }
     const operationType = res.config.operationType || '';   
     // 需要显示消息的操作类型列表
-    const showMessageOperations = ['operate','query'];
+    const showMessageOperations = ['operate'];
     if(res.status===200){
         // 只有在特定操作类型时才显示成功消息
         if(res.data.code===200 && showMessageOperations.includes(operationType)){

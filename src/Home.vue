@@ -35,7 +35,7 @@
                     <HeaderSearch @click="openSearchModal"/>
                     <ThemeSwitch/>
                     <el-dropdown placement="bottom" @command="handleCommand">
-                        <el-avatar size="default" :src="`${userInfoStore.userInfo.avatar}`"></el-avatar>
+                        <el-avatar size="default" :src="`${preUrl}${userInfoStore.userInfo.avatar}`"></el-avatar>
                         <template #dropdown>
                             <el-dropdown-menu>
                                 <el-dropdown-item disabled>{{ userInfoStore.userInfo.name }}</el-dropdown-item>
@@ -64,6 +64,8 @@
     import useUserInfoStore from './store/pinia/userInfo'
     import { clearToken,clearTokenCheckTimer } from '@/utils/tokenManager'
     import { toLoginOut } from '@/api/api'
+
+    const preUrl = `${import.meta.env.VITE_BASE_URL}`
     const userInfoStore = useUserInfoStore()
     const store = useStore()
     const router = useRouter()

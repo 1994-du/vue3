@@ -69,7 +69,7 @@ h1,.hljs{
             font-size: 20px;
             text-shadow: 2px 2px 4px var(--logoShadow);
             overflow: hidden;
-            border-bottom: .5px dashed #AADAFB;
+            border-bottom: 1px solid var(--borderColor);
             cursor: pointer;
         }
         .vue3-menu{

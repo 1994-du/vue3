@@ -3,6 +3,25 @@ import router from '../router';
 
 let tokenCheckTimer = null; // 定时器引用
 
+// JWT解析函数
+export const parseJWT = (token) => {
+    try {
+        // JWT由三部分组成，用.分隔，中间部分是payload
+        const payload = token.split('.')[1];
+        // 解码base64
+        const decodedPayload = JSON.parse(atob(payload.replace(/-/g, '+').replace(/_/g, '/')));
+        if(decodedPayload&&decodedPayload.exp){
+            // JWT的exp是秒级时间戳，需要转换为毫秒
+            const expireTime = decodedPayload.exp * 1000;
+            localStorage.setItem('tokenExpireTime', expireTime.toString());
+            console.log('Token过期时间:', new Date(expireTime).toLocaleString());
+        }
+    } catch (error) {
+        console.error('JWT解析失败:', error);
+        return null;
+    }
+}
+
 // 检查token是否过期
 export const isTokenExpired = () => {
     console.log('检查token是否过期');

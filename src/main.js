@@ -23,8 +23,9 @@ async function connectIndexDB(){
     }  
 }
 connectIndexDB();
-// 
-document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'light')
+// 设置html主题
+import { persistenceHtmlTheme } from './utils/saveHtmlTheme.js'
+persistenceHtmlTheme()
 // ant-design-vue
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/reset.css';

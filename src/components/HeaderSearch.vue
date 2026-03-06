@@ -1,7 +1,7 @@
 <template>
     <div class="header_inner">
         <button class="header_search">
-            <span class="search_icon">
+            <span class="search_icon select-none">
                 <el-icon><Search/></el-icon>
                 <span class="search_text">搜索</span>
             </span>

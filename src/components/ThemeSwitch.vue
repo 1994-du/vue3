@@ -8,17 +8,15 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { Sunny, Moon } from '@element-plus/icons-vue'
+import { persistenceHtmlTheme } from '@/utils/saveHtmlTheme.js'
 const currentTheme = ref()
 onMounted(() => {
-  // document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'light')
   currentTheme.value = document.documentElement.getAttribute('data-theme') || 'light'
 })
 function toggleTheme() {
   const theme = currentTheme.value === 'light' ? 'dark' : 'light'
-  const root = document.documentElement
+  persistenceHtmlTheme(theme)
   currentTheme.value = theme
-  root.setAttribute('data-theme', theme)
-  localStorage.setItem('theme', theme)
 }
 </script>
 <style scoped lang='less'>

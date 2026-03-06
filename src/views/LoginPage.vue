@@ -29,6 +29,7 @@ import { useRouter } from 'vue-router'
 import { useStore } from 'vuex';
 import { ref,reactive } from 'vue'
 import { toLogin, toRegistry } from '@/api/api'
+import { parseJWT } from '../utils/tokenManager'
 import useUserInfoStore from '../store/pinia/userInfo';
 const userInfoStore = useUserInfoStore()
 let loginObj = reactive({
@@ -46,19 +47,7 @@ const rules = reactive({
     ]
 })
 const loginFormRef = ref(null)
-// JWT解析函数
-const parseJWT = (token) => {
-    try {
-        // JWT由三部分组成，用.分隔，中间部分是payload
-        const payload = token.split('.')[1];
-        // 解码base64
-        const decodedPayload = JSON.parse(atob(payload.replace(/-/g, '+').replace(/_/g, '/')));
-        return decodedPayload;
-    } catch (error) {
-        console.error('JWT解析失败:', error);
-        return null;
-    }
-}
+
 
 const handleLogin = function () {
     if (!(window as any).db) {
@@ -71,22 +60,13 @@ const handleLogin = function () {
         if (res.code === 200) {
             // 保存token
             if (token) {
-                localStorage.setItem('token', token);
+                // localStorage.setItem('token', token);
                 userInfoStore.setMenus(menus)
                 userInfoStore.setUserInfo({name:username,avatar:avatar})
                 // 解析JWT获取过期时间
-                const payload = parseJWT(token);
-                if (payload && payload.exp) {
-                    // JWT的exp是秒级时间戳，需要转换为毫秒
-                    const expireTime = payload.exp * 1000;
-                    localStorage.setItem('tokenExpireTime', expireTime.toString());
-                    console.log('Token过期时间:', new Date(expireTime).toLocaleString());
-                }
+                parseJWT(token);
             }
-
-            localStorage.setItem('username', loginObj.username)
-            
-
+            // localStorage.setItem('username', loginObj.username)
             router.replace('/')
         }
     })

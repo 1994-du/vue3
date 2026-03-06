@@ -10,18 +10,12 @@ const useUserInfoStore = defineStore('userInfo',{
             menus:[]
         }
     },
-    getters:{
-        doubleCount:(state)=>{
-            return state.age*2
-        }
-    },
+    getters:{},
     actions:{
         setMenus(menus){
             this.menus = menus
         },
         setUserInfo(userInfo){
-            console.log('setUserInfo',userInfo);
-            
             this.userInfo = Object.assign({},this.userInfo,userInfo)
         }
     },

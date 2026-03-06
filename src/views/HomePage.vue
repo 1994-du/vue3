@@ -205,7 +205,7 @@ onUnmounted(() => {
 
 	// elementplus的命名空间是vue3
 	> .vue3-card {
-		background-color: var(--background) !important;
+		background-color: transparent !important;
 		color: var(--fontColor) !important;
 		/* 允许卡片使用自己的高度设置 */
 		height: auto !important;

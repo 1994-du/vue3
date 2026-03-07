@@ -63,7 +63,7 @@
                         :before-upload="beforeAvatarUpload"
                         :http-request="customUpload"
                     >
-                        <img class="edit_img" :src="`${editUserObj.avatar}`" alt="">
+                        <img class="edit_img" :src="`${preUrl}${editUserObj.avatar}`" alt="">
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="角色">
@@ -102,7 +102,7 @@
                     :before-upload="beforeAvatarUpload"
                     :http-request="customUpload"
                 >
-                    <img class="edit_img" :src="`${createUserObj.avatar}`" alt="">
+                    <img class="edit_img" :src="`${preUrl}${createUserObj.avatar}`" alt="">
                 </el-upload>
             </el-form-item>
             <el-form-item label="角色">

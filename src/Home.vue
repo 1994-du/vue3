@@ -78,7 +78,8 @@
     
     // 菜单
     const handleMenuSelect=function(index,indexPath){
-        router.push(index)
+        console.log(index,indexPath);
+        router.push(indexPath.join(''))
     }
     const collapse = function(){
         isCollapse.value=!isCollapse.value
@@ -104,34 +105,34 @@
     }
     // 初始化
     onMounted(()=>{
-        let arr = []
-        router.getRoutes().forEach(el=>{
-            if(el.meta.groupName){
-                let res = arr.find(ml=>ml?.groupName==el.meta.groupName)
-                if(res){
-                    res.children[0]={
-                        groupName:res.groupName,
-                        menuName:res.menuName,
-                        menuLink:res.menuLink
-                    }
-                    res.children.push({
-                        groupName:el.meta.groupName,
-                        menuName:el.name,
-                        menuLink:el.path,
-                        children:[]
-                    })
-                }else{
-                    arr[el.meta.index]={
-                        groupName:el.meta.groupName,
-                        menuName:el.name,
-                        menuLink:el.path,
-                        children:[]
-                    }
-                }
-            }
-        })
-        menuConfig.value = arr
-        
+        // let arr = []
+        // router.getRoutes().forEach(el=>{
+        //     if(el.meta.groupName){
+        //         let res = arr.find(ml=>ml?.groupName==el.meta.groupName)
+        //         if(res){
+        //             res.children[0]={
+        //                 groupName:res.groupName,
+        //                 menuName:res.menuName,
+        //                 menuLink:res.menuLink
+        //             }
+        //             res.children.push({
+        //                 groupName:el.meta.groupName,
+        //                 menuName:el.name,
+        //                 menuLink:el.path,
+        //                 children:[]
+        //             })
+        //         }else{
+        //             arr[el.meta.index]={
+        //                 groupName:el.meta.groupName,
+        //                 menuName:el.name,
+        //                 menuLink:el.path,
+        //                 children:[]
+        //             }
+        //         }
+        //     }
+        // })
+        // menuConfig.value = arr
+        menuConfig.value = userInfoStore.menus
         window.addEventListener('keydown', (e) => {
             if((e.ctrlKey||e.metaKey) && e.key === 'f'){
                 e.preventDefault()

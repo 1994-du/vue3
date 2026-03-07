@@ -1,6 +1,6 @@
 <template>
     <div class="menu_management_wrap">
-        <header>
+        <header class="flex justify-start">
             <el-button type="primary" @click="handleAddMenu(null)">新建菜单</el-button>
         </header>
         <el-table class="my-[10px]" border row-key="id" :data="menusList" style="width: 100%">
@@ -88,7 +88,6 @@ const handleCreateMenu = ()=>{
                     icon: createMenuObj.value.icon
                 }).then(res=>{
                     if(res.code===200){
-                        ElMessage.success(res.msg)
                         createMenuVisible.value = false
                         getMenusList()
                     } else {
@@ -106,7 +105,6 @@ const handleCreateMenu = ()=>{
                     icon: createMenuObj.value.icon
                 }).then(res=>{
                     if(res.code===200){
-                        ElMessage.success(res.msg)
                         createMenuVisible.value = false
                         getMenusList()
                     } else {
@@ -158,7 +156,6 @@ const handleDeleteMenu = (row)=>{
     }).then(() => {
         deleteMenu({id: row.id}).then(res=>{
             if(res.code===200){
-                ElMessage.success(res.msg)
                 getMenusList()
             } else {
                 ElMessage.error(res.msg)

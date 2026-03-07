@@ -1,6 +1,6 @@
 <template>
     <svg v-if="loaded" class="svg-icon" aria-hidden="true">
-        <use :xlink:href="`#icon-${name}`"></use>
+        <use :xlink:href="`#icon-${name || 'default'}`"></use>
     </svg>
 </template>
 
@@ -9,13 +9,12 @@ import { onMounted, ref } from 'vue';
 import svgLoader from './loader.js'
 const props = defineProps({
     name: {
-        type: String,
-        required: true
+        type: String
     }
 });
 let loaded = ref(false);
 onMounted(async () => {
-    loaded.value = await svgLoader(props.name);
+    loaded.value = await svgLoader(props.name || 'default');
 });
 </script>
 <style scoped lang='less'>

@@ -1,14 +1,14 @@
 <template>
-    <el-sub-menu v-if="menus.children&&menus.children.length>0" :index="menus.menuName">
+    <el-sub-menu v-if="menus.children&&menus.children.length>0" :index="menus.path">
         <template #title>
-            <el-icon><Folder /></el-icon>
-            <el-text truncated>{{ menus.groupName }}</el-text>
+            <SvgIcon name="分组" class="text-lg mr-2"/>
+            <el-text truncated class="text-lg">{{ menus.name }}</el-text>
         </template>
         <SubMenu v-for="(item,index) in menus.children" :key="index" :menus="item"/>
     </el-sub-menu>
-    <el-menu-item v-else :index="menus.menuLink">
-        <el-icon><Document /></el-icon>
-        <el-text truncated>{{ menus.menuName }}</el-text>
+    <el-menu-item v-else :index="menus.path">
+        <SvgIcon :name="menus.icon" class="text-lg mr-2"/>
+        <el-text truncated class="text-lg">{{ menus.name }}</el-text>
     </el-menu-item>
 </template>
 <script setup>

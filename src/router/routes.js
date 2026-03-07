@@ -28,7 +28,7 @@ export default[
             },
             // Echarts
             {
-                path:'/echarts/bar/base',
+                path:'/echarts/echart-bar',
                 name:'Echart-Bar',
                 meta:{
                     index:2,
@@ -37,7 +37,7 @@ export default[
                 component:()=>import('@/views/Echarts/echart-bar.vue')
             },
             {
-                path:'/echarts/line',
+                path:'/echarts/echart-line',
                 name:'Echart-Line',
                 meta:{
                     index:2,
@@ -46,7 +46,7 @@ export default[
                 component:()=>import('@/views/Echarts/echart-line.vue')
             },
             {
-                path:'/echarts/bar/bullet',
+                path:'/echarts/echart-bullet',
                 name:'Echart-Bullet',
                 meta:{
                     index:2,
@@ -73,7 +73,7 @@ export default[
                 component:()=>import('@/views/Echarts/echart-scatterBars.vue')
             },
             {
-                path:'/echarts/bar/overShow',
+                path:'/echarts/echart-bars',
                 name:'Echart-bars',
                 meta:{
                     index:2,
@@ -229,7 +229,7 @@ export default[
             // Http
 
             {
-                path:'/http/axios',
+                path:'/axios/useAxios',
                 name:'Axios',
                 meta:{
                     index:5,
@@ -676,40 +676,34 @@ export default[
                 },
                 component:()=>import('@/views/Browser/Principle.vue')
             },
-            
+            {
+                path:'/set',
+                name:'set',
+                component:()=>import('@/views/SetPage.vue'),
+                redirect:'/set/menuManagement',
+                children:[
+                    {
+                        path:'menuManagement',
+                        name:'菜单管理',
+                        component:()=>import('@/views/MenuManagement.vue')
+                    },
+                    {
+                        path:'userManagement',
+                        name:'用户管理',
+                        component:()=>import('@/views/UserManagement.vue')
+                    },
+                    {
+                        path:'roleManagement',
+                        name:'角色管理',
+                        component:()=>import('@/views/RoleManagement.vue')
+                    }
+                ]
+            }
         ]
     },
     {
         path:'/login',
         name:'login',
         component:()=>import('@/views/LoginPage.vue')
-    },
-    {
-        path:'/set',
-        name:'set',
-        component:()=>import('@/views/SetPage.vue'),
-        redirect:'/set/menuManagement',
-        children:[
-            {
-                path:'menuManagement',
-                name:'菜单管理',
-                component:()=>import('@/views/MenuManagement.vue')
-            },
-            {
-                path:'userManagement',
-                name:'用户管理',
-                component:()=>import('@/views/UserManagement.vue')
-            },
-            {
-                path:'roleManagement',
-                name:'角色管理',
-                component:()=>import('@/views/RoleManagement.vue')
-            }
-        ]
-    },
-    {
-        path:'/userInfo',
-        name:'userInfo',
-        component:()=>import('@/Home.vue')
     }
 ]

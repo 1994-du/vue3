@@ -180,17 +180,17 @@ const handleResize = () => {
 // 组件挂载后初始化瀑布流
 onMounted(() => {
 	// 使用setTimeout确保DOM完全渲染
-	setTimeout(() => {
-		createWaterfall()
-	}, 100)
+	// setTimeout(() => {
+	// 	createWaterfall()
+	// }, 100)
 	
 	// 添加窗口大小变化监听
-	window.addEventListener('resize', handleResize)
+	// window.addEventListener('resize', handleResize)
 })
 
 // 组件卸载时移除监听
 onUnmounted(() => {
-	window.removeEventListener('resize', handleResize)
+	// window.removeEventListener('resize', handleResize)
 })
 </script>
 <style lang='scss'>

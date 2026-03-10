@@ -1,12 +1,11 @@
 <template>
-    <div class="menu_management_wrap">
-        <header class="flex justify-start">
-            <el-button type="primary" @click="handleAddMenu(null)">新建菜单</el-button>
-        </header>
+    <div class="flex flex-col items-start">
+        <el-button type="primary" @click="handleAddMenu(null)">新建菜单</el-button>
         <el-table class="my-[10px]" border row-key="id" :data="menusList" style="width: 100%">
             <el-table-column prop="name" label="菜单名称"></el-table-column>
             <el-table-column prop="path" label="菜单路径"></el-table-column>
             <el-table-column prop="component" label="组件"></el-table-column>
+            <el-table-column prop="sort" label="排序"></el-table-column>
             <el-table-column prop="icon" label="图标"></el-table-column>
 
             <el-table-column label="操作">

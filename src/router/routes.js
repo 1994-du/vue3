@@ -679,23 +679,23 @@ export default[
             {
                 path:'/set',
                 name:'set',
-                component:()=>import('@/views/SetPage.vue'),
+                component:()=>import('@/views/Set/index.vue'),
                 redirect:'/set/menuManagement',
                 children:[
                     {
                         path:'menuManagement',
                         name:'菜单管理',
-                        component:()=>import('@/views/MenuManagement.vue')
+                        component:()=>import('@/views/Set/MenuManagement.vue')
                     },
                     {
                         path:'userManagement',
                         name:'用户管理',
-                        component:()=>import('@/views/UserManagement.vue')
+                        component:()=>import('@/views/Set/UserManagement.vue')
                     },
                     {
                         path:'roleManagement',
                         name:'角色管理',
-                        component:()=>import('@/views/RoleManagement.vue')
+                        component:()=>import('@/views/Set/RoleManagement.vue')
                     }
                 ]
             }

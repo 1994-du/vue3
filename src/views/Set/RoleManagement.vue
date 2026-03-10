@@ -1,8 +1,6 @@
 <template>
-    <div class="role_management_wrap">
-        <header>
-            <el-button type="primary" @click="createRole">新建角色</el-button>
-        </header>
+    <div class="flex flex-col items-start">
+        <el-button type="primary" @click="createRole">新建角色</el-button>
         <el-table class="my-[10px]" border :data="tableData">
             <el-table-column label="角色名称" prop="name"></el-table-column>
             <el-table-column label="角色描述" prop="roleDesc"></el-table-column>
@@ -52,8 +50,8 @@
 
 <script setup>
 import { ref, onMounted, nextTick } from 'vue'
-import { getRoles,setRole,addRole } from '../api/role'
-import { addMenu, getMenuTree } from '../api/menus'
+import { getRoles,setRole,addRole } from '../../api/role'
+import { addMenu, getMenuTree } from '../../api/menus'
 let allMenus = ref([])
 onMounted(()=>{
     getMenuTree().then(res=>{

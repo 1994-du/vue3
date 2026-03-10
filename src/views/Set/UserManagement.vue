@@ -1,9 +1,7 @@
 <template>
-    <div class="user_management">
-        <header>
-            <el-button type="primary" @click="createUser">新建用户</el-button>
-        </header>
-        <el-table style="width: 100%;height: 500px;" :data="tableData" border>
+    <div class="flex flex-col items-start">
+        <el-button type="primary" @click="createUser">新建用户</el-button>
+        <el-table class="my-[10px]" :data="tableData" border>
             <el-table-column label="用户名" prop="username"></el-table-column>
             <el-table-column label="头像" prop="avatar">
                 <template #default="{row}">

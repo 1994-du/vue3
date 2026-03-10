@@ -13,7 +13,6 @@
 </template>
 <script setup>
 import SubMenu from './subMenu.vue'
-import { Folder, Document } from '@element-plus/icons-vue'
 const props = defineProps(['menus'])
 const menus = props.menus;
 </script>
@@ -24,7 +23,4 @@ const menus = props.menus;
 .vue3-text{
     color: inherit;
 }
-// .vue3-menu-item{
-//     display: flex;
-// }
 </style>

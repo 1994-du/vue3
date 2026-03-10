@@ -1,4 +1,4 @@
-export default async function (iconName,svgPath=`src/assets/icons/${iconName}.svg`) {
+export default async function (iconName,svgPath=`/icons/${iconName}.svg`) {
     try{
         const response = await fetch(svgPath);
         if(!response.ok) throw new Error(`Failed to load SVG icon: ${iconName}`);

@@ -1,6 +1,6 @@
 export default async function (iconName,svgPath=`/icons/${iconName}.svg`) {
     try{
-        const response = await fetch(svgPath);
+        const response = await fetch(import.meta.env.VITE_PROJECT_URL+svgPath);
         if(!response.ok) throw new Error(`Failed to load SVG icon: ${iconName}`);
         const svgText = await response.text();
         const parser = new DOMParser();

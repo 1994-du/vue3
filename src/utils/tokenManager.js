@@ -37,7 +37,8 @@ export const isTokenExpired = () => {
 export const clearToken = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('tokenExpireTime');
-    localStorage.removeItem('username');
+    localStorage.removeItem('userInfo');
+    localStorage.removeItem('theme');
 }
 
 // token过期处理
@@ -83,4 +84,10 @@ export const clearTokenCheckTimer = () => {
         clearInterval(tokenCheckTimer);
         tokenCheckTimer = null;
     }
+}
+// 登录退出效果
+export const loginOutEffect = () => {
+    clearToken()
+    clearTokenCheckTimer()
+    router.replace('/login')
 }

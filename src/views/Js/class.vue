@@ -10,10 +10,7 @@
         <pre>在类内部访问</pre>
         <pre>每个实例独有此属性</pre>
     </code>
-</template>
-
-<script setup>
-class BankAccount {
+    <CodeEditor code="class BankAccount {
   #balance = 1000; // 私有属性
 
   getBalance() {
@@ -23,7 +20,12 @@ class BankAccount {
 
 const account = new BankAccount();
 console.log(account.getBalance()); // ✅ 1000
-console.log(BankAccount.#balance); // ❌ 报错 (SyntaxError: Private field '#balance' must be declared in an enclosing class)
+console.log(BankAccount.#balance); // ❌ 报错 (SyntaxError: Private field '#balance' must be declared in an enclosing class)"
+/>
+</template>
+
+<script setup>
+
 </script>
 <style scoped lang='less'>
 </style>

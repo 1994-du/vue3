@@ -31,6 +31,8 @@ import { ref,reactive } from 'vue'
 import { toLogin, toRegistry } from '@/api/auth'
 import { parseJWT } from '../utils/tokenManager'
 import useUserInfoStore from '../store/pinia/userInfo';
+import { initRoutes } from '../utils/generateRoutes';
+
 const userInfoStore = useUserInfoStore()
 let loginObj = reactive({
     username: "",
@@ -54,7 +56,7 @@ const handleLogin = function () {
         console.error('数据库未打开');
         return
     }
-    toLogin(loginObj).then((res: any) => {
+    toLogin(loginObj).then(async (res: any) => {
         console.log('登录',res);
         const { token,menus,username,avatar } = res.data
         if (res.code === 200) {
@@ -66,6 +68,7 @@ const handleLogin = function () {
                 // 解析JWT获取过期时间
                 parseJWT(token);
             }
+            await initRoutes()
             // localStorage.setItem('username', loginObj.username)
             router.replace('/')
         }

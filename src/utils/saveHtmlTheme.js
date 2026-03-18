@@ -3,7 +3,6 @@ export function saveHtmlTheme(theme) {
 }
 // 持久化html主题
 export function persistenceHtmlTheme(arg) {
-    const theme = localStorage.getItem('theme') || 'light';
-    document.documentElement.setAttribute('data-theme', arg || theme)
+    document.documentElement.setAttribute('data-theme', arg);
     localStorage.setItem('theme', arg);
 }

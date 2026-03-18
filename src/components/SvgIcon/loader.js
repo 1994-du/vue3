@@ -10,6 +10,10 @@ export default async function (iconName,svgPath=`/icons/${iconName}.svg`) {
         svgElement.removeAttribute('width');
         svgElement.removeAttribute('height');
         svgElement.removeAttribute('fill');
+        const paths = svgElement.querySelectorAll('[fill]');
+        paths.forEach(el => {
+            el.setAttribute('fill', 'currentColor');
+        });
         svgElement.setAttribute('viewBox',svgElement.getAttribute('viewBox') || '0 0 1024 1024');
         const symbolId = `icon-${iconName}`;
         // 创建symbol标签

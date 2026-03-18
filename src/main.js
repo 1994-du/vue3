@@ -25,7 +25,7 @@ async function connectIndexDB(){
 connectIndexDB();
 // 设置html主题
 import { persistenceHtmlTheme } from './utils/saveHtmlTheme.js'
-persistenceHtmlTheme()
+persistenceHtmlTheme(localStorage.getItem('theme'))
 // ant-design-vue
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/reset.css';
@@ -54,6 +54,7 @@ import registryComponents from './components/index.js'
 // 中央事件
 import mitt from 'mitt'
 const bus = new mitt()
+// 登录过期处理
 import { setupTokenExpiryCheck } from '@/utils/tokenManager.js'
 setupTokenExpiryCheck();
 // render 函数

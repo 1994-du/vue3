@@ -5,7 +5,7 @@
             <el-table-column prop="name" label="菜单名称"></el-table-column>
             <el-table-column prop="path" label="菜单路径"></el-table-column>
             <el-table-column prop="component" label="组件"></el-table-column>
-            <el-table-column prop="sort" label="排序"></el-table-column>
+            <el-table-column prop="sort" label="序号"></el-table-column>
             <el-table-column prop="icon" label="图标"></el-table-column>
 
             <el-table-column label="操作">
@@ -38,6 +38,9 @@
             <el-form-item label="组件" prop="component">
                 <el-input v-model="createMenuObj.component" placeholder="请输入组件"></el-input>
             </el-form-item>
+            <el-form-item label="序号" prop="sort">
+                <el-input v-model="createMenuObj.sort" placeholder="请输入序号"></el-input>
+            </el-form-item>
             <el-form-item label="图标" prop="icon">
                 <el-input v-model="createMenuObj.icon" placeholder="请输入图标"></el-input>
             </el-form-item>
@@ -62,6 +65,7 @@ const createMenuObj = ref({
     name: '',
     path: '',
     component: '',
+    sort: '',
     icon: ''
 })
 const createMenuRules = ref({
@@ -84,7 +88,8 @@ const handleCreateMenu = ()=>{
                     name: createMenuObj.value.name,
                     path: createMenuObj.value.path,
                     component: createMenuObj.value.component,
-                    icon: createMenuObj.value.icon
+                    sort: createMenuObj.value.sort,
+                    icon: createMenuObj.value.icon || 'default'
                 }).then(res=>{
                     if(res.code===200){
                         createMenuVisible.value = false
@@ -101,7 +106,8 @@ const handleCreateMenu = ()=>{
                     name: createMenuObj.value.name,
                     path: createMenuObj.value.path,
                     component: createMenuObj.value.component,
-                    icon: createMenuObj.value.icon
+                    sort: createMenuObj.value.sort,
+                    icon: createMenuObj.value.icon || 'default'
                 }).then(res=>{
                     if(res.code===200){
                         createMenuVisible.value = false

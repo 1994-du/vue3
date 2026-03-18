@@ -13,6 +13,7 @@ export const parseJWT = (token) => {
         if(decodedPayload&&decodedPayload.exp){
             // JWT的exp是秒级时间戳，需要转换为毫秒
             const expireTime = decodedPayload.exp * 1000;
+            localStorage.setItem('token', token);
             localStorage.setItem('tokenExpireTime', expireTime.toString());
             console.log('Token过期时间:', new Date(expireTime).toLocaleString());
         }
@@ -25,10 +26,10 @@ export const parseJWT = (token) => {
 // 检查token是否过期
 export const isTokenExpired = () => {
     console.log('检查token是否过期');
-    const token = localStorage.getItem('token');
+    // const token = localStorage.getItem('token');
     const expireTime = localStorage.getItem('tokenExpireTime');
     
-    if (!token || !expireTime) return false; // 没有token时不需要提示过期
+    // if (!token || !expireTime) return false; // 没有token时不需要提示过期
     
     return Date.now() > parseInt(expireTime);
 }

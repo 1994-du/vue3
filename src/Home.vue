@@ -56,7 +56,7 @@
     import { computed, onMounted,ref } from 'vue'
     import useUserInfoStore from './store/pinia/userInfo'
     import { loginOutEffect } from '@/utils/tokenManager'
-    import { toLoginOut } from '@/api/api'
+    import { toLoginOut } from '@/api/auth'
 
     const preUrl = `${import.meta.env.VITE_BASE_URL}`
     const userInfoStore = useUserInfoStore()

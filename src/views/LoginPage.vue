@@ -28,10 +28,9 @@
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex';
 import { ref,reactive } from 'vue'
-import { toLogin, toRegistry } from '@/api/api'
+import { toLogin, toRegistry } from '@/api/auth'
 import { parseJWT } from '../utils/tokenManager'
 import useUserInfoStore from '../store/pinia/userInfo';
-import { initRoutes } from '../utils/generateRoutes';
 const userInfoStore = useUserInfoStore()
 let loginObj = reactive({
     username: "",
@@ -66,8 +65,6 @@ const handleLogin = function () {
                 userInfoStore.setUserInfo({name:username,avatar:avatar})
                 // 解析JWT获取过期时间
                 parseJWT(token);
-                // 初始化路由
-                initRoutes()    
             }
             // localStorage.setItem('username', loginObj.username)
             router.replace('/')

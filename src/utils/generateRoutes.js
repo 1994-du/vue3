@@ -1,4 +1,5 @@
 import router from '@/router'
+import { getCurrentUserMenu } from '@/api/auth'
 import useUserInfoStore from '@/store/pinia/userInfo.js'
 const modules = import.meta.glob('@/views/**/*.vue')
 
@@ -25,8 +26,11 @@ function generateRoutes(menus) {
 
 
 async function initRoutes() {
-    const userInfoStore = useUserInfoStore()
-    const menus = userInfoStore.menus
+    let menus = []
+    let res = await getCurrentUserMenu()
+    if(res.code === 200){
+        menus = res.data.menus
+    }
     const routes = generateRoutes(menus)
     routes.forEach(route => {
         router.addRoute('layout',route)

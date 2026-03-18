@@ -38,6 +38,8 @@ import './styles/element_plus.scss'
 import "@/styles/common.scss"
 // elementPlus图标
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+// 
+import { initRoutes } from '@/utils/generateRoutes.js'
 // 国际化
 import LanguageZH from '@/lang/zh-cn.js'
 import LanguageEN from '@/lang/en-us.js'
@@ -67,7 +69,7 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 registryComponents(instance)
 instance.config.globalProperties.$axios = axios
 instance.config.globalProperties.$bus = bus
-instance.use(router)
+
 instance.use(store)
 instance.use(dxUI)
 instance.use(ElementPlus, { 
@@ -79,8 +81,14 @@ instance.use(i18n)
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
 instance.use(pinia)
-instance.mount('#vue3')
 customDirective(instance)
+// 动态路由注册
+async function bootstrap(){
+    await initRoutes() // 先注册路由
+    instance.use(router) // 再注册router
+    instance.mount('#vue3') 
+}
+bootstrap()
 if (window.__MICRO_APP_ENVIRONMENT__) {
   console.info('我在微前端环境中')
   // 监听数据变化

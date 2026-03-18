@@ -27,9 +27,11 @@ function generateRoutes(menus) {
 
 async function initRoutes() {
     let menus = []
-    let res = await getCurrentUserMenu()
-    if(res.code === 200){
-        menus = res.data.menus
+    if(localStorage.getItem('token')){
+        let res = await getCurrentUserMenu()
+        if(res.code === 200){
+            menus = res.data.menus
+        }
     }
     const routes = generateRoutes(menus)
     routes.forEach(route => {

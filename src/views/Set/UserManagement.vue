@@ -53,6 +53,12 @@
                 <el-form-item label="用户名">
                     <el-input v-model="editUserObj.username"></el-input>
                 </el-form-item>
+                <el-form-item label="性别">
+                    <el-radio-group v-model="editUserObj.gender">
+                        <el-radio label="1">男</el-radio>
+                        <el-radio label="2">女</el-radio>
+                    </el-radio-group>
+                </el-form-item>
                 <el-form-item label="头像">
                     <el-upload
                         :on-success="handleAvatarUploadSuccess"
@@ -102,6 +108,12 @@
                 >
                     <img class="edit_img" :src="`${preUrl}${createUserObj.avatar}`" alt="">
                 </el-upload>
+            </el-form-item>
+            <el-form-item label="性别">
+                <el-radio-group v-model="createUserObj.gender">
+                    <el-radio label="1">男</el-radio>
+                    <el-radio label="2">女</el-radio>
+                </el-radio-group>
             </el-form-item>
             <el-form-item label="角色">
                 <el-select v-model="createUserObj.roleId" placeholder="请选择">

@@ -1,6 +1,5 @@
 import { ElMessageBox } from 'element-plus';
 import router from '../router';
-
 let tokenCheckTimer = null; // 定时器引用
 
 // JWT解析函数
@@ -29,7 +28,7 @@ export const isTokenExpired = () => {
     // const token = localStorage.getItem('token');
     const expireTime = localStorage.getItem('tokenExpireTime');
     
-    // if (!token || !expireTime) return false; // 没有token时不需要提示过期
+    if (!expireTime) return true; // 没有token时不需要提示过期
     
     return Date.now() > parseInt(expireTime);
 }
@@ -66,6 +65,8 @@ export const handleTokenExpire = () => {
 
 // 设置token过期监听
 export const setupTokenExpiryCheck = () => {
+    // 如果当前不是登录路由，才设置token过期监听
+    if (window.location.pathname === '/login') return;
     // 清除之前可能存在的定时器
     if (tokenCheckTimer) {
         clearInterval(tokenCheckTimer);

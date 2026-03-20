@@ -9,8 +9,9 @@ router.onError=(err)=>{
     console.log('路由错误',err)
 }
 router.beforeEach(async (to,from,next)=>{
-    if(isTokenExpired()){
+    if(to.path!=='/login'&&isTokenExpired()){
         handleTokenExpire();
+        next()
     }else{
         next()
     }

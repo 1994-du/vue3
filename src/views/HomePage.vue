@@ -1,23 +1,4 @@
 <template>
-	 <van-field
-		v-model="message"
-		rows="2"
-		autosize
-		type="textarea"
-		maxlength="5000"
-		placeholder="请输入留言"
-		show-word-limit
-	/>
-	<van-field
-		v-model="message"
-		clearable
-		left-icon="search"
-		placeholder="显示清除图标"
-	/>
-	<van-radio-group v-model="checked" shape="square">
-		<van-radio name="1">单选框 1</van-radio>
-		<van-radio name="2">单选框 2</van-radio>
-	</van-radio-group>
 	<div class="home_wrap" ref="homeWrap">
 		<el-card>
 			<div style="height: 100px;">
@@ -129,7 +110,6 @@
 	</div>
 </template>
 <script setup>
-import { Field, Radio, RadioGroup } from 'vant'
 import useCounterStore from '@/store/pinia/counter'
 import { storeToRefs } from 'pinia'
 import { ref, onMounted, onUnmounted } from 'vue'

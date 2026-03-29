@@ -40,6 +40,9 @@ import "@/styles/common.scss"
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 // 
 import { initRoutes } from '@/utils/generateRoutes.js'
+// vant
+import Vant from 'vant';
+import 'vant/lib/index.css';
 // 国际化
 import LanguageZH from '@/lang/zh-cn.js'
 import LanguageEN from '@/lang/en-us.js'
@@ -81,6 +84,7 @@ instance.use(i18n)
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
 instance.use(pinia)
+instance.use(Vant)
 customDirective(instance)
 // 动态路由注册
 async function bootstrap(){

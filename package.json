@@ -25,6 +25,7 @@
     "pinia-plugin-persistedstate": "^4.7.1",
     "postcss-px-to-viewport": "^1.1.1",
     "socket.io-client": "^4.6.1",
+    "vant": "^4.9.24",
     "vite-plugin-mock": "^3.0.2",
     "vue": "^3.5.12",
     "vue-i18n": "^9.4.1",

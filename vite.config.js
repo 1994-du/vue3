@@ -7,6 +7,8 @@ import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 export default defineConfig(({mode,command}) => {
+  console.log('command',command);
+  
   const env = loadEnv(mode,process.cwd())
   return{
     plugins: [vue(),

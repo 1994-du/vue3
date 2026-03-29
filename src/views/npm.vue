@@ -1,5 +1,5 @@
 <template>
-    <div class="masonry">
+    <div class="masonry" :style="{background:'',}">
       <code>
         <pre>// npm版本更新</pre>
         <pre>npm version [name]</pre>

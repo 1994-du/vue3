@@ -78,11 +78,11 @@ Axios.interceptors.response.use(res=>{
 },err=>{
     console.log('响应错误',err)
     // 处理网络错误中的401情况
-    if (err.response && err.response.status === 401||err.status===400) {
+    if (err.response && err.response.status === 401) {
         handleTokenExpire();
     } else {
         ElMessage({
-            message: err.response.data.msg || '请求失败',
+            message: err.response?.data?.msg || '请求失败',
             type: 'error'
         });
     }

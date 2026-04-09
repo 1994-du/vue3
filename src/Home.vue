@@ -1,20 +1,22 @@
 <template>
     <ModalSearch v-if="isShowSearch" v-model="isShowSearch"/>
     <div class="layout">
-        <div class="layout_menu">
+        <div class="layout_menu" :class="{ collapsed: isCollapse }">
             <div class="layout_menu_logo" @click="router.push('/home')">
                 <span v-show="!isCollapse">KNOWLEDGE ENGINE</span>
                 <span v-show="isCollapse">K&E</span>
             </div>
-            <el-menu
-                @select="handleMenuSelect"
-                router
-                :default-active="onRoutes"
-                :collapse="isCollapse"
-                :style="{width:!isCollapse?'250px':''}"
-                :collapse-transition="false">
-                <SubMenu v-for="(item,index) in menuConfig" :key="index" :menus="item"/>
-            </el-menu>
+            <div class="menu_scroll_container">
+                <el-menu
+                    @select="handleMenuSelect"
+                    router
+                    :default-active="onRoutes"
+                    :collapse="isCollapse"
+                    :style="{width:!isCollapse?'250px':'64px'}"
+                    :collapse-transition="false">
+                    <SubMenu v-for="(item,index) in menuConfig" :key="index" :menus="item"/>
+                </el-menu>
+            </div>
             <div class="custome_menu_btn" @click="collapse">
                 <el-icon v-if="!isCollapse"><DArrowLeft/></el-icon>
                 <el-icon v-if="isCollapse"><DArrowRight/></el-icon>
@@ -58,7 +60,7 @@
     import { loginOutEffect } from '@/utils/tokenManager'
     import { toLoginOut } from '@/api/auth'
 
-    const preUrl = `${import.meta.env.VITE_BASE_URL}`
+    const preUrl = `${import.meta.env.VITE_PROXY}`.replace(/\/$/, '')
     const userInfoStore = useUserInfoStore()
     const router = useRouter()
     const route = useRoute()

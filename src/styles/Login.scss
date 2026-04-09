@@ -1,84 +1,246 @@
-.login_inner{
-    color: var(--fontColor);
-    width: 500px;
-    height: 250px;
-    background: var(--background);
+/* ============================================
+   登录页面样式 - 现代化玻璃拟态设计
+   ============================================ */
+
+.login_inner {
+    color: var(--text-primary);
+    width: 420px;
+    padding: 40px;
+    background: var(--bg-elevated);
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin: auto;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     display: flex;
     flex-direction: column;
-    .login_logo{
-        text-align: center;
-        font-size: 40px;
-        font-weight: bold;
-        text-shadow: 0 0 10px #bfffe7;
-        padding: 15px 0;
-        margin-bottom: 30px;
+    border-radius: var(--border-radius-xl);
+    box-shadow: var(--shadow-xl), 0 0 0 1px var(--border-color);
+    
+    /* 背景装饰 */
+    &::before {
+        content: '';
+        position: fixed;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: 
+            radial-gradient(circle at 20% 80%, rgba(93, 186, 171, 0.15) 0%, transparent 50%),
+            radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 40% 40%, rgba(93, 186, 171, 0.08) 0%, transparent 40%);
+        z-index: -1;
+        pointer-events: none;
     }
-    .login_box{
+
+    .login_logo {
+        text-align: center;
+        font-size: var(--font-size-2xl);
+        font-weight: 700;
+        background: var(--primary-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        padding: 0 0 32px 0;
+        letter-spacing: 2px;
+        position: relative;
+        
+        &::after {
+            content: '';
+            position: absolute;
+            bottom: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: var(--primary-gradient);
+            border-radius: 2px;
+        }
+    }
+
+    .login_box {
         width: 100%;
         display: flex;
         flex-direction: column;
-        .input_box{
+        gap: 24px;
+
+        .input_box {
             flex: 1;
             display: flex;
             flex-direction: column;
-            justify-content: space-around;
-            :deep(.vue3-form-item__label:before,){
-                color: transparent;
+            gap: 16px;
+
+            .el-form {
+                .el-form-item {
+                    margin-bottom: 20px;
+                    
+                    &__label {
+                        font-weight: 500;
+                        color: var(--text-secondary);
+                        padding-bottom: 6px;
+                    }
+                    
+                    &__error {
+                        color: var(--error);
+                        font-size: var(--font-size-xs);
+                        padding-top: 4px;
+                    }
+                }
             }
-            :deep(.vue3-form-item__error){
-                color: var(--errorColor);
+
+            .el-input {
+                &__wrapper {
+                    padding: 4px 16px;
+                    border-radius: var(--border-radius) !important;
+                    box-shadow: 0 0 0 1px var(--border-color) inset !important;
+                    transition: all var(--transition-fast);
+                    background: var(--bg-secondary);
+                    
+                    &:hover, &.is-focus {
+                        box-shadow: 0 0 0 2px var(--primary) inset !important;
+                        background: var(--bg-elevated);
+                    }
+                }
+                
+                &__inner {
+                    height: 44px;
+                    font-size: var(--font-size-base);
+                    color: var(--text-primary);
+                    
+                    &::placeholder {
+                        color: var(--text-tertiary);
+                    }
+                }
             }
-            .usename,.password{
+
+            .usename, .password {
                 width: 100%;
                 margin-bottom: 10px;
                 display: flex;
                 align-items: center;
                 position: relative;
-                input{
-                    height: 30px;
+
+                input {
+                    height: 44px;
                     width: 100%;
                     text-indent: 16px;
                     outline: none;
                     border: none;
-                    border-bottom: 1px solid #aaa;
-                    background: white;
+                    border-radius: var(--border-radius);
+                    border-bottom: none;
+                    background: var(--bg-secondary);
+                    box-shadow: 0 0 0 1px var(--border-color) inset;
+                    transition: all var(--transition-fast);
+                    font-size: var(--font-size-base);
+                    color: var(--text-primary);
+
+                    &:focus {
+                        box-shadow: 0 0 0 2px var(--primary) inset;
+                        background: var(--bg-elevated);
+                    }
+
+                    &::placeholder {
+                        color: var(--text-tertiary);
+                    }
                 }
-                .showpassword{
+
+                .showpassword {
                     display: none;
                     position: absolute;
-                    right: 5px;
-                    top: 5px;
+                    right: 12px;
+                    top: 50%;
+                    transform: translateY(-50%);
                     width: 20px;
                     height: 20px;
+                    cursor: pointer;
+                    opacity: 0.6;
+                    transition: opacity var(--transition-fast);
+                    
+                    &:hover {
+                        opacity: 1;
+                    }
                 }
             }
-            .password:hover img{
+
+            .password:hover img {
                 display: block;
             }
         }
-        
-        .login_buttons{
+
+        .login_buttons {
             display: flex;
-            // flex-direction: column;
+            gap: 12px;
             align-items: center;
-            justify-content: space-between;
-            .vue3-button{
-                width: 180px;
-                // height: 34px;
-                outline: none;
-                padding: 5px  10px;
-                border-radius: 5px;
-                cursor: pointer;
-                border: none;
-                margin-top: 15px;
-                margin-left: 0;
+            margin-top: 8px;
+
+            .el-button {
+                flex: 1;
+                height: 48px;
+                font-size: var(--font-size-base);
+                font-weight: 600;
+                border-radius: var(--border-radius) !important;
+                transition: all var(--transition-fast);
+
+                &--primary {
+                    background: var(--primary-gradient) !important;
+                    border: none !important;
+                    box-shadow: 0 4px 14px rgba(93, 186, 171, 0.4);
+
+                    &:hover {
+                        box-shadow: 0 6px 20px rgba(93, 186, 171, 0.5);
+                        transform: translateY(-2px);
+                    }
+
+                    &:active {
+                        transform: translateY(0);
+                    }
+                }
+
+                &--default {
+                    border-color: var(--border-color);
+                    color: var(--text-secondary);
+                    background: var(--bg-secondary);
+
+                    &:hover {
+                        border-color: var(--primary);
+                        color: var(--primary);
+                        background: var(--menu-bg-active);
+                    }
+                }
             }
+        }
+    }
+}
+
+/* 登录页背景 */
+#app .login-page {
+    background: var(--bg-secondary);
+    position: relative;
+    overflow: hidden;
+    
+    /* 动态背景网格 */
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: 
+            linear-gradient(rgba(93, 186, 171, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(93, 186, 171, 0.03) 1px, transparent 1px);
+        background-size: 50px 50px;
+        pointer-events: none;
+    }
+}
+
+/* 响应式适配 */
+@media (max-width: 480px) {
+    .login_inner {
+        width: 90%;
+        padding: 32px 24px;
+        
+        .login_logo {
+            font-size: var(--font-size-xl);
         }
     }
 }

@@ -224,3 +224,127 @@ export function uploadFile(data){
         })
     })
 }
+
+/**
+ * @description 获取组织架构树
+ * @param {Object} data - 请求参数
+ * @param {number} data.parentId - 父级组织id，默认为0
+*/
+export function getOrgTree(data = { parentId: 0 }){
+    return new Promise((resolve,reject)=>{
+        Axios({
+            url:`${baseUrl}/org-structures/tree`,
+            method:'post',
+            needAuth: true, // 需要鉴权
+            data: {
+                parentId: 0,
+                ...data
+            }
+        }).then(res=>{
+            resolve(res)
+        }).catch(err=>{
+            reject(err)
+        })
+    })
+}
+
+/**
+ * @description 获取组织详情
+ * @param {number} id - 组织id
+*/
+export function getOrgDetail(data){
+    return new Promise((resolve,reject)=>{
+        Axios({
+            url:`${baseUrl}/org-structures/detail`,
+            method:'get',
+            needAuth: true, // 需要鉴权
+            data
+        }).then(res=>{
+            resolve(res)
+        }).catch(err=>{
+            reject(err)
+        })
+    })
+}
+
+/**
+ * @description 新增组织
+ * @param {Object} data - 组织数据
+ * @param {string} data.name - 组织名称
+ * @param {string} data.code - 组织编码
+ * @param {number} data.parentId - 父级组织id
+ * @param {number} data.sort - 排序
+ * @param {number} data.status - 状态
+ * @param {string} data.remark - 备注
+*/
+/**
+ * @description 创建组织结构
+ * @param {Object} data - 组织数据
+ * @param {string} data.name - 组织名称
+ * @param {string} data.code - 组织编码
+ * @param {number} data.parentId - 父级组织id
+ * @param {number} data.sort - 排序
+ * @param {number} data.status - 状态
+ * @param {string} data.remark - 备注
+*/
+export function addOrg(data){
+    return new Promise((resolve,reject)=>{
+        Axios({
+            url:`${baseUrl}/org-structures/create`,
+            method:'post',
+            needAuth: true, // 需要鉴权
+            operationType: 'operate', // 添加操作类型标识
+            data
+        }).then(res=>{
+            resolve(res)
+        }).catch(err=>{
+            reject(err)
+        })
+    })
+}
+
+/**
+ * @description 更新组织
+ * @param {Object} data - 组织数据
+ * @param {number} data.id - 组织id
+ * @param {string} data.name - 组织名称
+ * @param {string} data.code - 组织编码
+ * @param {number} data.sort - 排序
+ * @param {number} data.status - 状态
+ * @param {string} data.remark - 备注
+*/
+export function updateOrg(data){
+    return new Promise((resolve,reject)=>{
+        Axios({
+            url:`${baseUrl}/org-structures/update`,
+            method:'post',
+            needAuth: true, // 需要鉴权
+            operationType: 'operate', // 添加操作类型标识
+            data
+        }).then(res=>{
+            resolve(res)
+        }).catch(err=>{
+            reject(err)
+        })
+    })
+}
+
+/**
+ * @description 删除组织
+ * @param {number} id - 组织id
+*/
+export function deleteOrg(data){
+    return new Promise((resolve,reject)=>{
+        Axios({
+            url:`${baseUrl}/org-structures/delete`,
+            method:'post',
+            needAuth: true, // 需要鉴权
+            operationType: 'operate', // 添加操作类型标识
+            data
+        }).then(res=>{
+            resolve(res)
+        }).catch(err=>{
+            reject(err)
+        })
+    })
+}

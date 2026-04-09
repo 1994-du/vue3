@@ -25,7 +25,7 @@ import useUserInfoStore from '@/store/pinia/userInfo'
 const userInfoStore = useUserInfoStore()
 const avatar = userInfoStore.userInfo.avatar
 const input = ref('')
-const preUrl = `${import.meta.env.VITE_BASE_URL}`
+const preUrl = `${import.meta.env.VITE_PROXY}`.replace(/\/$/, '')
 const msg_box = ref([])
 const send = async () => {
     msg_box.value.push({

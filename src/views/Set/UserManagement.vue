@@ -144,7 +144,7 @@ let tableData = ref([])
 let editUserVisible = ref(false)
 let editUserObj = ref({})
 let roleList = ref([])
-const preUrl = `${import.meta.env.VITE_BASE_URL}`
+const preUrl = `${import.meta.env.VITE_PROXY}`.replace(/\/$/, '')
 const getUsersList = ()=>{
     getUsers({
         page: currentPage.value,

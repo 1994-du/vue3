@@ -1,43 +1,227 @@
 @import "tailwindcss";
+
+/* ============================================
+   设计系统变量 - 现代化配色方案
+   ============================================ */
 :root {
-    --x:50%;
-    --y:50%;
-    --errorColor:#f56c6c;
-    --color:#5DBAAB;
-    --background2:#d75959;
-    --transitionBg:#000;
-    --maskBg:rgba(101,108,133,.8);
-    --background:#fff;
-    --h4label:#409eff;
-    --menu-font-color:#6f6d6d;
-    --fontColor:#000000;
-    --menuFontColorActive:#5DBAAB;
-    --menuFontColor:#000;
-    --fontSize:14px;
-    --inputColor:white;
-    --borderColor:#eee;
-    --tabFontColor:#ac3aee;
-    --codeBackground:#17191c;
-    --codeFontColor:#ffffff;
-    --logoShadow:rgba(0,0,0,0.3);
+    /* 主色调 - 青绿色系 */
+    --primary: #5DBAAB;
+    --primary-light: #7DD3C0;
+    --primary-dark: #4A9687;
+    --primary-gradient: linear-gradient(135deg, #5DBAAB 0%, #4A9687 100%);
+    
+    /* 辅助色 */
+    --secondary: #6366f1;
+    --secondary-light: #818cf8;
+    --accent: #f59e0b;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --error: #ef4444;
+    --info: #3b82f6;
+    
+    /* 中性色 */
+    --gray-50: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-300: #d1d5db;
+    --gray-400: #9ca3af;
+    --gray-500: #6b7280;
+    --gray-600: #4b5563;
+    --gray-700: #374151;
+    --gray-800: #1f2937;
+    --gray-900: #111827;
+    
+    /* 背景色 */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --bg-tertiary: #f1f5f9;
+    --bg-elevated: #ffffff;
+    
+    /* 文字色 */
+    --text-primary: #111827;
+    --text-secondary: #4b5563;
+    --text-tertiary: #9ca3af;
+    --text-inverse: #ffffff;
+    
+    /* 边框 */
+    --border-color: #e5e7eb;
+    --border-light: #f3f4f6;
+    --border-radius-sm: 6px;
+    --border-radius: 10px;
+    --border-radius-lg: 16px;
+    --border-radius-xl: 24px;
+    
+    /* 阴影 */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --shadow-glow: 0 0 20px rgba(93, 186, 171, 0.3);
+    
+    /* 间距 */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+    --space-8: 32px;
+    --space-10: 40px;
+    
+    /* 字体 */
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+    --font-size-xs: 12px;
+    --font-size-sm: 14px;
+    --font-size-base: 16px;
+    --font-size-lg: 18px;
+    --font-size-xl: 20px;
+    --font-size-2xl: 24px;
+    --font-size-3xl: 30px;
+    
+    /* 过渡 */
+    --transition-fast: 150ms ease;
+    --transition-base: 250ms ease;
+    --transition-slow: 350ms ease;
+    
+    /* 菜单 */
+    --menu-bg: #ffffff;
+    --menu-text: #4b5563;
+    --menu-text-active: #5DBAAB;
+    --menu-bg-active: rgba(93, 186, 171, 0.1);
+    
+    /* 其他 */
+    --x: 50%;
+    --y: 50%;
+    --maskBg: rgba(0, 0, 0, 0.5);
+    --code-bg: #1e1e2e;
+    --code-text: #cdd6f4;
+    
+    /* 兼容旧变量 */
+    --color: var(--primary);
+    --background: var(--bg-primary);
+    --background2: var(--error);
+    --transitionBg: var(--bg-primary);
+    --h4label: var(--primary);
+    --menu-font-color: var(--menu-text);
+    --fontColor: var(--text-primary);
+    --menuFontColorActive: var(--menu-text-active);
+    --menuFontColor: var(--menu-text);
+    --fontSize: var(--font-size-sm);
+    --inputColor: var(--bg-primary);
+    --borderColor: var(--border-color);
+    --tabFontColor: var(--secondary);
+    --codeBackground: var(--code-bg);
+    --codeFontColor: var(--code-text);
+    --logoShadow: rgba(0, 0, 0, 0.1);
+    --errorColor: var(--error);
 }
 
-
+/* ============================================
+   深色模式
+   ============================================ */
 [data-theme="dark"] {
-    --color:#5DBAAB;
-    --transitionBg:#fff;
-    --maskBg:rgba(0,0,0,.5);
-    --background:#17191c;
-    --h4label:#409eff;
-    --menu-font-color:#fff;
-    --fontColor:#ffffff;
-    --menuFontColorActive:#5DBAAB;
-    --menuFontColor:#97A2B6;
-    --fontSize:14px;
-    --inputColor:#303133;
-    --borderColor:#202837;
-    --tabFontColor:#ac3aee;
-    --codeBackground:#fff;
-    --codeFontColor:#000000;
-    --logoShadow:rgba(255,255,255,1);
+    --primary: #5DBAAB;
+    --primary-light: #7DD3C0;
+    --primary-dark: #4A9687;
+    
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-tertiary: #334155;
+    --bg-elevated: #1e293b;
+    
+    --text-primary: #f8fafc;
+    --text-secondary: #cbd5e1;
+    --text-tertiary: #64748b;
+    --text-inverse: #0f172a;
+    
+    --border-color: #334155;
+    --border-light: #1e293b;
+    
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+    --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.4);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.4);
+    
+    --menu-bg: #1e293b;
+    --menu-text: #94a3b8;
+    --menu-text-active: #5DBAAB;
+    --menu-bg-active: rgba(93, 186, 171, 0.15);
+    
+    --code-bg: #181825;
+    --code-text: #cdd6f4;
+    
+    /* 兼容旧变量 */
+    --color: var(--primary);
+    --background: var(--bg-primary);
+    --transitionBg: var(--text-primary);
+    --maskBg: rgba(0, 0, 0, 0.7);
+    --h4label: var(--primary);
+    --menu-font-color: var(--menu-text);
+    --fontColor: var(--text-primary);
+    --menuFontColorActive: var(--menu-text-active);
+    --menuFontColor: var(--menu-text);
+    --fontSize: var(--font-size-sm);
+    --inputColor: var(--bg-secondary);
+    --borderColor: var(--border-color);
+    --tabFontColor: var(--secondary-light);
+    --codeBackground: var(--code-bg);
+    --codeFontColor: var(--code-text);
+    --logoShadow: rgba(255, 255, 255, 0.1);
+    --errorColor: var(--error);
+}
+
+/* ============================================
+   全局基础样式
+   ============================================ */
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-sans);
+    font-size: var(--font-size-sm);
+    line-height: 1.6;
+    color: var(--text-primary);
+    background-color: var(--bg-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--gray-300);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--gray-400);
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+    background: var(--gray-600);
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+    background: var(--gray-500);
+}
+
+/* 选中文字样式 */
+::selection {
+    background: var(--primary);
+    color: white;
 }

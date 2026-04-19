@@ -1,43 +1,130 @@
 import router from '@/router'
 import { getCurrentUserMenu } from '@/api/auth'
-import useUserInfoStore from '@/store/pinia/userInfo.js'
-const modules = import.meta.glob('@/views/**/*.vue')
+import {
+    HOME_FALLBACK_PATH,
+    getDefaultRoutePath,
+    getRelativeRoutePath,
+    normalizeComponentPath,
+    normalizeRoutePath,
+    resolveMenuFullPath,
+    toChildRoutePath
+} from './menuRoute'
 
-function generateRoutes(menus) {
+const modules = import.meta.glob('/src/views/**/*.vue')
+
+function resolveRouteComponent(menu, normalizedPath) {
+    const componentPath = normalizeComponentPath(menu?.component)
+
+    if (componentPath && modules[componentPath]) {
+        return modules[componentPath]
+    }
+
+    if (normalizedPath === HOME_FALLBACK_PATH) {
+        return modules['/src/views/HomePage.vue']
+    }
+
+    return undefined
+}
+
+function generateRoutes(menus = [], parentPath = '') {
     const routes = []
+
     menus.forEach(menu => {
+        const fullPath = resolveMenuFullPath(parentPath, menu?.path)
+        const children = menu?.children?.length ? generateRoutes(menu.children, fullPath) : []
+        const routePath = getRelativeRoutePath(fullPath, parentPath)
+
+        if (!routePath && !children.length) {
+            return
+        }
+
         const route = {
-            path: menu.path,
-            name: menu.name
+            path: routePath,
+            name: menu.name || routePath
         }
-        // 如果有组件
-        if (menu.component) {
-            const componentPath = `/src/views/${menu.component}.vue`
-            route.component = modules[componentPath]
+
+        const component = resolveRouteComponent(menu, fullPath)
+        if (component) {
+            route.component = component
         }
-        // 递归 children
-        if (menu.children && menu.children.length) {
-            route.children = generateRoutes(menu.children)
+
+        if (children.length) {
+            route.children = children
         }
+
+        if (!route.component && !route.children?.length) {
+            return
+        }
+
         routes.push(route)
     })
+
     return routes
 }
 
+function hasRoutePath(routeList, targetPath, parentPath = '') {
+    return routeList.some(route => {
+        const currentPath = normalizeRoutePath(
+            parentPath ? `${parentPath}/${route.path}` : route.path
+        )
 
-async function initRoutes() {
+        if (currentPath === targetPath) {
+            return true
+        }
+
+        if (route.children?.length) {
+            return hasRoutePath(route.children, targetPath, currentPath)
+        }
+
+        return false
+    })
+}
+
+function addDynamicRoutes(routes) {
+    const existedPaths = new Set(
+        router.getRoutes().map(route => normalizeRoutePath(route.path))
+    )
+
+    routes.forEach(route => {
+        const normalizedPath = normalizeRoutePath(route.path)
+
+        if (existedPaths.has(normalizedPath)) {
+            return
+        }
+
+        router.addRoute('layout', route)
+        existedPaths.add(normalizedPath)
+    })
+}
+
+async function initRoutes(menusFromLogin) {
     let menus = []
-    if(localStorage.getItem('token')){
+
+    if (menusFromLogin && menusFromLogin.length > 0) {
+        menus = menusFromLogin
+    } else if (localStorage.getItem('token')) {
         let res = await getCurrentUserMenu()
-        if(res.code === 200){
+        if (res.code === 200) {
             menus = res.data.menus
         }
     }
+
     const routes = generateRoutes(menus)
-    routes.forEach(route => {
-        router.addRoute('layout',route)
-    })
+    const defaultRoutePath = getDefaultRoutePath(menus)
+
+    if (!hasRoutePath(routes, defaultRoutePath)) {
+        routes.unshift({
+            path: toChildRoutePath(defaultRoutePath),
+            name: 'home',
+            component: modules['/src/views/HomePage.vue']
+        })
+    }
+
+    addDynamicRoutes(routes)
+
+    return defaultRoutePath
 }
+
 export{
     initRoutes
 }

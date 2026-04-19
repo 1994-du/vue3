@@ -1,168 +1,87 @@
 /* ============================================
-   登录页面样式 - 现代化玻璃拟态设计
+   登录页面样式 - 清爽简约设计
    ============================================ */
 
 .login_inner {
-    color: var(--text-primary);
-    width: 420px;
-    padding: 40px;
-    background: var(--bg-elevated);
+    color: #1f2937;
+    width: 380px;
+    padding: 0;
+    background: transparent;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     display: flex;
     flex-direction: column;
-    border-radius: var(--border-radius-xl);
-    box-shadow: var(--shadow-xl), 0 0 0 1px var(--border-color);
-    
-    /* 背景装饰 */
-    &::before {
-        content: '';
-        position: fixed;
-        top: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
-        background: 
-            radial-gradient(circle at 20% 80%, rgba(93, 186, 171, 0.15) 0%, transparent 50%),
-            radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
-            radial-gradient(circle at 40% 40%, rgba(93, 186, 171, 0.08) 0%, transparent 40%);
-        z-index: -1;
-        pointer-events: none;
-    }
+    border-radius: 0;
+    box-shadow: none;
 
     .login_logo {
         text-align: center;
-        font-size: var(--font-size-2xl);
-        font-weight: 700;
-        background: var(--primary-gradient);
+        font-size: 42px;
+        font-weight: 800;
+        background: linear-gradient(135deg, #5DBAAB 0%, #6366F1 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
-        padding: 0 0 32px 0;
+        padding: 0 0 48px 0;
         letter-spacing: 2px;
-        position: relative;
-        
-        &::after {
-            content: '';
-            position: absolute;
-            bottom: 16px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 3px;
-            background: var(--primary-gradient);
-            border-radius: 2px;
-        }
+        text-shadow: none;
+        white-space: nowrap;
     }
 
     .login_box {
         width: 100%;
         display: flex;
         flex-direction: column;
-        gap: 24px;
+        gap: 28px;
 
         .input_box {
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 20px;
 
-            .el-form {
-                .el-form-item {
-                    margin-bottom: 20px;
-                    
-                    &__label {
-                        font-weight: 500;
-                        color: var(--text-secondary);
-                        padding-bottom: 6px;
-                    }
-                    
-                    &__error {
-                        color: var(--error);
-                        font-size: var(--font-size-xs);
-                        padding-top: 4px;
-                    }
-                }
-            }
-
-            .el-input {
-                &__wrapper {
-                    padding: 4px 16px;
-                    border-radius: var(--border-radius) !important;
-                    box-shadow: 0 0 0 1px var(--border-color) inset !important;
-                    transition: all var(--transition-fast);
-                    background: var(--bg-secondary);
-                    
-                    &:hover, &.is-focus {
-                        box-shadow: 0 0 0 2px var(--primary) inset !important;
-                        background: var(--bg-elevated);
-                    }
+            .form-item {
+                width: 100%;
+                margin-bottom: 24px;
+                
+                .form-label {
+                    font-weight: 600;
+                    color: #374151;
+                    padding-bottom: 8px;
+                    display: block;
+                    text-align: left;
+                    width: 100%;
+                    font-size: 14px;
                 }
                 
-                &__inner {
-                    height: 44px;
-                    font-size: var(--font-size-base);
-                    color: var(--text-primary);
-                    
-                    &::placeholder {
-                        color: var(--text-tertiary);
-                    }
-                }
-            }
-
-            .usename, .password {
-                width: 100%;
-                margin-bottom: 10px;
-                display: flex;
-                align-items: center;
-                position: relative;
-
-                input {
-                    height: 44px;
+                .form-input {
                     width: 100%;
-                    text-indent: 16px;
+                    height: 52px;
+                    font-size: 15px;
+                    color: #111827;
+                    padding: 0 20px;
+                    border-radius: 12px;
+                    background: #ffffff;
+                    border: 2px solid #e5e7eb;
+                    transition: all 0.2s ease;
                     outline: none;
-                    border: none;
-                    border-radius: var(--border-radius);
-                    border-bottom: none;
-                    background: var(--bg-secondary);
-                    box-shadow: 0 0 0 1px var(--border-color) inset;
-                    transition: all var(--transition-fast);
-                    font-size: var(--font-size-base);
-                    color: var(--text-primary);
-
-                    &:focus {
-                        box-shadow: 0 0 0 2px var(--primary) inset;
-                        background: var(--bg-elevated);
-                    }
-
-                    &::placeholder {
-                        color: var(--text-tertiary);
-                    }
-                }
-
-                .showpassword {
-                    display: none;
-                    position: absolute;
-                    right: 12px;
-                    top: 50%;
-                    transform: translateY(-50%);
-                    width: 20px;
-                    height: 20px;
-                    cursor: pointer;
-                    opacity: 0.6;
-                    transition: opacity var(--transition-fast);
+                    box-sizing: border-box;
                     
                     &:hover {
-                        opacity: 1;
+                        border-color: #d1d5db;
+                    }
+                    
+                    &:focus {
+                        border-color: #5DBAAB;
+                        box-shadow: 0 0 0 4px rgba(93, 186, 171, 0.1);
+                    }
+                    
+                    &::placeholder {
+                        color: #9ca3af;
                     }
                 }
-            }
-
-            .password:hover img {
-                display: block;
             }
         }
 
@@ -170,24 +89,25 @@
             display: flex;
             gap: 12px;
             align-items: center;
-            margin-top: 8px;
+            margin-top: 4px;
 
             .el-button {
                 flex: 1;
-                height: 48px;
-                font-size: var(--font-size-base);
+                height: 52px;
+                font-size: 15px;
                 font-weight: 600;
-                border-radius: var(--border-radius) !important;
-                transition: all var(--transition-fast);
+                border-radius: 12px !important;
+                transition: all 0.2s ease;
+                border: none !important;
 
                 &--primary {
-                    background: var(--primary-gradient) !important;
-                    border: none !important;
-                    box-shadow: 0 4px 14px rgba(93, 186, 171, 0.4);
+                    background: linear-gradient(135deg, #5DBAAB 0%, #6366F1 100%) !important;
+                    color: #ffffff !important;
+                    box-shadow: 0 4px 14px rgba(93, 186, 171, 0.35);
 
                     &:hover {
-                        box-shadow: 0 6px 20px rgba(93, 186, 171, 0.5);
-                        transform: translateY(-2px);
+                        box-shadow: 0 6px 20px rgba(93, 186, 171, 0.45);
+                        transform: translateY(-1px);
                     }
 
                     &:active {
@@ -196,14 +116,13 @@
                 }
 
                 &--default {
-                    border-color: var(--border-color);
-                    color: var(--text-secondary);
-                    background: var(--bg-secondary);
+                    background: #f3f4f6;
+                    color: #374151;
+                    border: 2px solid #e5e7eb !important;
 
                     &:hover {
-                        border-color: var(--primary);
-                        color: var(--primary);
-                        background: var(--menu-bg-active);
+                        background: #e5e7eb;
+                        border-color: #d1d5db !important;
                     }
                 }
             }
@@ -213,11 +132,12 @@
 
 /* 登录页背景 */
 #app .login-page {
-    background: var(--bg-secondary);
+    background: #f9fafb;
     position: relative;
     overflow: hidden;
+    min-height: 100vh;
     
-    /* 动态背景网格 */
+    /* 简洁背景装饰 */
     &::before {
         content: '';
         position: absolute;
@@ -225,10 +145,9 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background-image: 
-            linear-gradient(rgba(93, 186, 171, 0.03) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(93, 186, 171, 0.03) 1px, transparent 1px);
-        background-size: 50px 50px;
+        background: 
+            radial-gradient(circle at 20% 80%, rgba(93, 186, 171, 0.08) 0%, transparent 50%),
+            radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.06) 0%, transparent 50%);
         pointer-events: none;
     }
 }
@@ -236,11 +155,11 @@
 /* 响应式适配 */
 @media (max-width: 480px) {
     .login_inner {
-        width: 90%;
-        padding: 32px 24px;
+        width: 85%;
+        padding: 0;
         
         .login_logo {
-            font-size: var(--font-size-xl);
+            font-size: 28px;
         }
     }
 }

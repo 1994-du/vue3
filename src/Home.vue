@@ -2,13 +2,12 @@
     <ModalSearch v-if="isShowSearch" v-model="isShowSearch"/>
     <div class="layout">
         <div class="layout_menu" :class="{ collapsed: isCollapse }">
-            <div class="layout_menu_logo" @click="router.push('/home')">
+            <div class="layout_menu_logo" @click="goHome">
                 <span v-show="!isCollapse">KNOWLEDGE ENGINE</span>
                 <span v-show="isCollapse">K&E</span>
             </div>
             <div class="menu_scroll_container">
                 <el-menu
-                    @select="handleMenuSelect"
                     router
                     :default-active="onRoutes"
                     :collapse="isCollapse"
@@ -59,6 +58,7 @@
     import useUserInfoStore from './store/pinia/userInfo'
     import { loginOutEffect } from '@/utils/tokenManager'
     import { toLoginOut } from '@/api/auth'
+    import { getDefaultRoutePath } from '@/utils/menuRoute'
 
     const preUrl = `${import.meta.env.VITE_PROXY}`.replace(/\/$/, '')
     const userInfoStore = useUserInfoStore()
@@ -69,19 +69,13 @@
     })
     const isCollapse=ref(false)
     const menuConfig = ref([])
-    
-    // 菜单
-    const handleMenuSelect=function(index,indexPath){
-        console.log(index,indexPath);
-        if(indexPath.length>1){
-            router.push(indexPath.join('/'))
-        }
-        if(indexPath.length==1){
-            router.push(`${indexPath[0]}`)
-        }
-    }
+
     const collapse = function(){
         isCollapse.value=!isCollapse.value
+    }
+
+    const goHome = () => {
+        router.push(getDefaultRoutePath(userInfoStore.menus))
     }
 
     let isShowSearch = ref(false)

@@ -1,8 +1,10 @@
+import { getDefaultRoutePath } from '@/utils/menuRoute'
+
 // 路由分组
 export default[
     {
         path:'/',
-        redirect:'/home',
+        redirect:() => getDefaultRoutePath(),
         name:'layout',
         component:()=>import('@/Home.vue')
     },

@@ -6,14 +6,26 @@
         </div>
         <div class="login_box">
             <div class="input_box">
-                <el-form :model="loginObj" ref="loginFormRef" :rules="rules">
-                    <el-form-item label="账号" prop="username">
-                        <el-input size="large" v-focus type="text" placeholder="请输入账号" v-model="loginObj.username"></el-input>
-                    </el-form-item>
-                    <el-form-item label="密码" prop="password">
-                        <el-input size="large" type="password" placeholder="请输入密码" v-model="loginObj.password" @keyup.enter="handleLogin"></el-input>
-                    </el-form-item>
-                </el-form>
+                <div class="form-item">
+                    <label class="form-label">账号</label>
+                    <input 
+                        type="text" 
+                        class="form-input" 
+                        v-focus 
+                        placeholder="请输入账号" 
+                        v-model="loginObj.username"
+                    >
+                </div>
+                <div class="form-item">
+                    <label class="form-label">密码</label>
+                    <input 
+                        type="password" 
+                        class="form-input" 
+                        placeholder="请输入密码" 
+                        v-model="loginObj.password"
+                        @keyup.enter="handleLogin"
+                    >
+                </div>
             </div>
 
             <div class="login_buttons">
@@ -68,9 +80,9 @@ const handleLogin = function () {
                 // 解析JWT获取过期时间
                 parseJWT(token);
             }
-            await initRoutes()
+            const defaultRoutePath = await initRoutes(menus)
             // localStorage.setItem('username', loginObj.username)
-            router.replace('/')
+            await router.replace(defaultRoutePath)
         }
     })
 }

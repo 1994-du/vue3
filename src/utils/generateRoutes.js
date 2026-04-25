@@ -1,130 +1,78 @@
 import router from '@/router'
-import { getCurrentUserMenu } from '@/api/auth'
-import {
-    HOME_FALLBACK_PATH,
-    getDefaultRoutePath,
-    getRelativeRoutePath,
-    normalizeComponentPath,
-    normalizeRoutePath,
-    resolveMenuFullPath,
-    toChildRoutePath
-} from './menuRoute'
+import useUserInfoStore from '@/store/pinia/userInfo.js'
+const modules = import.meta.glob('@/views/**/*.vue')
 
-const modules = import.meta.glob('/src/views/**/*.vue')
-
-function resolveRouteComponent(menu, normalizedPath) {
-    const componentPath = normalizeComponentPath(menu?.component)
-
-    if (componentPath && modules[componentPath]) {
-        return modules[componentPath]
-    }
-
-    if (normalizedPath === HOME_FALLBACK_PATH) {
-        return modules['/src/views/HomePage.vue']
-    }
-
-    return undefined
-}
-
-function generateRoutes(menus = [], parentPath = '') {
+function generateRoutes(menus) {
     const routes = []
-
     menus.forEach(menu => {
-        const fullPath = resolveMenuFullPath(parentPath, menu?.path)
-        const children = menu?.children?.length ? generateRoutes(menu.children, fullPath) : []
-        const routePath = getRelativeRoutePath(fullPath, parentPath)
-
-        if (!routePath && !children.length) {
-            return
-        }
-
         const route = {
-            path: routePath,
-            name: menu.name || routePath
+            path: menu.path,
+            name: menu.name
         }
-
-        const component = resolveRouteComponent(menu, fullPath)
-        if (component) {
-            route.component = component
+        // 如果有组件
+        if (menu.component) {
+            const componentPath = `/src/views/${menu.component}.vue`
+            route.component = modules[componentPath]
         }
-
-        if (children.length) {
-            route.children = children
+        // 递归 children
+        if (menu.children && menu.children.length) {
+            route.children = generateRoutes(menu.children)
         }
-
-        if (!route.component && !route.children?.length) {
-            return
-        }
-
         routes.push(route)
     })
-
     return routes
 }
 
-function hasRoutePath(routeList, targetPath, parentPath = '') {
-    return routeList.some(route => {
-        const currentPath = normalizeRoutePath(
-            parentPath ? `${parentPath}/${route.path}` : route.path
-        )
-
-        if (currentPath === targetPath) {
-            return true
+// 从菜单中找到默认路由路径
+function getDefaultRoutePath(menus) {
+    if (!menus || menus.length === 0) {
+        return '/'
+    }
+    
+    // 优先选择首页
+    for (const menu of menus) {
+        if (menu.path === '/home' || menu.path === '/') {
+            return menu.path
         }
-
-        if (route.children?.length) {
-            return hasRoutePath(route.children, targetPath, currentPath)
+    }
+    
+    // 否则返回第一个有组件的菜单
+    for (const menu of menus) {
+        if (menu.component) {
+            return menu.path
         }
-
-        return false
-    })
-}
-
-function addDynamicRoutes(routes) {
-    const existedPaths = new Set(
-        router.getRoutes().map(route => normalizeRoutePath(route.path))
-    )
-
-    routes.forEach(route => {
-        const normalizedPath = normalizeRoutePath(route.path)
-
-        if (existedPaths.has(normalizedPath)) {
-            return
+        if (menu.children && menu.children.length) {
+            const childPath = getDefaultRoutePath(menu.children)
+            if (childPath) {
+                return childPath
+            }
         }
-
-        router.addRoute('layout', route)
-        existedPaths.add(normalizedPath)
-    })
+    }
+    
+    return '/'
 }
 
 async function initRoutes(menusFromLogin) {
     let menus = []
-
+    const userInfoStore = useUserInfoStore()
+    
     if (menusFromLogin && menusFromLogin.length > 0) {
         menus = menusFromLogin
+        userInfoStore.setMenus(menus)
     } else if (localStorage.getItem('token')) {
-        let res = await getCurrentUserMenu()
-        if (res.code === 200) {
-            menus = res.data.menus
+        // 只从 store 中获取菜单数据，不调用 API
+        if (userInfoStore.menus && userInfoStore.menus.length > 0) {
+            menus = userInfoStore.menus
         }
     }
-
+    
     const routes = generateRoutes(menus)
-    const defaultRoutePath = getDefaultRoutePath(menus)
-
-    if (!hasRoutePath(routes, defaultRoutePath)) {
-        routes.unshift({
-            path: toChildRoutePath(defaultRoutePath),
-            name: 'home',
-            component: modules['/src/views/HomePage.vue']
-        })
-    }
-
-    addDynamicRoutes(routes)
-
-    return defaultRoutePath
+    routes.forEach(route => {
+        router.addRoute('layout',route)
+    })
+    
+    return getDefaultRoutePath(menus)
 }
-
 export{
     initRoutes
 }

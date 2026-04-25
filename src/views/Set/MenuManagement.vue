@@ -1,53 +1,93 @@
 <template>
-    <div class="flex flex-col items-start">
-        <el-button type="primary" @click="handleAddMenu(null)">新建菜单</el-button>
-        <el-table class="my-[10px]" border row-key="id" :data="menusList" style="width: 100%">
-            <el-table-column prop="name" label="菜单名称"></el-table-column>
-            <el-table-column prop="path" label="菜单路径"></el-table-column>
-            <el-table-column prop="component" label="组件"></el-table-column>
-            <el-table-column prop="sort" label="序号"></el-table-column>
-            <el-table-column prop="icon" label="图标"></el-table-column>
+    <div class="menu-management-container">
+        <div class="page-header">
+            <h2>菜单管理</h2>
+            <div class="header-actions">
+                <el-button type="primary" @click="handleAddMenu(null)" class="add-btn">
+                    <el-icon><Plus /></el-icon>新建菜单
+                </el-button>
+            </div>
+        </div>
+        
+        <div class="table-card">
+            <el-table 
+                class="menu-table"
+                border 
+                row-key="id" 
+                :data="menusList" 
+                style="width: 100%"
+                v-loading="loading">
+                <el-table-column prop="name" label="菜单名称" min-width="180">
+                    <!-- <template #default="{ row }">
+                        <div class="menu-name">
+                            <component v-if="row.icon" :is="`el-icon-${row.icon}`" class="menu-icon"></component>
+                            <span>{{ row.name }}</span>
+                        </div>
+                    </template> -->
+                </el-table-column>
+                <el-table-column prop="path" label="菜单路径" min-width="200" />
+                <el-table-column prop="component" label="组件" min-width="200" />
+                <el-table-column prop="sort" label="序号" width="80" />
 
-            <el-table-column label="操作">
-                <template #default="scope">
-                    <el-button type="primary" link @click="handleAddMenu(scope.row)">新增</el-button>
-                    <el-button type="primary" link @click="handleEditMenu(scope.row)">编辑</el-button>
-                    <el-button type="danger" link @click="handleDeleteMenu(scope.row)">删除</el-button>
-                </template>
-            </el-table-column>
-        </el-table>
-        <el-pagination
-            v-model:current-page="currentPage4"
-            v-model:page-size="pageSize4"
-            :page-sizes="[20, 30, 40]"
-            layout="total, sizes, prev, pager, next"
-            :total="total"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-        />
+                <el-table-column label="操作" width="200" fixed="right">
+                    <template #default="scope">
+                        <div class="table-actions">
+                            <el-button link type="primary" @click="handleAddMenu(scope.row)" class="action-btn">新增</el-button>
+                            <el-button link type="primary" @click="handleEditMenu(scope.row)" class="action-btn">编辑</el-button>
+                            <el-button link type="danger" @click="handleDeleteMenu(scope.row)" class="action-btn">删除</el-button>
+                        </div>
+                    </template>
+                </el-table-column>
+            </el-table>
+            
+            <div class="pagination-container">
+                <el-pagination
+                    v-model:current-page="currentPage4"
+                    v-model:page-size="pageSize4"
+                    :page-sizes="[20, 30, 40]"
+                    layout="total, sizes, prev, pager, next"
+                    :total="total"
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    class="menu-pagination"
+                />
+            </div>
+        </div>
     </div>
     
-    <el-dialog :title="dialogTitle" v-model="createMenuVisible" width="400" :close-on-click-modal="false">
-        <el-form :model="createMenuObj" :rules="createMenuRules" ref="createMenuFormRef" label-width="70px">
+    <el-dialog 
+        :title="dialogTitle" 
+        v-model="createMenuVisible" 
+        width="450" 
+        :close-on-click-modal="false"
+        class="menu-dialog">
+        <el-form 
+            :model="createMenuObj" 
+            :rules="createMenuRules" 
+            ref="createMenuFormRef" 
+            label-width="90px"
+            class="menu-form">
             <el-form-item label="菜单名称" prop="name">
-                <el-input v-model="createMenuObj.name" placeholder="请输入菜单名称"></el-input>
+                <el-input v-model="createMenuObj.name" placeholder="请输入菜单名称" class="custom-input" />
             </el-form-item>
             <el-form-item label="菜单路径" prop="path">
-                <el-input v-model="createMenuObj.path" placeholder="请输入菜单路径"></el-input>
+                <el-input v-model="createMenuObj.path" placeholder="请输入菜单路径" class="custom-input" />
             </el-form-item>
             <el-form-item label="组件" prop="component">
-                <el-input v-model="createMenuObj.component" placeholder="请输入组件"></el-input>
+                <el-input v-model="createMenuObj.component" placeholder="请输入组件" class="custom-input" />
             </el-form-item>
             <el-form-item label="序号" prop="sort">
-                <el-input v-model="createMenuObj.sort" placeholder="请输入序号"></el-input>
+                <el-input v-model="createMenuObj.sort" placeholder="请输入序号" class="custom-input" />
             </el-form-item>
             <el-form-item label="图标" prop="icon">
-                <el-input v-model="createMenuObj.icon" placeholder="请输入图标"></el-input>
+                <el-input v-model="createMenuObj.icon" placeholder="请输入图标" class="custom-input" />
             </el-form-item>
         </el-form>
         <template #footer>
-            <el-button type="primary" @click="handleCreateMenu">确定</el-button>
-            <el-button @click="createMenuVisible = false">取消</el-button>
+            <div class="dialog-footer">
+                <el-button @click="createMenuVisible = false" class="cancel-btn">取消</el-button>
+                <el-button type="primary" @click="handleCreateMenu" class="submit-btn">确定</el-button>
+            </div>
         </template>
     </el-dialog>
 </template>
@@ -55,6 +95,7 @@
 import { ref,shallowRef, onMounted } from 'vue'
 import { getMenus,addMenu, setMenu, deleteMenu } from '@/api/menus'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { Plus } from '@element-plus/icons-vue'
 let dialogTitle = ref('新增菜单')
 let dialogType = ref('add')
 let currentPage4 = ref(1)
@@ -77,6 +118,7 @@ const createMenuRules = ref({
     ]
 })
 const createMenuFormRef = ref(null)
+const loading = ref(false)
 // 新增菜单
 const handleCreateMenu = ()=>{
     createMenuFormRef.value.validate((valid) => {
@@ -127,11 +169,14 @@ const handleCreateMenu = ()=>{
 
 const menusList = shallowRef([])
 const getMenusList = ()=>{
+    loading.value = true
     getMenus().then(res=>{
         if(res.code===200){
             menusList.value = res.data
             total.value = res.data.length
         }
+    }).finally(() => {
+        loading.value = false
     })
 }
 // 新增
@@ -186,3 +231,220 @@ onMounted(()=>{
     getMenusList()
 })
 </script>
+
+<style scoped lang="scss">
+.menu-management-container {
+    padding: 20px;
+    background-color: var(--bg-primary);
+    min-height: 100vh;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-color);
+    
+    h2 {
+        font-size: 20px;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin: 0;
+    }
+    
+    .header-actions {
+        display: flex;
+        gap: 12px;
+        
+        .add-btn {
+            border-radius: var(--border-radius);
+            transition: all var(--transition-fast);
+            
+            &:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(93, 186, 171, 0.3);
+            }
+        }
+    }
+}
+
+.table-card {
+    background-color: var(--bg-elevated);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: 20px;
+    margin-bottom: 24px;
+}
+
+.menu-table {
+    :deep(.el-table) {
+        background-color: transparent;
+        border: none;
+        margin-bottom: 20px;
+        
+        .el-table__header-wrapper {
+            .el-table__header {
+                th {
+                    background-color: var(--bg-secondary);
+                    color: var(--text-secondary);
+                    font-weight: 600;
+                    border-bottom: 1px solid var(--border-color);
+                }
+            }
+        }
+        
+        .el-table__body-wrapper {
+            .el-table__row {
+                transition: background-color var(--transition-fast);
+                
+                &:hover {
+                    background-color: var(--bg-secondary) !important;
+                }
+                
+                &.el-table__row--striped {
+                    background-color: var(--bg-elevated) !important;
+                }
+                
+                td {
+                    border-bottom: 1px solid var(--border-color);
+                    
+                    &:last-child {
+                        border-right: none;
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* .menu-name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    
+    .menu-icon {
+        color: var(--primary);
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    component {
+        color: var(--primary);
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    span {
+        display: flex;
+        align-items: center;
+    }
+} */
+
+.table-actions {
+    display: flex;
+    gap: 12px;
+    
+    .action-btn {
+        padding: 4px 8px;
+        font-size: 14px;
+    }
+}
+
+.pagination-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.menu-pagination {
+    :deep(.el-pagination) {
+        .el-pager li {
+            margin: 0 5px;
+            
+            &.is-active {
+                background-color: var(--primary);
+                color: white;
+            }
+        }
+    }
+}
+
+.menu-dialog {
+    :deep(.el-dialog__header) {
+        border-bottom: 1px solid var(--border-color);
+        padding: 20px;
+    }
+    
+    :deep(.el-dialog__title) {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+    
+    :deep(.el-dialog__body) {
+        padding: 24px;
+    }
+    
+    :deep(.el-dialog__footer) {
+        border-top: 1px solid var(--border-color);
+        padding: 16px 24px;
+    }
+}
+
+.menu-form {
+    .custom-input {
+        border-radius: var(--border-radius);
+        transition: all var(--transition-fast);
+        
+        &:focus {
+            box-shadow: 0 0 0 2px var(--primary) inset !important;
+        }
+    }
+}
+
+.dialog-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    
+    .cancel-btn,
+    .submit-btn {
+        padding: 8px 20px;
+        border-radius: var(--border-radius);
+        transition: all var(--transition-fast);
+        
+        &:hover {
+            transform: translateY(-1px);
+        }
+    }
+    
+    .submit-btn {
+        &:hover {
+            box-shadow: 0 4px 12px rgba(93, 186, 171, 0.3);
+        }
+    }
+}
+
+.text-muted {
+    color: var(--text-tertiary);
+    font-size: 14px;
+}
+
+.icon-preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background-color: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    color: var(--primary);
+    font-size: 16px;
+}
+</style>

@@ -1,78 +1,92 @@
 <template>
     <div class="org-structure-container">
-        <div class="flex justify-between items-center mb-4">
-            <el-button type="primary" @click="handleAdd">新增组织</el-button>
-            <el-button type="default" @click="refreshData">
-                <el-icon><Refresh /></el-icon>刷新
-            </el-button>
+        <div class="page-header">
+            <h2>组织架构管理</h2>
+            <div class="header-actions">
+                <el-button type="primary" @click="handleAdd" class="add-btn">
+                    <el-icon><Plus /></el-icon>新增组织
+                </el-button>
+                <el-button type="default" @click="refreshData" class="refresh-btn">
+                    <el-icon><Refresh /></el-icon>刷新
+                </el-button>
+            </div>
         </div>
         
-        <el-table 
-            :data="tableData" 
-            border 
-            row-key="id"
-            default-expand-all
-            :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-            v-loading="loading">
-            <el-table-column label="组织名称" prop="name" min-width="200">
-                <template #default="{ row }">
-                    <div class="flex items-center">
-                        <el-icon class="mr-2" v-if="row.children && row.children.length > 0">
-                            <OfficeBuilding />
-                        </el-icon>
-                        <el-icon class="mr-2" v-else>
-                            <User />
-                        </el-icon>
-                        <span>{{ row.name }}</span>
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column label="组织编码" prop="code" width="150" />
-            <el-table-column label="排序" prop="sort" width="80" />
-            <el-table-column label="状态" prop="status" width="100">
-                <template #default="{ row }">
-                    <el-tag :type="row.status === 1 ? 'success' : 'danger'">
-                        {{ row.status === 1 ? '启用' : '禁用' }}
-                    </el-tag>
-                </template>
-            </el-table-column>
-            <el-table-column label="创建时间" prop="createTime" width="180" />
-            <el-table-column label="操作" width="250" fixed="right">
-                <template #default="{ row }">
-                    <el-button link type="primary" @click="handleAddChild(row)">添加下级</el-button>
-                    <el-button link type="primary" @click="handleEdit(row)">编辑</el-button>
-                    <el-popconfirm 
-                        title="确定删除此组织?"
-                        @confirm="handleDelete(row.id)">
-                        <template #reference>
-                            <el-button link type="danger">删除</el-button>
-                        </template>
-                    </el-popconfirm>
-                </template>
-            </el-table-column>
-        </el-table>
+        <div class="table-card">
+            <el-table 
+                :data="tableData" 
+                border 
+                row-key="id"
+                default-expand-all
+                :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+                v-loading="loading"
+                class="org-table">
+                <el-table-column label="组织名称" prop="name" min-width="200">
+                    <template #default="{ row }">
+                        <div class="org-name">
+                            <el-icon class="org-icon" v-if="row.children && row.children.length > 0">
+                                <OfficeBuilding />
+                            </el-icon>
+                            <el-icon class="org-icon" v-else>
+                                <User />
+                            </el-icon>
+                            <span>{{ row.name }}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column label="组织编码" prop="code" width="150" />
+                <el-table-column label="排序" prop="sort" width="80" />
+                <el-table-column label="状态" prop="status" width="100">
+                    <template #default="{ row }">
+                        <el-tag :type="row.status === 1 ? 'success' : 'danger'" effect="light">
+                            {{ row.status === 1 ? '启用' : '禁用' }}
+                        </el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column label="创建时间" prop="createTime" width="180" />
+                <el-table-column label="操作" width="250" fixed="right">
+                    <template #default="{ row }">
+                        <div class="table-actions">
+                            <el-button link type="primary" @click="handleAddChild(row)" class="action-btn">添加下级</el-button>
+                            <el-button link type="primary" @click="handleEdit(row)" class="action-btn">编辑</el-button>
+                            <el-popconfirm 
+                                title="确定删除此组织?"
+                                @confirm="handleDelete(row.id)"
+                                confirm-button-text="确定"
+                                cancel-button-text="取消">
+                                <template #reference>
+                                    <el-button link type="danger" class="action-btn">删除</el-button>
+                                </template>
+                            </el-popconfirm>
+                        </div>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </div>
     </div>
 
     <!-- 新增/编辑对话框 -->
     <el-dialog 
         :title="dialogTitle"
         v-model="dialogVisible"
-        width="500px">
-        <el-form :model="formData" :rules="rules" ref="formRef" label-width="100px">
+        width="500px"
+        class="org-dialog"
+        :close-on-click-modal="false">
+        <el-form :model="formData" :rules="rules" ref="formRef" label-width="100px" class="org-form">
             <el-form-item label="上级组织" v-if="formData.parentId !== 0">
-                <el-input v-model="parentName" disabled />
+                <el-input v-model="parentName" disabled class="disabled-input" />
             </el-form-item>
             <el-form-item label="组织名称" prop="name">
-                <el-input v-model="formData.name" placeholder="请输入组织名称" />
+                <el-input v-model="formData.name" placeholder="请输入组织名称" class="custom-input" />
             </el-form-item>
             <el-form-item label="组织编码" prop="code">
-                <el-input v-model="formData.code" placeholder="请输入组织编码" />
+                <el-input v-model="formData.code" placeholder="请输入组织编码" class="custom-input" />
             </el-form-item>
             <el-form-item label="排序">
-                <el-input-number v-model="formData.sort" :min="0" :max="999" />
+                <el-input-number v-model="formData.sort" :min="0" :max="999" class="custom-input-number" />
             </el-form-item>
             <el-form-item label="状态">
-                <el-radio-group v-model="formData.status">
+                <el-radio-group v-model="formData.status" class="status-radio">
                     <el-radio :label="1">启用</el-radio>
                     <el-radio :label="0">禁用</el-radio>
                 </el-radio-group>
@@ -82,13 +96,14 @@
                     v-model="formData.remark" 
                     type="textarea" 
                     :rows="3"
-                    placeholder="请输入备注" />
+                    placeholder="请输入备注" 
+                    class="custom-textarea"/>
             </el-form-item>
         </el-form>
         <template #footer>
             <div class="dialog-footer">
-                <el-button @click="dialogVisible = false">取消</el-button>
-                <el-button type="primary" @click="handleSubmit">确定</el-button>
+                <el-button @click="dialogVisible = false" class="cancel-btn">取消</el-button>
+                <el-button type="primary" @click="handleSubmit" class="submit-btn">确定</el-button>
             </div>
         </template>
     </el-dialog>
@@ -97,7 +112,7 @@
 <script setup>
 import { ref, reactive, onMounted, computed } from 'vue'
 import { ElMessage } from 'element-plus'
-import { Refresh, OfficeBuilding, User } from '@element-plus/icons-vue'
+import { Refresh, OfficeBuilding, User, Plus } from '@element-plus/icons-vue'
 import { 
     getOrgTree, 
     addOrg, 
@@ -259,17 +274,162 @@ onMounted(() => {
 .org-structure-container {
     padding: 20px;
     background-color: var(--bg-primary);
+    min-height: 100vh;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-color);
     
+    h2 {
+        font-size: 20px;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin: 0;
+    }
+    
+    .header-actions {
+        display: flex;
+        gap: 12px;
+        
+        .add-btn {
+            border-radius: var(--border-radius);
+            transition: all var(--transition-fast);
+            
+            &:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(93, 186, 171, 0.3);
+            }
+        }
+        
+        .refresh-btn {
+            border-radius: var(--border-radius);
+            transition: all var(--transition-fast);
+        }
+    }
+}
+
+.table-card {
+    background-color: var(--bg-elevated);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: 20px;
+    margin-bottom: 24px;
+}
+
+.org-table {
     :deep(.el-table) {
         background-color: transparent;
+        border: none;
         
-        .el-table__row {
-            & > td:first-child {
-                .cell {
-                    display: flex;
-                    align-items: center;
+        .el-table__header-wrapper {
+            .el-table__header {
+                th {
+                    background-color: var(--bg-secondary);
+                    color: var(--text-secondary);
+                    font-weight: 600;
+                    border-bottom: 1px solid var(--border-color);
                 }
             }
+        }
+        
+        .el-table__body-wrapper {
+            .el-table__row {
+                transition: background-color var(--transition-fast);
+                
+                &:hover {
+                    background-color: var(--bg-secondary) !important;
+                }
+                
+                &.el-table__row--striped {
+                    background-color: var(--bg-elevated) !important;
+                }
+                
+                td {
+                    border-bottom: 1px solid var(--border-color);
+                    
+                    &:last-child {
+                        border-right: none;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.org-name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    
+    .org-icon {
+        color: var(--primary);
+        font-size: 16px;
+    }
+}
+
+.table-actions {
+    display: flex;
+    gap: 12px;
+    
+    .action-btn {
+        padding: 4px 8px;
+        font-size: 14px;
+    }
+}
+
+.org-dialog {
+    :deep(.el-dialog__header) {
+        border-bottom: 1px solid var(--border-color);
+        padding: 20px;
+    }
+    
+    :deep(.el-dialog__title) {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+    
+    :deep(.el-dialog__body) {
+        padding: 24px;
+    }
+    
+    :deep(.el-dialog__footer) {
+        border-top: 1px solid var(--border-color);
+        padding: 16px 24px;
+    }
+}
+
+.org-form {
+    .custom-input,
+    .disabled-input,
+    .custom-textarea {
+        border-radius: var(--border-radius);
+        transition: all var(--transition-fast);
+        
+        &:focus {
+            box-shadow: 0 0 0 2px var(--primary) inset !important;
+        }
+    }
+    
+    .custom-input-number {
+        border-radius: var(--border-radius);
+        
+        :deep(.el-input__wrapper) {
+            border-radius: var(--border-radius);
+        }
+    }
+    
+    .status-radio {
+        display: flex;
+        gap: 24px;
+        
+        :deep(.el-radio) {
+            margin-right: 0;
         }
     }
 }
@@ -277,6 +437,23 @@ onMounted(() => {
 .dialog-footer {
     display: flex;
     justify-content: flex-end;
-    gap: 10px;
+    gap: 12px;
+    
+    .cancel-btn,
+    .submit-btn {
+        padding: 8px 20px;
+        border-radius: var(--border-radius);
+        transition: all var(--transition-fast);
+        
+        &:hover {
+            transform: translateY(-1px);
+        }
+    }
+    
+    .submit-btn {
+        &:hover {
+            box-shadow: 0 4px 12px rgba(93, 186, 171, 0.3);
+        }
+    }
 }
 </style>

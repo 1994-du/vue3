@@ -6,27 +6,35 @@
         </div>
         <div class="login_box">
             <div class="input_box">
-                <div class="form-item">
-                    <label class="form-label">账号</label>
-                    <input 
-                        type="text" 
-                        class="form-input" 
-                        v-focus 
-                        placeholder="请输入账号" 
-                        v-model="loginObj.username"
-                    >
+                    <div class="form-item">
+                        <label class="form-label">账号</label>
+                        <input 
+                            type="text" 
+                            class="form-input" 
+                            v-focus 
+                            placeholder="请输入账号" 
+                            v-model="loginObj.username"
+                        >
+                    </div>
+                    <div class="form-item">
+                        <label class="form-label">密码</label>
+                        <input 
+                            type="password" 
+                            class="form-input" 
+                            placeholder="请输入密码" 
+                            v-model="loginObj.password"
+                            @keyup.enter="handleLogin"
+                        >
+                    </div>
+                    <div class="form-item remember-item">
+                        <input 
+                            type="checkbox" 
+                            id="remember" 
+                            v-model="loginObj.remember"
+                        >
+                        <label for="remember" class="remember-label">记住账号密码</label>
+                    </div>
                 </div>
-                <div class="form-item">
-                    <label class="form-label">密码</label>
-                    <input 
-                        type="password" 
-                        class="form-input" 
-                        placeholder="请输入密码" 
-                        v-model="loginObj.password"
-                        @keyup.enter="handleLogin"
-                    >
-                </div>
-            </div>
 
             <div class="login_buttons">
                 <el-button size="large" type="primary" @click="handleLogin">登录</el-button>
@@ -48,10 +56,43 @@ import { initRoutes } from '../utils/generateRoutes';
 const userInfoStore = useUserInfoStore()
 let loginObj = reactive({
     username: "",
-    password: ""
+    password: "",
+    remember: false
 })
 const store = useStore()
 const router = useRouter()
+
+// 页面加载时，从localStorage读取保存的账号密码
+const loadSavedCredentials = () => {
+    const savedCredentials = localStorage.getItem('loginCredentials')
+    if (savedCredentials) {
+        try {
+            const credentials = JSON.parse(savedCredentials)
+            loginObj.username = credentials.username || ''
+            loginObj.password = credentials.password || ''
+            loginObj.remember = credentials.remember || false
+        } catch (error) {
+            console.error('读取保存的账号密码失败:', error)
+        }
+    }
+}
+
+// 保存账号密码到localStorage
+const saveCredentials = () => {
+    if (loginObj.remember) {
+        const credentials = {
+            username: loginObj.username,
+            password: loginObj.password,
+            remember: loginObj.remember
+        }
+        localStorage.setItem('loginCredentials', JSON.stringify(credentials))
+    } else {
+        localStorage.removeItem('loginCredentials')
+    }
+}
+
+// 页面加载时执行
+loadSavedCredentials()
 const rules = reactive({
     username: [
         { required: true, message: '请输入账号', trigger: 'blur' }
@@ -72,6 +113,9 @@ const handleLogin = function () {
         console.log('登录',res);
         const { token,menus,username,avatar } = res.data
         if (res.code === 200) {
+            // 保存账号密码
+            saveCredentials()
+            
             // 保存token
             if (token) {
                 // localStorage.setItem('token', token);

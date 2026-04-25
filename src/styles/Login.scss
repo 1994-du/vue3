@@ -37,53 +37,74 @@
         gap: 28px;
 
         .input_box {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
 
-            .form-item {
-                width: 100%;
-                margin-bottom: 24px;
-                
-                .form-label {
-                    font-weight: 600;
-                    color: #374151;
-                    padding-bottom: 8px;
-                    display: block;
-                    text-align: left;
+                .form-item {
                     width: 100%;
-                    font-size: 14px;
+                    margin-bottom: 24px;
+                    
+                    .form-label {
+                        font-weight: 600;
+                        color: #374151;
+                        padding-bottom: 8px;
+                        display: block;
+                        text-align: left;
+                        width: 100%;
+                        font-size: 14px;
+                    }
+                    
+                    .form-input {
+                        width: 100%;
+                        height: 52px;
+                        font-size: 15px;
+                        color: #111827;
+                        padding: 0 20px;
+                        border-radius: 12px;
+                        background: #ffffff;
+                        border: 2px solid #e5e7eb;
+                        transition: all 0.2s ease;
+                        outline: none;
+                        box-sizing: border-box;
+                        
+                        &:hover {
+                            border-color: #d1d5db;
+                        }
+                        
+                        &:focus {
+                            border-color: #5DBAAB;
+                            box-shadow: 0 0 0 4px rgba(93, 186, 171, 0.1);
+                        }
+                        
+                        &::placeholder {
+                            color: #9ca3af;
+                        }
+                    }
                 }
                 
-                .form-input {
-                    width: 100%;
-                    height: 52px;
-                    font-size: 15px;
-                    color: #111827;
-                    padding: 0 20px;
-                    border-radius: 12px;
-                    background: #ffffff;
-                    border: 2px solid #e5e7eb;
-                    transition: all 0.2s ease;
-                    outline: none;
-                    box-sizing: border-box;
+                .remember-item {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    margin-bottom: 12px;
                     
-                    &:hover {
-                        border-color: #d1d5db;
+                    input[type="checkbox"] {
+                        width: 18px;
+                        height: 18px;
+                        cursor: pointer;
+                        accent-color: #5DBAAB;
                     }
                     
-                    &:focus {
-                        border-color: #5DBAAB;
-                        box-shadow: 0 0 0 4px rgba(93, 186, 171, 0.1);
-                    }
-                    
-                    &::placeholder {
-                        color: #9ca3af;
+                    .remember-label {
+                        color: #4b5563;
+                        font-size: 14px;
+                        cursor: pointer;
+                        user-select: none;
                     }
                 }
             }
-        }
 
         .login_buttons {
             display: flex;

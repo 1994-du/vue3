@@ -1,7 +1,6 @@
 <template>
   <h4>数组转树</h4>
-  <code>
-    <pre>let arr=[
+  <CodeEditor code="let arr=[
     { id:1,value:1,parent:null},
     { id:2,value:2,parent:1},
     { id:3,value:3,parent:1},
@@ -35,9 +34,7 @@ const arrayToTree = (arr) => {
     }
     return result
 }
-console.log(arrayToTree(arr))
-</pre>
-  </code>
+console.log(arrayToTree(arr))"></CodeEditor>
 </template>
 <script setup>
 let arr=[
@@ -56,9 +53,9 @@ let arr=[
 ]
 const arrayToTree = (arr) => {
     const map=new Map();
-    for(let item of arr){
+    arr.forEach(el=>{
         map.set(item.id,item)
-    }
+    })
     console.log('map',map);
     
     let result=[];

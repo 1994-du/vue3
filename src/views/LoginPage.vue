@@ -49,7 +49,7 @@ import { useRouter } from 'vue-router'
 import { useStore } from 'vuex';
 import { ref,reactive } from 'vue'
 import { toLogin, toRegistry } from '@/api/auth'
-import { parseJWT } from '../utils/tokenManager'
+import { parseJWT, setupTokenExpiryCheck } from '../utils/tokenManager'
 import useUserInfoStore from '../store/pinia/userInfo';
 import { initRoutes } from '../utils/generateRoutes';
 
@@ -118,11 +118,10 @@ const handleLogin = function () {
             
             // 保存token
             if (token) {
-                // localStorage.setItem('token', token);
                 userInfoStore.setMenus(menus)
                 userInfoStore.setUserInfo({name:username,avatar:avatar})
-                // 解析JWT获取过期时间
                 parseJWT(token);
+                setupTokenExpiryCheck()
             }
             const defaultRoutePath = await initRoutes(menus)
             // localStorage.setItem('username', loginObj.username)

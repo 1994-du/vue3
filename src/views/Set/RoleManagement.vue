@@ -215,6 +215,37 @@ const rules = ref({
         { required: true, message: '请输入角色名称', trigger: 'blur' }
     ]
 })
+
+const normalizeMenuIds = (menus) => {
+    if (Array.isArray(menus)) {
+        return menus
+    }
+
+    if (typeof menus === 'string') {
+        try {
+            const parsedMenus = JSON.parse(menus)
+            return Array.isArray(parsedMenus) ? parsedMenus : []
+        } catch (error) {
+            console.error('解析角色菜单数据失败', error)
+        }
+    }
+
+    return []
+}
+
+const restoreCheckedMenus = (menus = []) => {
+    if (!formTree.value) {
+        return
+    }
+
+    const checkedMenuIds = normalizeMenuIds(menus)
+
+    formTree.value.setCheckedKeys([])
+    checkedMenuIds.forEach((menuId) => {
+        formTree.value.setChecked(menuId, true, false)
+    })
+}
+
 const handleRole = () => {
     let checkKeys = formTree.value.getCheckedKeys()
     let checkHalfKeys = formTree.value.getHalfCheckedKeys()
@@ -258,19 +289,25 @@ const editRole = (row) => {
     dialogType.value = 'edit'
     dialogTitle.value = '编辑角色'
     console.log('编辑角色', row)
-    formData.value = Object.assign({},row)
+    formData.value = Object.assign({},row, {
+        menus: normalizeMenuIds(row.menus)
+    })
     console.log('formData',formData.value);
     nextTick(()=>{
-        formTree.value.setCheckedKeys(formData.value.menus)
+        restoreCheckedMenus(formData.value.menus)
     })
 }
 const createRole = () => {
     dialogType.value = 'add'
     dialogTitle.value = '新建角色'
     dialogVisible.value = true
-    formData.value = {}
+    formData.value = {
+        roleName: '',
+        roleDesc: '',
+        menus: []
+    }
     nextTick(()=>{
-        formTree.value.setCheckedKeys([])
+        restoreCheckedMenus([])
     })
 }
 onMounted(()=>{

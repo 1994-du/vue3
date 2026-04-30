@@ -8,6 +8,7 @@
         <p>less定义变量：@color:red;</p>
         <p>sass定义变量：$color:red;</p>
     </div>
+    
 </template>
 <script setup>
 </script>

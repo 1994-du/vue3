@@ -18,9 +18,25 @@ loadScript('a.js')
   .catch(err => {
     console.error('加载失败', err)
   })"></CodeEditor>
+  <CodeEditor class="my-[10px]" code="async function init() {
+  await loadScript('a.js')
+  await loadScript('b.js')
+  console.log('顺序加载完成')
+}
+
+init()"></CodeEditor>
 </template>
 
 <script setup>
+const loadScript =(src)=> {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script')
+    script.src = src
+    script.onload = resolve
+    script.onerror = reject
+    document.body.appendChild(script)
+  })
+}
 </script>
 <style scoped lang='less'>
 </style>

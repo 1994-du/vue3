@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { ElMessage,ElLoading } from 'element-plus'
-import { handleTokenExpire } from '@/utils/tokenManager'
+import { getToken, handleTokenExpire, isTokenExpired } from '@/utils/tokenManager'
 let loadingInstance = null
 let requestCount = 0
 const showLoading = () => {
@@ -14,10 +14,14 @@ const showLoading = () => {
     requestCount++
 }
 const hideLoading = () => {
-    requestCount--
+    requestCount = Math.max(requestCount - 1, 0)
     if(requestCount === 0 && loadingInstance){
         loadingInstance.close()
     }
+}
+
+const isUnauthorized = (response) => {
+    return response?.status === 401 || response?.data?.code === 401 || response?.data?.status === 401
 }
 // 使用从tokenManager导入的函数进行token管理
 
@@ -26,14 +30,25 @@ const Axios = axios.create({
     timeout:300000
 })
 
+const createTokenExpiredError = () => {
+    const error = new Error('token已过期')
+    error.isTokenExpired = true
+    return error
+}
+
 // 请求拦截器
-Axios.interceptors.request.use(config=>{
+Axios.interceptors.request.use(async (config)=>{
     const needAuth = config.needAuth !== false; // 默认值为true
     if (needAuth) {
-        // 添加token到请求头
-        const token = localStorage.getItem('token');
+        if (isTokenExpired()) {
+            await handleTokenExpire()
+            return Promise.reject(createTokenExpiredError())
+        }
+
+        const token = getToken()
         if (token) {
-            config.headers['Authorization'] = `Bearer ${token}`;
+            config.headers = config.headers || {}
+            config.headers['Authorization'] = `Bearer ${token}`
         }
     }
     // 清理自定义参数，不传递给服务器
@@ -41,13 +56,17 @@ Axios.interceptors.request.use(config=>{
     showLoading()
     config.headers['Content-Type'] = config.headers['Content-Type'] || 'application/json;charset=UTF-8'
     return config
+}, err => {
+    hideLoading()
+    return Promise.reject(err)
 })
 Axios.interceptors.response.use(res=>{
     console.log('响应数据',res)
     // 处理token过期的特定状态码（例如401或特定的错误码）
-    if (res.status === 401 || res.data.code === 401 || res.data.status === 401) {
+    if (isUnauthorized(res)) {
+        hideLoading()
         handleTokenExpire();
-        return Promise.reject(new Error('token已过期'));
+        return Promise.reject(createTokenExpiredError());
     }
     const operationType = res.config.operationType || '';   
     // 需要显示消息的操作类型列表
@@ -77,8 +96,12 @@ Axios.interceptors.response.use(res=>{
    
 },err=>{
     console.log('响应错误',err)
+    if (err.isTokenExpired) {
+        hideLoading();
+        return Promise.reject(err);
+    }
     // 处理网络错误中的401情况
-    if (err.response && err.response.status === 401) {
+    if (isUnauthorized(err.response)) {
         handleTokenExpire();
     } else {
         ElMessage({

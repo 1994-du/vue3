@@ -12,5 +12,9 @@ export default[
         path:'/login',
         name:'login',
         component:()=>import('@/views/LoginPage.vue')
+    },{
+        path:'/error',
+        name:'error',
+        component:()=>import('@/views/Error.vue')
     }
 ]

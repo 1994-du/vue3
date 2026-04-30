@@ -57,8 +57,7 @@ import registryComponents from './components/index.js'
 import mitt from 'mitt'
 const bus = new mitt()
 // 登录过期处理
-import { setupTokenExpiryCheck } from '@/utils/tokenManager.js'
-setupTokenExpiryCheck();
+import { clearToken, isAuthenticated, setupTokenExpiryCheck } from '@/utils/tokenManager.js'
 // render 函数
 let instance=null
 instance = createApp(App)
@@ -84,7 +83,13 @@ instance.use(pinia)
 customDirective(instance)
 // 动态路由注册
 async function bootstrap(){
-    await initRoutes() // 先注册路由
+    if (isAuthenticated()) {
+        await initRoutes()
+        setupTokenExpiryCheck()
+    } else {
+        clearToken()
+    }
+
     instance.use(router) // 再注册router
     instance.mount('#vue3') 
 }

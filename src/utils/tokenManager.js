@@ -1,95 +1,146 @@
-import { ElMessageBox } from 'element-plus';
-import router from '../router';
-let tokenCheckTimer = null; // 定时器引用
+import { ElMessage } from 'element-plus'
+import router from '../router'
 
-// JWT解析函数
-export const parseJWT = (token) => {
+const TOKEN_KEY = 'token'
+const TOKEN_EXPIRE_KEY = 'tokenExpireTime'
+const USER_INFO_KEY = 'userInfo'
+const MENUS_KEY = 'menus'
+const CLOCK_SKEW = 5000
+
+let tokenCheckTimer = null
+let isHandlingTokenExpire = false
+
+function decodeBase64Url(value = '') {
+    const normalizedValue = value.replace(/-/g, '+').replace(/_/g, '/')
+    const padding = normalizedValue.length % 4
+    const paddedValue = padding
+        ? normalizedValue.padEnd(normalizedValue.length + (4 - padding), '=')
+        : normalizedValue
+
+    return atob(paddedValue)
+}
+
+function decodeJWTPayload(token = '') {
     try {
-        // JWT由三部分组成，用.分隔，中间部分是payload
-        const payload = token.split('.')[1];
-        // 解码base64
-        const decodedPayload = JSON.parse(atob(payload.replace(/-/g, '+').replace(/_/g, '/')));
-        if(decodedPayload&&decodedPayload.exp){
-            // JWT的exp是秒级时间戳，需要转换为毫秒
-            const expireTime = decodedPayload.exp * 1000;
-            localStorage.setItem('token', token);
-            localStorage.setItem('tokenExpireTime', expireTime.toString());
-            console.log('Token过期时间:', new Date(expireTime).toLocaleString());
+        const [, payload = ''] = token.split('.')
+        if (!payload) {
+            return null
         }
+
+        return JSON.parse(decodeBase64Url(payload))
     } catch (error) {
-        console.error('JWT解析失败:', error);
-        return null;
+        console.error('JWT解析失败:', error)
+        return null
     }
 }
 
-// 检查token是否过期
+export const getToken = () => {
+    return localStorage.getItem(TOKEN_KEY) || ''
+}
+
+export const getTokenExpireTime = () => {
+    const expireTime = Number(localStorage.getItem(TOKEN_EXPIRE_KEY))
+    return Number.isFinite(expireTime) && expireTime > 0 ? expireTime : 0
+}
+
+export const hasToken = () => {
+    return !!getToken()
+}
+
+export const saveToken = (token) => {
+    if (!token) {
+        clearToken()
+        return null
+    }
+
+    const payload = decodeJWTPayload(token)
+    if (!payload?.exp) {
+        clearToken()
+        return null
+    }
+
+    const expireTime = payload.exp * 1000
+
+    localStorage.setItem(TOKEN_KEY, token)
+    localStorage.setItem(TOKEN_EXPIRE_KEY, expireTime.toString())
+
+    return payload
+}
+
+// 兼容现有调用
+export const parseJWT = (token) => {
+    return saveToken(token)
+}
+
 export const isTokenExpired = () => {
-    console.log('检查token是否过期');
-    // const token = localStorage.getItem('token');
-    const expireTime = localStorage.getItem('tokenExpireTime');
-    
-    if (!expireTime) return true; // 没有token时不需要提示过期
-    
-    return Date.now() > parseInt(expireTime);
-}
+    const token = getToken()
+    const expireTime = getTokenExpireTime()
 
-// 清除token
-export const clearToken = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('tokenExpireTime');
-    localStorage.removeItem('userInfo');
-    localStorage.removeItem('theme');
-}
-
-// token过期处理
-export const handleTokenExpire = () => {
-    // 使用ElMessageBox确认对话框
-    ElMessageBox.confirm(
-        'Token已过期，请重新登录',
-        '登录过期',
-        {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-        }
-    ).then(() => {
-        // 用户点击确定，清除token并跳转到登录页
-        clearToken();
-        router.replace('/login');
-    }).catch(() => {
-        // 用户点击取消，也清除token并跳转（防止绕过登录）
-        clearToken();
-        router.replace('/login');
-    });
-}
-
-// 设置token过期监听
-export const setupTokenExpiryCheck = () => {
-    // 如果当前不是登录路由，才设置token过期监听
-    if (window.location.pathname === '/login') return;
-    // 清除之前可能存在的定时器
-    if (tokenCheckTimer) {
-        clearInterval(tokenCheckTimer);
+    if (!token || !expireTime) {
+        return true
     }
-    // 每10秒检查一次token是否过期
-    tokenCheckTimer = setInterval(() => {
-        if (isTokenExpired()) {
-            handleTokenExpire();
-            clearInterval(tokenCheckTimer);
-        }
-    }, 10000);
+
+    return Date.now() >= expireTime - CLOCK_SKEW
 }
 
-// 清除token检查定时器
+export const isAuthenticated = () => {
+    return hasToken() && !isTokenExpired()
+}
+
+export const clearToken = () => {
+    localStorage.removeItem(TOKEN_KEY)
+    localStorage.removeItem(TOKEN_EXPIRE_KEY)
+    localStorage.removeItem(USER_INFO_KEY)
+    localStorage.removeItem(MENUS_KEY)
+}
+
 export const clearTokenCheckTimer = () => {
     if (tokenCheckTimer) {
-        clearInterval(tokenCheckTimer);
-        tokenCheckTimer = null;
+        clearTimeout(tokenCheckTimer)
+        tokenCheckTimer = null
     }
 }
-// 登录退出效果
-export const loginOutEffect = () => {
+
+export const handleTokenExpire = async (message = '登录已过期，请重新登录') => {
+    if (isHandlingTokenExpire) {
+        return
+    }
+
+    isHandlingTokenExpire = true
+    clearTokenCheckTimer()
+    clearToken()
+
+    if (message) {
+        ElMessage.warning(message)
+    }
+
+    try {
+        if (router.currentRoute.value.path !== '/login') {
+            await router.replace('/login')
+        }
+    } finally {
+        isHandlingTokenExpire = false
+    }
+}
+
+export const setupTokenExpiryCheck = () => {
+    clearTokenCheckTimer()
+
+    if (!isAuthenticated()) {
+        return
+    }
+
+    const delay = Math.max(getTokenExpireTime() - Date.now(), 0)
+    tokenCheckTimer = window.setTimeout(() => {
+        handleTokenExpire()
+    }, delay)
+}
+
+export const loginOutEffect = async () => {
     clearToken()
     clearTokenCheckTimer()
-    router.replace('/login')
+
+    if (router.currentRoute.value.path !== '/login') {
+        await router.replace('/login')
+    }
 }

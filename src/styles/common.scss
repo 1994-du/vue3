@@ -1,19 +1,19 @@
 @import "tailwindcss";
 
 /* ============================================
-   设计系统变量 - 现代化配色方案
+   设计系统变量 - 科技风格配色方案
    ============================================ */
 :root {
-    /* 主色调 - 青绿色系 */
-    --primary: #5DBAAB;
-    --primary-light: #7DD3C0;
-    --primary-dark: #4A9687;
-    --primary-gradient: linear-gradient(135deg, #5DBAAB 0%, #4A9687 100%);
+    /* 主色调 - 霓虹青系 */
+    --primary: #00d4ff;
+    --primary-light: #66e0ff;
+    --primary-dark: #00a8cc;
+    --primary-gradient: linear-gradient(135deg, #00d4ff 0%, #8b5cf6 100%);
     
     /* 辅助色 */
-    --secondary: #6366f1;
-    --secondary-light: #818cf8;
-    --accent: #f59e0b;
+    --secondary: #8b5cf6;
+    --secondary-light: #a78bfa;
+    --accent: #00d4ff;
     --success: #10b981;
     --warning: #f59e0b;
     --error: #ef4444;
@@ -32,23 +32,23 @@
     --gray-900: #111827;
     
     /* 背景色 */
-    --bg-primary: #ffffff;
-    --bg-secondary: #f8fafc;
-    --bg-tertiary: #f1f5f9;
-    --bg-elevated: #ffffff;
-    --bg-overlay: rgba(255, 255, 255, 0.95);
+    --bg-primary: #0f0f23;
+    --bg-secondary: #1a1a3e;
+    --bg-tertiary: #252550;
+    --bg-elevated: #1a1a3e;
+    --bg-overlay: rgba(15, 15, 35, 0.95);
     
     /* 文字色 */
-    --text-primary: #111827;
-    --text-secondary: #4b5563;
-    --text-tertiary: #9ca3af;
-    --text-inverse: #ffffff;
-    --text-muted: #6b7280;
+    --text-primary: #ffffff;
+    --text-secondary: #e0e0ff;
+    --text-tertiary: #a0a0cc;
+    --text-inverse: #0f0f23;
+    --text-muted: #9090aa;
     
     /* 边框 */
-    --border-color: #e5e7eb;
-    --border-light: #f3f4f6;
-    --border-dark: #d1d5db;
+    --border-color: rgba(0, 212, 255, 0.2);
+    --border-light: rgba(0, 212, 255, 0.1);
+    --border-dark: rgba(0, 212, 255, 0.3);
     --border-radius-sm: 6px;
     --border-radius: 8px;
     --border-radius-lg: 12px;
@@ -56,15 +56,15 @@
     --border-radius-full: 9999px;
     
     /* 阴影 */
-    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-    --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
-    --shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.06);
-    --shadow-glow: 0 0 20px rgba(93, 186, 171, 0.3);
-    --shadow-soft: 0 10px 25px -5px rgba(93, 186, 171, 0.1), 0 8px 10px -6px rgba(93, 186, 171, 0.05);
+    --shadow-sm: 0 1px 2px 0 rgba(0, 212, 255, 0.05);
+    --shadow: 0 1px 3px 0 rgba(0, 212, 255, 0.1), 0 1px 2px -1px rgba(0, 212, 255, 0.1);
+    --shadow-md: 0 4px 6px -1px rgba(0, 212, 255, 0.15), 0 2px 4px -2px rgba(0, 212, 255, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 212, 255, 0.2), 0 4px 6px -4px rgba(0, 212, 255, 0.15);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 212, 255, 0.25), 0 8px 10px -6px rgba(0, 212, 255, 0.2);
+    --shadow-2xl: 0 25px 50px -12px rgba(0, 212, 255, 0.4);
+    --shadow-inner: inset 0 2px 4px 0 rgba(0, 212, 255, 0.1);
+    --shadow-glow: 0 0 20px rgba(0, 212, 255, 0.4);
+    --shadow-soft: 0 10px 25px -5px rgba(0, 212, 255, 0.2), 0 8px 10px -6px rgba(0, 212, 255, 0.1);
     
     /* 间距 */
     --space-1: 4px;
@@ -109,10 +109,10 @@
     --transition-bounce: 300ms cubic-bezier(0.4, 0, 0.2, 1);
     
     /* 菜单 */
-    --menu-bg: #ffffff;
-    --menu-text: #4b5563;
-    --menu-text-active: #5DBAAB;
-    --menu-bg-active: rgba(93, 186, 171, 0.1);
+    --menu-bg: #1a1a3e;
+    --menu-text: #a0a0cc;
+    --menu-text-active: #00d4ff;
+    --menu-bg-active: rgba(0, 212, 255, 0.15);
     --menu-border: var(--border-color);
     
     /* 其他 */
@@ -242,37 +242,26 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--gray-300);
+    background: linear-gradient(180deg, var(--primary), var(--secondary));
     border-radius: var(--border-radius-full);
     transition: background var(--transition-fast);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: var(--gray-400);
-}
-
-[data-theme="dark"] ::-webkit-scrollbar-track {
-    background: var(--bg-tertiary);
-}
-
-[data-theme="dark"] ::-webkit-scrollbar-thumb {
-    background: var(--gray-600);
-}
-
-[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
-    background: var(--gray-500);
+    background: linear-gradient(180deg, var(--primary-light), var(--secondary-light));
 }
 
 /* 选中文字样式 */
 ::selection {
     background: var(--primary);
-    color: white;
+    color: var(--text-inverse);
 }
 
 /* 焦点样式 */
 *:focus {
     outline: 2px solid var(--primary);
     outline-offset: 2px;
+    box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.3);
 }
 
 *:focus:not(:focus-visible) {
@@ -283,10 +272,11 @@ body {
 a {
     color: var(--primary);
     text-decoration: none;
-    transition: color var(--transition-fast);
+    transition: color var(--transition-fast), text-shadow var(--transition-fast);
     
     &:hover {
-        color: var(--primary-dark);
+        color: var(--primary-light);
+        text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
     }
     
     &:active {
@@ -312,14 +302,14 @@ input, textarea, select {
     font-size: inherit;
     line-height: inherit;
     color: inherit;
-    background: var(--bg-primary);
+    background: var(--bg-secondary);
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
     transition: all var(--transition-fast);
     
     &:focus {
         border-color: var(--primary);
-        box-shadow: 0 0 0 3px rgba(93, 186, 171, 0.1);
+        box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.2), 0 0 20px rgba(0, 212, 255, 0.1);
     }
 }
 

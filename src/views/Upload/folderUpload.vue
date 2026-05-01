@@ -1,18 +1,18 @@
 <template>
-    <div class="upload-page">
+    <div class="folder-upload-page">
         <el-card shadow="hover" class="page-card">
             <template #header>
                 <div class="card-header">
                     <div>
-                        <h2>文件上传示例</h2>
-                        <p>示例接口：`POST /api/file/upload`</p>
+                        <h2>文件夹上传示例</h2>
+                        <p>示例接口：`POST /api/files/upload-folder`</p>
                     </div>
-                    <el-tag type="primary">多文件上传</el-tag>
+                    <el-tag type="success">保留目录结构</el-tag>
                 </div>
             </template>
 
             <el-alert
-                title="当前示例限制 PDF、JPG、PNG，单个文件不超过 5MB。上传时会逐个调用接口并展示状态。"
+                title="上传时会同时提交文件内容和 webkitRelativePath，后端可以按相对路径还原目录结构。"
                 type="info"
                 :closable="false"
                 show-icon
@@ -21,26 +21,30 @@
 
             <div class="actions">
                 <input
-                    ref="fileInputRef"
-                    class="hidden-input"
+                    ref="folderInputRef"
+                    class="folder-input"
                     type="file"
+                    webkitdirectory
                     multiple
-                    accept=".pdf,.jpg,.jpeg,.png"
-                    @change="handleFileChange"
+                    @change="handleFolderChange"
                 >
-                <el-button type="primary" @click="chooseFiles">选择文件</el-button>
+                <el-button type="primary" @click="chooseFolder">选择文件夹</el-button>
                 <el-button
                     type="success"
                     :disabled="!selectedFiles.length || uploading"
                     :loading="uploading"
-                    @click="submitFiles"
+                    @click="submitFolder"
                 >
-                    开始上传
+                    上传文件夹
                 </el-button>
                 <el-button :disabled="uploading" @click="clearSelection">清空</el-button>
             </div>
 
             <div class="summary" v-if="selectedFiles.length">
+                <div class="summary-item">
+                    <span class="label">文件夹名</span>
+                    <span class="value">{{ folderName }}</span>
+                </div>
                 <div class="summary-item">
                     <span class="label">文件数量</span>
                     <span class="value">{{ selectedFiles.length }}</span>
@@ -48,10 +52,6 @@
                 <div class="summary-item">
                     <span class="label">总大小</span>
                     <span class="value">{{ totalSizeText }}</span>
-                </div>
-                <div class="summary-item">
-                    <span class="label">成功数量</span>
-                    <span class="value">{{ successCount }}</span>
                 </div>
             </div>
 
@@ -62,7 +62,7 @@
                 class="progress"
             />
 
-            <el-empty v-if="!selectedFiles.length" description="请选择要上传的文件" />
+            <el-empty v-if="!selectedFiles.length" description="请选择一个本地文件夹" />
 
             <el-table
                 v-else
@@ -74,6 +74,7 @@
             >
                 <el-table-column type="index" label="#" width="60" align="center" />
                 <el-table-column prop="name" label="文件名" min-width="220" show-overflow-tooltip />
+                <el-table-column prop="relativePath" label="相对路径" min-width="320" show-overflow-tooltip />
                 <el-table-column label="大小" width="120" align="right">
                     <template #default="{ row }">
                         {{ formatFileSize(row.size) }}
@@ -84,22 +85,6 @@
                         {{ row.type || 'unknown' }}
                     </template>
                 </el-table-column>
-                <el-table-column label="进度" width="180" align="center">
-                    <template #default="{ row }">
-                        <el-progress
-                            :percentage="row.progress"
-                            :status="row.status === 'error' ? 'exception' : undefined"
-                            :stroke-width="10"
-                        />
-                    </template>
-                </el-table-column>
-                <el-table-column label="状态" width="110" align="center">
-                    <template #default="{ row }">
-                        <el-tag :type="statusTagMap[row.status]">
-                            {{ statusTextMap[row.status] }}
-                        </el-tag>
-                    </template>
-                </el-table-column>
             </el-table>
         </el-card>
     </div>
@@ -108,44 +93,32 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { ElMessage } from 'element-plus'
-import { uploadFile } from '@/api/upload'
+import { uploadFolder } from '@/api/upload'
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024
-const ALLOWED_FILE_TYPES = ['application/pdf', 'image/jpeg', 'image/png']
-
-const fileInputRef = ref(null)
+const folderInputRef = ref(null)
 const selectedFiles = ref([])
 const uploading = ref(false)
 const uploadProgress = ref(0)
 
-const statusTextMap = {
-    ready: '待上传',
-    uploading: '上传中',
-    success: '成功',
-    error: '失败'
-}
+const folderName = computed(() => {
+    if (!selectedFiles.value.length) {
+        return ''
+    }
 
-const statusTagMap = {
-    ready: 'info',
-    uploading: 'warning',
-    success: 'success',
-    error: 'danger'
-}
+    const [firstPath = ''] = selectedFiles.value[0].relativePath.split('/')
+    return firstPath || selectedFiles.value[0].name
+})
 
 const totalSizeText = computed(() => {
     const totalSize = selectedFiles.value.reduce((sum, item) => sum + item.size, 0)
     return formatFileSize(totalSize)
 })
 
-const successCount = computed(() => {
-    return selectedFiles.value.filter(item => item.status === 'success').length
-})
-
-const chooseFiles = () => {
-    fileInputRef.value?.click()
+const chooseFolder = () => {
+    folderInputRef.value?.click()
 }
 
-const handleFileChange = (event) => {
+const handleFolderChange = (event) => {
     const fileList = Array.from(event.target.files || [])
 
     if (!fileList.length) {
@@ -153,31 +126,15 @@ const handleFileChange = (event) => {
         return
     }
 
-    const validFiles = []
+    selectedFiles.value = fileList.map((file, index) => ({
+        uid: `${file.name}-${index}-${file.size}`,
+        name: file.name,
+        size: file.size,
+        type: file.type,
+        relativePath: file.webkitRelativePath || file.name,
+        raw: file
+    }))
 
-    fileList.forEach((file, index) => {
-        if (!ALLOWED_FILE_TYPES.includes(file.type)) {
-            ElMessage.error(`${file.name} 类型不支持`)
-            return
-        }
-
-        if (file.size > MAX_FILE_SIZE) {
-            ElMessage.error(`${file.name} 超过 5MB 限制`)
-            return
-        }
-
-        validFiles.push({
-            uid: `${file.name}-${index}-${file.size}`,
-            name: file.name,
-            size: file.size,
-            type: file.type,
-            raw: file,
-            progress: 0,
-            status: 'ready'
-        })
-    })
-
-    selectedFiles.value = validFiles
     uploadProgress.value = 0
 }
 
@@ -185,74 +142,50 @@ const clearSelection = () => {
     selectedFiles.value = []
     uploadProgress.value = 0
 
-    if (fileInputRef.value) {
-        fileInputRef.value.value = ''
+    if (folderInputRef.value) {
+        folderInputRef.value.value = ''
     }
 }
 
-const submitFiles = async () => {
+const submitFolder = async () => {
     if (!selectedFiles.value.length || uploading.value) {
         return
     }
 
-    const totalSize = selectedFiles.value.reduce((sum, item) => sum + item.size, 0)
-    let uploadedSize = 0
-    let successTotal = 0
+    const formData = new FormData()
+    formData.append('folderName', folderName.value)
+
+    selectedFiles.value.forEach((item) => {
+        formData.append('files', item.raw)
+        formData.append('relativePaths', item.relativePath)
+    })
 
     try {
         uploading.value = true
         uploadProgress.value = 0
 
-        for (const item of selectedFiles.value) {
-            const formData = new FormData()
-            formData.append('file', item.raw)
-
-            item.status = 'uploading'
-            item.progress = 0
-
-            try {
-                const res = await uploadFile(formData, {
-                    onUploadProgress: (progressEvent) => {
-                        const { loaded = 0, total = 0 } = progressEvent
-                        if (!total) {
-                            return
-                        }
-
-                        item.progress = Math.min(100, Math.round((loaded / total) * 100))
-                        uploadProgress.value = Math.min(
-                            100,
-                            Math.round(((uploadedSize + loaded) / totalSize) * 100)
-                        )
-                    }
-                })
-
-                if (res?.code === 200) {
-                    item.status = 'success'
-                    item.progress = 100
-                    successTotal += 1
-                } else {
-                    item.status = 'error'
-                    ElMessage.error(res?.msg || `${item.name} 上传失败`)
+        const res = await uploadFolder(formData, {
+            onUploadProgress: (progressEvent) => {
+                const { loaded = 0, total = 0 } = progressEvent
+                if (!total) {
+                    return
                 }
-            } catch (error) {
-                item.status = 'error'
-                console.error('文件上传失败', error)
-            } finally {
-                uploadedSize += item.size
                 uploadProgress.value = Math.min(
                     100,
-                    Math.round((uploadedSize / totalSize) * 100)
+                    Math.round((loaded / total) * 100)
                 )
             }
-        }
+        })
 
-        if (successTotal === selectedFiles.value.length) {
-            ElMessage.success('文件上传成功')
-        } else if (successTotal > 0) {
-            ElMessage.warning(`部分文件上传成功：${successTotal}/${selectedFiles.value.length}`)
+        if (res?.code === 200) {
+            ElMessage.success('文件夹上传成功')
+            clearSelection()
         } else {
-            ElMessage.error('文件上传失败')
+            ElMessage.error(res?.msg || '文件夹上传失败')
         }
+    } catch (error) {
+        console.error('文件夹上传失败', error)
+        ElMessage.error('文件夹上传失败，请稍后重试')
     } finally {
         uploading.value = false
     }
@@ -276,7 +209,7 @@ const formatFileSize = (size = 0) => {
 </script>
 
 <style scoped lang="scss">
-.upload-page {
+.folder-upload-page {
     padding: 24px;
 
     .page-card {
@@ -303,7 +236,7 @@ const formatFileSize = (size = 0) => {
         }
     }
 
-    .hidden-input {
+    .folder-input {
         display: none;
     }
 

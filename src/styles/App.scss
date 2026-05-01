@@ -64,31 +64,31 @@ h6 {
     border-bottom: none !important;
 }
 
-.el-dialog {
+.vue3-dialog {
     border-radius: var(--border-radius-xl) !important;
     overflow: hidden;
     box-shadow: var(--shadow-2xl) !important;
     backdrop-filter: var(--backdrop-blur);
     
-    .el-dialog__header {
+    .vue3-dialog__header {
         background: var(--bg-overlay);
         padding: 20px 24px !important;
         margin-right: 0 !important;
         border-bottom: 1px solid var(--border-color);
     }
     
-    .el-dialog__title {
+    .vue3-dialog__title {
         font-weight: var(--font-weight-semibold);
         color: var(--text-primary);
         font-size: var(--font-size-lg);
     }
     
-    .el-dialog__body {
+    .vue3-dialog__body {
         padding: 24px !important;
         background: var(--bg-elevated);
     }
     
-    .el-dialog__footer {
+    .vue3-dialog__footer {
         padding: 16px 24px !important;
         border-top: 1px solid var(--border-color);
         background: var(--bg-overlay);
@@ -99,7 +99,7 @@ h6 {
 }
 
 /* 卡片样式优化 */
-.el-card {
+.vue3-card {
     border-radius: var(--border-radius-xl) !important;
     border: 1px solid var(--border-color) !important;
     box-shadow: var(--shadow) !important;
@@ -112,7 +112,7 @@ h6 {
         transform: translateY(-2px);
     }
     
-    .el-card__header {
+    .vue3-card__header {
         padding: 20px 24px;
         border-bottom: 1px solid var(--border-color);
         font-weight: var(--font-weight-semibold);
@@ -120,13 +120,13 @@ h6 {
         background: var(--bg-secondary);
     }
     
-    .el-card__body {
+    .vue3-card__body {
         padding: 24px;
     }
 }
 
 /* 按钮样式优化 */
-.el-button {
+.vue3-button {
     border-radius: var(--border-radius) !important;
     font-weight: var(--font-weight-medium);
     transition: all var(--transition-fast);
@@ -139,7 +139,7 @@ h6 {
         box-shadow: var(--shadow-soft);
         
         &:hover {
-            box-shadow: var(--shadow-glow);
+            box-shadow: var(--shadow-glow), 0 0 20px rgba(0, 212, 255, 0.3);
             transform: translateY(-1px);
         }
         
@@ -156,7 +156,7 @@ h6 {
         &:hover {
             border-color: var(--primary);
             color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(93, 186, 171, 0.1);
+            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.15);
         }
     }
     
@@ -202,33 +202,33 @@ h6 {
 }
 
 /* 输入框样式优化 */
-.el-input {
-    .el-input__wrapper {
+.vue3-input {
+    .vue3-input__wrapper {
         border-radius: var(--border-radius) !important;
         box-shadow: 0 0 0 1px var(--border-color) inset !important;
         transition: all var(--transition-fast);
-        background: var(--bg-primary) !important;
+        background: var(--bg-secondary) !important;
         
         &:hover, &.is-focus {
-            box-shadow: 0 0 0 3px rgba(93, 186, 171, 0.1) !important;
+            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.2), 0 0 20px rgba(0, 212, 255, 0.1) !important;
             border-color: var(--primary) !important;
         }
     }
     
-    .el-input__inner {
+    .vue3-input__inner {
         color: var(--text-primary);
         font-size: var(--font-size-sm);
         padding: 10px 12px;
     }
     
-    .el-input__prefix {
+    .vue3-input__prefix {
         color: var(--text-tertiary);
     }
     
-    .el-input__suffix {
+    .vue3-input__suffix {
         color: var(--text-tertiary);
         
-        .el-input__clear {
+        .vue3-input__clear {
             &:hover {
                 color: var(--error);
             }
@@ -237,8 +237,8 @@ h6 {
 }
 
 /* 表单样式优化 */
-.el-form {
-    .el-form-item {
+.vue3-form {
+    .vue3-form-item {
         margin-bottom: var(--space-4);
         
         &__label {
@@ -257,7 +257,7 @@ h6 {
 }
 
 /* 下拉菜单样式优化 */
-.el-dropdown-menu {
+.vue3-dropdown-menu {
     border-radius: var(--border-radius-lg) !important;
     box-shadow: var(--shadow-xl) !important;
     border: 1px solid var(--border-color) !important;
@@ -265,7 +265,7 @@ h6 {
     background: var(--bg-overlay) !important;
     backdrop-filter: var(--backdrop-blur);
     
-    .el-dropdown-menu__item {
+    .vue3-dropdown-menu__item {
         border-radius: var(--border-radius);
         padding: var(--space-3) var(--space-4);
         font-size: var(--font-size-sm);
@@ -284,23 +284,23 @@ h6 {
 }
 
 /* 选择器样式优化 */
-.el-select {
-    .el-input__wrapper {
+.vue3-select {
+    .vue3-input__wrapper {
         border-radius: var(--border-radius) !important;
     }
     
-    .el-select__caret {
+    .vue3-select__caret {
         color: var(--text-tertiary);
     }
     
-    .el-select-dropdown {
+    .vue3-select-dropdown {
         border-radius: var(--border-radius-lg) !important;
         box-shadow: var(--shadow-xl) !important;
         border: 1px solid var(--border-color) !important;
         background: var(--bg-overlay) !important;
         backdrop-filter: var(--backdrop-blur);
         
-        .el-select-dropdown__item {
+        .vue3-select-dropdown__item {
             padding: var(--space-3) var(--space-4);
             font-size: var(--font-size-sm);
             color: var(--text-secondary);
@@ -319,7 +319,7 @@ h6 {
 }
 
 /* 头像样式优化 */
-.el-avatar {
+.vue3-avatar {
     border: 2px solid var(--border-color);
     transition: all var(--transition-fast);
     
@@ -343,7 +343,7 @@ h6 {
 }
 
 /* 标签样式优化 */
-.el-tag {
+.vue3-tag {
     border-radius: var(--border-radius-full) !important;
     font-weight: var(--font-weight-medium);
     font-size: var(--font-size-xs);
@@ -381,15 +381,15 @@ h6 {
 }
 
 /* 表格样式优化 */
-.el-table {
+.vue3-table {
     border-radius: var(--border-radius-xl) !important;
     overflow: hidden;
     box-shadow: var(--shadow) !important;
     
-    .el-table__header-wrapper {
+    .vue3-table__header-wrapper {
         background: var(--bg-secondary);
         
-        .el-table__header {
+        .vue3-table__header {
             th {
                 background: var(--bg-secondary) !important;
                 border-bottom: 1px solid var(--border-color) !important;
@@ -400,8 +400,8 @@ h6 {
         }
     }
     
-    .el-table__body-wrapper {
-        .el-table__row {
+    .vue3-table__body-wrapper {
+        .vue3-table__row {
             transition: background-color var(--transition-fast);
             
             &:hover {
@@ -416,34 +416,34 @@ h6 {
         }
     }
     
-    .el-table__empty-block {
+    .vue3-table__empty-block {
         padding: var(--space-8) 0;
         
-        .el-table__empty-text {
+        .vue3-table__empty-text {
             color: var(--text-tertiary);
         }
     }
 }
 
 /* 分页样式优化 */
-.el-pagination {
+.vue3-pagination {
     display: flex;
     justify-content: flex-end;
     align-items: center;
     gap: var(--space-4);
     
-    .el-pagination__sizes {
-        .el-select .el-input__wrapper {
+    .vue3-pagination__sizes {
+        .vue3-select .vue3-input__wrapper {
             width: 100px;
         }
     }
     
-    .el-pagination__jump {
+    .vue3-pagination__jump {
         font-size: var(--font-size-sm);
         color: var(--text-secondary);
     }
     
-    .el-pager {
+    .vue3-pager {
         .number {
             border-radius: var(--border-radius);
             margin: 0 2px;
@@ -462,7 +462,7 @@ h6 {
         }
     }
     
-    .el-pagination__prev, .el-pagination__next {
+    .vue3-pagination__prev, .vue3-pagination__next {
         border-radius: var(--border-radius);
         width: 32px;
         height: 32px;
@@ -486,137 +486,139 @@ h6 {
 }
 
 /* 加载样式优化 */
-.el-loading {
-    .el-loading-mask {
-        background: rgba(255, 255, 255, 0.8) !important;
+.vue3-loading {
+    .vue3-loading-mask {
+        background: rgba(15, 15, 35, 0.85) !important;
         backdrop-filter: var(--backdrop-blur);
     }
     
-    .el-loading-spinner {
+    .vue3-loading-spinner {
         .path {
             stroke: var(--primary);
         }
         
-        .el-loading-text {
-            color: var(--text-secondary);
+        .vue3-loading-text {
+            color: var(--text-primary);
         }
     }
 }
 
 /* 消息提示样式优化 */
-.el-message {
+.vue3-message {
     min-width: 300px;
     border-radius: var(--border-radius-lg) !important;
-    box-shadow: var(--shadow-lg) !important;
+    box-shadow: var(--shadow-xl) !important;
     padding: var(--space-4);
+    backdrop-filter: var(--backdrop-blur);
+    border: 1px solid var(--border-color);
     
-    .el-message__content {
+    .vue3-message__content {
         font-size: var(--font-size-sm);
         line-height: var(--line-height-normal);
     }
     
     &--success {
-        background: rgba(16, 185, 129, 0.1) !important;
+        background: rgba(16, 185, 129, 0.15) !important;
         border-color: var(--success) !important;
         
-        .el-message__content {
+        .vue3-message__content {
             color: var(--success);
         }
     }
     
     &--warning {
-        background: rgba(245, 158, 11, 0.1) !important;
+        background: rgba(245, 158, 11, 0.15) !important;
         border-color: var(--warning) !important;
         
-        .el-message__content {
+        .vue3-message__content {
             color: var(--warning);
         }
     }
     
     &--error {
-        background: rgba(239, 68, 68, 0.1) !important;
+        background: rgba(239, 68, 68, 0.15) !important;
         border-color: var(--error) !important;
         
-        .el-message__content {
+        .vue3-message__content {
             color: var(--error);
         }
     }
     
     &--info {
-        background: rgba(59, 130, 246, 0.1) !important;
-        border-color: var(--info) !important;
+        background: rgba(0, 212, 255, 0.15) !important;
+        border-color: var(--primary) !important;
         
-        .el-message__content {
-            color: var(--info);
+        .vue3-message__content {
+            color: var(--primary);
         }
     }
 }
 
 /* 通知样式优化 */
-.el-notification {
+.vue3-notification {
     border-radius: var(--border-radius-lg) !important;
     box-shadow: var(--shadow-xl) !important;
     padding: var(--space-4);
     background: var(--bg-overlay) !important;
     backdrop-filter: var(--backdrop-blur);
     
-    .el-notification__title {
+    .vue3-notification__title {
         font-weight: var(--font-weight-semibold);
         color: var(--text-primary);
         margin-bottom: var(--space-2);
     }
     
-    .el-notification__content {
+    .vue3-notification__content {
         color: var(--text-secondary);
         line-height: var(--line-height-normal);
     }
     
     &--success {
-        .el-notification__icon {
+        .vue3-notification__icon {
             color: var(--success);
         }
     }
     
     &--warning {
-        .el-notification__icon {
+        .vue3-notification__icon {
             color: var(--warning);
         }
     }
     
     &--error {
-        .el-notification__icon {
+        .vue3-notification__icon {
             color: var(--error);
         }
     }
     
     &--info {
-        .el-notification__icon {
+        .vue3-notification__icon {
             color: var(--info);
         }
     }
 }
 
 /* 进度条样式优化 */
-.el-progress {
-    .el-progress-bar {
+.vue3-progress {
+    .vue3-progress-bar {
         background: var(--bg-secondary);
         border-radius: var(--border-radius-full);
         
-        .el-progress-bar__inner {
+        .vue3-progress-bar__inner {
             background: var(--primary-gradient);
             border-radius: var(--border-radius-full);
         }
     }
     
-    .el-progress__text {
+    .vue3-progress__text {
         font-size: var(--font-size-sm);
         color: var(--text-secondary);
     }
 }
 
 /* 开关样式优化 */
-.el-switch {
-    .el-switch__core {
+.vue3-switch {
+    .vue3-switch__core {
         border-radius: var(--border-radius-full);
         width: 44px;
         height: 24px;
@@ -631,7 +633,7 @@ h6 {
     }
     
     &.is-checked {
-        .el-switch__core {
+        .vue3-switch__core {
             background: var(--primary) !important;
             
             &::before {
@@ -642,12 +644,12 @@ h6 {
 }
 
 /* 滑块样式优化 */
-.el-slider {
-    .el-slider__bar {
+.vue3-slider {
+    .vue3-slider__bar {
         background: var(--primary-gradient);
     }
     
-    .el-slider__button {
+    .vue3-slider__button {
         border: 2px solid var(--primary);
         background: white;
         width: 16px;
@@ -658,41 +660,41 @@ h6 {
         }
     }
     
-    .el-slider__runway {
+    .vue3-slider__runway {
         background: var(--bg-secondary);
     }
 }
 
 /* 时间选择器样式优化 */
-.el-date-picker {
+.vue3-date-picker {
     border-radius: var(--border-radius-lg) !important;
     box-shadow: var(--shadow-xl) !important;
     border: 1px solid var(--border-color) !important;
     background: var(--bg-overlay) !important;
     backdrop-filter: var(--backdrop-blur);
     
-    .el-date-picker__header {
+    .vue3-date-picker__header {
         background: var(--bg-secondary);
         border-bottom: 1px solid var(--border-color);
         
-        .el-date-picker__header-label {
+        .vue3-date-picker__header-label {
             font-weight: var(--font-weight-semibold);
             color: var(--text-primary);
         }
     }
     
-    .el-date-table {
-        .el-date-table__row {
-            .el-date-table__cell {
-                &.el-date-table__cell--today {
-                    .el-date-table__cell-inner {
+    .vue3-date-table {
+        .vue3-date-table__row {
+            .vue3-date-table__cell {
+                &.vue3-date-table__cell--today {
+                    .vue3-date-table__cell-inner {
                         color: var(--primary);
                         font-weight: var(--font-weight-medium);
                     }
                 }
                 
                 &.is-selected {
-                    .el-date-table__cell-inner {
+                    .vue3-date-table__cell-inner {
                         background: var(--primary);
                         color: white;
                         border-radius: var(--border-radius);
@@ -700,7 +702,7 @@ h6 {
                 }
                 
                 &:hover {
-                    .el-date-table__cell-inner {
+                    .vue3-date-table__cell-inner {
                         background: var(--bg-secondary);
                         border-radius: var(--border-radius);
                     }

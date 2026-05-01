@@ -7,14 +7,12 @@
                 <span v-show="isCollapse">K&E</span>
             </div>
             <div class="menu_scroll_container">
-                <el-menu
-                    router
-                    :default-active="onRoutes"
+                <NativeMenu
+                    :menu-config="menuConfig"
                     :collapse="isCollapse"
-                    :style="{width:!isCollapse?'250px':'64px'}"
-                    :collapse-transition="false">
-                    <SubMenu v-for="(item,index) in menuConfig" :key="index" :menus="item"/>
-                </el-menu>
+                    :active-path="onRoutes"
+                    @menu-click="handleMenuClick"
+                />
             </div>
             <div class="custome_menu_btn" @click="collapse">
                 <el-icon v-if="!isCollapse"><DArrowLeft/></el-icon>
@@ -52,7 +50,7 @@
     import ModalSearch from '@/components/ModalSearch.vue'
     import HeaderSearch from './components/HeaderSearch.vue'
     import ThemeSwitch from '@/components/ThemeSwitch.vue'
-    import SubMenu from './components/subMenu.vue'
+    import NativeMenu from './components/NativeMenu.vue'
     import { useRouter, useRoute } from 'vue-router'
     import { computed, onMounted,ref } from 'vue'
     import useUserInfoStore from './store/pinia/userInfo'
@@ -76,6 +74,10 @@
 
     const goHome = () => {
         router.push(getDefaultRoutePath(userInfoStore.menus))
+    }
+
+    const handleMenuClick = (path) => {
+        router.push(path)
     }
 
     let isShowSearch = ref(false)

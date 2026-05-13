@@ -71,7 +71,7 @@
 </template>
 
 <script setup>
-import { ref, computed, nextTick } from 'vue'
+import { ref, computed, nextTick, watch, onMounted } from 'vue'
 import { resolveMenuFullPath } from '@/utils/menuRoute'
 import SvgIcon from './SvgIcon/index.vue'
 
@@ -121,8 +121,34 @@ const fullPath = computed(() => resolveMenuFullPath(props.parentPath, props.menu
 
 const isActive = computed(() => props.activePath === fullPath.value)
 
+// 检查当前菜单路径是否是激活路径的父路径，即是否需要展开
+const isParentOfActive = computed(() => {
+    if (!props.activePath || !hasChildren.value) return false
+    return props.activePath.startsWith(fullPath.value)
+})
+
 const toggleSubMenu = () => {
     isOpen.value = !isOpen.value
+    // 保存菜单展开状态
+    saveMenuState()
+}
+
+// 保存菜单状态到 localStorage
+const saveMenuState = () => {
+    const menuState = JSON.parse(localStorage.getItem('menuState') || '{}')
+    menuState[fullPath.value] = isOpen.value
+    localStorage.setItem('menuState', JSON.stringify(menuState))
+}
+
+// 从 localStorage 恢复菜单状态
+const restoreMenuState = () => {
+    const menuState = JSON.parse(localStorage.getItem('menuState') || '{}')
+    if (menuState[fullPath.value] !== undefined) {
+        isOpen.value = menuState[fullPath.value]
+    } else if (isParentOfActive.value) {
+        // 如果是激活路由的父菜单，默认展开
+        isOpen.value = true
+    }
 }
 
 const handleMouseEnter = () => {
@@ -153,6 +179,18 @@ const handleSubMenuClick = (path) => {
     isHovering.value = false
     emit('menu-click', path)
 }
+
+// 监听激活路由变化，自动展开父菜单
+watch(() => props.activePath, (newPath) => {
+    if (hasChildren.value && newPath.startsWith(fullPath.value)) {
+        isOpen.value = true
+        saveMenuState()
+    }
+}, { immediate: true })
+
+onMounted(() => {
+    restoreMenuState()
+})
 </script>
 
 <style lang="scss" scoped>
@@ -244,11 +282,10 @@ const handleSubMenuClick = (path) => {
     border-radius: 0 var(--border-radius) var(--border-radius) var(--border-radius);
     box-shadow: var(--shadow-lg);
     z-index: 9999;
-    padding: 4px;
+    padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 2px;
-    overflow-y: auto;
+    overflow: hidden;
 }
 
 .native-sub-menu__dropdown-title {
@@ -260,7 +297,6 @@ const handleSubMenuClick = (path) => {
     color: var(--menu-text-active);
     font-weight: 600;
     border-bottom: 1px solid var(--border-color);
-    margin-bottom: 4px;
     flex-shrink: 0;
     user-select: none;
 
@@ -270,8 +306,11 @@ const handleSubMenuClick = (path) => {
 }
 
 .native-sub-menu__dropdown-children {
+    flex: 1;
     display: flex;
     flex-direction: column;
     gap: 2px;
+    padding: 4px;
+    overflow-y: auto;
 }
 </style>

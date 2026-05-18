@@ -6,7 +6,8 @@ export default[
         path:'/',
         redirect:() => getDefaultRoutePath(),
         name:'layout',
-        component:()=>import('@/Home.vue')
+        component:()=>import('@/Home.vue'),
+        children:[]
     },
     {
         path:'/login',

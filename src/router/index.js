@@ -4,7 +4,7 @@ import routes from './routes'
 import { initRoutes } from '@/utils/generateRoutes'
 import { getDefaultRoutePath } from '@/utils/menuRoute'
 
-const WHITE_LIST = ['/login', '/error']
+const WHITE_LIST = ['/login', '/error', '/web-office']
 
 const router =createRouter({
     history:createWebHistory(import.meta.env.VITE_PROJECT_URL),

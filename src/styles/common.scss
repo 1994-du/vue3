@@ -457,3 +457,17 @@ pre code {
 .transition-slow {
     transition: all var(--transition-slow);
 }
+
+/* 全局Table文字样式强制覆盖 */
+.el-table,
+.el-table tr,
+.el-table th,
+.el-table td,
+.el-table .cell {
+    color: #000000 !important;
+}
+
+.el-table__body-wrapper,
+.el-table__header-wrapper {
+    color: #000000 !important;
+}

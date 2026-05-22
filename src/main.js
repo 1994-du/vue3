@@ -72,7 +72,6 @@ instance.config.globalProperties.$bus = bus
 instance.use(store)
 instance.use(dxUI)
 instance.use(ElementPlus, { 
-    namespace:'vue3',
     locale: zhCn 
 })
 instance.use(Antd)

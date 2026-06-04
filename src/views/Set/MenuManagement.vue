@@ -180,7 +180,7 @@ const handleCreateMenu = (): void => {
                     sort: createMenuObj.value.sort,
                     icon: createMenuObj.value.icon || 'default'
                 }
-                addMenu(params).then((res: MenuOperationResponse) => {
+                addMenu(params).then((res: any) => {
                     if(res.code === 200){
                         createMenuVisible.value = false
                         getMenusList()
@@ -199,7 +199,7 @@ const handleCreateMenu = (): void => {
                     sort: createMenuObj.value.sort,
                     icon: createMenuObj.value.icon || 'default'
                 }
-                setMenu(params).then((res: MenuOperationResponse) => {
+                setMenu(params).then((res: any) => {
                     if(res.code === 200){
                         createMenuVisible.value = false
                         getMenusList()
@@ -219,7 +219,7 @@ const menusList = shallowRef<MenuItem[]>([])
 
 const getMenusList = (): void => {
     loading.value = true
-    getMenus().then((res: GetMenusResponse) => {
+    getMenus().then((res: any) => {
         if(res.code === 200){
             menusList.value = res.data
             total.value = res.data.length
@@ -256,7 +256,7 @@ const handleDeleteMenu = (row: MenuItem): void => {
         cancelButtonText: '取消',
         type: 'warning'
     }).then(() => {
-        deleteMenu({id: row.id}).then((res: MenuOperationResponse) => {
+        deleteMenu({id: row.id}).then((res: any) => {
             if(res.code === 200){
                 getMenusList()
             } else {

@@ -267,7 +267,7 @@ const customUpload = async (options: any) => {
         formData.append('file', file)
         
         // 使用后端提供的 /wps/upload 接口
-        const response = await wpsUpload(formData, {
+        const response: any = await wpsUpload(formData, {
             onUploadProgress: (progressEvent: any) => {
                 const percent = Math.round(
                     (progressEvent.loaded * 100) / progressEvent.total

@@ -229,7 +229,7 @@ const submitFiles = async (): Promise<void> => {
             item.progress = 0
 
             try {
-                const res: UploadResponse = await uploadFile(formData, {
+                const res: any = await uploadFile(formData, {
                     onUploadProgress: (progressEvent: any) => {
                         const { loaded = 0, total = 0 } = progressEvent
                         if (!total) {

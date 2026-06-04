@@ -34,6 +34,7 @@ const isUnauthorized = (response: any): boolean => {
 
 // 创建axios实例
 const Axios: AxiosInstance = axios.create({
+    baseURL: '/api',
     timeout: 300000
 })
 

@@ -96,7 +96,7 @@ const cancleReq = () => {
 }
 
 const sendRequest = () => { 
-    getUsers({ page: 1, pageSize: 10 }).then((res: GetUsersResponse) => {
+    getUsers({ page: 1, pageSize: 10 }).then((res: any) => {
         console.log('请求成功', res);
         responseData.value = res;
     }).catch((err: unknown) => {

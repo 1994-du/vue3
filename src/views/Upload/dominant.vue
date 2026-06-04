@@ -237,7 +237,7 @@ const submitImage = async () => {
         uploadStatus.value = 'uploading'
         uploadProgress.value = 0
 
-        const res = await uploadImage(formData, {
+        const res: any = await uploadImage(formData, {
             onUploadProgress: (progressEvent: ProgressEvent) => {
                 const { loaded = 0, total = 0 } = progressEvent
                 if (!total) {

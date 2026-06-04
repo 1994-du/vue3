@@ -322,7 +322,7 @@ interface GetRolesDictResponse {
 }
 
 const getRoleDictList = (): void => {
-    getRolesDict().then((res: GetRolesDictResponse) => {
+    getRolesDict().then((res: any) => {
         const { code, data, msg } = res
         if(code === 200){
             roleList.value = data
@@ -345,7 +345,7 @@ interface AddUserResponse {
 }
 
 const handleCreateUser = (): void => {
-    addUser(createUserObj.value).then((res: AddUserResponse) => {
+    addUser(createUserObj.value).then((res: any) => {
         if(res.code === 200){
             createUserVisible.value = false
             getUsersList()
@@ -372,7 +372,7 @@ interface ResetPasswordResponse {
 const resetPassword = (userId: number): void => {
     toResetPassword({
         id: userId
-    }).then((res: ResetPasswordResponse) => {
+    }).then((res: any) => {
         if(res.code === 200){
             ElMessage.success('密码重置成功');
             // 刷新用户列表
@@ -392,7 +392,7 @@ interface UpdateUserResponse {
 }
 
 const handleEditUser = (): void => {
-    updateUser(editUserObj.value).then((res: UpdateUserResponse) => {
+    updateUser(editUserObj.value).then((res: any) => {
         if(res.code === 200){
             editUserVisible.value = false
             getUsersList()
@@ -413,7 +413,7 @@ interface DeleteUserResponse {
 const deleteUser = (userId: number): void => {
     delUser({
         id: userId
-    }).then((res: DeleteUserResponse) => {
+    }).then((res: any) => {
         if(res.code === 200){
             getUsersList()
         }
@@ -475,7 +475,7 @@ const handleAvatarUploadSuccess = (response: UploadResponse): void => {
 }
 
 // 新建上传成功回调
-const handleAvatarUploadSuccessCreate = (response: UploadResponse): void => {
+const handleAvatarUploadSuccessCreate = (response: any): void => {
     if (response.code === 200) {
         createUserObj.value.avatar = response.data.avatarUrl;
     }
@@ -497,7 +497,7 @@ interface UploadParam {
 const customUpload = (param: UploadParam): void => {
     const formData = new FormData();
     formData.append('file', param.file); // 将文件添加到 FormData 中
-    updateAvatar(formData).then((response: UploadResponse) => {
+    updateAvatar(formData).then((response: any) => {
         param.onSuccess(response); // 调用成功回调
     })
     .catch((error: Error) => {

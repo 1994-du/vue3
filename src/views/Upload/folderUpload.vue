@@ -181,7 +181,7 @@ const submitFolder = async (): Promise<void> => {
         uploading.value = true
         uploadProgress.value = 0
 
-        const res: UploadResponse = await uploadFolder(formData, {
+        const res: any = await uploadFolder(formData, {
             onUploadProgress: (progressEvent: ProgressEvent) => {
                 const { loaded = 0, total = 0 } = progressEvent
                 if (!total) {

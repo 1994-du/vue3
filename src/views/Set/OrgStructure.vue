@@ -202,7 +202,7 @@ const dialogTitle = computed(() => {
 const fetchData = async (): Promise<void> => {
     loading.value = true
     try {
-        const res: ApiResponse = await getOrgTree()
+        const res: any = await getOrgTree()
         if (res.code === 200) {
             tableData.value = res.data || []
         } else {
@@ -253,7 +253,7 @@ const handleEdit = async (row: OrgItem): Promise<void> => {
     dialogType.value = 'edit'
     resetForm()
     try {
-        const res: ApiResponse = await getOrgDetail({ id: row.id })
+        const res: any = await getOrgDetail({ id: row.id })
         if (res.code === 200) {
             Object.assign(formData, res.data)
             dialogVisible.value = true
@@ -268,7 +268,7 @@ const handleEdit = async (row: OrgItem): Promise<void> => {
 // 删除组织
 const handleDelete = async (id: number): Promise<void> => {
     try {
-        const res: ApiResponse = await deleteOrg({ id })
+        const res: any = await deleteOrg({ id })
         if (res.code === 200) {
             ElMessage.success('删除成功')
             fetchData()
@@ -286,7 +286,7 @@ const handleSubmit = async (): Promise<void> => {
     if (!valid) return
 
     try {
-        let res: ApiResponse
+        let res: any
         if (dialogType.value === 'edit') {
             res = await updateOrg(formData)
         } else {

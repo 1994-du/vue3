@@ -186,7 +186,7 @@ interface GetMenuTreeParams {
 }
 
 onMounted(() => {
-    getMenuTree().then((res: GetMenuTreeResponse) => {
+    getMenuTree().then((res: any) => {
         if(res.code === 200){
             allMenus.value = res.data
         }
@@ -220,7 +220,7 @@ const getRoleList = (): void => {
         size: pageSize4.value,
         keyword: searchKeyword.value
     }
-    getRoles(params).then((res: GetRolesResponse) => {
+    getRoles(params).then((res: any) => {
         tableData.value = res.data.list || []
         total.value = res.data.total || 0
     }).catch((err: Error) => {
@@ -245,7 +245,7 @@ const tableRowClassName = ({ rowIndex }: { rowIndex: number }): string => {
 const deleteRole = (roleId: number): void => {
     delRole({
         id: roleId
-    }).then((res: RoleOperationResponse) => {
+    }).then((res: any) => {
         if(res.code === 200){
             ElMessage.success('角色删除成功')
             getRoleList()
@@ -319,7 +319,7 @@ const handleRole = (): void => {
                     ...formData.value,
                     menus: checkKeys
                 }
-                addRole(params).then((res: RoleOperationResponse) => {
+                addRole(params).then((res: any) => {
                     console.log('新增角色成功', res)
                     if(res.code === 200){
                         dialogVisible.value = false
@@ -334,7 +334,7 @@ const handleRole = (): void => {
                     ...formData.value,
                     menus: checkKeys
                 }
-                setRole(params).then((res: RoleOperationResponse) => {
+                setRole(params).then((res: any) => {
                     console.log('设置角色成功', res)
                     if(res.code === 200){
                         dialogVisible.value = false

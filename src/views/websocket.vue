@@ -188,7 +188,7 @@ const sendImage = async (event: Event): Promise<void> => {
       // 创建FormData对象上传图片
       const formData = new FormData();
       formData.append('file', file);
-      const response: UploadResponse = await uploadFile(formData);
+      const response: any = await uploadFile(formData);
       
       // 检查上传是否成功
       if (response.status === 'success') {

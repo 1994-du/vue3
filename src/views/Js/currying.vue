@@ -1,7 +1,7 @@
 <template>
 <h4>函数柯里化</h4>
 </template>
-<script setup>
+<script setup lang="ts">
 </script>
 <style lang='scss' scoped>
 </style>

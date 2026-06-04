@@ -44,7 +44,7 @@ console.log(func.constructor === Function); // true</pre>
     </code>
 </template>
 
-<script setup>
+<script setup lang="ts">
 
 </script>
 <style scoped>

@@ -211,34 +211,84 @@
     </el-dialog>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import axios from 'axios'
 import { getUsers,getRolesDict,updateUser,addUser, delUser,updateAvatar,toResetPassword } from '@/api/api'
 import { ElMessage } from 'element-plus'
 import { Plus, Edit, Delete, Refresh } from '@element-plus/icons-vue'
 
+// 定义用户数据接口
+interface UserItem {
+    id: number
+    username: string
+    gender: string
+    roleId: number
+    roleName: string
+    avatar: string
+}
+
+// 定义角色数据接口
+interface RoleItem {
+    id: number
+    name: string
+}
+
+// 定义编辑用户对象接口
+interface EditUserForm {
+    id?: number
+    username: string
+    gender: string
+    roleId: number | string
+    avatar: string
+}
+
+// 定义创建用户对象接口
+interface CreateUserForm {
+    username: string
+    gender: string
+    roleId: number | string
+    avatar: string
+}
+
 // 响应式数据
-let tableData = ref([])
+let tableData = ref<UserItem[]>([])
 let editUserVisible = ref(false)
-let editUserObj = ref({})
-let roleList = ref([])
+let editUserObj = ref<EditUserForm>({} as EditUserForm)
+let roleList = ref<RoleItem[]>([])
 let searchKeyword = ref('')
 let loading = ref(false)
-let hoverRow = ref(null)
+let hoverRow = ref<UserItem | null>(null)
 const preUrl = `${import.meta.env.VITE_PROXY}`.replace(/\/$/, '')
-const getUsersList = ()=>{
+
+interface GetUsersParams {
+    page: number
+    pageSize: number
+    keyword: string
+}
+
+interface GetUsersResponse {
+    code: number
+    data: {
+        list: UserItem[]
+        total: number
+    }
+    msg: string
+}
+
+const getUsersList = (): void => {
     loading.value = true
-    getUsers({
+    const params: GetUsersParams = {
         page: currentPage.value,
         pageSize: pageSize4.value,
         keyword: searchKeyword.value
-    }).then(res=>{
+    }
+    getUsers(params).then((res: any) => {
         const { code, data, msg } = res
         if(code !== 200){
             ElMessage({
-                message:msg,
-                type:'error'
+                message: msg,
+                type: 'error'
             })
         }
         if(code === 200){
@@ -251,57 +301,79 @@ const getUsersList = ()=>{
 }
 
 // 表格行样式
-const tableRowClassName = ({ row, rowIndex }) => {
+const tableRowClassName = ({ rowIndex }: { rowIndex: number }): string => {
     return rowIndex % 2 === 0 ? 'even-row' : 'odd-row'
 }
 
 // 行悬停处理
-const handleRowHover = (row, column, event) => {
+const handleRowHover = (row: UserItem): void => {
     hoverRow.value = row
 }
 
-const handleSearch = () => {
+const handleSearch = (): void => {
     currentPage.value = 1 // 搜索时重置为第一页
     getUsersList()
 }
-const getRoleDictList = ()=>{
-    getRolesDict().then(res=>{
+
+interface GetRolesDictResponse {
+    code: number
+    data: RoleItem[]
+    msg: string
+}
+
+const getRoleDictList = (): void => {
+    getRolesDict().then((res: GetRolesDictResponse) => {
         const { code, data, msg } = res
-        if(code===200){
+        if(code === 200){
             roleList.value = data
         }
     })
 }
+
 //新建
 let createUserVisible = ref(false)
-let createUserObj = ref({})
-const createUser = ()=>{
-    createUserObj.value = {}
+let createUserObj = ref<CreateUserForm>({} as CreateUserForm)
+
+const createUser = (): void => {
+    createUserObj.value = {} as CreateUserForm
     createUserVisible.value = true
 }
-const handleCreateUser = ()=>{
-    addUser(createUserObj.value).then(res=>{
-        if(res.code===200){
+
+interface AddUserResponse {
+    code: number
+    msg: string
+}
+
+const handleCreateUser = (): void => {
+    addUser(createUserObj.value).then((res: AddUserResponse) => {
+        if(res.code === 200){
             createUserVisible.value = false
             getUsersList()
         }
     })
 }
+
 // 编辑
-const editUser = (row)=>{
-    editUserObj.value = Object.assign({},row)
+const editUser = (row: UserItem): void => {
+    editUserObj.value = Object.assign({}, row)
     editUserVisible.value = true
 }
+
 /**
  * @description: 重置用户密码
- * @param {*} userId
+ * @param {number} userId
  * @return {*}
  */
-const resetPassword = (userId)=>{
+interface ResetPasswordResponse {
+    code: number
+    msg: string
+}
+
+const resetPassword = (userId: number): void => {
     toResetPassword({
         id: userId
-    }).then(res=>{
-        if(res.code===200){
+    }).then((res: ResetPasswordResponse) => {
+        if(res.code === 200){
             ElMessage.success('密码重置成功');
             // 刷新用户列表
             getUsersList();
@@ -311,47 +383,61 @@ const resetPassword = (userId)=>{
     })
 }
 
-
 /**
  * 编辑用户
  */
-const handleEditUser = ()=>{
-    updateUser(editUserObj.value).then(res=>{
-        if(res.code===200){
+interface UpdateUserResponse {
+    code: number
+    msg: string
+}
+
+const handleEditUser = (): void => {
+    updateUser(editUserObj.value).then((res: UpdateUserResponse) => {
+        if(res.code === 200){
             editUserVisible.value = false
             getUsersList()
         }
     })
 }
+
 /**
  * @description: 删除用户
- * @param {*}
+ * @param {number} userId
  * @return {*}
  */
-const deleteUser = (userId)=>{
+interface DeleteUserResponse {
+    code: number
+    msg: string
+}
+
+const deleteUser = (userId: number): void => {
     delUser({
         id: userId
-    }).then(res=>{
-        if(res.code===200){
+    }).then((res: DeleteUserResponse) => {
+        if(res.code === 200){
             getUsersList()
         }
     })
 }
+
 let currentPage = ref(1)
 let pageSize4 = ref(10)
 let total = ref(0)
 let size = ref('small')
 let disabled = ref(false)
 let background = ref(false)
-const handleSizeChange = (val) => {
+
+const handleSizeChange = (val: number): void => {
     pageSize4.value = val
     getUsersList()
 }
-const handleCurrentChange = (val) => {
+
+const handleCurrentChange = (val: number): void => {
     currentPage.value = val
     getUsersList()
 }
-onMounted(()=>{
+
+onMounted(() => {
     getUsersList()
     getRoleDictList()
 })
@@ -360,7 +446,7 @@ onMounted(()=>{
 const uploadUrl = ref('/api/commonUpload')
 
 // 上传前的钩子，可用于检查文件类型和大小等
-const beforeAvatarUpload = (file) => {
+const beforeAvatarUpload = (file: File): boolean => {
     const isJPG = file.type === 'image/jpeg' || file.type === 'image/png';
     const isLt2M = file.size / 1024 / 1024 < 2;
 
@@ -373,31 +459,48 @@ const beforeAvatarUpload = (file) => {
     return isJPG && isLt2M;
 }
 
+interface UploadResponse {
+    code: number
+    data: {
+        avatarUrl: string
+    }
+    msg: string
+}
+
 // 编辑上传成功回调
-const handleAvatarUploadSuccess = (response, file, fileList) => {
+const handleAvatarUploadSuccess = (response: UploadResponse): void => {
     if (response.code === 200) {
         editUserObj.value.avatar = response.data.avatarUrl;
     }
 }
+
 // 新建上传成功回调
-const handleAvatarUploadSuccessCreate = (response, file, fileList) => {
-    if (response.code===200) {
+const handleAvatarUploadSuccessCreate = (response: UploadResponse): void => {
+    if (response.code === 200) {
         createUserObj.value.avatar = response.data.avatarUrl;
     }
 }
+
 // 上传失败回调
-const handleAvatarUploadError = (err, file, fileList) => {
+const handleAvatarUploadError = (err: Error): void => {
+    console.error('上传失败', err)
     ElMessage.error('头像上传失败，请稍后重试');
 }
 
 // 自定义上传方法
-const customUpload = (param) => {
+interface UploadParam {
+    file: File
+    onSuccess: (response: UploadResponse) => void
+    onError: (error: Error) => void
+}
+
+const customUpload = (param: UploadParam): void => {
     const formData = new FormData();
     formData.append('file', param.file); // 将文件添加到 FormData 中
-    updateAvatar(formData).then(response => {
+    updateAvatar(formData).then((response: UploadResponse) => {
         param.onSuccess(response); // 调用成功回调
     })
-    .catch(error => {
+    .catch((error: Error) => {
         param.onError(error); // 调用失败回调
     });
 }

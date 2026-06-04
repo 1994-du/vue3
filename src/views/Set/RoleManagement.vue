@@ -118,27 +118,76 @@
     </el-dialog>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, nextTick } from 'vue'
+// @ts-ignore
 import { getRoles,setRole,addRole, delRole } from '../../api/role'
+// @ts-ignore
 import { addMenu, getMenuTree } from '../../api/menus'
 import { ElMessage } from 'element-plus'
 import { Plus, Edit, Delete } from '@element-plus/icons-vue'
 
+// 定义菜单树节点接口
+interface MenuNode {
+    id: number | string
+    name: string
+    children?: MenuNode[]
+}
+
+// 定义角色数据接口
+interface RoleItem {
+    id: number
+    name: string
+    roleDesc: string
+    menus?: number[] | string
+}
+
+// 定义角色表单数据接口
+interface RoleFormData {
+    name: string
+    roleDesc: string
+    menus: number[]
+}
+
+// 定义角色列表响应接口
+interface GetRolesResponse {
+    code: number
+    data: {
+        list: RoleItem[]
+        total: number
+    }
+}
+
+// 定义获取菜单树响应接口
+interface GetMenuTreeResponse {
+    code: number
+    data: MenuNode[]
+}
+
+// 定义操作角色响应接口
+interface RoleOperationResponse {
+    code: number
+    msg: string
+}
+
 // 响应式数据
-let allMenus = ref([])
-let dialogType = ref('add')
+let allMenus = ref<MenuNode[]>([])
+let dialogType = ref<'add' | 'edit'>('add')
 let dialogTitle = ref('新建角色')
-let tableData = ref([])
+let tableData = ref<RoleItem[]>([])
 let currentPage4 = ref(1)
 let pageSize4 = ref(10)
 let total = ref(0)
 let searchKeyword = ref('')
 let loading = ref(false)
 
-onMounted(()=>{
-    getMenuTree().then(res=>{
-        if(res.code===200){
+interface GetMenuTreeParams {
+    // 根据实际API参数定义
+}
+
+onMounted(() => {
+    getMenuTree().then((res: GetMenuTreeResponse) => {
+        if(res.code === 200){
             allMenus.value = res.data
         }
     })
@@ -148,75 +197,84 @@ const defaultProps = {
   children: 'children',
   label: 'name',
 }
+
 // const handleCheckChange = (checkedKeys, checkedNodes) => {
 //     console.log('checkedKeys', checkedKeys)
 //     console.log('checkedNodes', checkedNodes)
 // }
-const handleSizeChange = (val) => {
+
+const handleSizeChange = (val: number): void => {
     pageSize4.value = val
     getRoleList()
 }
-const handleCurrentChange = (val) => {
+
+const handleCurrentChange = (val: number): void => {
     currentPage4.value = val
     getRoleList()
 }
 
-const getRoleList = () => {
+const getRoleList = (): void => {
     loading.value = true
-    getRoles({
+    const params = {
         page: currentPage4.value,
         size: pageSize4.value,
         keyword: searchKeyword.value
-    }).then(res=>{
+    }
+    getRoles(params).then((res: GetRolesResponse) => {
         tableData.value = res.data.list || []
         total.value = res.data.total || 0
-    }).catch(err=>{
-        console.error('获取角色数据失败',err)
+    }).catch((err: Error) => {
+        console.error('获取角色数据失败', err)
     }).finally(() => {
         loading.value = false
     })
 }
 
 // 搜索方法
-const handleSearch = () => {
+const handleSearch = (): void => {
     currentPage4.value = 1 // 搜索时重置为第一页
     getRoleList()
 }
 
 // 表格行样式
-const tableRowClassName = ({ row, rowIndex }) => {
+const tableRowClassName = ({ rowIndex }: { rowIndex: number }): string => {
     return rowIndex % 2 === 0 ? 'even-row' : 'odd-row'
 }
 
 // 删除角色
-const deleteRole = (roleId) => {
+const deleteRole = (roleId: number): void => {
     delRole({
         id: roleId
-    }).then(res=>{
-        if(res.code===200){
+    }).then((res: RoleOperationResponse) => {
+        if(res.code === 200){
             ElMessage.success('角色删除成功')
             getRoleList()
         }
-    }).catch(err=>{
+    }).catch((err: Error) => {
         console.error('删除角色失败', err)
         ElMessage.error('删除角色失败')
     })
 }
-let formRef = ref(null)
-let formTree = ref(null)
+
+let formRef = ref<any>(null)
+let formTree = ref<any>(null)
 let dialogVisible = ref(false)
-let formData = ref({
-    roleName: '',
+let formData = ref<RoleFormData>({
+    name: '',
     roleDesc: '',
     menus: []
 })
+
 const rules = ref({
     name: [
         { required: true, message: '请输入角色名称', trigger: 'blur' }
     ]
 })
 
-const normalizeMenuIds = (menus) => {
+// 菜单ID类型
+type MenuId = number | string
+
+const normalizeMenuIds = (menus: number[] | string | undefined): MenuId[] => {
     if (Array.isArray(menus)) {
         return menus
     }
@@ -233,12 +291,12 @@ const normalizeMenuIds = (menus) => {
     return []
 }
 
-const restoreCheckedMenus = (menus = []) => {
+const restoreCheckedMenus = (menus: MenuId[] = []): void => {
     if (!formTree.value) {
         return
     }
 
-    const checkedMenuIds = normalizeMenuIds(menus)
+    const checkedMenuIds = normalizeMenuIds(menus as number[] | string)
 
     formTree.value.setCheckedKeys([])
     checkedMenuIds.forEach((menuId) => {
@@ -246,71 +304,84 @@ const restoreCheckedMenus = (menus = []) => {
     })
 }
 
-const handleRole = () => {
-    let checkKeys = formTree.value.getCheckedKeys()
-    let checkHalfKeys = formTree.value.getHalfCheckedKeys()
+const handleRole = (): void => {
+    if (!formTree.value) return
+    
+    const checkKeys = formTree.value.getCheckedKeys()
+    const checkHalfKeys = formTree.value.getHalfCheckedKeys()
     console.log('关闭弹窗', checkKeys, checkHalfKeys)
-    formRef.value.validate((valid)=>{
+    
+    formRef.value.validate((valid: boolean) => {
         if(valid){
             if(dialogType.value === 'add'){
                 // 新增角色
-                addRole({
+                const params = {
                     ...formData.value,
                     menus: checkKeys
-                }).then(res=>{
+                }
+                addRole(params).then((res: RoleOperationResponse) => {
                     console.log('新增角色成功', res)
-                    if(res.code===200){
+                    if(res.code === 200){
                         dialogVisible.value = false
                         getRoleList()
                     }
-                }).catch(err=>{
+                }).catch((err: Error) => {
                     console.error('新增角色失败', err)
                 })
-            }else{
+            } else {
                 // 编辑角色
-                setRole({
+                const params = {
                     ...formData.value,
                     menus: checkKeys
-                }).then(res=>{
+                }
+                setRole(params).then((res: RoleOperationResponse) => {
                     console.log('设置角色成功', res)
-                    if(res.code===200){
+                    if(res.code === 200){
                         dialogVisible.value = false
                         getRoleList()
                     }
-                }).catch(err=>{
+                }).catch((err: Error) => {
                     console.error('设置角色失败', err)
                 })
             }
         }
     })
 }
-const editRole = (row) => {
+
+const editRole = (row: RoleItem): void => {
     dialogVisible.value = true
     dialogType.value = 'edit'
     dialogTitle.value = '编辑角色'
     console.log('编辑角色', row)
-    formData.value = Object.assign({},row, {
-        menus: normalizeMenuIds(row.menus)
-    })
-    console.log('formData',formData.value);
-    nextTick(()=>{
-        restoreCheckedMenus(formData.value.menus)
+    
+    const normalizedMenus = normalizeMenuIds(row.menus)
+    formData.value = {
+        name: row.name,
+        roleDesc: row.roleDesc,
+        menus: normalizedMenus as number[]
+    }
+    console.log('formData', formData.value)
+    
+    nextTick(() => {
+        restoreCheckedMenus(normalizedMenus)
     })
 }
-const createRole = () => {
+
+const createRole = (): void => {
     dialogType.value = 'add'
     dialogTitle.value = '新建角色'
     dialogVisible.value = true
     formData.value = {
-        roleName: '',
+        name: '',
         roleDesc: '',
         menus: []
     }
-    nextTick(()=>{
+    nextTick(() => {
         restoreCheckedMenus([])
     })
 }
-onMounted(()=>{
+
+onMounted(() => {
     getRoleList()
 })
 </script>

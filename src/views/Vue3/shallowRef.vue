@@ -4,7 +4,7 @@
         <p>shallowRef 是一个“只关心 .value 变化，不关心内部属性变化”的 ref。</p>
     </div>
 </template>
-<script setup>
+<script setup lang="ts">
 import { shallowRef,shallowReactive } from 'vue'
 
 </script>

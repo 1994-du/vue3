@@ -8,7 +8,7 @@
     </el-table>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const tableData = [
     {
         layer: '应用层',

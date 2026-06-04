@@ -8,7 +8,7 @@
     <h5>6.使用分层技术，将不同元素分配到不同的图层，传递给GPU合成</h5>
 </template>
 
-<script setup>
+<script setup lang="ts">
 </script>
 <style scoped lang='less'>
 </style>

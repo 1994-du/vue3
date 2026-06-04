@@ -5,7 +5,7 @@
 <p>2.下一批次请求如果在最小RTT时依然未响应，就废弃。小于当前RTT就重置为当前RTT</p>
 <p>3.最终返回最小RTT的IP</p>
 </template>
-<script setup>
+<script setup lang="ts">
 </script>
 <style lang='scss' scoped>
 p{

@@ -24,7 +24,7 @@ console.log(BankAccount.#balance); // ❌ 报错 (SyntaxError: Private field '#b
 />
 </template>
 
-<script setup>
+<script setup lang="ts">
 
 </script>
 <style scoped lang='less'>

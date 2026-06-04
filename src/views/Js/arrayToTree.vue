@@ -36,8 +36,15 @@ const arrayToTree = (arr) => {
 }
 console.log(arrayToTree(arr))"></CodeEditor>
 </template>
-<script setup>
-let arr=[
+<script setup lang="ts">
+interface TreeItem {
+    id: number
+    value: number
+    parent: number | null
+    children?: TreeItem[]
+}
+
+let arr: TreeItem[] = [
     { id:1,value:1,parent:null},
     { id:2,value:2,parent:1},
     { id:3,value:3,parent:1},
@@ -51,23 +58,23 @@ let arr=[
     { id:11,value:11,parent:5},
     { id:12,value:12,parent:6},
 ]
-const arrayToTree = (arr) => {
-    const map=new Map();
-    arr.forEach(el=>{
-        map.set(item.id,item)
+const arrayToTree = (arr: TreeItem[]) => {
+    const map = new Map<number, TreeItem>();
+    arr.forEach((item: TreeItem) => {
+        map.set(item.id, item)
     })
-    console.log('map',map);
+    console.log('map', map);
     
-    let result=[];
-    for(let item of arr){
-        if(!item.parent){
+    let result: TreeItem[] = [];
+    for (let item of arr) {
+        if (!item.parent) {
             result.push(item)
-        }else{
-            const parent=map.get(item.parent)
-            if(!parent.children){
-                parent.children=[item]
-            }else{
-                parent.children.push(item)
+        } else {
+            const parent = map.get(item.parent)
+            if (parent && !parent.children) {
+                parent.children = [item]
+            } else if (parent) {
+                parent.children!.push(item)
             }
         }
     }

@@ -2,7 +2,7 @@
 import Axios from "@/api";
 import { getCurrentInstance, ref, watchEffect } from "vue"
 import { Plus } from '@element-plus/icons-vue';
-import {toUpload} from "@/api/api.js"
+import {toUpload} from "@/api/api"
 const {proxy} = getCurrentInstance()
 let upload = ref()
 let props = defineProps(['url'])

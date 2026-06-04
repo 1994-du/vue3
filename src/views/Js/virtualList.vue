@@ -10,7 +10,7 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 
 // 配置参数
@@ -18,7 +18,7 @@ const itemHeight = 60;  // 每项高度
 const items = Array.from({ length: 1000 }, (_, i) => ({ id: i + 1 })); // 测试数据
 
 // DOM引用 & 响应式状态
-const container = ref(null);
+const container = ref<HTMLDivElement | null>(null);
 const scrollTop = ref(0);
 const startIndex = ref(0);
 
@@ -38,12 +38,15 @@ const visibleItems = computed(() => {
 
 // 滚动处理
 const handleScroll = () => {
+    if (!container.value) return;
     scrollTop.value = container.value.scrollTop;
     startIndex.value = Math.floor(scrollTop.value / itemHeight);
 };
 
 onMounted(() => {
-    container.value.scrollTop = 0;
+    if (container.value) {
+        container.value.scrollTop = 0;
+    }
 });
 </script>
 

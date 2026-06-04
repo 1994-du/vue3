@@ -122,31 +122,31 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount, computed, nextTick } from 'vue'
 import { ElMessage } from 'element-plus'
 import { UploadFilled } from '@element-plus/icons-vue'
 import { config as WebOfficeConfig } from '@/assets/web-office-sdk-v1.1.20.es.js'
 import { uploadToWPS, wpsUpload } from '@/api/wps'
 
-const officeViewer = ref(null)
-const logContainer = ref(null)
+const officeViewer = ref<HTMLElement | null>(null)
+const logContainer = ref<HTMLElement | null>(null)
 const isInitialized = ref(false)
-const officeInstance = ref(null)
+const officeInstance = ref<any>(null)
 const activeCodeTab = ref('basic')
-const fileList = ref([])
+const fileList = ref<any[]>([])
 const isUploading = ref(false)
 
 const config = ref({
     fileType: 'docx',
     title: '文档',
     mode: 'edit',
-    appId: 'SX20260425VSHWJE',
+    appId: 'SX20250425VSHWJE',
     fileId: 'test-file-001',
     token: ''
 })
 
-const logs = ref([])
+const logs = ref<any[]>([])
 
 const codeTabs = [
     { name: 'basic', label: '基础使用' },
@@ -191,9 +191,9 @@ wpsOffice.destroy()
 wpsOffice.updateConfig({})`
 }
 
-const activeCode = computed(() => codeExamples[activeCodeTab.value])
+const activeCode = computed(() => (codeExamples as any)[activeCodeTab.value])
 
-const addLog = (type, ...messages) => {
+const addLog = (type: string, ...messages: any[]) => {
     const time = new Date().toLocaleTimeString()
     const message = messages.map(m => {
         if (typeof m === 'object') {
@@ -219,7 +219,7 @@ const clearLogs = () => {
 }
 
 // 上传相关方法
-const beforeUpload = (file) => {
+const beforeUpload = (file: any) => {
     const validTypes = [
         'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -248,7 +248,7 @@ const beforeUpload = (file) => {
     return true
 }
 
-const handleChange = (file, fileList) => {
+const handleChange = (file: any, fileList: any[]) => {
     addLog('info', `文件选择: ${file.name}`)
 }
 
@@ -256,7 +256,7 @@ const handleExceed = () => {
     ElMessage.warning('只能上传一个文件！')
 }
 
-const customUpload = async (options) => {
+const customUpload = async (options: any) => {
     const { file, onSuccess, onError, onProgress } = options
     
     try {
@@ -268,7 +268,7 @@ const customUpload = async (options) => {
         
         // 使用后端提供的 /wps/upload 接口
         const response = await wpsUpload(formData, {
-            onUploadProgress: (progressEvent) => {
+            onUploadProgress: (progressEvent: any) => {
                 const percent = Math.round(
                     (progressEvent.loaded * 100) / progressEvent.total
                 )
@@ -310,7 +310,7 @@ const customUpload = async (options) => {
             onError(new Error('未获取到 WPS FileID'))
         }
         
-    } catch (error) {
+    } catch (error: any) {
         addLog('error', `上传失败: ${error.message}`)
         ElMessage.error('上传失败，请重试')
         onError(error)
@@ -319,11 +319,11 @@ const customUpload = async (options) => {
     }
 }
 
-const handleSuccess = (response, file) => {
+const handleSuccess = (response: any, file: any) => {
     addLog('info', '文件上传处理完成')
 }
 
-const handleError = (error, file) => {
+const handleError = (error: any, file: any) => {
     addLog('error', `文件上传出错: ${error.message}`)
 }
 
@@ -336,7 +336,7 @@ const initOffice = () => {
         isInitialized.value = true
         
         nextTick(() => {
-            const container = officeViewer.value
+            const container = officeViewer.value as HTMLElement
             if (!container) {
                 addLog('error', '找不到 office-container 元素')
                 return
@@ -346,7 +346,7 @@ const initOffice = () => {
             
             container.innerHTML = ''
             
-            let configOptions = {
+            let configOptions: Record<string, any> = {
                 appId: config.value.appId,
                 fileId: config.value.fileId,
                 mount: container,
@@ -375,7 +375,7 @@ const initOffice = () => {
             addLog('info', '配置参数:', configOptions)
             addLog('info', '正在初始化 WPS Office SDK...')
 
-            const wpsOffice = WebOfficeConfig(configOptions)
+            const wpsOffice = WebOfficeConfig(configOptions as any)
             
             addLog('info', 'wpsOffice 实例:', wpsOffice)
             
@@ -402,7 +402,7 @@ const initOffice = () => {
             })
         })
         
-    } catch (error) {
+    } catch (error: any) {
         addLog('error', `初始化失败: ${error.message}`)
         console.error('SDK 初始化错误:', error)
         console.error('错误堆栈:', error.stack)
@@ -415,7 +415,7 @@ const destroyOffice = () => {
         try {
             officeInstance.value.destroy()
             addLog('success', 'SDK 实例已销毁')
-        } catch (error) {
+        } catch (error: any) {
             addLog('error', 'SDK 销毁错误: ' + error)
         }
         officeInstance.value = null

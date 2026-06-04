@@ -1,10 +1,10 @@
 <template>
 <div ref="echartRef" class="echart-container" style="width: 100%; height: 100%"></div>
 </template>
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import * as echarts from 'echarts'
-let echartRef = ref(null)
+let echartRef = ref<HTMLElement | null>(null)
 const initEchart = () => {
     const myChart = echarts.init(echartRef.value)
     const option = {
@@ -18,14 +18,14 @@ const initEchart = () => {
         },
         tooltip: {
             trigger: 'axis',
-            formatter: function (params) {
+            formatter: function (params: any[]) {
                 if(params[0].axisIndex === 0) return
                 let result = `${params[0].axisValue}<br>
                 <div style="display:flex;justify-content:space-between;">
                     <span>名称</span><span>值</span> 
                 </div>
                 `;
-                params.forEach(item => {
+                params.forEach((item: any) => {
                     // if (item.seriesType === 'bar') { // 只处理柱状图数据
                     if(item.axisIndex === 1){
                         let aa = `<div style="display:flex;align-items: center; justify-content: space-between; width: 100%;">
@@ -68,22 +68,16 @@ const initEchart = () => {
                 type: 'category',
                 show:false,
                 data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'], axisPointer: {
-                    type: 'shadow'
-                },
-                axisPointer:{
-                    type:'line',
-                    snap:true
+                    type: 'shadow',
+                    snap: true
                 }
             },
             {
                 gridIndex: 1,
                 type: 'category',
                 data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'], axisPointer: {
-                    type: 'shadow'
-                },
-                axisPointer:{
-                    type:'shadow',
-                    snap:true
+                    type: 'shadow',
+                    snap: true
                 }
             }
         ],
@@ -102,13 +96,10 @@ const initEchart = () => {
                     min: 0,
                     max: 250,
                     // interval: 50,
-                    axisLabel: {
-                        formatter: '{value} ml'
-                    },
                     axisLabel:{
                         show:true,
-                        formatter:(value,index)=>{
-                            return value+'%'
+                        formatter:(value: any, index: any)=>{
+                            return value
                         }
                     },
                     splitLine:{
@@ -158,7 +149,7 @@ const initEchart = () => {
                             padding:[5,10],
                             borderRadius:5,
                             color:'#fff',
-                            formatter:(params)=>{
+                            formatter:(params: any)=>{
                                 return params.value+'%'
                             }
                         }
@@ -177,14 +168,14 @@ const initEchart = () => {
                     yAxisIndex: 1,
                     name: '平均温度',
                     type: 'bar',
-                    yAxisIndex: 1, data: [2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2]
+                    data: [2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2]
                 },
                 {
                     xAxisIndex: 1,
                     yAxisIndex: 1,
                     name: '测试',
                     type: 'line',
-                    yAxisIndex: 1, data: [2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2]
+                    data: [2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2]
                 }
             ]
     }

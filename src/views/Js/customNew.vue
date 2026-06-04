@@ -23,7 +23,7 @@ console.log(p1.getName());
 "/>
 </template>
 
-<script setup>
+<script setup lang="ts">
 </script>
 <style scoped lang='less'>
 .tip{

@@ -18,15 +18,26 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 import { toChatDeepSeek } from '@/api/chat'
 import useUserInfoStore from '@/store/pinia/userInfo'
+
+interface MessageItem {
+    id: number
+    type: string
+    content: string
+}
+
+interface ChatResponse {
+    data: string
+}
+
 const userInfoStore = useUserInfoStore()
 const avatar = userInfoStore.userInfo.avatar
 const input = ref('')
 const preUrl = `${import.meta.env.VITE_PROXY}`.replace(/\/$/, '')
-const msg_box = ref([])
+const msg_box = ref<MessageItem[]>([])
 const send = async () => {
     msg_box.value.push({
         type: 'user',
@@ -35,8 +46,8 @@ const send = async () => {
     })
     await toChatDeepSeek({
         message: input.value
-    }).then(res=>{
-        console.log('聊天成功',res)
+    }).then((res: ChatResponse) => {
+        console.log('聊天成功', res)
         let content = JSON.parse(res.data).choices[0].message.content
         msg_box.value.push({
             type: 'assistant',
@@ -45,9 +56,9 @@ const send = async () => {
         })
 
         input.value = ''
-    }).catch(err=>{
-        console.log('聊天失败',err)
-   })
+    }).catch((err: unknown) => {
+        console.log('聊天失败', err)
+    })
 }
 </script>
 <style scoped lang="scss">

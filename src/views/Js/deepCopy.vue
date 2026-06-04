@@ -43,7 +43,7 @@ function deepClone(obj) {
 "/>
 </template>
 
-<script setup>
+<script setup lang="ts">
 </script>
 <style lang="less" scoped>
 h2,h4,p{

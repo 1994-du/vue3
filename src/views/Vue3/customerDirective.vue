@@ -8,27 +8,31 @@
     
 </template>
 
-<script setup>
-import {ref, useCssModule} from 'vue'
-const isShow=ref(true)
-const vMove={
-    create(){},
-    beforeMount() {},
-    mounted(el) {
-        el.style.background='var(--fontColor)';
-        el.style.color='var(--inputColor)'
+<script setup lang="ts">
+import { ref, useCssModule, Directive } from 'vue'
+
+const isShow = ref<boolean>(true)
+
+// 定义自定义指令对象
+const vMove: Directive = {
+    created() {},
+    beforeMount(el: HTMLElement) {
+        el.style.background = 'var(--fontColor)';
+        el.style.color = 'var(--inputColor)'
     },
+    mounted() {},
     beforeUpdate() {},
     updated() {},
     beforeUnmount() {},
     unmounted() {},
 }
 
-let color=ref('#000')
-const colorHandle=(event)=>{
-    console.log(event.target.value);
-    
-    color.value=event.target.value
+let color = ref<string>('#000')
+
+const colorHandle = (event: Event): void => {
+    const target = event.target as HTMLInputElement
+    console.log(target.value);
+    color.value = target.value
 }
 
 const demo = useCssModule('democss')

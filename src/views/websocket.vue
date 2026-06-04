@@ -35,20 +35,53 @@
     </div>
   </div>
 </template>
-<script setup>
+<script setup lang="ts">
 import { ElMessage } from 'element-plus';
 import { nextTick, onMounted, onUnmounted, ref } from 'vue';
-import { uploadFile } from '../api/api';
-let username = localStorage.getItem('username');
-let message_box = ref(null);
+// @ts-ignore
+import { uploadFile } from '@/api/api';
+
+// 定义消息项接口
+interface MessageItem {
+    username: string
+    avatar: string
+    message: string
+    image?: string
+    isImage: boolean
+    time: string
+}
+
+// 定义WebSocket消息负载接口
+interface WebSocketPayload {
+    type: string
+    payload: {
+        username?: string
+        avatar?: string
+        message?: string
+        image?: string
+        isImage?: boolean | string
+        time?: string
+        token?: string
+    }
+}
+
+// 定义上传响应接口
+interface UploadResponse {
+    status: string
+    fileUrl?: string
+    msg?: string
+}
+
+let username = localStorage.getItem('username') || '';
+let message_box = ref<HTMLElement | null>(null);
 const message = ref('');
-let messageList = ref([]);
-let socket = null;
+let messageList = ref<MessageItem[]>([]);
+let socket: WebSocket | null = null;
 const isImagePreviewVisible = ref(false);
 const previewImageSrc = ref('');
 
 // 获取当前时间，包含年月日时分秒
-const getCurrentTime = () => {
+const getCurrentTime = (): string => {
   const now = new Date();
   const year = now.getFullYear();
   const month = String(now.getMonth() + 1).padStart(2, '0');
@@ -60,7 +93,7 @@ const getCurrentTime = () => {
 };
 
 // 连接服务器
-const connectServer = () => {
+const connectServer = (): void => {
   socket = new WebSocket(import.meta.env.VITE_WS);
   socket.onopen = () => {
     console.log('WebSocket连接成功');
@@ -72,10 +105,10 @@ const connectServer = () => {
         time: getCurrentTime() // 添加时间属性
       }
     };
-    socket.send(JSON.stringify(userMessage));
+    socket?.send(JSON.stringify(userMessage));
   };
-  socket.onmessage = (event) => {
-    const data = JSON.parse(event.data);
+  socket.onmessage = (event: MessageEvent) => {
+    const data: WebSocketPayload = JSON.parse(event.data);
     console.log('收到服务器消息：', data);
     if (data.type === 'userJoined') {
       ElMessage({
@@ -83,48 +116,50 @@ const connectServer = () => {
         type: 'info'
       });
     } else if(data.type === 'chat'){
-      let newMessage;
-      if (data.payload.isImage&&(data.payload.isImage === true||data.payload.isImage === 'true')) {
+      let newMessage: MessageItem;
+      if (data.payload.isImage && (data.payload.isImage === true || data.payload.isImage === 'true')) {
         // 若为图片消息，直接使用完整的 payload
         newMessage = {
-          avatar: data.payload.avatar,
-          username: data.payload.username,
+          avatar: data.payload.avatar || '',
+          username: data.payload.username || '',
           image: data.payload.image,
-          message: data.payload.image,
+          message: data.payload.image || '',
           isImage: true,
-          time: data.payload.time // 从 payload 中获取时间属性
+          time: data.payload.time || '' // 从 payload 中获取时间属性
         };
       } else {
         // 若为普通文本消息，按原逻辑处理
         newMessage = {
-          avatar: data.payload.avatar,
-          username: data.payload.username,
-          message: data.payload.message,
+          avatar: data.payload.avatar || '',
+          username: data.payload.username || '',
+          message: data.payload.message || '',
           isImage: false,
-          time: data.payload.time // 从 payload 中获取时间属性
+          time: data.payload.time || '' // 从 payload 中获取时间属性
         };
       }
       messageList.value.push(newMessage);
       nextTick(() => {
-        console.log(message_box.value.scrollHeight);
-        console.log(message_box.value.scrollTop);
+        console.log(message_box.value?.scrollHeight);
+        console.log(message_box.value?.scrollTop);
         
-        message_box.value.scrollTop = message_box.value.scrollHeight;
+        if (message_box.value) {
+          message_box.value.scrollTop = message_box.value.scrollHeight;
+        }
       });
     }
   };
-  socket.onclose = (event) => {
+  socket.onclose = (event: CloseEvent) => {
     console.log('WebSocket连接已关闭', event);
   };
 };
 
-const sendMessage = () => {
-  if (socket && socket.readyState === WebSocket.OPEN&&message.value) {
+const sendMessage = (): void => {
+  if (socket && socket.readyState === WebSocket.OPEN && message.value) {
     const chatMessage = {
       type: 'chat',
       payload: {
         isImage: false,
-        token:localStorage.getItem('token'),
+        token: localStorage.getItem('token'),
         username: username,
         message: message.value,
         time: getCurrentTime() // 添加时间属性
@@ -138,21 +173,22 @@ const sendMessage = () => {
   }
 };
 
-const fileInput = ref(null);
+const fileInput = ref<HTMLInputElement | null>(null);
 
-const openFileSelector = () => {
-  fileInput.value.click();
+const openFileSelector = (): void => {
+  fileInput.value?.click();
 };
 
 // 发送图片
-const sendImage = async (event) => {
-  const file = event.target.files[0];
+const sendImage = async (event: Event): Promise<void> => {
+  const target = event.target as HTMLInputElement;
+  const file = target.files?.[0];
   if (file) {
     try {
       // 创建FormData对象上传图片
       const formData = new FormData();
       formData.append('file', file);
-      const response = await uploadFile(formData);
+      const response: UploadResponse = await uploadFile(formData);
       
       // 检查上传是否成功
       if (response.status === 'success') {
@@ -166,7 +202,7 @@ const sendImage = async (event) => {
             type: 'chat',
             payload: {
               isImage: true,
-              token:localStorage.getItem('token'),
+              token: localStorage.getItem('token'),
               username: username,
               image: imageUrl, // 使用服务器返回的图片地址
               time: getCurrentTime() // 添加时间属性
@@ -185,10 +221,10 @@ const sendImage = async (event) => {
     }
   }
   // 清空文件输入，允许重复选择相同的文件
-  event.target.value = '';
+  target.value = '';
 };
 
-const disConnectServer = () => {
+const disConnectServer = (): void => {
   if (socket) {
     socket.close();
     console.log('WebSocket连接已关闭');
@@ -196,13 +232,13 @@ const disConnectServer = () => {
 };
 
 // 打开图片预览
-const openImagePreview = (src) => {
+const openImagePreview = (src: string): void => {
   previewImageSrc.value = `${src}`;
   isImagePreviewVisible.value = true;
 };
 
 // 关闭图片预览
-const closeImagePreview = () => {
+const closeImagePreview = (): void => {
   isImagePreviewVisible.value = false;
 };
 

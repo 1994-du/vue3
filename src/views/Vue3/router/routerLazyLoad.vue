@@ -12,7 +12,7 @@
     </code>
 </template>
 
-<script setup>
+<script setup lang="ts">
 </script>
 <style lang="less" scoped>
 h2 , p{

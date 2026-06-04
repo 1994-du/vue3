@@ -1,5 +1,4 @@
 import { defineConfig,loadEnv } from 'vite'
-import { viteMockServe } from 'vite-plugin-mock'
 import vue from '@vitejs/plugin-vue'
 import path from 'path'
 import AutoImport from 'unplugin-auto-import/vite'
@@ -19,10 +18,6 @@ export default defineConfig(({mode,command}) => {
         resolvers: [ElementPlusResolver({
           importStyle: 'css',
         })],
-      }),
-      viteMockServe({
-        mockPath: 'mock', // mock 文件存放目录
-        enable: command === 'serve', // 仅开发时启用
       })
     ],
     server: {

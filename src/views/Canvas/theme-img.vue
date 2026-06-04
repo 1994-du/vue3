@@ -4,7 +4,7 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import themeImg from './components/theme-img.vue';
 let source = [
     {id:1,src: new URL('@/assets/1.jpg', import.meta.url).href},

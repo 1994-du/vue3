@@ -16,7 +16,7 @@ console.log(gen.next(42).value); // "You provided: 42"</pre>
     </code>
 </template>
 
-<script setup>
+<script setup lang="ts">
 // function* numberGenerator() {
 //     let num = yield "Please provide a number";
 //     console.log(`You provided: ${num}`);

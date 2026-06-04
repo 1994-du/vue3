@@ -21,7 +21,7 @@ export default{
     name:'prototype-proto'
 }
 </script>
-<script setup>
+<script setup lang="ts">
 
 </script>
 <style scoped>

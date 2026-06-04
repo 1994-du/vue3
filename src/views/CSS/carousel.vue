@@ -17,7 +17,7 @@
     <button class="carousel_btn next" @click="next">下一张</button>
 </div>
 </template>
-<script setup>
+<script setup lang="ts">
 
 let currentIndex=1;
 function prev() {
@@ -30,9 +30,11 @@ function next() {
 }
 
 function updateCarousel() {
-    const carouselWrap = document.querySelector('.carousel_warp');
+    const carouselWrap = document.querySelector('.carousel_warp') as HTMLElement | null;
+    if (!carouselWrap) return;
     const imageWidth = carouselWrap.clientWidth
-    let images = document.querySelector('.carousel_list');
+    const images = document.querySelector('.carousel_list') as HTMLElement | null;
+    if (!images) return;
     const offset = -currentIndex * imageWidth;
     images.style.transform = `translateX(${offset}px)`;
     if(currentIndex === images.children.length -1){

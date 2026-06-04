@@ -4,7 +4,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
 
 const props = defineProps({
@@ -12,7 +12,7 @@ const props = defineProps({
 })
 
 const mainColor = ref('#fff')
-const imgRef = ref(null)
+const imgRef = ref<HTMLImageElement | null>(null)
 
 function extractDominantColor() {
   const img = imgRef.value
@@ -22,6 +22,7 @@ function extractDominantColor() {
   const size = 64
   const canvas = document.createElement('canvas')
   const ctx = canvas.getContext('2d')
+  if (!ctx) return;
   canvas.width = size
   canvas.height = size
 
@@ -32,20 +33,21 @@ function extractDominantColor() {
 
   ctx.drawImage(img, 0, 0, w, h, 0, 0, size, size)
 
-  let imgData
+  let imgData: ImageData | null = null
   try {
     imgData = ctx.getImageData(0, 0, size, size)
   } catch (e) {
-    // 跨域未设置或被拒会 taint canvas
+    // 跨域未设置或被 tainted canvas
     console.warn('getImageData failed:', e)
     return
   }
+  if (!imgData) return;
 
   mainColor.value = getDominantColor(imgData.data)
 }
 
 // 颜色量化 + 频次统计（按饱和度加权）
-function getDominantColor(data) {
+function getDominantColor(data: Uint8ClampedArray) {
   const bins = new Map()
   const stride = 8 // 采样步长（可调大一点进一步加速，如 8、12）
 
@@ -83,7 +85,7 @@ function getDominantColor(data) {
     }
   })
 
-  return `rgb(${best.r},${best.g},${best.b})`
+  return `rgb(${best!.r},${best!.g},${best!.b})`
 }
 
 function tryExtract() {

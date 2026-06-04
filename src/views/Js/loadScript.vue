@@ -27,8 +27,8 @@ loadScript('a.js')
 init()"></CodeEditor>
 </template>
 
-<script setup>
-const loadScript =(src)=> {
+<script setup lang="ts">
+const loadScript = (src: string) => {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script')
     script.src = src

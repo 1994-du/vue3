@@ -11,21 +11,22 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
-let audio = null; // 音频对象
-let canvas = null; // 画布对象
-let ctx = null; // 画布上下文对象
+let audio: HTMLAudioElement | null = null; // 音频对象
+let canvas: HTMLCanvasElement | null = null; // 画布对象
+let ctx: CanvasRenderingContext2D | null = null; // 画布上下文对象
 let isInit = false; // 是否已经初始化
 
-let analyser = null
-let buffer = null
-let animationFrameId = null
+let analyser: AnalyserNode | null = null
+let buffer: Uint8Array<ArrayBuffer> | null = null
+let animationFrameId: number | null = null
 const ys = getComputedStyle(document.documentElement).getPropertyValue('--color').trim();
 // 初始化
 const initCvs = () => {
   audio = document.querySelector('audio');
   canvas = document.querySelector('canvas');
+  if (!canvas) return;
   ctx = canvas.getContext('2d');
   canvas.width = 400*devicePixelRatio;
   canvas.height = 200*devicePixelRatio;
@@ -33,10 +34,12 @@ const initCvs = () => {
 };
 // 注册事件
 const registerEvent = () => {
+  if (!audio) return;
   audio.addEventListener('play', () => {
     draw()
     if(isInit) return;
     const audioCtx = new AudioContext();// 音频上下文
+    if (!audio) return;
     const source = audioCtx.createMediaElementSource(audio);// 音频源节点
     analyser = audioCtx.createAnalyser(); // 分析器
     source.connect(analyser); // 音频源节点连接到分析器节点
@@ -51,10 +54,11 @@ const registerEvent = () => {
 const draw = () => {
   animationFrameId = requestAnimationFrame(draw);
   if(!isInit) return;
+  if (!canvas || !ctx || !analyser || !buffer) return;
   // 清空画布
   const { width, height } = canvas;
   ctx.clearRect(0, 0, width, height);
-  analyser.getByteFrequencyData(buffer);
+  analyser.getByteFrequencyData(buffer as any);
   const len = buffer.length / 2.5;
   const count = len * 2;
   const barWidth = width / count;
@@ -70,7 +74,9 @@ const draw = () => {
   
 };
 const stopDraw = () => {
-  cancelAnimationFrame(animationFrameId);
+  if (animationFrameId !== null) {
+    cancelAnimationFrame(animationFrameId);
+  }
 };
 onMounted(()=>{
   initCvs();

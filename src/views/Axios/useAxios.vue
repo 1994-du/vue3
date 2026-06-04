@@ -69,6 +69,12 @@ onDownloadProgress:(progressEvt)=>{
 import { ref } from 'vue'
 import { getUsers } from '@/api/api'
 
+interface GetUsersResponse {
+    data: any
+    code?: number
+    message?: string
+}
+
 let controllers: any[] = [];
 let cancelTokens: any[] = [];
 const responseData = ref<any>(null);
@@ -77,7 +83,6 @@ const cancleReq = () => {
     controllers.forEach(controller => {
         if (controller) {
             controller.abort();
-            controller = null;
         }
     })
     controllers = [];
@@ -91,10 +96,10 @@ const cancleReq = () => {
 }
 
 const sendRequest = () => { 
-    getUsers({ page: 1, pageSize: 10 }).then(res => {
+    getUsers({ page: 1, pageSize: 10 }).then((res: GetUsersResponse) => {
         console.log('请求成功', res);
         responseData.value = res;
-    }).catch(err => {
+    }).catch((err: unknown) => {
         console.log('请求失败', err);
     })
 }

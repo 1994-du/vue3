@@ -105,55 +105,73 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { uploadFile } from '@/api/upload'
 
+// 定义文件项接口
+interface FileItem {
+    uid: string
+    name: string
+    size: number
+    type: string
+    raw: File
+    progress: number
+    status: 'ready' | 'uploading' | 'success' | 'error'
+}
+
+// 定义上传响应接口
+interface UploadResponse {
+    code: number
+    msg?: string
+}
+
 const MAX_FILE_SIZE = 5 * 1024 * 1024
 const ALLOWED_FILE_TYPES = ['application/pdf', 'image/jpeg', 'image/png']
 
-const fileInputRef = ref(null)
-const selectedFiles = ref([])
+const fileInputRef = ref<HTMLInputElement | null>(null)
+const selectedFiles = ref<FileItem[]>([])
 const uploading = ref(false)
 const uploadProgress = ref(0)
 
-const statusTextMap = {
+const statusTextMap: Record<string, string> = {
     ready: '待上传',
     uploading: '上传中',
     success: '成功',
     error: '失败'
 }
 
-const statusTagMap = {
+const statusTagMap: Record<string, string> = {
     ready: 'info',
     uploading: 'warning',
     success: 'success',
     error: 'danger'
 }
 
-const totalSizeText = computed(() => {
+const totalSizeText = computed((): string => {
     const totalSize = selectedFiles.value.reduce((sum, item) => sum + item.size, 0)
     return formatFileSize(totalSize)
 })
 
-const successCount = computed(() => {
+const successCount = computed((): number => {
     return selectedFiles.value.filter(item => item.status === 'success').length
 })
 
-const chooseFiles = () => {
+const chooseFiles = (): void => {
     fileInputRef.value?.click()
 }
 
-const handleFileChange = (event) => {
-    const fileList = Array.from(event.target.files || [])
+const handleFileChange = (event: Event): void => {
+    const target = event.target as HTMLInputElement
+    const fileList = Array.from(target.files || [])
 
     if (!fileList.length) {
         clearSelection()
         return
     }
 
-    const validFiles = []
+    const validFiles: FileItem[] = []
 
     fileList.forEach((file, index) => {
         if (!ALLOWED_FILE_TYPES.includes(file.type)) {
@@ -181,7 +199,7 @@ const handleFileChange = (event) => {
     uploadProgress.value = 0
 }
 
-const clearSelection = () => {
+const clearSelection = (): void => {
     selectedFiles.value = []
     uploadProgress.value = 0
 
@@ -190,7 +208,7 @@ const clearSelection = () => {
     }
 }
 
-const submitFiles = async () => {
+const submitFiles = async (): Promise<void> => {
     if (!selectedFiles.value.length || uploading.value) {
         return
     }
@@ -211,8 +229,8 @@ const submitFiles = async () => {
             item.progress = 0
 
             try {
-                const res = await uploadFile(formData, {
-                    onUploadProgress: (progressEvent) => {
+                const res: UploadResponse = await uploadFile(formData, {
+                    onUploadProgress: (progressEvent: any) => {
                         const { loaded = 0, total = 0 } = progressEvent
                         if (!total) {
                             return
@@ -258,7 +276,7 @@ const submitFiles = async () => {
     }
 }
 
-const formatFileSize = (size = 0) => {
+const formatFileSize = (size: number = 0): string => {
     if (size < 1024) {
         return `${size} B`
     }

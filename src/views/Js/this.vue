@@ -122,7 +122,7 @@ getDate.apply({year:2023},[1,1]) // 2023-1-1"/>
 <CodeEditor code="let newFun = getDate.bind({year:2024})(1,1)
 newFun() // 2024-1-1"/>
 </template>
-<script setup>
+<script setup lang="ts">
 </script>
 <style lang='scss' scoped>
 p{

@@ -109,7 +109,7 @@
     </el-dialog>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, reactive, onMounted, computed } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Refresh, OfficeBuilding, User, Plus } from '@element-plus/icons-vue'
@@ -121,14 +121,54 @@ import {
     getOrgDetail 
 } from '@/api/api'
 
+// 定义组织数据接口
+interface OrgItem {
+    id: number
+    parentId: number
+    name: string
+    code: string
+    sort: number
+    status: number
+    remark: string
+    createTime?: string
+    children?: OrgItem[]
+}
+
+// 定义表单数据接口
+interface OrgFormData {
+    id: number | null
+    parentId: number
+    name: string
+    code: string
+    sort: number
+    status: number
+    remark: string
+}
+
+// 定义验证规则接口
+interface ValidationRule {
+    required: boolean
+    message: string
+    trigger: string
+    min?: number
+    max?: number
+}
+
+// 定义API响应接口
+interface ApiResponse {
+    code: number
+    data?: any
+    msg?: string
+}
+
 const loading = ref(false)
-const tableData = ref([])
+const tableData = ref<OrgItem[]>([])
 const dialogVisible = ref(false)
-const dialogType = ref('add') // 'add' | 'edit' | 'addChild'
-const formRef = ref(null)
+const dialogType = ref<'add' | 'edit' | 'addChild'>('add')
+const formRef = ref<any>(null)
 const parentName = ref('')
 
-const formData = reactive({
+const formData = reactive<OrgFormData>({
     id: null,
     parentId: 0,
     name: '',
@@ -138,19 +178,19 @@ const formData = reactive({
     remark: ''
 })
 
-const rules = {
+const rules: Record<string, ValidationRule[]> = {
     name: [
         { required: true, message: '请输入组织名称', trigger: 'blur' },
-        { min: 2, max: 50, message: '长度在 2 到 50 个字符', trigger: 'blur' }
+        { required: true, min: 2, max: 50, message: '长度在 2 到 50 个字符', trigger: 'blur' }
     ],
     code: [
         { required: true, message: '请输入组织编码', trigger: 'blur' },
-        { min: 2, max: 50, message: '长度在 2 到 50 个字符', trigger: 'blur' }
+        { required: true, min: 2, max: 50, message: '长度在 2 到 50 个字符', trigger: 'blur' }
     ]
 }
 
 const dialogTitle = computed(() => {
-    const titles = {
+    const titles: Record<string, string> = {
         add: '新增组织',
         edit: '编辑组织',
         addChild: '添加下级组织'
@@ -159,10 +199,10 @@ const dialogTitle = computed(() => {
 })
 
 // 获取组织架构树
-const fetchData = async () => {
+const fetchData = async (): Promise<void> => {
     loading.value = true
     try {
-        const res = await getOrgTree()
+        const res: ApiResponse = await getOrgTree()
         if (res.code === 200) {
             tableData.value = res.data || []
         } else {
@@ -176,12 +216,12 @@ const fetchData = async () => {
 }
 
 // 刷新数据
-const refreshData = () => {
+const refreshData = (): void => {
     fetchData()
 }
 
 // 重置表单
-const resetForm = () => {
+const resetForm = (): void => {
     formData.id = null
     formData.parentId = 0
     formData.name = ''
@@ -193,14 +233,14 @@ const resetForm = () => {
 }
 
 // 新增组织
-const handleAdd = () => {
+const handleAdd = (): void => {
     dialogType.value = 'add'
     resetForm()
     dialogVisible.value = true
 }
 
 // 添加下级组织
-const handleAddChild = (row) => {
+const handleAddChild = (row: OrgItem): void => {
     dialogType.value = 'addChild'
     resetForm()
     formData.parentId = row.id
@@ -209,11 +249,11 @@ const handleAddChild = (row) => {
 }
 
 // 编辑组织
-const handleEdit = async (row) => {
+const handleEdit = async (row: OrgItem): Promise<void> => {
     dialogType.value = 'edit'
     resetForm()
     try {
-        const res = await getOrgDetail({ id: row.id })
+        const res: ApiResponse = await getOrgDetail({ id: row.id })
         if (res.code === 200) {
             Object.assign(formData, res.data)
             dialogVisible.value = true
@@ -226,9 +266,9 @@ const handleEdit = async (row) => {
 }
 
 // 删除组织
-const handleDelete = async (id) => {
+const handleDelete = async (id: number): Promise<void> => {
     try {
-        const res = await deleteOrg({ id })
+        const res: ApiResponse = await deleteOrg({ id })
         if (res.code === 200) {
             ElMessage.success('删除成功')
             fetchData()
@@ -241,12 +281,12 @@ const handleDelete = async (id) => {
 }
 
 // 提交表单
-const handleSubmit = async () => {
+const handleSubmit = async (): Promise<void> => {
     const valid = await formRef.value.validate().catch(() => false)
     if (!valid) return
 
     try {
-        let res
+        let res: ApiResponse
         if (dialogType.value === 'edit') {
             res = await updateOrg(formData)
         } else {

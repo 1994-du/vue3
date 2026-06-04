@@ -15,23 +15,34 @@
         </div>
     </div>
 </template>
-<script setup>
-import { reactive, ref,toRef,toRefs } from 'vue'
-import { dxButton } from '@1994-du/vue3-ui'
-const objA = reactive({
+<script setup lang="ts">
+import { reactive, ref, toRef, toRefs } from 'vue'
+import * as dxUI from '@1994-du/vue3-ui'
+const dxButton = (dxUI as any).dxButton
+
+// 定义响应式对象接口
+interface ObjA {
+    count: number
+    name: string
+}
+
+const objA = reactive<ObjA>({
     count: 0,
     name: '张三',
 })
-const obj = ref({
+
+const obj = ref<ObjA>({
     count: 0,
     name: '张三',
 })
-const obj2 = reactive({
+
+const obj2 = reactive<ObjA>({
     count: 0,
     name: '张三',
 })
-const angleCount = toRef(obj.value,'count')
-const angleCountA = toRef(objA,'count')
-const { count,name } = toRefs(obj.value)  
-const { count:count2,name:name2 } = toRefs(obj2)
+
+const angleCount = toRef(obj.value, 'count')
+const angleCountA = toRef(objA, 'count')
+const { count, name } = toRefs<ObjA>(obj.value)  
+const { count: count2, name: name2 } = toRefs<ObjA>(obj2)
 </script>

@@ -4,7 +4,7 @@
         <el-table-column label="状态描述" prop="statusDesc"></el-table-column>
     </el-table>
 </template>
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 const stateCodeList = ref([
     {

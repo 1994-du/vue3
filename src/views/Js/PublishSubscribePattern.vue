@@ -5,7 +5,7 @@
     <el-text type="primary" size="large">事件中心</el-text>
 </div>
 </template>
-<script setup>
+<script setup lang="ts">
 </script>
 <style lang='scss' scoped>
 .vue3-text{

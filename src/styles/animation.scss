@@ -8,24 +8,6 @@
         width: 100px;
         transition: all 2s;
     }
-    table{
-        display: block;
-        width: 100%;
-        max-height: 400px;
-        border: 1px solid #aaa;
-        margin: 0;
-        padding: 0;
-        overflow: auto;
-        th{
-            border: 1px solid #aaa;
-        }
-        td{
-            border: 1px solid #aaa;
-        }
-        tr:last-of-type{
-            height: 200px;
-        }
-    }
     
 }
 pre{

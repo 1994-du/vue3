@@ -115,37 +115,51 @@ const decrementAge = () => {
         </code>
     </div>
 </template>
-<script setup>
+<script setup lang="ts">
 import { computed, reactive, toRefs } from 'vue';
 import { useStore } from 'vuex'
+
+// 定义用户信息接口
+interface UserInfo {
+    name: string
+    age: number
+}
+
 const store = useStore()
-const { name,age } = toRefs(store.state)
+const { name, age } = toRefs<{ name: string; age: number }>(store.state as { name: string; age: number })
 const reactiveGetters = reactive(store.getters)
-const { info } = toRefs(reactiveGetters)
+const { info } = toRefs<{ info: string }>(reactiveGetters as { info: string })
 
 //使用commit调用 mutation 中的方法同步修改state中的值
-const changAge = ((num)=>{
-    store.commit('CHANGE_AGE',{num:num})
+const changAge = ((num: number): void => {
+    store.commit('CHANGE_AGE', { num: num })
 })
+
 //使用dispatch调用 actions 中的方法异步修改state中的值
-const asyncChangAge =((num)=>{
-    store.dispatch('ASYNC_CHANGE_AGE',{num:num})
+const asyncChangAge = ((num: number): void => {
+    store.dispatch('ASYNC_CHANGE_AGE', { num: num })
 })
 
 import useCounterStore from '@/store/pinia/userInfo'
 import { storeToRefs } from 'pinia'
 const counter = useCounterStore()
+
+// 定义Pinia用户信息接口
+interface PiniaUserInfo {
+    name: string
+    age: number
+}
+
 // const { userInfo } = storeToRefs(counter)
-const { name:piniaName,age:piniaAge } = toRefs(counter.userInfo)
-const incrementAge = () => {
-	counter.increment()
-}
-const decrementAge = () => {
-	counter.decrement()
+const { name: piniaName, age: piniaAge } = toRefs<PiniaUserInfo>(counter.userInfo as PiniaUserInfo)
+
+const incrementAge = (): void => {
+    counter.increment()
 }
 
-
-
+const decrementAge = (): void => {
+    counter.decrement()
+}
 </script>
 <style scoped lang="scss">
 .use_store{

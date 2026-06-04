@@ -6,7 +6,7 @@
 
 <script setup>
 import { onMounted, ref } from 'vue';
-import svgLoader from './loader.js'
+import svgLoader from './loader'
 const props = defineProps({
     name: {
         type: String

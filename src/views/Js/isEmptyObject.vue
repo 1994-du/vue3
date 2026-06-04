@@ -7,7 +7,7 @@ JSON.stringify(obj)==='{}'
 let obj={[Symbol()]:1}
 Reflect.ownKeys(obj).length===0" />
 </template>
-<script setup>
+<script setup lang="ts">
 </script>
 <style lang='scss' scoped>
 </style>

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import ArrowTmp from '@/components/arrow.vue'
 import { computed } from 'vue';
 

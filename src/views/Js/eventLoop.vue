@@ -19,7 +19,7 @@
 •queueMicrotask（用来手动将任务添加到微任务队列）</pre>
 </code>
 </template>
-<script setup>
+<script setup lang="ts">
 </script>
 <style lang='scss' scoped>
 </style>

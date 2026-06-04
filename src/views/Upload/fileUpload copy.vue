@@ -5,7 +5,7 @@
     <el-button @click="openFile">打开文件选择框</el-button>
     <h4>window.showDirectoryPicker()打开文件夹选择框</h4>
     <el-button @click="openFloder">打开文件夹选择框</el-button>
-    <div v-for="item in imgs" :key="item+1">
+    <div v-for="(item, idx) in imgs" :key="item.name + idx">
         <img :src="item.src" alt="">
         <p>{{ item.name }}</p>
     </div>
@@ -35,37 +35,42 @@
    </div>
    
 </template>
-<script setup>
+<script setup lang="ts">
 import { reactive } from 'vue';
-import { fragmentUpload } from '@/api/api.js'
-import { he } from 'element-plus/es/locales.mjs';
-let flodeFile=reactive({})
-let imgs=reactive([])
+import { fragmentUpload } from '@/api/api'
+
+interface ImgItem {
+    name: string
+    src: string | ArrayBuffer | null
+}
+
+let flodeFile = reactive<{ children?: any[] }>({})
+let imgs = reactive<{ name: string; src: string }[]>([])
 //打开文件夹选择框
-const openFloder = async()=>{
+const openFloder = async () => {
     try{
-        const handle =await window.showDirectoryPicker()
-        const files =await processHandle(handle)
-        flodeFile=files
+        const handle = await window.showDirectoryPicker()
+        const files = await processHandle(handle)
+        flodeFile = files
         
-        files.children.forEach (async el=>{
+        files.children.forEach(async (el: any) => {
             // 文件
-            if(el.kind=='file'){
+            if(el.kind === 'file'){
                 const file = await el.getFile()
                 console.log(file)
                 
                 //图片
-                if(file.type==='image/jpeg'){
+                if(file.type === 'image/jpeg'){
                     const reader = new FileReader()
                     //读取文件地址
                     reader.readAsDataURL(file)
                     //读取文件内容
                     // reader.readAsText(file,'utf-8')
-                    reader.onload=(e)=>{
+                    reader.onload = (e: ProgressEvent<FileReader>) => {
                         console.log(e)
                         imgs.push({
-                            name:file.name,
-                            src:e.target.result
+                            name: file.name,
+                            src: e.target?.result as string
                         })
                     }
                 }
@@ -73,18 +78,16 @@ const openFloder = async()=>{
             }
             
         })
-        const reder = new FileReader()
-        console.log(reder(files))
     }
     catch{
         console.log('拒绝查看')
     }
-    async function processHandle(handle){
-        if(handle.kind==='file'){
+    async function processHandle(handle: any): Promise<any> {
+        if(handle.kind === 'file'){
             return handle
         }
-        handle.children=[]
-        const iter =  handle.entries()
+        handle.children = []
+        const iter = handle.entries()
         for await(const item of iter){
             handle.children.push(await processHandle(item[1]))
         }
@@ -97,7 +100,15 @@ const openFile = ()=>{
 }
 
 // 分片上传
-const uploadFile = (file) => {
+interface UploadFileParam {
+    file: {
+        size: number
+        name: string
+        slice: (start: number, end: number) => Blob
+    }
+}
+
+const uploadFile = (file: UploadFileParam) => {
     const chunkSize = 1024 * 1024 * 50; // 1MB
     const totalChunks = Math.ceil(file.file.size / chunkSize);
     let currentChunk = 0;
@@ -112,10 +123,10 @@ const uploadFile = (file) => {
         const formData = new FormData();
         formData.append('file', chunk);
         formData.append('filename', file.file.name);
-        formData.append('chunkNumber', currentChunk + 1);
-        formData.append('totalChunks', totalChunks);
-        formData.append('chunkSize', chunkSize);
-        formData.append('currentChunkSize', chunk.size);
+        formData.append('chunkNumber', String(currentChunk + 1));
+        formData.append('totalChunks', String(totalChunks));
+        formData.append('chunkSize', String(chunkSize));
+        formData.append('currentChunkSize', String(chunk.size));
 
         console.log('FormData', formData.get('file')); // 添加调试信息
 
@@ -132,26 +143,35 @@ const uploadFile = (file) => {
         //     chunkSize: chunkSize,
         //     currentChunkSize: chunk.size
         // }
-        fragmentUpload(formData).then((res) => {
+        fragmentUpload(formData).then((res: any) => {
             console.log('上传成功', res);
             currentChunk++;
             if (currentChunk < totalChunks) {
                 uploadChunk();
             }
-        }).catch((err) => {
+        }).catch((err: any) => {
             console.error('上传失败', err);
         });
     };
 
     uploadChunk();
 }
-const handleChange = (file, fileList) => {
+
+interface ElUploadFile {
+    name: string
+    raw?: File
+    uid?: number
+}
+
+const handleChange = (file: ElUploadFile, fileList: ElUploadFile[]) => {
     console.log('文件改变', file, fileList)
 }
-const handleSuccess = (response, file, fileList) => {
+
+const handleSuccess = (response: any, file: ElUploadFile, fileList: ElUploadFile[]) => {
     console.log('上传成功', response, file, fileList)
 }
-const handleError = (error, file, fileList) => {
+
+const handleError = (error: any, file: ElUploadFile, fileList: ElUploadFile[]) => {
     console.log('上传失败', error, file, fileList)
 }
 // 分片下载

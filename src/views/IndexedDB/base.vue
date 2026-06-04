@@ -43,7 +43,7 @@
         <pre>objectStore.getAll(); // 获取所有数据</pre>
     </code>
 </template>
-<script setup>
+<script setup lang="ts">
 </script>
 <style lang='scss' scoped>
 </style>

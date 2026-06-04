@@ -47,7 +47,7 @@
     <p><strong>长链接</strong>:一次tcp连接可以发送多个请求，每个域名浏览器最多同时开6个TCP连接</p>
 </template>
 
-<script setup>
+<script setup lang="ts">
 </script>
 <style lang="less" scoped>
 p{

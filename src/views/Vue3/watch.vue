@@ -8,41 +8,52 @@
     </div>
 </template>
 
-<script setup>
-import { watch,ref, reactive } from 'vue';
-let num = ref(0)
-let num2 = ref(2)
-let single = reactive({a:1,b:2})
-let single2 = reactive({c:1,d:2})
-watch(num,
-(newVal,oldVal)=>{
-    console.log(newVal,oldVal);
-},
-{
-    immediate:true
+<script setup lang="ts">
+import { watch, ref, reactive } from 'vue';
+
+// 定义响应式对象接口
+interface ReactiveObj {
+    a: number
+    b: number
+    c?: number
+    d?: number
+}
+
+let num = ref<number>(0)
+let num2 = ref<number>(2)
+let single = reactive<ReactiveObj>({ a: 1, b: 2 })
+interface ReactiveObj2 {
+    c: number
+    d: number
+}
+
+let single2 = reactive<ReactiveObj2>({ c: 1, d: 2 })
+
+watch(num, (newVal, oldVal) => {
+    console.log(newVal, oldVal);
+}, {
+    immediate: true
 })
-watch([num,num2],
-(newVal,oldVal)=>{
-    console.log(newVal,oldVal);
-},
-{
-    immediate:true
+
+watch([num, num2], (newVal, oldVal) => {
+    console.log(newVal, oldVal);
+}, {
+    immediate: true
 })
-watch(single,
-(newVal,oldVal)=>{
-    console.log(newVal,oldVal);
-},
-{
-    immediate:true
+
+watch(single, (newVal, oldVal) => {
+    console.log(newVal, oldVal);
+}, {
+    immediate: true
 })
-watch([single,single2],
-(newVal,oldVal)=>{
-    console.log(newVal,oldVal);
-},
-{
-    immediate:true
+
+watch([single, single2], (newVal, oldVal) => {
+    console.log(newVal, oldVal);
+}, {
+    immediate: true
 })
-const add=()=>{
-    single.a+=1
+
+const add = (): void => {
+    single.a += 1
 }
 </script>

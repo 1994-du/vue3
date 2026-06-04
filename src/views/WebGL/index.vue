@@ -38,11 +38,12 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import * as THREE from 'three'
+const T = THREE as any
 
-const canvasContainer = ref(null)
+const canvasContainer = ref<HTMLDivElement | null>(null)
 const currentIndex = ref(0)
 const isLoading = ref(true)
 
@@ -74,45 +75,49 @@ const images = [
     }
 ]
 
-let scene, camera, renderer, photoMeshes = []
+let scene: any
+let camera: any
+let renderer: any
+let photoMeshes: any[] = []
 let isDragging = false
 let dragStartX = 0
 let dragStartIndex = 0
 let dragOffset = 0
 let totalDragOffset = 0
-let animationId
-let clock
+let animationId: number
+let clock: any
 
 const initScene = () => {
     const container = canvasContainer.value
+    if (!container) return
     const width = container.clientWidth
     const height = container.clientHeight
 
-    scene = new THREE.Scene()
-    scene.background = new THREE.Color(0x0f172a)
+    scene = new T.Scene()
+    scene.background = new T.Color(0x0f172a)
 
-    camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000)
+    camera = new T.PerspectiveCamera(60, width / height, 0.1, 1000)
     camera.position.z = 8
 
-    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
+    renderer = new T.WebGLRenderer({ antialias: true, alpha: true })
     renderer.setSize(width, height)
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     container.appendChild(renderer.domElement)
 
-    clock = new THREE.Clock()
+    clock = new T.Clock()
 
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6)
+    const ambientLight = new T.AmbientLight(0xffffff, 0.6)
     scene.add(ambientLight)
 
-    const mainLight = new THREE.DirectionalLight(0xffffff, 1)
+    const mainLight = new T.DirectionalLight(0xffffff, 1)
     mainLight.position.set(5, 5, 5)
     scene.add(mainLight)
 
-    const fillLight = new THREE.DirectionalLight(0x667eea, 0.4)
+    const fillLight = new T.DirectionalLight(0x667eea, 0.4)
     fillLight.position.set(-5, 3, -3)
     scene.add(fillLight)
 
-    const backLight = new THREE.DirectionalLight(0x764ba2, 0.3)
+    const backLight = new T.DirectionalLight(0x764ba2, 0.3)
     backLight.position.set(0, -3, -5)
     scene.add(backLight)
 
@@ -120,26 +125,26 @@ const initScene = () => {
 }
 
 const createPhotos = () => {
-    const loader = new THREE.TextureLoader()
+    const loader = new T.TextureLoader()
     const photoWidth = 2.8
     const photoHeight = 2.1
     let loadedCount = 0
 
     images.forEach((imageData, index) => {
-        loader.load(imageData.url, (texture) => {
-            texture.minFilter = THREE.LinearFilter
-            texture.magFilter = THREE.LinearFilter
+        loader.load(imageData.url, (texture: any) => {
+            texture.minFilter = T.LinearFilter
+            texture.magFilter = T.LinearFilter
             texture.anisotropy = renderer.capabilities.getMaxAnisotropy()
 
-            const photoGeometry = new THREE.PlaneGeometry(photoWidth, photoHeight)
-            const photoMaterial = new THREE.MeshPhongMaterial({
+            const photoGeometry = new T.PlaneGeometry(photoWidth, photoHeight)
+            const photoMaterial = new T.MeshPhongMaterial({
                 map: texture,
-                side: THREE.DoubleSide,
+                side: T.DoubleSide,
                 shininess: 100,
                 specular: 0x444444
             })
 
-            const photo = new THREE.Mesh(photoGeometry, photoMaterial)
+            const photo = new T.Mesh(photoGeometry, photoMaterial)
             photo.userData = { index }
 
             scene.add(photo)
@@ -150,12 +155,12 @@ const createPhotos = () => {
                 isLoading.value = false
             }
         }, undefined, () => {
-            const fallbackGeometry = new THREE.PlaneGeometry(photoWidth, photoHeight)
-            const fallbackMaterial = new THREE.MeshPhongMaterial({
+            const fallbackGeometry = new T.PlaneGeometry(photoWidth, photoHeight)
+            const fallbackMaterial = new T.MeshPhongMaterial({
                 color: 0x444444,
-                side: THREE.DoubleSide
+                side: T.DoubleSide
             })
-            const fallbackPhoto = new THREE.Mesh(fallbackGeometry, fallbackMaterial)
+            const fallbackPhoto = new T.Mesh(fallbackGeometry, fallbackMaterial)
             fallbackPhoto.userData = { index }
             
             scene.add(fallbackPhoto)
@@ -212,12 +217,12 @@ const goToNext = () => {
     dragOffset = 0
 }
 
-const goToPage = (index) => {
+const goToPage = (index: number) => {
     currentIndex.value = index
     dragOffset = 0
 }
 
-const handleMouseDown = (event) => {
+const handleMouseDown = (event: MouseEvent) => {
     isDragging = true
     dragStartX = event.clientX
     dragStartIndex = currentIndex.value
@@ -225,7 +230,7 @@ const handleMouseDown = (event) => {
     dragOffset = 0
 }
 
-const handleMouseMove = (event) => {
+const handleMouseMove = (event: MouseEvent) => {
     if (!isDragging) return
     const deltaX = event.clientX - dragStartX
     dragOffset = -deltaX / 200
@@ -244,7 +249,7 @@ const handleMouseUp = () => {
     dragOffset = 0
 }
 
-const handleWheel = (event) => {
+const handleWheel = (event: WheelEvent) => {
     event.preventDefault()
     const now = Date.now()
     
@@ -261,7 +266,7 @@ const handleWheel = (event) => {
     }
 }
 
-const handleTouchStart = (event) => {
+const handleTouchStart = (event: TouchEvent) => {
     isDragging = true
     dragStartX = event.touches[0].clientX
     dragStartIndex = currentIndex.value
@@ -269,7 +274,7 @@ const handleTouchStart = (event) => {
     dragOffset = 0
 }
 
-const handleTouchMove = (event) => {
+const handleTouchMove = (event: TouchEvent) => {
     if (!isDragging) return
     const deltaX = event.touches[0].clientX - dragStartX
     dragOffset = -deltaX / 200
@@ -289,8 +294,10 @@ const handleTouchEnd = () => {
 }
 
 const handleResize = () => {
-    const width = canvasContainer.value.clientWidth
-    const height = canvasContainer.value.clientHeight
+    const container = canvasContainer.value
+    if (!container) return
+    const width = container.clientWidth
+    const height = container.clientHeight
     
     camera.aspect = width / height
     camera.updateProjectionMatrix()
@@ -304,15 +311,17 @@ onMounted(() => {
     initScene()
     animate()
     
-    const canvas = canvasContainer.value
-    canvas.addEventListener('mousedown', handleMouseDown)
-    window.addEventListener('mousemove', handleMouseMove)
-    window.addEventListener('mouseup', handleMouseUp)
-    canvas.addEventListener('wheel', handleWheel, { passive: false })
-    canvas.addEventListener('touchstart', handleTouchStart, { passive: true })
-    window.addEventListener('touchmove', handleTouchMove, { passive: true })
-    window.addEventListener('touchend', handleTouchEnd)
-    window.addEventListener('resize', handleResize)
+    const canvasEl = canvasContainer.value
+    if (canvasEl) {
+        canvasEl.addEventListener('mousedown', handleMouseDown)
+        window.addEventListener('mousemove', handleMouseMove)
+        window.addEventListener('mouseup', handleMouseUp)
+        canvasEl.addEventListener('wheel', handleWheel, { passive: false })
+        canvasEl.addEventListener('touchstart', handleTouchStart, { passive: true })
+        window.addEventListener('touchmove', handleTouchMove, { passive: true })
+        window.addEventListener('touchend', handleTouchEnd)
+        window.addEventListener('resize', handleResize)
+    }
 })
 
 onBeforeUnmount(() => {

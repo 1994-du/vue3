@@ -1,7 +1,7 @@
 <template>
 <div id="chart" style="width:100%;height:100%;"></div>
 </template>
-<script setup>
+<script setup lang="ts">
 import * as echarts from 'echarts';
 import { onMounted } from 'vue';
 let chartConfig={
@@ -17,10 +17,10 @@ const initChart = () => {
     tooltip: {
         trigger: 'axis', // 提示框触发类型
         confine:true,
-        formatter: function (params) {
+        formatter: function (params: any) {
             if(params[0].axisIndex === 0) return
             let result = `${params[0].axisValue}<br>`;
-            params.forEach(item => {
+            params.forEach((item: any) => {
                 if (item.seriesType === 'bar') { // 只处理柱状图数据
                     result += `${item.marker} ${item.seriesName}: ${item.value}<br>`;
                 }
@@ -85,7 +85,7 @@ const initChart = () => {
             type: 'value',
             axisLabel:{
                 show:true,
-                formatter:(value,index)=>{
+                formatter:(value: number, index: number)=>{
                     return value+'%'
                 }
             },
@@ -137,7 +137,7 @@ const initChart = () => {
                     show:true,
                     position: 'left',
                     offset:[0,0],
-                    formatter: (params) => {
+                    formatter: (params: any) => {
                         return `{value|${params.value}%}{triangle|\u25B6}`;
                     },
                     rich: {

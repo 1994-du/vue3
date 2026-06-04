@@ -5,11 +5,18 @@
         </div>
     </div>
 </template>
-<script setup>
-import { ref, onMounted } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 import useUserInfoStore from '../store/pinia/userInfo'
+
+// 定义用户信息接口
+interface UserInfo {
+    name: string
+    avatar: string
+}
+
 const userInfoStore = useUserInfoStore()
-const userInfo = ref(userInfoStore.userInfo)
+const userInfo = ref<UserInfo>(userInfoStore.userInfo)
 </script>
 <style scoped>
 .user_info {

@@ -14,7 +14,7 @@ provide('state', state);"/>
 const state = inject('state');"/>
   </div>
 </template>
-<script setup>
+<script setup lang="ts">
 </script>
 <style lang='scss' scoped>
 </style>

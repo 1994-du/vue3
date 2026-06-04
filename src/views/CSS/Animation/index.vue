@@ -37,7 +37,7 @@
         </el-drawer>
     </div>
 </template>
-<script setup>
+<script setup lang="ts">
 import bg from '@/components/animations/bg.vue'
 import animations from "@/json/animation.json"
 import { onActivated, onDeactivated, onUnmounted, ref } from "vue";

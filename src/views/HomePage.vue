@@ -33,13 +33,23 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import SvgIcon from '@/components/SvgIcon/index.vue'
 import { ArrowRight } from '@element-plus/icons-vue'
 
+// 定义卡片数据结构接口
+interface CardItem {
+    title: string
+    icon: string
+    iconClass: string
+    tag: string
+    height: number
+    descriptions: string[]
+}
+
 // 卡片数据
-const cardList = ref([
+const cardList = ref<CardItem[]>([
     {
         title: 'HTML',
         icon: 'wenjian',
@@ -197,21 +207,22 @@ const cardList = ref([
     }
 ])
 
-const hoveredIndex = ref(-1)
+const hoveredIndex = ref<number>(-1)
 
-const handleCardHover = (index, isHover) => {
+// 卡片悬停处理
+const handleCardHover = (index: number, isHover: boolean): void => {
     hoveredIndex.value = isHover ? index : -1
 }
 
 // 瀑布流布局
-const homeWrap = ref(null)
+const homeWrap = ref<HTMLElement | null>(null)
 const cardSpacing = 20
 const cardWidth = 280
 
-const createWaterfall = () => {
+const createWaterfall = (): void => {
     if (!homeWrap.value) return
     
-    const container = homeWrap.value.querySelector('.waterfall_container')
+    const container = homeWrap.value.querySelector('.waterfall_container') as HTMLElement
     if (!container) return
     
     const cards = container.querySelectorAll('.knowledge_card')
@@ -222,7 +233,7 @@ const createWaterfall = () => {
     
     const columnHeights = new Array(columns).fill(0)
     
-    cards.forEach((card, index) => {
+    cards.forEach((card) => {
         let minHeightColumn = 0
         let minHeight = columnHeights[0]
         
@@ -233,17 +244,18 @@ const createWaterfall = () => {
             }
         }
         
-        card.style.position = 'absolute'
-        card.style.left = `${minHeightColumn * (cardWidth + cardSpacing)}px`
-        card.style.top = `${columnHeights[minHeightColumn]}px`
+        const cardElement = card as HTMLElement
+        cardElement.style.position = 'absolute'
+        cardElement.style.left = `${minHeightColumn * (cardWidth + cardSpacing)}px`
+        cardElement.style.top = `${columnHeights[minHeightColumn]}px`
         
-        columnHeights[minHeightColumn] += card.offsetHeight + cardSpacing
+        columnHeights[minHeightColumn] += cardElement.offsetHeight + cardSpacing
     })
     
     container.style.height = `${Math.max(...columnHeights)}px`
 }
 
-const handleResize = () => {
+const handleResize = (): void => {
     createWaterfall()
 }
 

@@ -12,7 +12,7 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref,reactive } from 'vue'
 import popButton from '../../components/popButton.vue';
 import { ElMessage } from 'element-plus';
@@ -33,10 +33,10 @@ let tableData = reactive([
     { handler: '李四' },
     { handler: '王五' },
 ])
-let selectData = ref([])
-let userBtnRef1 = ref(null)
-let userBtnRef2 = ref(null)
-const handleSelectionChange = (val) => {
+let selectData = ref<any[]>([])
+let userBtnRef1 = ref<any>(null)
+let userBtnRef2 = ref<any>(null)
+const handleSelectionChange = (val: any[]) => {
     selectData.value = val
 }
 const testOne1 = ()=>{
@@ -59,7 +59,7 @@ const testOne2 = ()=>{
         userBtnRef2.value.openPopover()
     }
 }
-const userSelect = (data) => {
+const userSelect = (data: any) => {
     console.log('确定',data)
 }
 </script>

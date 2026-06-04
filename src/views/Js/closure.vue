@@ -29,7 +29,7 @@
     <p>11. 闭包可以用来实现函数的组合。</p>
   </div>
 </template>
-<script setup>
+<script setup lang="ts">
 </script>
 <style lang='scss' scoped>
 p{

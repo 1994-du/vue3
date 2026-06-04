@@ -1,9 +1,9 @@
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
 
-const particles = ref([]);
-const canvas = ref(null);
-const ctx = ref(null);
+const particles = ref<Particle[]>([]);
+const canvas = ref<HTMLCanvasElement | null>(null);
+const ctx = ref<CanvasRenderingContext2D | null>(null);
 const width = ref(window.innerWidth);
 const height = ref(window.innerHeight);
 
@@ -25,12 +25,14 @@ const initCanvas = () => {
 }
 
 const createParticles = () => {
+    if (!ctx.value) return;
     for (let i = 0; i < 100; i++) {
         particles.value.push(new Particle(ctx.value, width.value, height.value));
     }
 }
 
 const animate = () => {
+    if (!ctx.value) return;
     // 重新绘制背景色
     ctx.value.fillStyle = 'black';
     ctx.value.fillRect(0, 0, width.value, height.value);
@@ -42,7 +44,16 @@ const animate = () => {
 }
 
 class Particle {
-    constructor(ctx, width, height) {
+    ctx: CanvasRenderingContext2D;
+    width: number;
+    height: number;
+    x: number;
+    y: number;
+    size: number;
+    speedX: number;
+    speedY: number;
+
+    constructor(ctx: CanvasRenderingContext2D, width: number, height: number) {
         this.ctx = ctx;
         this.width = width;
         this.height = height;

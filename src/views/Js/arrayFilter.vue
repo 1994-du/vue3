@@ -18,10 +18,10 @@
         <pre>let newArr = arr.reduce((pre,cur)=>pre.includes(cur)?pre:[...pre,cur],[])</pre>
     </code>
 </template>
-<script setup>
+<script setup lang="ts">
 let arr = [1,2,3,2,4,1,3,6,5];
 // let newArr = arr.filter((item,index,self)=>self.indexOf(item)===index)
-let newArr = arr.reduce((pre,cur)=>pre.includes(cur)?pre:[...pre,cur],[])
+let newArr = arr.reduce<number[]>((pre,cur)=>pre.includes(cur)?pre:[...pre,cur],[])
 console.log(newArr);
 
 

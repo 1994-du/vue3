@@ -67,36 +67,36 @@ function debounce(fn, delay, immediate = false) {
 <el-text class="block text-left text-lg mb-[10px]!">{{throttleValShow}}</el-text> 
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {onMounted, ref, getCurrentInstance} from "vue"
 const debounceVal =ref('')
 const throttleVal = ref('')
 let debounceValShow=ref('')
 let throttleValShow=ref('')
-let debounceTimer;
-let throttleTimer;
-const debounceFn=function(val){
-    debounceValShow.value=val
-    console.log('debounceValShow',debounceValShow.value)
+let debounceTimer: ReturnType<typeof setTimeout> | undefined;
+let throttleTimer: ReturnType<typeof setTimeout> | undefined;
+const debounceFn = function(val: string) {
+    debounceValShow.value = val
+    console.log('debounceValShow', debounceValShow.value)
 }
-const throttleFn=function(val){
-    throttleValShow.value=val
-    console.log('throttleValShow',throttleValShow.value)
+const throttleFn = function(val: string) {
+    throttleValShow.value = val
+    console.log('throttleValShow', throttleValShow.value)
 }
-const debounceHandle=function(delay){
-    if(debounceTimer){
+const debounceHandle = function(delay: number) {
+    if (debounceTimer) {
         clearTimeout(debounceTimer)
     }
-    debounceTimer=setTimeout(()=>{
+    debounceTimer = setTimeout(() => {
         debounceFn(debounceVal.value)
-    },delay)
+    }, delay)
 }
-const throttleHandle=function(delay){
-    if(!throttleTimer){
-        throttleTimer=setTimeout(()=>{
+const throttleHandle = function(delay: number) {
+    if (!throttleTimer) {
+        throttleTimer = setTimeout(() => {
             throttleFn(throttleVal.value)
-            throttleTimer=null
-        },delay)
+            throttleTimer = undefined
+        }, delay)
     }
 }
 onMounted(()=>{

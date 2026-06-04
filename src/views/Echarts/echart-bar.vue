@@ -3,7 +3,7 @@
         <div id="echart_bar" style="width:100%;height:100%;"></div>
     </div>
 </template>
-<script setup>
+<script setup lang="ts">
 import * as echarts from 'echarts'
 import { ref, onMounted } from 'vue'
 

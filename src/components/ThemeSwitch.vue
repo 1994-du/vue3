@@ -8,7 +8,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { Sunny, Moon } from '@element-plus/icons-vue'
-import { persistenceHtmlTheme } from '@/utils/saveHtmlTheme.js'
+import { persistenceHtmlTheme } from '@/utils/saveHtmlTheme'
 const currentTheme = ref()
 onMounted(() => {
   currentTheme.value = document.documentElement.getAttribute('data-theme') || 'light'

@@ -1,17 +1,19 @@
 <template>
     <div id="chart_bullet" style="width:400px;height:400px;"></div>
 </template>
-<script setup>
+<script setup lang="ts">
 import * as echarts from 'echarts'
 import { onMounted } from 'vue';
-let echart1=null
+let echart1: echarts.ECharts | null = null
 const initEchart1=()=>{
     if(echart1!==null){
         echart1.dispose()
     }
     echart1=echarts.init(document.getElementById('chart_bullet'))
     window.onresize=()=>{
-        echart1.resize()
+        if (echart1) {
+            echart1.resize()
+        }
     }
     echart1.setOption({
         title: {

@@ -92,24 +92,69 @@
     </el-dialog>
 </template>
 <script setup lang="ts">
-import { ref,shallowRef, onMounted } from 'vue'
-import { getMenus,addMenu, setMenu, deleteMenu } from '@/api/menus'
+import { ref, shallowRef, onMounted } from 'vue'
+import { getMenus, addMenu, setMenu, deleteMenu } from '@/api/menus'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
+
+// 定义菜单数据接口
+interface MenuItem {
+    id: number | string
+    name: string
+    path: string
+    component: string
+    sort: string | number
+    icon?: string
+    parentId?: number | string
+}
+
+// 定义菜单表单数据接口
+interface MenuFormData {
+    id?: number | string
+    parentId?: number | string
+    name: string
+    path: string
+    component: string
+    sort: string | number
+    icon?: string
+}
+
+// 定义验证规则接口
+interface ValidationRule {
+    required: boolean
+    message: string
+    trigger: string
+}
+
+// 定义获取菜单列表响应接口
+interface GetMenusResponse {
+    code: number
+    data: MenuItem[]
+    msg?: string
+}
+
+// 定义菜单操作响应接口
+interface MenuOperationResponse {
+    code: number
+    msg?: string
+}
+
 let dialogTitle = ref('新增菜单')
-let dialogType = ref('add')
+let dialogType = ref<'add' | 'edit'>('add')
 let currentPage4 = ref(1)
 let pageSize4 = ref(20)
 const total = ref(0)
 const createMenuVisible = ref(false)
-const createMenuObj = ref({
+
+const createMenuObj = ref<MenuFormData>({
     name: '',
     path: '',
     component: '',
     sort: '',
     icon: ''
 })
-const createMenuRules = ref({
+
+const createMenuRules = ref<Record<string, ValidationRule[]>>({
     name: [
         { required: true, message: '请输入菜单名称', trigger: 'blur' }
     ],
@@ -117,32 +162,35 @@ const createMenuRules = ref({
         { required: true, message: '请输入菜单路径', trigger: 'blur' }
     ]
 })
-const createMenuFormRef = ref(null)
+
+const createMenuFormRef = ref<any>(null)
 const loading = ref(false)
+
 // 新增菜单
-const handleCreateMenu = ()=>{
-    createMenuFormRef.value.validate((valid) => {
+const handleCreateMenu = (): void => {
+    createMenuFormRef.value.validate((valid: boolean) => {
         if (valid) {
             if(dialogType.value === 'add'){
                 // 表单验证通过，提交数据
-                addMenu({
+                const params = {
                     parentId: createMenuObj.value.parentId,
                     name: createMenuObj.value.name,
                     path: createMenuObj.value.path,
                     component: createMenuObj.value.component,
                     sort: createMenuObj.value.sort,
                     icon: createMenuObj.value.icon || 'default'
-                }).then(res=>{
-                    if(res.code===200){
+                }
+                addMenu(params).then((res: MenuOperationResponse) => {
+                    if(res.code === 200){
                         createMenuVisible.value = false
                         getMenusList()
                     } else {
-                        ElMessage.error(res.msg)
+                        ElMessage.error(res.msg || '新增失败')
                     }
                 })
-            }else{
+            } else {
                 // 表单验证通过，提交数据
-                setMenu({
+                const params = {
                     id: createMenuObj.value.id,
                     parentId: createMenuObj.value.parentId,
                     name: createMenuObj.value.name,
@@ -150,16 +198,16 @@ const handleCreateMenu = ()=>{
                     component: createMenuObj.value.component,
                     sort: createMenuObj.value.sort,
                     icon: createMenuObj.value.icon || 'default'
-                }).then(res=>{
-                    if(res.code===200){
+                }
+                setMenu(params).then((res: MenuOperationResponse) => {
+                    if(res.code === 200){
                         createMenuVisible.value = false
                         getMenusList()
                     } else {
-                        ElMessage.error(res.msg)
+                        ElMessage.error(res.msg || '更新失败')
                     }
                 })
             }
-            
         } else {
             // 表单验证不通过，提示用户
             ElMessage.error('请填写完整信息');
@@ -167,11 +215,12 @@ const handleCreateMenu = ()=>{
     });
 }
 
-const menusList = shallowRef([])
-const getMenusList = ()=>{
+const menusList = shallowRef<MenuItem[]>([])
+
+const getMenusList = (): void => {
     loading.value = true
-    getMenus().then(res=>{
-        if(res.code===200){
+    getMenus().then((res: GetMenusResponse) => {
+        if(res.code === 200){
             menusList.value = res.data
             total.value = res.data.length
         }
@@ -179,55 +228,61 @@ const getMenusList = ()=>{
         loading.value = false
     })
 }
+
 // 新增
-const handleAddMenu = (row)=>{
+const handleAddMenu = (row: MenuItem | null): void => {
     console.log('新增菜单', row)
     dialogTitle.value = '新增菜单'
     dialogType.value = 'add'
-    createMenuObj.value = {}
+    createMenuObj.value = {} as MenuFormData
     createMenuObj.value.parentId = row?.id || ''
     createMenuVisible.value = true
 }
+
 // 编辑
-const handleEditMenu = (row)=>{
+const handleEditMenu = (row: MenuItem): void => {
     dialogTitle.value = '编辑菜单'
     dialogType.value = 'edit'
     createMenuObj.value = {...row}
     createMenuVisible.value = true
     console.log(row)
 }
+
 // 删除
-const handleDeleteMenu = (row)=>{
+const handleDeleteMenu = (row: MenuItem): void => {
     console.log(row)
     ElMessageBox.confirm('确认删除该菜单吗？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
     }).then(() => {
-        deleteMenu({id: row.id}).then(res=>{
-            if(res.code===200){
+        deleteMenu({id: row.id}).then((res: MenuOperationResponse) => {
+            if(res.code === 200){
                 getMenusList()
             } else {
-                ElMessage.error(res.msg)
+                ElMessage.error(res.msg || '删除失败')
             }
         })
     }).catch(() => {
         // 取消删除操作
     });
 }
+
 // 分页大小改变
-const handleSizeChange = (val)=>{
+const handleSizeChange = (val: number): void => {
     console.log(`每页 ${val} 条`)
     pageSize4.value = val
     getMenusList()
 }
+
 // 分页当前页改变
-const handleCurrentChange = (val)=>{
+const handleCurrentChange = (val: number): void => {
     console.log(`当前页: ${val}`)
     currentPage4.value = val
     getMenusList()
 }
-onMounted(()=>{
+
+onMounted(() => {
     getMenusList()
 })
 </script>

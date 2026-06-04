@@ -107,10 +107,25 @@
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex';
 import { ref,reactive, onMounted } from 'vue'
+// @ts-ignore
 import { toLogin, toRegistry } from '@/api/auth'
 import { parseJWT, setupTokenExpiryCheck } from '../utils/tokenManager'
 import useUserInfoStore from '../store/pinia/userInfo';
 import { initRoutes } from '../utils/generateRoutes';
+
+// 定义登录对象接口
+interface LoginForm {
+    username: string
+    password: string
+    remember: boolean
+}
+
+// 定义验证规则接口
+interface ValidationRule {
+    required: boolean
+    message: string
+    trigger: string
+}
 
 const userInfoStore = useUserInfoStore()
 const videoRef = ref<HTMLVideoElement | null>(null)
@@ -118,7 +133,7 @@ const videoSrc = '/mp4/demo.mp4'
 const showLogin = ref(false)
 let timer: number | null = null
 
-let loginObj = reactive({
+let loginObj = reactive<LoginForm>({
     username: "",
     password: "",
     remember: false
@@ -127,11 +142,11 @@ const store = useStore()
 const router = useRouter()
 
 // 页面加载时，从localStorage读取保存的账号密码
-const loadSavedCredentials = () => {
+const loadSavedCredentials = (): void => {
     const savedCredentials = localStorage.getItem('loginCredentials')
     if (savedCredentials) {
         try {
-            const credentials = JSON.parse(savedCredentials)
+            const credentials: LoginForm = JSON.parse(savedCredentials)
             loginObj.username = credentials.username || ''
             loginObj.password = credentials.password || ''
             loginObj.remember = credentials.remember || false
@@ -142,9 +157,9 @@ const loadSavedCredentials = () => {
 }
 
 // 保存账号密码到localStorage
-const saveCredentials = () => {
+const saveCredentials = (): void => {
     if (loginObj.remember) {
-        const credentials = {
+        const credentials: LoginForm = {
             username: loginObj.username,
             password: loginObj.password,
             remember: loginObj.remember
@@ -157,7 +172,7 @@ const saveCredentials = () => {
 
 // 页面加载时执行
 loadSavedCredentials()
-const rules = reactive({
+const rules = reactive<Record<string, ValidationRule[]>>({
     username: [
         { required: true, message: '请输入账号', trigger: 'blur' }
     ],
@@ -165,10 +180,10 @@ const rules = reactive({
         { required: true, message: '请输入密码', trigger: 'blur' }
     ]
 })
-const loginFormRef = ref(null)
+const loginFormRef = ref<any>(null)
 
 // 视频播放5秒后暂停并显示登录框
-const handleVideoTimeUpdate = () => {
+const handleVideoTimeUpdate = (): void => {
     if (videoRef.value && videoRef.value.currentTime >= 5) {
         videoRef.value.pause()
         showLogin.value = true
@@ -176,18 +191,18 @@ const handleVideoTimeUpdate = () => {
 }
 
 // 视频播放结束处理（备用）
-const handleVideoEnded = () => {
+const handleVideoEnded = (): void => {
     showLogin.value = true
 }
 
-const handleLogin = function () {
+const handleLogin = function (): void {
     if (!(window as any).db) {
         console.error('数据库未打开');
         return
     }
     toLogin(loginObj).then(async (res: any) => {
         console.log('登录',res);
-        const { token,menus,username,avatar } = res.data
+        const { token, menus, username, avatar } = res.data
         if (res.code === 200) {
             // 保存账号密码
             saveCredentials()
@@ -195,19 +210,19 @@ const handleLogin = function () {
             // 保存token
             if (token) {
                 userInfoStore.setMenus(menus)
-                userInfoStore.setUserInfo({name:username,avatar:avatar})
+                userInfoStore.setUserInfo({name: username, avatar: avatar})
                 parseJWT(token);
                 setupTokenExpiryCheck()
             }
             const defaultRoutePath = await initRoutes(menus)
-            // localStorage.setItem('username', loginObj.username)
             await router.replace(defaultRoutePath)
         }
     })
 }
-const handleRegistry = function () {
+
+const handleRegistry = function (): void {
     loginFormRef.value?.validate?.()
-    toRegistry(loginObj).then(res => {
+    toRegistry(loginObj).then((res: any) => {
         console.log('注册', res)
     })
 }
@@ -227,8 +242,6 @@ onMounted(() => {
         localStorage.setItem('hasVisited', 'true')
     }
 })
-
-
 </script>
 <style lang="scss" scoped>
 @use '@/styles/Login.scss';

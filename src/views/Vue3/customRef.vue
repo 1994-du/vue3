@@ -24,13 +24,15 @@ export function useDebouncedRef(value,delay = 200) {
 }</pre>
     </code>
 </template>
-<script setup>
+<script setup lang="ts">
 import { useDebouncedRef } from '@/utils/useCustomRef'
 import { ref } from 'vue';
-let iptVal = ref('')
-let textVal = useDebouncedRef('',2000)
-console.log('textVal',textVal);
-const changeIpt = () => {
+
+let iptVal = ref<string>('')
+let textVal = useDebouncedRef<string>('', 2000)
+console.log('textVal', textVal);
+
+const changeIpt = (): void => {
     textVal.value = iptVal.value
 }
 </script>

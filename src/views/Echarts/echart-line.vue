@@ -2,11 +2,11 @@
    <div id="echart_line" style="width:100%;height:100%;"></div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import * as echarts from 'echarts'
 import { ref, onMounted } from 'vue'
 
-let echartLine=null;
+let echartLine: echarts.ECharts | null = null;
 const initEchartBar=()=>{
     echartLine = echarts.init(document.getElementById('echart_line'));
     let option = {
@@ -34,7 +34,8 @@ const initEchartBar=()=>{
 
     echartLine.setOption(option);
     // 获取点击时 axisPointer 当前指向的 axis 值
-    echartLine.getZr().on('click', function (params) {
+    echartLine.getZr().on('click', function (params: any) {
+        if (!echartLine) return;
         const pointInPixel = [params.offsetX, params.offsetY];
         const pointInGrid = echartLine.convertFromPixel({ seriesIndex: 0 }, pointInPixel);
         

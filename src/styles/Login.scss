@@ -1,14 +1,337 @@
-.login-container {
+.login-page {
     display: flex;
-    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+// ========== 左侧品牌区 ==========
+.login-brand {
+    position: relative;
+    flex: 1;
+    display: flex;
     align-items: center;
     justify-content: center;
-    height: 100vh;
-    .login_inner{
-        width: 400px;
-        padding: 40px;
-        background-color: #fff;
-        border-radius: 8px;
-        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 40%, #0c1929 100%);
+    overflow: hidden;
+
+    .brand-bg {
+        position: absolute;
+        inset: 0;
+
+        .floating-shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .shape-1 {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            top: -100px;
+            right: -50px;
+            animation-delay: 0s;
+        }
+
+        .shape-2 {
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(135deg, #06b6d4, #00d4ff);
+            bottom: -60px;
+            left: -40px;
+            animation-delay: -3s;
+        }
+
+        .shape-3 {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, #10b981, #34d399);
+            top: 50%;
+            left: 30%;
+            animation-delay: -5s;
+        }
     }
+
+    @keyframes float {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        33% { transform: translate(20px, -20px) scale(1.05); }
+        66% { transform: translate(-15px, 15px) scale(0.95); }
+    }
+
+    .brand-content {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        color: #fff;
+        padding: 48px;
+    }
+
+    .brand-logo {
+        width: 120px;
+        height: 120px;
+        margin: 0 auto 28px;
+        svg { width: 100%; height: 100%; }
+    }
+
+    .brand-title {
+        font-size: 32px;
+        font-weight: 700;
+        letter-spacing: 6px;
+        margin-bottom: 12px;
+        background: linear-gradient(90deg, #00d4ff, #a78bfa, #06b6d4);
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: shimmer 4s linear infinite;
+    }
+
+    @keyframes shimmer {
+        to { background-position: 200% center; }
+    }
+
+    .brand-subtitle {
+        font-size: 15px;
+        color: rgba(255, 255, 255, 0.55);
+        letter-spacing: 2px;
+        margin-bottom: 48px;
+    }
+
+    .brand-stats {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 24px;
+        padding: 24px 32px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 16px;
+        backdrop-filter: blur(10px);
+    }
+
+    .stat-item {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .stat-num {
+        font-size: 24px;
+        font-weight: 700;
+        color: #00d4ff;
+    }
+
+    .stat-label {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.45);
+        letter-spacing: 1px;
+    }
+
+    .stat-divider {
+        width: 1px;
+        height: 36px;
+        background: rgba(255, 255, 255, 0.12);
+    }
+}
+
+// ========== 右侧登录区 ==========
+.login-form-wrapper {
+    flex: 0 0 480px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8fafc;
+    padding: 40px;
+}
+
+.form-card {
+    width: 100%;
+    max-width: 380px;
+    padding: 44px 40px 40px;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow:
+        0 4px 24px rgba(0, 0, 0, 0.04),
+        0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.form-header {
+    margin-bottom: 36px;
+    text-align: center;
+
+    h2 {
+        font-size: 26px;
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 8px;
+        letter-spacing: 1px;
+    }
+
+    p {
+        font-size: 14px;
+        color: #94a3b8;
+    }
+}
+
+.login-form {
+    :deep(.el-input__wrapper) {
+        border-radius: 10px;
+        box-shadow: 0 0 0 1px #e2e8f0 inset;
+        transition: all 0.25s ease;
+        padding: 4px 14px;
+
+        &:hover { box-shadow: 0 0 0 1px #cbd5e1 inset; }
+        &.is-focus { box-shadow: 0 0 0 2px #6366f1 inset !important; }
+    }
+
+    :deep(.el-input__inner) {
+        font-size: 15px;
+        color: #1e293b;
+        &::placeholder { color: #94a3b8; }
+    }
+}
+
+.field-group {
+    margin-bottom: 22px;
+}
+
+.field-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #475569;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+
+    .el-icon {
+        font-size: 14px;
+        color: #6366f1;
+    }
+}
+
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+
+    :deep(.el-checkbox__label) {
+        font-size: 13px;
+        color: #64748b;
+    }
+}
+
+// 登录按钮
+.btn-login {
+    position: relative;
+    width: 100%;
+    height: 46px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.3s ease;
+
+    &:hover:not(.loading) {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 25px rgba(99, 102, 241, 0.35);
+    }
+
+    &:active:not(.loading) {
+        transform: translateY(0);
+    }
+
+    &.loading {
+        cursor: wait;
+        pointer-events: none;
+    }
+
+    .btn-glow {
+        position: absolute;
+        top: 0; left: -100%;
+        width: 100%; height: 100%;
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.15),
+            transparent
+        );
+        transition: none;
+    }
+
+    &:hover .btn-glow {
+        animation: btnGlow 0.6s ease forwards;
+    }
+
+    @keyframes btnGlow {
+        to { left: 100%; }
+    }
+}
+
+.btn-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2.5px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+// 底部注册链接
+.form-footer {
+    text-align: center;
+    margin-top: 24px;
+    font-size: 14px;
+
+    .footer-text { color: #94a3b8; }
+
+    .link-register {
+        color: #6366f1;
+        font-weight: 600;
+        text-decoration: none;
+        margin-left: 4px;
+        transition: color 0.2s;
+
+        &:hover { color: #4f46e5; text-decoration: underline; }
+    }
+}
+
+// ========== 响应式 ==========
+@media (max-width: 900px) {
+    .login-page { flex-direction: column; }
+
+    .login-brand {
+        flex: 0 0 auto;
+        min-height: 280px;
+        padding: 40px 24px;
+
+        .brand-content { padding: 24px; }
+
+        .brand-title { font-size: 24px; letter-spacing: 4px; }
+        .brand-subtitle { font-size: 13px; margin-bottom: 24px; }
+        .brand-stats { padding: 16px 20px; gap: 16px; }
+        .stat-num { font-size: 18px; }
+    }
+
+    .login-form-wrapper {
+        flex: 1;
+        padding: 24px;
+    }
+
+    .form-card { padding: 32px 24px 28px; max-width: 420px; }
 }

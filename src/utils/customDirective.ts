@@ -4,9 +4,9 @@ function loop(el: Element): HTMLInputElement | undefined {
     if (el.tagName === 'INPUT') {
         ;(el as HTMLInputElement).focus()
         return el as HTMLInputElement
-    } else {
-        return loop(el.children[0])
     }
+    const first = el.children[0]
+    return first ? loop(first) : undefined
 }
 
 const customDirective = (app: App): void => {

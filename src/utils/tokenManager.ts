@@ -4,7 +4,6 @@ import router from '@/router'
 const TOKEN_KEY = 'token'
 const TOKEN_EXPIRE_KEY = 'tokenExpireTime'
 const USER_INFO_KEY = 'userInfo'
-const MENUS_KEY = 'menus'
 const CLOCK_SKEW = 5000
 
 let tokenCheckTimer: number | null = null
@@ -97,7 +96,6 @@ export const clearToken = (): void => {
     localStorage.removeItem(TOKEN_KEY)
     localStorage.removeItem(TOKEN_EXPIRE_KEY)
     localStorage.removeItem(USER_INFO_KEY)
-    localStorage.removeItem(MENUS_KEY)
 }
 
 export const clearTokenCheckTimer = (): void => {

@@ -8,9 +8,9 @@ export default{
         console.log(props)
     }
 }
-</script>"></highlightjs>
-<h4>vue3.2</h4>
-<highlightjs code="<script setup lang="ts">
+</script>" />
+   <h4>vue3.2</h4>
+   <highlightjs code="<script setup lang='ts'>
 import { defineProps } from 'vue';
 
 // 定义props对象接口
@@ -29,7 +29,7 @@ const props = defineProps<{
         }
     }
 })
-</script>"></highlightjs>
+</script>" />
 </template>
 <script setup lang="ts">
 const props = defineProps({

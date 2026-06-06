@@ -1,161 +1,20 @@
-const HOME_FALLBACK_PATH = '/home'
+// 菜单路径工具（仅保留菜单组件使用的函数）
 
-interface MenuItem {
-    path?: string
-    component?: string
-    children?: MenuItem[]
-    [key: string]: any
+function normalizePath(path: string = ''): string {
+    if (typeof path !== 'string') return ''
+    return '/' + path.trim().split('/').filter(Boolean).join('/')
 }
 
-function normalizeRoutePath(path: string = ''): string {
-    if (typeof path !== 'string') {
-        return ''
+// 解析菜单完整路径（父路径 + 当前路径）
+export function resolveMenuFullPath(parentPath: string = '', currentPath: string = ''): string {
+    const p = normalizePath(parentPath)
+    const c = normalizePath(currentPath)
+    if (!p) return c
+    if (!c) return p
+    if (c === p || c.startsWith(p + '/')) return c
+    // 单级路径拼接到父路径下
+    if (c.split('/').filter(Boolean).length === 1) {
+        return normalizePath(p + '/' + c)
     }
-
-    const segments = path
-        .trim()
-        .split('/')
-        .filter(Boolean)
-
-    return segments.length ? `/${segments.join('/')}` : ''
-}
-
-function toChildRoutePath(path: string = ''): string {
-    return normalizeRoutePath(path).replace(/^\/+/, '')
-}
-
-function getRouteSegments(path: string = ''): string[] {
-    return normalizeRoutePath(path)
-        .split('/')
-        .filter(Boolean)
-}
-
-function resolveMenuFullPath(parentPath: string = '', currentPath: string = ''): string {
-    const normalizedParentPath = normalizeRoutePath(parentPath)
-    const normalizedCurrentPath = normalizeRoutePath(currentPath)
-
-    if (!normalizedParentPath) {
-        return normalizedCurrentPath
-    }
-
-    if (!normalizedCurrentPath) {
-        return normalizedParentPath
-    }
-
-    if (
-        normalizedCurrentPath === normalizedParentPath ||
-        normalizedCurrentPath.startsWith(`${normalizedParentPath}/`)
-    ) {
-        return normalizedCurrentPath
-    }
-
-    if (getRouteSegments(normalizedCurrentPath).length > 1) {
-        return normalizedCurrentPath
-    }
-
-    return normalizeRoutePath(`${normalizedParentPath}/${normalizedCurrentPath}`)
-}
-
-function getRelativeRoutePath(fullPath: string = '', parentPath: string = ''): string {
-    const normalizedFullPath = normalizeRoutePath(fullPath)
-    const normalizedParentPath = normalizeRoutePath(parentPath)
-
-    if (!normalizedParentPath) {
-        return toChildRoutePath(normalizedFullPath)
-    }
-
-    if (!normalizedFullPath || normalizedFullPath === normalizedParentPath) {
-        return ''
-    }
-
-    if (normalizedFullPath.startsWith(`${normalizedParentPath}/`)) {
-        return normalizedFullPath.slice(normalizedParentPath.length + 1)
-    }
-
-    return toChildRoutePath(normalizedFullPath)
-}
-
-function normalizeComponentPath(component: string = ''): string {
-    if (typeof component !== 'string') {
-        return ''
-    }
-
-    const normalizedComponent = component
-        .trim()
-        .replace(/^\/+/, '')
-        .replace(/\.vue$/i, '')
-
-    return normalizedComponent ? `/src/views/${normalizedComponent}.vue` : ''
-}
-
-function getPersistedMenus(): MenuItem[] {
-    if (typeof window === 'undefined') {
-        return []
-    }
-
-    const rawMenus = window.localStorage.getItem('menus')
-    if (!rawMenus) {
-        return []
-    }
-
-    try {
-        const parsedMenus = JSON.parse(rawMenus)
-
-        if (Array.isArray(parsedMenus)) {
-            return parsedMenus
-        }
-
-        if (Array.isArray((parsedMenus as any)?.menus)) {
-            return (parsedMenus as any).menus
-        }
-    } catch (error) {
-        console.warn('解析本地菜单数据失败:', error)
-    }
-
-    return []
-}
-
-function findMenuPath(menus: MenuItem[] = [], matcher: (menu: MenuItem, normalizedPath: string) => boolean): string {
-    for (const menu of menus) {
-        const normalizedPath = normalizeRoutePath(menu?.path || '')
-
-        if (normalizedPath && matcher(menu, normalizedPath)) {
-            return normalizedPath
-        }
-
-        if (Array.isArray(menu?.children) && menu.children.length) {
-            const childPath = findMenuPath(menu.children, matcher)
-            if (childPath) {
-                return childPath
-            }
-        }
-    }
-
-    return ''
-}
-
-function findFirstRoutePath(menus: MenuItem[] = []): string {
-    return findMenuPath(menus, (menu) => {
-        return !!menu?.component || !Array.isArray(menu?.children) || menu.children.length === 0
-    })
-}
-
-function getDefaultRoutePath(menus: MenuItem[] = []): string {
-    const menuList = Array.isArray(menus) && menus.length ? menus : getPersistedMenus()
-
-    return (
-        findMenuPath(menuList, (_, normalizedPath) => normalizedPath === HOME_FALLBACK_PATH) ||
-        findFirstRoutePath(menuList) ||
-        HOME_FALLBACK_PATH
-    )
-}
-
-export {
-    HOME_FALLBACK_PATH,
-    getDefaultRoutePath,
-    getRelativeRoutePath,
-    normalizeComponentPath,
-    normalizeRoutePath,
-    resolveMenuFullPath,
-    toChildRoutePath
+    return c
 }

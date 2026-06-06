@@ -1,13 +1,21 @@
 import type { RouteRecordRaw } from 'vue-router'
+import { findDefaultPath } from '@/utils/generateRoutes'
+import useUserInfoStore from '@/store/pinia/userInfo'
 
 // 路由分组
 const routes: RouteRecordRaw[] = [
     {
         path: '/',
-        redirect: () => '/home',
+        redirect: () => findDefaultPath(useUserInfoStore().menus),
         name: 'layout',
         component: () => import('@/Home.vue'),
-        children: []
+        children: [
+            {
+                path:'home',
+                name:'home',
+                component: () => import('@/views/HomePage.vue')
+            }
+        ]
     },
     {
         path: '/login',

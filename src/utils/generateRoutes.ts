@@ -1,90 +1,65 @@
 import router from '@/router'
 import useUserInfoStore from '@/store/pinia/userInfo'
-import type { Component } from 'vue'
+import type { MenuItem } from '@/store/pinia/userInfo'
 
 const modules = import.meta.glob('@/views/**/*.vue')
 
-interface MenuItem {
-    path: string
-    name: string
-    component?: string
-    children?: MenuItem[]
-    [key: string]: any
-}
-
-function generateRoutes(menus: MenuItem[]): any[] {
-    const routes: any[] = []
-    menus.forEach(menu => {
-        const route: any = {
-            path: menu.path,
-            name: menu.name
-        }
-        // 如果有组件
-        if (menu.component) {
-            const componentPath = `/src/views/${menu.component}.vue`
-            route.component = modules[componentPath]
-        }
-        // 递归 children
-        if (menu.children && menu.children.length) {
-            route.children = generateRoutes(menu.children)
-        }
-        routes.push(route)
-    })
-    return routes
-}
-
-// 从菜单中找到默认路由路径
-function getDefaultRoutePath(menus: MenuItem[]): string {
-    if (!menus || menus.length === 0) {
-        return '/'
-    }
-    
-    // 优先选择首页
-    for (const menu of menus) {
-        if (menu.path === '/home' || menu.path === '/') {
-            return menu.path
-        }
-    }
-    
-    // 否则返回第一个有组件的菜单
-    for (const menu of menus) {
-        if (menu.component) {
-            return menu.path
-        }
-        if (menu.children && menu.children.length) {
-            const childPath = getDefaultRoutePath(menu.children)
-            if (childPath) {
-                return childPath
+// 将菜单转换为路由
+function menusToRoutes(menus: MenuItem[]): any[] {
+    return menus
+        .filter(m => m.component || m.children?.length)
+        .map(menu => {
+            const route: any = { path: menu.path, name: menu.name }
+            if (menu.component) {
+                route.component = modules[`/src/views/${menu.component}.vue`]
             }
-        }
-    }
-    
-    return '/'
+            if (menu.children?.length) {
+                route.children = menusToRoutes(menu.children)
+            }
+            return route
+        })
 }
 
-async function initRoutes(menusFromLogin?: MenuItem[]): Promise<string> {
-    let menus: MenuItem[] = []
-    const userInfoStore = useUserInfoStore()
-    
-    if (menusFromLogin && menusFromLogin.length > 0) {
-        menus = menusFromLogin
-        userInfoStore.setMenus(menus)
-    } else if (localStorage.getItem('token')) {
-        // 只从 store 中获取菜单数据，不调用 API
-        if (userInfoStore.menus && userInfoStore.menus.length > 0) {
-            menus = userInfoStore.menus
+// 获取默认路由路径
+function findDefaultPath(menus: MenuItem[]): string {
+    for (const m of menus) {
+        if (m.path === '/home') return '/home'
+        if (m.path === '/') return '/'
+    }
+    for (const m of menus) {
+        if (m.component) return m.path
+        if (m.children?.length) {
+            const p = findDefaultPath(m.children)
+            if (p) return p
         }
     }
-    
-    const routes = generateRoutes(menus)
-    routes.forEach(route => {
-        router.addRoute('layout', route)
-    })
-    
-    return getDefaultRoutePath(menus)
+    return '/home'
 }
 
-export {
-    initRoutes,
-    getDefaultRoutePath
+let isInited = false
+
+// 初始化动态路由（幂等）
+export async function initRoutes(menusFromLogin?: MenuItem[]): Promise<string> {
+    // 防止重复初始化
+    if (isInited) return findDefaultPath(useUserInfoStore().menus)
+
+    const store = useUserInfoStore()
+    let menus = menusFromLogin || store.menus
+
+    if (!menus.length) return '/login'
+
+    // 登录时同步菜单到 store
+    if (menusFromLogin) store.setMenus(menus)
+
+    // 添加路由
+    menusToRoutes(menus).forEach(r => router.addRoute('layout', r))
+    isInited = true
+
+    return findDefaultPath(menus)
 }
+
+export function resetRoutes(): void {
+    isInited = false
+}
+
+export { findDefaultPath }

@@ -56,7 +56,7 @@
     import useUserInfoStore from './store/pinia/userInfo'
     import { loginOutEffect } from '@/utils/tokenManager'
     import { toLoginOut } from '@/api/auth'
-    import { getDefaultRoutePath } from '@/utils/menuRoute'
+    import { findDefaultPath } from '@/utils/generateRoutes'
 
     const preUrl = `${import.meta.env.VITE_PROXY}`.replace(/\/$/, '')
     const userInfoStore = useUserInfoStore()
@@ -79,7 +79,7 @@
     }
 
     const goHome = () => {
-        router.push(getDefaultRoutePath(userInfoStore.menus))
+        router.push(findDefaultPath(userInfoStore.menus))
     }
 
     const handleMenuClick = (path) => {

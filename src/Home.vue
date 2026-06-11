@@ -70,7 +70,7 @@
     
     // 从 localStorage 恢复收起状态
     const isCollapse=ref(JSON.parse(localStorage.getItem('menuCollapse') || 'false'))
-    const menuConfig = ref([])
+    const menuConfig = computed(() => userInfoStore.menus)
 
     const collapse = function(){
         isCollapse.value=!isCollapse.value
@@ -134,7 +134,6 @@
     }
     // 初始化
     onMounted(()=>{
-        menuConfig.value = userInfoStore.menus
         // 恢复滚动位置
         restoreScrollPosition()
         // 绑定滚动事件

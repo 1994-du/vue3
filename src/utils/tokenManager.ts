@@ -1,5 +1,7 @@
 import { ElMessage } from 'element-plus'
 import router from '@/router'
+import useUserInfoStore from '@/store/pinia/userInfo'
+import { resetRoutes } from '@/utils/generateRoutes'
 
 const TOKEN_KEY = 'token'
 const TOKEN_EXPIRE_KEY = 'tokenExpireTime'
@@ -98,6 +100,14 @@ export const clearToken = (): void => {
     localStorage.removeItem(USER_INFO_KEY)
 }
 
+function clearAuthState(): void {
+    clearToken()
+    const userInfoStore = useUserInfoStore()
+    userInfoStore.clearMenus()
+    userInfoStore.clearUserInfo()
+    resetRoutes()
+}
+
 export const clearTokenCheckTimer = (): void => {
     if (tokenCheckTimer) {
         clearTimeout(tokenCheckTimer)
@@ -112,7 +122,7 @@ export const handleTokenExpire = async (message: string = '登录已过期，请
 
     isHandlingTokenExpire = true
     clearTokenCheckTimer()
-    clearToken()
+    clearAuthState()
 
     if (message) {
         ElMessage.warning(message)
@@ -141,8 +151,8 @@ export const setupTokenExpiryCheck = (): void => {
 }
 
 export const loginOutEffect = async (): Promise<void> => {
-    clearToken()
     clearTokenCheckTimer()
+    clearAuthState()
 
     if (router.currentRoute.value.path !== '/login') {
         await router.replace('/login')

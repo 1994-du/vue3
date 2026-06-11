@@ -20,12 +20,18 @@ interface UserInfoState {
     menus: MenuItem[]
 }
 
-const MENUS_KEY = 'menus'
+const LEGACY_MENUS_KEY = 'menus'
+const USER_INFO_STORE_KEY = 'userInfo-store'
 
-function loadPersistedMenus(): MenuItem[] {
+function loadLegacyMenus(): MenuItem[] {
     try {
-        const raw = localStorage.getItem(MENUS_KEY)
-        return raw ? JSON.parse(raw) : []
+        const raw = localStorage.getItem(LEGACY_MENUS_KEY)
+        if (!raw) {
+            return []
+        }
+
+        const parsed = JSON.parse(raw)
+        return Array.isArray(parsed) ? parsed : []
     } catch {
         return []
     }
@@ -34,19 +40,20 @@ function loadPersistedMenus(): MenuItem[] {
 const useUserInfoStore = defineStore('userInfo', {
     state: (): UserInfoState => ({
         userInfo: { name: 'default', age: 0, avatar: '' },
-        menus: loadPersistedMenus()
+        menus: loadLegacyMenus()
     }),
     actions: {
         setMenus(menus: MenuItem[]): void {
-            this.menus = menus
-            localStorage.setItem(MENUS_KEY, JSON.stringify(menus))
+            this.menus = Array.isArray(menus) ? menus : []
         },
         clearMenus(): void {
             this.menus = []
-            localStorage.removeItem(MENUS_KEY)
         },
         setUserInfo(userInfo: Partial<UserInfo>): void {
             this.userInfo = Object.assign({}, this.userInfo, userInfo)
+        },
+        clearUserInfo(): void {
+            this.userInfo = { name: 'default', age: 0, avatar: '' }
         },
         increment(): void {
             this.userInfo.age++
@@ -54,6 +61,11 @@ const useUserInfoStore = defineStore('userInfo', {
         decrement(): void {
             this.userInfo.age--
         }
+    },
+    persist: {
+        key: USER_INFO_STORE_KEY,
+        storage: localStorage,
+        pick: ['userInfo', 'menus']
     }
 })
 

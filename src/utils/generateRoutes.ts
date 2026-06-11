@@ -1,65 +1,119 @@
+import type { RouteRecordRaw } from 'vue-router'
 import router from '@/router'
 import useUserInfoStore from '@/store/pinia/userInfo'
 import type { MenuItem } from '@/store/pinia/userInfo'
+import { resolveMenuFullPath } from '@/utils/menuRoute'
 
 const modules = import.meta.glob('@/views/**/*.vue')
+const addedRouteNames = new Set<string>()
 
-// 将菜单转换为路由
-function menusToRoutes(menus: MenuItem[]): any[] {
-    return menus
-        .filter(m => m.component || m.children?.length)
-        .map(menu => {
-            const route: any = { path: menu.path, name: menu.name }
-            if (menu.component) {
-                route.component = modules[`/src/views/${menu.component}.vue`]
-            }
-            if (menu.children?.length) {
-                route.children = menusToRoutes(menu.children)
-            }
-            return route
-        })
+function buildRouteName(menu: MenuItem, fullPath: string): string {
+    return menu.name || fullPath
 }
 
-// 获取默认路由路径
-function findDefaultPath(menus: MenuItem[]): string {
-    for (const m of menus) {
-        if (m.path === '/home') return '/home'
-        if (m.path === '/') return '/'
-    }
-    for (const m of menus) {
-        if (m.component) return m.path
-        if (m.children?.length) {
-            const p = findDefaultPath(m.children)
-            if (p) return p
+function createRouteRecord(menu: MenuItem, parentPath: string = ''): RouteRecordRaw[] {
+    const fullPath = resolveMenuFullPath(parentPath, menu.path)
+    const routes: RouteRecordRaw[] = []
+
+    if (menu.component) {
+        const componentPath = `/src/views/${menu.component}.vue`
+        const component = modules[componentPath]
+
+        if (component) {
+            routes.push({
+                path: fullPath,
+                name: buildRouteName(menu, fullPath),
+                component,
+                meta: {
+                    title: menu.name
+                }
+            })
+        } else {
+            console.warn(`[dynamic-route] view not found: ${componentPath}`)
         }
     }
+
+    if (menu.children?.length) {
+        menu.children.forEach(child => {
+            routes.push(...createRouteRecord(child, fullPath))
+        })
+    }
+
+    return routes
+}
+
+function menusToRoutes(menus: MenuItem[]): RouteRecordRaw[] {
+    return menus.flatMap(menu => createRouteRecord(menu))
+}
+
+function findDefaultPath(menus: MenuItem[], parentPath: string = ''): string {
+    for (const menu of menus) {
+        const fullPath = resolveMenuFullPath(parentPath, menu.path)
+
+        if (fullPath === '/home') return '/home'
+        if (fullPath === '/') return '/'
+    }
+
+    for (const menu of menus) {
+        const fullPath = resolveMenuFullPath(parentPath, menu.path)
+
+        if (menu.component) return fullPath
+        if (menu.children?.length) {
+            const childPath = findDefaultPath(menu.children, fullPath)
+            if (childPath) return childPath
+        }
+    }
+
     return '/home'
 }
 
 let isInited = false
 
-// 初始化动态路由（幂等）
 export async function initRoutes(menusFromLogin?: MenuItem[]): Promise<string> {
-    // 防止重复初始化
-    if (isInited) return findDefaultPath(useUserInfoStore().menus)
-
     const store = useUserInfoStore()
-    let menus = menusFromLogin || store.menus
+    const menus = menusFromLogin || store.menus
 
     if (!menus.length) return '/login'
 
-    // 登录时同步菜单到 store
-    if (menusFromLogin) store.setMenus(menus)
+    if (menusFromLogin) {
+        store.setMenus(menus)
+    }
 
-    // 添加路由
-    menusToRoutes(menus).forEach(r => router.addRoute('layout', r))
+    if (isInited) {
+        return findDefaultPath(menus)
+    }
+
+    const existingPaths = new Set(router.getRoutes().map(route => route.path))
+    const dynamicRoutes = menusToRoutes(menus)
+
+    dynamicRoutes.forEach(route => {
+        const routeName = String(route.name || '')
+        if (!routeName || existingPaths.has(route.path) || router.hasRoute(routeName)) {
+            return
+        }
+
+        router.addRoute('layout', route)
+        existingPaths.add(route.path)
+        addedRouteNames.add(routeName)
+    })
+
     isInited = true
-
     return findDefaultPath(menus)
 }
 
 export function resetRoutes(): void {
+    addedRouteNames.forEach(routeName => {
+        if (router.hasRoute(routeName)) {
+            router.removeRoute(routeName)
+        }
+    })
+
+    addedRouteNames.clear()
     isInited = false
+}
+
+export function hasDynamicRoutes(): boolean {
+    return isInited
 }
 
 export { findDefaultPath }

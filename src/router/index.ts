@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { getToken, isTokenExpired, handleTokenExpire, setupTokenExpiryCheck } from '@/utils/tokenManager'
 import { initRoutes, hasDynamicRoutes } from '@/utils/generateRoutes'
 import useUserInfoStore from '@/store/pinia/userInfo'
-import routes from './routes'
+import routes, { ROUTE_MISS_NAME } from './routes'
 
 const WHITE_LIST = ['/login', '/error', '/web-office']
 
@@ -14,6 +14,7 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
     const token = getToken()
     const userInfoStore = useUserInfoStore()
+    const isRouteMiss = to.name === ROUTE_MISS_NAME
 
     if (WHITE_LIST.includes(to.path)) {
         if (to.path === '/login' && token && !isTokenExpired()) {
@@ -37,7 +38,7 @@ router.beforeEach(async (to, from, next) => {
 
     setupTokenExpiryCheck()
 
-    if (userInfoStore.menus.length && !hasDynamicRoutes()) {
+    if (userInfoStore.menus.length && (!hasDynamicRoutes() || isRouteMiss)) {
         await initRoutes()
         next({ path: to.fullPath, replace: true })
         return

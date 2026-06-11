@@ -1,6 +1,9 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
+import { initRoutes } from '@/utils/generateRoutes'
+import useUserInfoStore from '@/store/pinia/userInfo'
+import { getToken, isTokenExpired } from '@/utils/tokenManager'
 
 // Pinia
 import { createPinia } from 'pinia'
@@ -60,8 +63,22 @@ persistenceHtmlTheme(localStorage.getItem('theme') || 'light')
 IndexDB.openDatabase().then(db => (window.db = db)).catch(() => {})
 
 // 路由守卫中处理动态路由，这里直接挂载
-app.use(router)
-app.mount('#vue3')
+async function bootstrap(): Promise<void> {
+    const userInfoStore = useUserInfoStore()
+    const hasValidToken = !!getToken() && !isTokenExpired()
+
+    if (hasValidToken && userInfoStore.menus.length) {
+        await initRoutes()
+    }
+
+    app.use(router)
+    await router.isReady()
+    app.mount('#vue3')
+}
+
+bootstrap().catch(error => {
+    console.error('bootstrap failed:', error)
+})
 
 // 微前端环境监听
 if (window.__MICRO_APP_ENVIRONMENT__ && window.microApp) {

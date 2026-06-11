@@ -1,7 +1,7 @@
 export default{
     plugins: {
         '@tailwindcss/postcss': {},
-        'postcss-px-to-viewport': {
+        'postcss-px-to-viewport-8-plugin': {
             viewportWidth: 1920, // 设计稿宽度
             viewportHeight: 1080, // 设计稿高度
             unitToConvert: 'px', // 需要转换的单位

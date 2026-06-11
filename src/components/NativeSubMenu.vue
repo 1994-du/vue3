@@ -9,9 +9,11 @@
             @mouseleave="handleMouseLeave"
             ref="menuTitleRef"
         >
-            <SvgIcon :name="menu.icon || '分组'" class="native-menu-icon"/>
+            <SvgIcon :name="menu.icon || '分组'" class="native-menu-icon" />
             <span v-if="!collapse" class="native-menu-text">{{ menu.name }}</span>
-            <span v-if="!collapse" class="native-menu-arrow" :class="{ rotated: isOpen }">›</span>
+            <el-icon v-if="!collapse" class="native-menu-arrow" :class="{ rotated: isOpen }">
+                <ArrowRight />
+            </el-icon>
         </div>
 
         <Teleport to="body">
@@ -23,7 +25,7 @@
                 @mouseleave="handleMouseLeave"
             >
                 <div class="native-sub-menu__dropdown-title">
-                    <SvgIcon :name="menu.icon || '分组'" class="native-menu-icon"/>
+                    <SvgIcon :name="menu.icon || '分组'" class="native-menu-icon" />
                     <span>{{ menu.name }}</span>
                 </div>
                 <div class="native-sub-menu__dropdown-children">
@@ -59,7 +61,7 @@
             @click="handleMenuItemClick"
         >
             <el-tooltip :content="menu.name" placement="right" :disabled="!collapse">
-                <SvgIcon :name="menu.icon || '菜单'" class="native-menu-icon"/>
+                <SvgIcon :name="menu.icon || '菜单'" class="native-menu-icon" />
             </el-tooltip>
             <span v-if="!collapse" class="native-menu-text">{{ menu.name }}</span>
         </div>
@@ -68,6 +70,7 @@
 
 <script setup>
 import { ref, computed, nextTick, watch, onMounted } from 'vue'
+import { ArrowRight } from '@element-plus/icons-vue'
 import { resolveMenuFullPath } from '@/utils/menuRoute'
 import SvgIcon from './SvgIcon/index.vue'
 
@@ -256,16 +259,25 @@ onMounted(() => {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        font-size: 16px;
-        font-weight: 700;
-        transition: transform var(--transition-fast), background var(--transition-fast);
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.92);
+        transition: transform var(--transition-fast), background var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast);
         transform: rotate(0deg);
         border-radius: 999px;
-        background: rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
 
         &.rotated {
             transform: rotate(90deg);
         }
+    }
+
+    &:hover .native-menu-arrow,
+    &.is-open .native-menu-arrow,
+    &.is-active-parent .native-menu-arrow {
+        color: #fff;
+        background: rgba(255, 255, 255, 0.16);
+        box-shadow: 0 6px 16px rgba(15, 23, 42, 0.18);
     }
 }
 

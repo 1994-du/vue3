@@ -6,6 +6,7 @@ import { resolveMenuFullPath } from '@/utils/menuRoute'
 
 const modules = import.meta.glob('@/views/**/*.vue')
 const addedRouteNames = new Set<string>()
+const preloadedModulePaths = new Set<string>()
 
 function buildRouteName(menu: MenuItem, fullPath: string): string {
     return menu.name || fullPath
@@ -40,6 +41,52 @@ function createRouteRecord(menu: MenuItem, parentPath: string = ''): RouteRecord
     }
 
     return routes
+}
+
+function resolveViewModulePath(component?: string): string {
+    return component ? `/src/views/${component}.vue` : ''
+}
+
+function preloadMenuComponent(menu: MenuItem): Promise<unknown> | null {
+    if (!menu.component) {
+        return null
+    }
+
+    const componentPath = resolveViewModulePath(menu.component)
+    const loader = modules[componentPath]
+
+    if (!loader || preloadedModulePaths.has(componentPath)) {
+        return null
+    }
+
+    preloadedModulePaths.add(componentPath)
+    return loader().catch(error => {
+        preloadedModulePaths.delete(componentPath)
+        console.warn(`[dynamic-route] preload failed: ${componentPath}`, error)
+    })
+}
+
+async function preloadMenuComponents(menus: MenuItem[]): Promise<void> {
+    const tasks: Promise<unknown>[] = []
+
+    const walk = (menuList: MenuItem[]): void => {
+        menuList.forEach(menu => {
+            const task = preloadMenuComponent(menu)
+            if (task) {
+                tasks.push(task)
+            }
+
+            if (menu.children?.length) {
+                walk(menu.children)
+            }
+        })
+    }
+
+    walk(menus)
+
+    if (tasks.length) {
+        await Promise.allSettled(tasks)
+    }
 }
 
 function menusToRoutes(menus: MenuItem[]): RouteRecordRaw[] {
@@ -101,6 +148,15 @@ export async function initRoutes(menusFromLogin?: MenuItem[]): Promise<string> {
     return findDefaultPath(menus)
 }
 
+export async function preloadDynamicRoutes(menusFromLogin?: MenuItem[]): Promise<void> {
+    const store = useUserInfoStore()
+    const menus = menusFromLogin || store.menus
+
+    if (!menus.length) return
+
+    await preloadMenuComponents(menus)
+}
+
 export function resetRoutes(): void {
     addedRouteNames.forEach(routeName => {
         if (router.hasRoute(routeName)) {
@@ -109,6 +165,7 @@ export function resetRoutes(): void {
     })
 
     addedRouteNames.clear()
+    preloadedModulePaths.clear()
     isInited = false
 }
 

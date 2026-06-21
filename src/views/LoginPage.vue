@@ -106,7 +106,7 @@ import { User, Lock } from '@element-plus/icons-vue'
 import { toLogin, toRegistry } from '@/api/auth'
 import useUserInfoStore from '../store/pinia/userInfo'
 import { parseJWT, setupTokenExpiryCheck } from '../utils/tokenManager'
-import { initRoutes, preloadDynamicRoutes } from '../utils/generateRoutes'
+import { initRoutes, preloadDynamicRoute, preloadDynamicRoutes } from '../utils/generateRoutes'
 
 const userInfoStore = useUserInfoStore()
 const router = useRouter()
@@ -161,7 +161,8 @@ async function handleLogin(): Promise<void> {
             parseJWT(token)
             setupTokenExpiryCheck()
             const defaultPath = await initRoutes(menus)
-            void preloadDynamicRoutes(menus)
+            await preloadDynamicRoute(defaultPath, menus)
+            void preloadDynamicRoutes(menus, { excludePath: defaultPath, concurrency: 3 })
             await router.replace(defaultPath)
         }
     } finally {

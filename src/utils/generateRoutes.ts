@@ -7,6 +7,12 @@ import { resolveMenuFullPath } from '@/utils/menuRoute'
 const modules = import.meta.glob('@/views/**/*.vue')
 const addedRouteNames = new Set<string>()
 const preloadedModulePaths = new Set<string>()
+const preloadModulePromises = new Map<string, Promise<unknown>>()
+
+interface PreloadDynamicRoutesOptions {
+    excludePath?: string
+    concurrency?: number
+}
 
 function buildRouteName(menu: MenuItem, fullPath: string): string {
     return menu.name || fullPath
@@ -47,6 +53,33 @@ function resolveViewModulePath(component?: string): string {
     return component ? `/src/views/${component}.vue` : ''
 }
 
+function normalizeRoutePath(path: string = ''): string {
+    const cleanPath = path.split(/[?#]/)[0] || '/'
+    const normalizedPath = '/' + cleanPath.trim().split('/').filter(Boolean).join('/')
+    return normalizedPath === '/' ? '/' : normalizedPath.replace(/\/$/, '')
+}
+
+function findMenuByPath(menus: MenuItem[], targetPath: string, parentPath: string = ''): MenuItem | null {
+    const normalizedTargetPath = normalizeRoutePath(targetPath)
+
+    for (const menu of menus) {
+        const fullPath = normalizeRoutePath(resolveMenuFullPath(parentPath, menu.path))
+
+        if (fullPath === normalizedTargetPath) {
+            return menu
+        }
+
+        if (menu.children?.length) {
+            const child = findMenuByPath(menu.children, normalizedTargetPath, fullPath)
+            if (child) {
+                return child
+            }
+        }
+    }
+
+    return null
+}
+
 function preloadMenuComponent(menu: MenuItem): Promise<unknown> | null {
     if (!menu.component) {
         return null
@@ -55,38 +88,67 @@ function preloadMenuComponent(menu: MenuItem): Promise<unknown> | null {
     const componentPath = resolveViewModulePath(menu.component)
     const loader = modules[componentPath]
 
-    if (!loader || preloadedModulePaths.has(componentPath)) {
+    if (!loader) {
         return null
     }
 
+    const existingPromise = preloadModulePromises.get(componentPath)
+    if (existingPromise) {
+        return existingPromise
+    }
+
+    if (preloadedModulePaths.has(componentPath)) {
+        return Promise.resolve()
+    }
+
     preloadedModulePaths.add(componentPath)
-    return loader().catch(error => {
-        preloadedModulePaths.delete(componentPath)
-        console.warn(`[dynamic-route] preload failed: ${componentPath}`, error)
-    })
+    const preloadPromise = loader()
+        .catch(error => {
+            preloadedModulePaths.delete(componentPath)
+            console.warn(`[dynamic-route] preload failed: ${componentPath}`, error)
+        })
+        .finally(() => {
+            preloadModulePromises.delete(componentPath)
+        })
+
+    preloadModulePromises.set(componentPath, preloadPromise)
+    return preloadPromise
 }
 
-async function preloadMenuComponents(menus: MenuItem[]): Promise<void> {
-    const tasks: Promise<unknown>[] = []
+async function runPreloadTasks(tasks: Array<() => Promise<unknown>>, concurrency: number = 4): Promise<void> {
+    if (!tasks.length) return
 
-    const walk = (menuList: MenuItem[]): void => {
+    let taskIndex = 0
+    const workerCount = Math.min(Math.max(concurrency, 1), tasks.length)
+    const workers = Array.from({ length: workerCount }, async () => {
+        while (taskIndex < tasks.length) {
+            const task = tasks[taskIndex++]
+            await task()
+        }
+    })
+
+    await Promise.allSettled(workers)
+}
+
+async function preloadMenuComponents(menus: MenuItem[], options: PreloadDynamicRoutesOptions = {}): Promise<void> {
+    const tasks: Array<() => Promise<unknown>> = []
+    const excludePath = options.excludePath ? normalizeRoutePath(options.excludePath) : ''
+
+    const walk = (menuList: MenuItem[], parentPath: string = ''): void => {
         menuList.forEach(menu => {
-            const task = preloadMenuComponent(menu)
-            if (task) {
-                tasks.push(task)
+            const fullPath = normalizeRoutePath(resolveMenuFullPath(parentPath, menu.path))
+            if (menu.component && fullPath !== excludePath) {
+                tasks.push(() => preloadMenuComponent(menu) || Promise.resolve())
             }
 
             if (menu.children?.length) {
-                walk(menu.children)
+                walk(menu.children, fullPath)
             }
         })
     }
 
     walk(menus)
-
-    if (tasks.length) {
-        await Promise.allSettled(tasks)
-    }
+    await runPreloadTasks(tasks, options.concurrency)
 }
 
 function menusToRoutes(menus: MenuItem[]): RouteRecordRaw[] {
@@ -148,13 +210,23 @@ export async function initRoutes(menusFromLogin?: MenuItem[]): Promise<string> {
     return findDefaultPath(menus)
 }
 
-export async function preloadDynamicRoutes(menusFromLogin?: MenuItem[]): Promise<void> {
+export async function preloadDynamicRoute(path: string, menusFromLogin?: MenuItem[]): Promise<void> {
+    const store = useUserInfoStore()
+    const menus = menusFromLogin || store.menus
+    const menu = findMenuByPath(menus, path)
+
+    if (!menu) return
+
+    await preloadMenuComponent(menu)
+}
+
+export async function preloadDynamicRoutes(menusFromLogin?: MenuItem[], options: PreloadDynamicRoutesOptions = {}): Promise<void> {
     const store = useUserInfoStore()
     const menus = menusFromLogin || store.menus
 
     if (!menus.length) return
 
-    await preloadMenuComponents(menus)
+    await preloadMenuComponents(menus, options)
 }
 
 export function resetRoutes(): void {
@@ -166,6 +238,7 @@ export function resetRoutes(): void {
 
     addedRouteNames.clear()
     preloadedModulePaths.clear()
+    preloadModulePromises.clear()
     isInited = false
 }
 

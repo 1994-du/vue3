@@ -15,9 +15,6 @@ import '@1994-du/vue3-ui/lib/style.css'
 import '@1994-du/vue3-ui/lib/theme.css'
 import ElementPlus from 'element-plus'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
-import * as ElementPlusIconsVue from '@element-plus/icons-vue'
-import Antd from 'ant-design-vue'
-import 'ant-design-vue/dist/reset.css'
 import './styles/element_plus.scss'
 
 // 工具
@@ -39,18 +36,12 @@ import mitt from 'mitt'
 
 const app = createApp(App)
 
-// 注册 ElementPlus 图标
-for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
-    app.component(key, component)
-}
-
 // 全局属性
 registryComponents(app)
 app.config.globalProperties.$bus = mitt()
 
 app.use(dxUI)
 app.use(ElementPlus as any, { locale: zhCn })
-app.use(Antd)
 app.use(createI18n({ locale: 'zh-cn', messages: { 'en-us': LanguageEN, 'zh-cn': LanguageZH } }))
 app.use(customDirective)
 
@@ -69,7 +60,7 @@ async function bootstrap(): Promise<void> {
 
     if (hasValidToken && userInfoStore.menus.length) {
         await initRoutes()
-        void preloadDynamicRoutes()
+        void preloadDynamicRoutes(undefined, { concurrency: 3 })
     }
 
     app.use(router)

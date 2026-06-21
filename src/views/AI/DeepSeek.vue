@@ -62,5 +62,5 @@ const send = async () => {
 }
 </script>
 <style scoped lang="scss">
-@import '@/styles/deepseek.scss';
+@use '@/styles/deepseek.scss' as *;
 </style>

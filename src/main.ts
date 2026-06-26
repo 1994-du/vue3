@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
-import { initRoutes, preloadDynamicRoutes } from '@/utils/generateRoutes'
+import { initRoutes } from '@/utils/generateRoutes'
 import useUserInfoStore from '@/store/pinia/userInfo'
 import { getToken, isTokenExpired } from '@/utils/tokenManager'
 
@@ -60,7 +60,6 @@ async function bootstrap(): Promise<void> {
 
     if (hasValidToken && userInfoStore.menus.length) {
         await initRoutes()
-        void preloadDynamicRoutes(undefined, { concurrency: 3 })
     }
 
     app.use(router)

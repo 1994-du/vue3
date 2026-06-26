@@ -56,7 +56,7 @@
     import useUserInfoStore from './store/pinia/userInfo'
     import { loginOutEffect } from '@/utils/tokenManager'
     import { toLoginOut } from '@/api/auth'
-    import { findDefaultPath, preloadDynamicRoute } from '@/utils/generateRoutes'
+    import { findDefaultPath } from '@/utils/generateRoutes'
 
     const preUrl = `${import.meta.env.VITE_PROXY}`.replace(/\/$/, '')
     const userInfoStore = useUserInfoStore()
@@ -81,8 +81,6 @@
     const goHome = async () => {
         const defaultPath = findDefaultPath(userInfoStore.menus)
         if (route.path === defaultPath) return
-
-        await preloadDynamicRoute(defaultPath)
         await router.push(defaultPath)
     }
 
@@ -93,7 +91,6 @@
         localStorage.setItem('currentMenuPath', path)
         // 保存当前滚动位置
         saveScrollPosition()
-        await preloadDynamicRoute(path)
         await router.push(path)
     }
 

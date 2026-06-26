@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { getToken, isTokenExpired, handleTokenExpire, setupTokenExpiryCheck } from '@/utils/tokenManager'
-import { initRoutes, hasDynamicRoutes, preloadDynamicRoute, preloadDynamicRoutes } from '@/utils/generateRoutes'
+import { initRoutes, hasDynamicRoutes } from '@/utils/generateRoutes'
 import useUserInfoStore from '@/store/pinia/userInfo'
 import routes, { ROUTE_MISS_NAME } from './routes'
 
@@ -21,8 +21,6 @@ router.beforeEach(async (to, from, next) => {
             setupTokenExpiryCheck()
             if (userInfoStore.menus.length) {
                 const redirectPath = await initRoutes()
-                await preloadDynamicRoute(redirectPath)
-                void preloadDynamicRoutes(undefined, { excludePath: redirectPath, concurrency: 3 })
                 next({ path: redirectPath, replace: true })
                 return
             }
@@ -42,8 +40,6 @@ router.beforeEach(async (to, from, next) => {
 
     if (userInfoStore.menus.length && (!hasDynamicRoutes() || isRouteMiss)) {
         await initRoutes()
-        await preloadDynamicRoute(to.fullPath)
-        void preloadDynamicRoutes(undefined, { excludePath: to.fullPath, concurrency: 3 })
         next({ path: to.fullPath, replace: true })
         return
     }

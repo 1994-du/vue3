@@ -1,4 +1,18 @@
-export default async function (iconName: string, svgPath?: string): Promise<boolean | null> {
+const iconCache = new Map<string, Promise<boolean | null>>()
+
+export default function (
+    iconName: string,
+    svgPath?: string
+): Promise<boolean | null> {
+    if (iconCache.has(iconName)) {
+        return iconCache.get(iconName)!
+    }
+    const promise = loadSvg(iconName, svgPath)
+    iconCache.set(iconName, promise)
+    return promise
+}
+
+async function loadSvg(iconName: string, svgPath?: string): Promise<boolean | null> {
     const path = svgPath || `/icons/${iconName}.svg`
     
     try {

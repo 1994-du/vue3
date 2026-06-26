@@ -144,6 +144,7 @@ interface RoleItem {
 
 // 定义角色表单数据接口
 interface RoleFormData {
+    id?: number
     name: string
     roleDesc: string
     menus: number[]
@@ -356,6 +357,7 @@ const editRole = (row: RoleItem): void => {
     
     const normalizedMenus = normalizeMenuIds(row.menus)
     formData.value = {
+        id: row.id,
         name: row.name,
         roleDesc: row.roleDesc,
         menus: normalizedMenus as number[]

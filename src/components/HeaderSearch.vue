@@ -13,6 +13,7 @@
 </template>
 
 <script setup>
+import { Search } from '@element-plus/icons-vue'
 import { onMounted, ref } from 'vue'
 let currentKey = ref('Ctrl')
 // 键盘事件

@@ -15,8 +15,8 @@
                 />
             </div>
             <div class="custome_menu_btn" @click="collapse">
-                <el-icon v-if="!isCollapse"><DArrowLeft/></el-icon>
-                <el-icon v-if="isCollapse"><DArrowRight/></el-icon>
+                <el-icon v-if="!isCollapse"><ArrowLeft/></el-icon>
+                <el-icon v-if="isCollapse"><ArrowRight/></el-icon>
                 <span v-if="!isCollapse">收起</span>
             </div>
         </div>
@@ -51,6 +51,7 @@
     import HeaderSearch from './components/HeaderSearch.vue'
     import ThemeSwitch from '@/components/ThemeSwitch.vue'
     import NativeMenu from './components/NativeMenu.vue'
+    import { ArrowLeft, ArrowRight } from '@element-plus/icons-vue'
     import { useRouter, useRoute } from 'vue-router'
     import { computed, onMounted,ref, onBeforeUnmount, nextTick } from 'vue'
     import useUserInfoStore from './store/pinia/userInfo'

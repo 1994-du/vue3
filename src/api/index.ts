@@ -75,7 +75,6 @@ Axios.interceptors.request.use(
 
 Axios.interceptors.response.use(
     (res: AxiosResponse) => {
-        console.log('响应数据', res)
         // 处理token过期的特定状态码（例如401或特定的错误码）
         if (isUnauthorized(res)) {
             hideLoading()

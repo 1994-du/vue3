@@ -1,11 +1,12 @@
 <template>
     <el-sub-menu v-if="hasChildren" :index="fullPath">
         <template #title>
+            <SvgIcon v-if="menus.icon" :name="menus.icon"/>
+            <el-icon v-else>
+                <FolderOpened />
+            </el-icon>
             <span class="menu-title">
-                <SvgIcon v-if="menus.icon" :name="menus.icon"/>
-                <el-icon v-else>
-                    <FolderOpened />
-                </el-icon>
+                
                 <span>{{ menus.name }}</span>
             </span>
         </template>
@@ -18,13 +19,11 @@
     </el-sub-menu>
 
     <el-menu-item v-else :index="fullPath">
-        <span class="menu-title">
-            <SvgIcon v-if="menus.icon" :name="menus.icon"/>
-            <el-icon v-else>
-                <FolderOpened />
-            </el-icon>
-            <span>{{ menus.name }}</span>
-        </span>
+        <SvgIcon v-if="menus.icon" :name="menus.icon"/>
+        <el-icon v-else>
+            <FolderOpened />
+        </el-icon>
+        <template #title>{{ menus.name }}</template>
     </el-menu-item>
 </template>
 

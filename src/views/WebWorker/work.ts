@@ -6,5 +6,5 @@ self.onmessage = (data)=>{
         sum += i
     }
     console.timeEnd('耗时')
-    self.postMessage('worker返回数据')
+    self.postMessage(`worker返回数据-${sum}`)
 }

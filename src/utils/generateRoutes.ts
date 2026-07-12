@@ -76,7 +76,7 @@ export async function initRoutes(menusFromLogin?: MenuItem[]): Promise<string> {
     const store = useUserInfoStore()
     const menus = menusFromLogin || store.menus
 
-    if (!menus.length) return '/login'
+    // if (!menus.length) return '/login'
 
     if (menusFromLogin) {
         store.setMenus(menus)

@@ -107,6 +107,7 @@ import { toLogin, toRegistry } from '@/api/auth'
 import useUserInfoStore from '../store/pinia/userInfo'
 import { parseJWT, setupTokenExpiryCheck } from '../utils/tokenManager'
 import { initRoutes } from '../utils/generateRoutes'
+import { ElMessage } from 'element-plus'
 
 const userInfoStore = useUserInfoStore()
 const router = useRouter()
@@ -162,6 +163,8 @@ async function handleLogin(): Promise<void> {
             setupTokenExpiryCheck()
             const defaultPath = await initRoutes(menus)
             await router.replace(defaultPath)
+        }else{
+            ElMessage.error(res.message || '登录失败，请检查账号密码')
         }
     } finally {
         isLoading.value = false

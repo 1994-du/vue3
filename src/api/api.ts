@@ -38,6 +38,24 @@ export const getUsers = (data: any) => {
 }
 
 /**
+ * @description 获取当前登录用户信息
+ */
+export const getCurrentUser = () => {
+    return new Promise((resolve, reject) => {
+        axios({
+            baseURL: '',
+            url: '/api/users/me',
+            method: 'get',
+            needAuth: true
+        } as any).then((res: any) => {
+            resolve(res)
+        }).catch((err: any) => {
+            reject(err)
+        })
+    })
+}
+
+/**
  * @description 编辑用户
  */
 export const updateUser = (data: any) => {

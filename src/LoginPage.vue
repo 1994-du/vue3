@@ -104,9 +104,9 @@ import { useRouter } from 'vue-router'
 import { ref, reactive, onMounted } from 'vue'
 import { User, Lock } from '@element-plus/icons-vue'
 import { toLogin, toRegistry } from '@/api/auth'
-import useUserInfoStore from '../store/pinia/userInfo'
-import { parseJWT, setupTokenExpiryCheck } from '../utils/tokenManager'
-import { initRoutes } from '../utils/generateRoutes'
+import useUserInfoStore from '@/store/pinia/userInfo'
+import { parseJWT, setupTokenExpiryCheck } from '@/utils/tokenManager'
+import { initRoutes } from '@/utils/generateRoutes'
 import { ElMessage } from 'element-plus'
 
 const userInfoStore = useUserInfoStore()

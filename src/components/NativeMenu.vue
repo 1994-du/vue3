@@ -3,7 +3,7 @@
         :default-active="activePath"
         :default-openeds="defaultOpeneds"
         :collapse="collapse"
-        :collapse-transition="false"
+        :collapse-transition="true"
         unique-opened
         @select="handleSelect"
         @open="handleOpen"

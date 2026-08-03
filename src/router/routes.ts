@@ -22,17 +22,17 @@ const routes: RouteRecordRaw[] = [
     {
         path: '/login',
         name: 'login',
-        component: () => import('@/views/LoginPage.vue')
+        component: () => import('@/LoginPage.vue')
     },
     {
         path: '/error',
         name: 'error',
-        component: () => import('@/views/Error.vue')
+        component: () => import('@/Error.vue')
     },
     {
         path: '/:pathMatch(.*)*',
         name: ROUTE_MISS_NAME,
-        component: () => import('@/views/Error.vue')
+        component: () => import('@/Error.vue')
     }
 ]
 

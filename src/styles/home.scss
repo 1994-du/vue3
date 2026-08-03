@@ -78,6 +78,7 @@ h1, .hljs {
            侧边栏样式
            ============================================ */
         .layout_menu {
+            transition: width .3s;
             font-size: var(--font-size-sm);
             font-weight: 500;
             flex-shrink: 0;

@@ -6,7 +6,6 @@
                 <FolderOpened />
             </el-icon>
             <span class="menu-title">
-                
                 <span>{{ menus.name }}</span>
             </span>
         </template>
@@ -23,7 +22,9 @@
         <el-icon v-else>
             <FolderOpened />
         </el-icon>
-        <template #title>{{ menus.name }}</template>
+        <span class="menu-title">
+            <span>{{ menus.name }}</span>
+        </span>
     </el-menu-item>
 </template>
 
@@ -55,5 +56,6 @@ const fullPath = computed(() => resolveMenuFullPath(props.parentPath, props.menu
     gap: 8px;
     cursor: pointer;
     user-select: none;
+    margin-left: 5px;
 }
 </style>

@@ -1,38 +1,37 @@
 <template>
-    <el-sub-menu v-if="hasChildren" :index="fullPath">
-        <template #title>
-            <SvgIcon v-if="menus.icon" :name="menus.icon"/>
-            <el-icon v-else>
-                <FolderOpened />
-            </el-icon>
-            <span class="menu-title">
-                <span>{{ menus.name }}</span>
-            </span>
-        </template>
-        <SubMenu
-            v-for="(item, index) in menus.children"
-            :key="item.path || index"
-            :menus="item"
-            :parent-path="fullPath"
-        />
-    </el-sub-menu>
+    <!-- 有子菜单 -->
+    <div class="dx-sub-menu" v-if="hasChildren">
+        <div class="dx-sub-menu-title" @click="toggleOpen">
+            <div class="dx-sub-menu-title-left">
+                <SvgIcon v-if="menus.icon" :name="menus.icon" />
+                <span class="menu-title">{{ menus.name }}</span>
+            </div>
 
-    <el-menu-item v-else :index="fullPath">
-        <SvgIcon v-if="menus.icon" :name="menus.icon"/>
-        <el-icon v-else>
-            <FolderOpened />
-        </el-icon>
-        <span class="menu-title">
-            <span>{{ menus.name }}</span>
-        </span>
-    </el-menu-item>
+            <SvgIcon name="xiangyou" :class="menus.open ? 'open' : 'closed'" />
+        </div>
+
+        <SubMenu v-if="menus.open" v-for="(item, index) in menus.children" :key="item.path || index" :menus="item"
+            :parent-path="fullPath" @menu-click="emitMenuClick" />
+    </div>
+
+    <!-- 没有子菜单 -->
+    <div v-else class="dx-menu-item" @click="handleLeafClick">
+        <div class="dx-sub-menu-title">
+            <SvgIcon v-if="menus.icon" :name="menus.icon" />
+            <span class="menu-title">{{ menus.name }}</span>
+        </div>
+    </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { FolderOpened } from '@element-plus/icons-vue'
-import { resolveMenuFullPath } from '@/utils/menuRoute'
 import SvgIcon from './SvgIcon/index.vue'
+import { resolveMenuFullPath } from '@/utils/menuRoute'
+
+interface MenuClickEvent {
+    menu: any
+    fullPath: string
+}
 
 const props = defineProps({
     menus: {
@@ -45,17 +44,109 @@ const props = defineProps({
     }
 })
 
-const hasChildren = computed(() => !!props.menus?.children?.length)
-const fullPath = computed(() => resolveMenuFullPath(props.parentPath, props.menus?.path))
+const emit = defineEmits<{
+    (e: 'menu-click', payload: MenuClickEvent): void
+}>()
+
+/**
+ * 是否存在子菜单
+ */
+const hasChildren = computed(() => {
+    return !!props.menus.children?.length
+})
+
+/**
+ * 当前菜单完整路径
+ */
+const fullPath = computed(() => {
+    return resolveMenuFullPath(props.parentPath, props.menus.path)
+})
+
+/**
+ * 展开/收起
+ */
+const toggleOpen = () => {
+    props.menus.open = !props.menus.open
+}
+
+/**
+ * 点击叶子菜单
+ */
+const handleLeafClick = () => {
+    emitMenuClick({
+        menu: props.menus,
+        fullPath: fullPath.value
+    })
+}
+
+/**
+ * 统一事件出口
+ * 当前点击、子组件点击都走这里
+ */
+const emitMenuClick = (payload: MenuClickEvent) => {
+    emit('menu-click', payload)
+}
 </script>
 
 <style lang="scss" scoped>
-.menu-title {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-    user-select: none;
-    margin-left: 5px;
+.dx-menu-item {
+    height: 45px;
+
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .dx-sub-menu-title {
+        cursor: pointer;
+        user-select: none;
+        padding: 0 10px;
+        height: 100%;
+        color: #fff;
+        display: flex;
+        align-items: center;
+
+        .svg-icon {
+            font-size: 26px;
+            flex-shrink: 0;
+            margin-right: 10px;
+        }
+    }
+}
+
+.dx-sub-menu {
+    .dx-sub-menu-title {
+        height: 45px;
+        cursor: pointer;
+        user-select: none;
+        padding: 0 10px;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .dx-sub-menu-title-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .svg-icon {
+            font-size: 26px;
+            flex-shrink: 0;
+            margin-right: 10px;
+        }
+
+        .open {
+            transform: rotate(90deg);
+            transition: .2s;
+        }
+
+        .closed {
+            transition: .2s;
+        }
+    }
 }
 </style>

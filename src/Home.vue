@@ -86,6 +86,7 @@
     }
 
     const handleMenuClick = async (path) => {
+        console.log('handleMenuClick', path)
         if (route.path === path) return
 
         // 保存当前菜单路径

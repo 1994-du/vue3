@@ -1,20 +1,12 @@
 <template>
-    <el-menu
-        :default-active="activePath"
-        :default-openeds="defaultOpeneds"
-        :collapse="collapse"
-        :collapse-transition="true"
-        unique-opened
-        @select="handleSelect"
-        @open="handleOpen"
-        @close="handleClose">
+    <div class="dx-menu">
         <SubMenu
             v-for="(item, index) in menuConfig"
             :key="item.path || index"
             :menus="item"
             parent-path=""
-        />
-    </el-menu>
+            @menu-click="handleSelect" />
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -68,8 +60,8 @@ function collectOpenPaths(menus: MenuItem[], activePath: string, parentPath: str
 
 const defaultOpeneds = computed(() => Array.from(collectOpenPaths(props.menuConfig, props.activePath)))
 
-const handleSelect = (path: string) => {
-    emit('menu-click', path)
+const handleSelect = ({ menu, fullPath }) => {
+    emit('menu-click', fullPath)
 }
 
 const handleOpen = (path: string) => {
@@ -86,25 +78,9 @@ const handleClose = (path: string) => {
 </script>
 
 <style lang="scss" scoped>
-.app-side-menu {
+.dx-menu{
     width: 100%;
-    border-right: none;
-    background: transparent;
-    padding: 8px;
-
-    ::v-deep(.el-menu) {
-        border-right: none;
-        background: transparent;
-        .el-menu-item{
-            .el-sub-menu__title{
-                padding-right:0!important;
-            }
-        }
-        .el-sub-menu{
-            .el-sub-menu__title{
-                padding-right:0!important;
-            }
-        }
-    }
+    height: 100%;
+    overflow: auto;
 }
 </style>

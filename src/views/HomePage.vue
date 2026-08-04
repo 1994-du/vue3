@@ -12,7 +12,11 @@
         <el-table-column prop="sha" label="SHA" width="300"></el-table-column>
         <el-table-column prop="commit.author.name" label="Author" width="150"></el-table-column>
         <el-table-column prop="commit.message" label="Message"></el-table-column>
-        <el-table-column prop="commit.author.date" label="Date" width="200"></el-table-column>
+        <el-table-column prop="commit.author.date" label="Date" width="200">
+            <template #default="{ row }">
+                {{ new Date(row.commit.author.date).toLocaleString() }}
+            </template>
+        </el-table-column>
     </el-table>
     <el-pagination
         :current-page="pageNum"

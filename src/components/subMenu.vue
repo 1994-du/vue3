@@ -3,22 +3,28 @@
     <div class="dx-sub-menu" v-if="hasChildren">
         <div class="dx-sub-menu-title" @click="toggleOpen">
             <div class="dx-sub-menu-title-left">
-                <SvgIcon v-if="menus.icon" :name="menus.icon" />
-                <span class="menu-title">{{ menus.name }}</span>
+                <SvgIcon v-if="menus.icon" :name="menus.icon" class="svg-icon22" />
+                <span v-if="!collapse" class="menu-title">{{ menus.name }}</span>
             </div>
-
-            <SvgIcon name="xiangyou" :class="menus.open ? 'open' : 'closed'" />
+            <SvgIcon v-if="!collapse" name="xiangyou" :class="menus.open ? 'open' : 'closed'" />
         </div>
 
-        <SubMenu v-if="menus.open" v-for="(item, index) in menus.children" :key="item.path || index" :menus="item"
-            :parent-path="fullPath" @menu-click="emitMenuClick" />
+        <SubMenu 
+            v-if="!collapse &&menus.open" 
+            v-for="(item, index) in menus.children" 
+            :key="item.path || index" 
+            :menus="item"
+            :parent-path="fullPath" 
+            :collapse="collapse"
+            @menu-click="emitMenuClick" 
+            style="padding-left:20px;"/>
     </div>
 
     <!-- 没有子菜单 -->
     <div v-else class="dx-menu-item" @click="handleLeafClick">
         <div class="dx-sub-menu-title">
-            <SvgIcon v-if="menus.icon" :name="menus.icon" />
-            <span class="menu-title">{{ menus.name }}</span>
+            <SvgIcon v-if="menus.icon" :name="menus.icon" class="svg-icon22" />
+            <span v-if="!collapse" class="menu-title">{{ menus.name }}</span>
         </div>
     </div>
 </template>
@@ -34,6 +40,10 @@ interface MenuClickEvent {
 }
 
 const props = defineProps({
+    collapse: {
+        type: Boolean,
+        default: false
+    },
     menus: {
         type: Object,
         required: true
@@ -90,22 +100,20 @@ const emitMenuClick = (payload: MenuClickEvent) => {
 
 <style lang="scss" scoped>
 .dx-menu-item {
-    height: 45px;
-
-    &:hover {
-        background-color: rgba(255, 255, 255, 0.1);
-    }
-
+    // height: 45px;
     .dx-sub-menu-title {
         cursor: pointer;
         user-select: none;
-        padding: 0 10px;
+        padding: 10px 15px;
         height: 100%;
         color: #fff;
         display: flex;
         align-items: center;
-
-        .svg-icon {
+        justify-content:unset!important;
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .svg-icon22 {
             font-size: 26px;
             flex-shrink: 0;
             margin-right: 10px;
@@ -115,10 +123,10 @@ const emitMenuClick = (payload: MenuClickEvent) => {
 
 .dx-sub-menu {
     .dx-sub-menu-title {
-        height: 45px;
+        // height: 45px;
         cursor: pointer;
         user-select: none;
-        padding: 0 10px;
+        padding: 10px 15px;
         color: #fff;
         display: flex;
         align-items: center;
@@ -133,18 +141,20 @@ const emitMenuClick = (payload: MenuClickEvent) => {
             align-items: center;
         }
 
-        .svg-icon {
+        .svg-icon22 {
             font-size: 26px;
             flex-shrink: 0;
             margin-right: 10px;
         }
 
         .open {
+            font-size: 26px;
             transform: rotate(90deg);
             transition: .2s;
         }
 
         .closed {
+            font-size: 26px;
             transition: .2s;
         }
     }

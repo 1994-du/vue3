@@ -4,6 +4,8 @@
             v-for="(item, index) in menuConfig"
             :key="item.path || index"
             :menus="item"
+            :collapse="collapse"
+            :active-path="activePath"
             parent-path=""
             @menu-click="handleSelect" />
     </div>

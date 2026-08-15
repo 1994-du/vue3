@@ -1,30 +1,31 @@
 <template>
-    <div class="modal_wrap" @click="closeModal">
+    <div class="modal_wrap" role="dialog" aria-modal="true" aria-label="搜索菜单" @click.self="closeModal">
         <div class="modal_inner">
             <div class="modal_input">
-                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 1024 1024">
-                    <path
-                        fill="#42b883"
-                        d="m795.904 750.72 124.992 124.928a32 32 0 0 1-45.248 45.248L750.656 795.904a416 416 0 1 1 45.248-45.248zM480 832a352 352 0 1 0 0-704 352 352 0 0 0 0 704">
-                    </path>
-                </svg>
+                <el-icon class="modal_search_icon"><Search /></el-icon>
                 <el-input
                     v-focus
                     v-model="menuIpt"
                     @compositionstart="setIpt(true)"
                     @compositionend="setIpt(false)"
                     @input="menuSearch(menuIpt)"
-                    placeholder="搜索菜单">
+                    placeholder="搜索菜单名称">
                 </el-input>
-                <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" @click="clearSearch">
-                    <line x1="0" y1="0" x2="20" y2="20" stroke="#42b883" stroke-width="2"/>
-                    <line x1="20" y1="0" x2="0" y2="20" stroke="#42b883" stroke-width="2"/>
-                </svg>
+                <button type="button" class="modal_close" aria-label="关闭搜索" title="关闭搜索" @click="closeSearch">
+                    <el-icon><Close /></el-icon>
+                </button>
             </div>
             <div class="modal_content">
-                <div class="modal_item" v-for="(item,index) in filterMenu" :key="index + 'r'" @click="toMenu(item.menuLink)">
-                    {{ item.menuName }}
-                </div>
+                <button
+                    type="button"
+                    class="modal_item"
+                    v-for="item in filterMenu"
+                    :key="item.menuLink"
+                    @click="toMenu(item.menuLink)">
+                    <span>{{ item.menuName }}</span>
+                    <el-icon><ArrowRight /></el-icon>
+                </button>
+                <div v-if="menuIpt && !filterMenu.length" class="modal_empty">未找到匹配菜单</div>
             </div>
         </div>
     </div>
@@ -33,6 +34,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { ArrowRight, Close, Search } from '@element-plus/icons-vue'
 import useUserInfoStore from '@/store/pinia/userInfo'
 import { resolveMenuFullPath } from '@/utils/menuRoute'
 
@@ -63,10 +65,13 @@ const clearSearch = () => {
     filterMenu.value = []
 }
 
-const closeModal = (e) => {
-    if (e.target.className === 'modal_wrap') {
-        emit('update:modelValue', false)
-    }
+const closeModal = () => {
+    emit('update:modelValue', false)
+}
+
+const closeSearch = () => {
+    clearSearch()
+    closeModal()
 }
 
 const transformData = (data, parentPath = '', arr = []) => {

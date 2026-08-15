@@ -1,170 +1,248 @@
 <template>
-    <ModalSearch v-if="isShowSearch" v-model="isShowSearch"/>
+    <ModalSearch v-if="isShowSearch" v-model="isShowSearch" />
     <div class="layout">
-        <div class="layout_menu" :class="{ collapsed: isCollapse }">
-            <div class="layout_menu_logo" @click="goHome">
-                <span v-show="!isCollapse">KNOWLEDGE ENGINE</span>
-                <span v-show="isCollapse">K&E</span>
-            </div>
+        <button
+            v-if="isMobileMenuOpen"
+            type="button"
+            class="menu-overlay"
+            aria-label="关闭导航"
+            @click="isMobileMenuOpen = false">
+        </button>
+
+        <aside
+            class="layout_menu"
+            :class="{
+                collapsed: isCollapse,
+                'mobile-open': isMobileMenuOpen
+            }">
+            <button type="button" class="layout_menu_logo" @click="goHome">
+                <span class="brand-mark">KE</span>
+                <span v-show="!isCollapse || isMobileMenuOpen" class="brand-copy">
+                    <strong>Knowledge Engine</strong>
+                    <small>Workspace</small>
+                </span>
+            </button>
+
             <div class="menu_scroll_container" ref="menuScrollContainerRef">
                 <NativeMenu
                     :menu-config="menuConfig"
-                    :collapse="isCollapse"
+                    :collapse="isCollapse && !isMobileMenuOpen"
                     :active-path="onRoutes"
                     @menu-click="handleMenuClick"
                 />
             </div>
-            <div class="custome_menu_btn" @click="collapse">
-                <el-icon v-if="!isCollapse"><ArrowLeft/></el-icon>
-                <el-icon v-if="isCollapse"><ArrowRight/></el-icon>
-                <span v-if="!isCollapse">收起</span>
-            </div>
-        </div>
-        <div class="layout_container">
-            <header>
+
+            <button
+                type="button"
+                class="custome_menu_btn"
+                :aria-label="isCollapse ? '展开导航' : '收起导航'"
+                :title="isCollapse ? '展开导航' : '收起导航'"
+                @click="collapse">
+                <el-icon v-if="!isCollapse"><ArrowLeft /></el-icon>
+                <el-icon v-else><ArrowRight /></el-icon>
+                <span v-if="!isCollapse">收起导航</span>
+            </button>
+        </aside>
+
+        <section class="layout_container">
+            <header class="topbar">
                 <div class="header_left">
-                    
+                    <button
+                        type="button"
+                        class="mobile-menu-button"
+                        aria-label="打开导航"
+                        title="打开导航"
+                        @click="isMobileMenuOpen = true">
+                        <el-icon><Menu /></el-icon>
+                    </button>
+                    <div class="route-heading">
+                        <span>Workspace</span>
+                        <strong>{{ currentPageTitle }}</strong>
+                    </div>
                 </div>
+
                 <div class="header_right">
-                    <HeaderSearch @click="openSearchModal"/>
-                    <ThemeSwitch/>
-                    <el-dropdown placement="bottom" @command="handleCommand">
-                        <el-avatar size="default" :src="`${preUrl}${userInfoStore.userInfo.avatar}`"></el-avatar>
+                    <HeaderSearch @click="openSearchModal" />
+                    <ThemeSwitch />
+                    <span class="topbar-divider" aria-hidden="true"></span>
+                    <el-dropdown placement="bottom-end" @command="handleCommand">
+                        <button type="button" class="user-trigger">
+                            <el-avatar :size="34" :src="avatarUrl">
+                                {{ userInitial }}
+                            </el-avatar>
+                            <span class="user-copy">
+                                <strong>{{ userInfoStore.userInfo.name || '用户' }}</strong>
+                                <small>当前账号</small>
+                            </span>
+                            <el-icon class="user-chevron"><ArrowDown /></el-icon>
+                        </button>
                         <template #dropdown>
                             <el-dropdown-menu>
-                                <el-dropdown-item disabled>{{ userInfoStore.userInfo.name }}</el-dropdown-item>
-                                <el-dropdown-item command="userInfo">个人信息</el-dropdown-item>
-                                <el-dropdown-item command="loginOut">退出登录</el-dropdown-item>
+                                <el-dropdown-item command="userInfo">
+                                    <el-icon><User /></el-icon>
+                                    个人信息
+                                </el-dropdown-item>
+                                <el-dropdown-item divided command="loginOut">
+                                    <el-icon><SwitchButton /></el-icon>
+                                    退出登录
+                                </el-dropdown-item>
                             </el-dropdown-menu>
                         </template>
                     </el-dropdown>
                 </div>
             </header>
-            <div class="layout_content">
-                <router-view></router-view>
-            </div>
-        </div>
+
+            <main class="layout_content">
+                <router-view />
+            </main>
+        </section>
     </div>
 </template>
+
 <script setup>
-    import ModalSearch from '@/components/ModalSearch.vue'
-    import HeaderSearch from './components/HeaderSearch.vue'
-    import ThemeSwitch from '@/components/ThemeSwitch.vue'
-    import NativeMenu from './components/NativeMenu.vue'
-    import { ArrowLeft, ArrowRight } from '@element-plus/icons-vue'
-    import { useRouter, useRoute } from 'vue-router'
-    import { computed, onMounted,ref, onBeforeUnmount, nextTick } from 'vue'
-    import useUserInfoStore from './store/pinia/userInfo'
-    import { loginOutEffect } from '@/utils/tokenManager'
-    import { toLoginOut } from '@/api/auth'
-    import { findDefaultPath } from '@/utils/generateRoutes'
+import ModalSearch from '@/components/ModalSearch.vue'
+import HeaderSearch from '@/components/HeaderSearch.vue'
+import ThemeSwitch from '@/components/ThemeSwitch.vue'
+import NativeMenu from '@/components/NativeMenu.vue'
+import {
+    ArrowDown,
+    ArrowLeft,
+    ArrowRight,
+    Menu,
+    SwitchButton,
+    User
+} from '@element-plus/icons-vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import useUserInfoStore from '@/store/pinia/userInfo'
+import { loginOutEffect } from '@/utils/tokenManager'
+import { toLoginOut } from '@/api/auth'
+import { findDefaultPath } from '@/utils/generateRoutes'
+import { resolveMenuFullPath } from '@/utils/menuRoute'
 
-    const preUrl = `${import.meta.env.VITE_PROXY}`.replace(/\/$/, '')
-    const userInfoStore = useUserInfoStore()
-    const router = useRouter()
-    const route = useRoute()
-    const menuScrollContainerRef = ref(null)
-    
-    const onRoutes = computed(()=>{
-        return route.path
-    })
-    
-    // 从 localStorage 恢复收起状态
-    const isCollapse=ref(JSON.parse(localStorage.getItem('menuCollapse') || 'false'))
-    const menuConfig = computed(() => userInfoStore.menus)
+const preUrl = `${import.meta.env.VITE_PROXY}`.replace(/\/$/, '')
+const userInfoStore = useUserInfoStore()
+const router = useRouter()
+const route = useRoute()
+const menuScrollContainerRef = ref(null)
+const isShowSearch = ref(false)
+const isMobileMenuOpen = ref(false)
+const isCollapse = ref(JSON.parse(localStorage.getItem('menuCollapse') || 'false'))
 
-    const collapse = function(){
-        isCollapse.value=!isCollapse.value
-        // 保存收起状态
-        localStorage.setItem('menuCollapse', JSON.stringify(isCollapse.value))
+const onRoutes = computed(() => route.path)
+const menuConfig = computed(() => userInfoStore.menus)
+const avatarUrl = computed(() => {
+    const avatar = userInfoStore.userInfo.avatar
+    if (!avatar) return ''
+    if (/^(https?:)?\/\//.test(avatar) || avatar.startsWith('data:')) return avatar
+    return `${preUrl}${avatar.startsWith('/') ? avatar : `/${avatar}`}`
+})
+const userInitial = computed(() => (userInfoStore.userInfo.name || 'U').trim().slice(0, 1).toUpperCase())
+
+const findMenuTitle = (menus, targetPath, parentPath = '') => {
+    for (const menu of menus) {
+        const fullPath = resolveMenuFullPath(parentPath, menu.path)
+        if (fullPath === targetPath) return menu.name
+        if (menu.children?.length) {
+            const childTitle = findMenuTitle(menu.children, targetPath, fullPath)
+            if (childTitle) return childTitle
+        }
     }
+    return ''
+}
 
-    const goHome = async () => {
-        const defaultPath = findDefaultPath(userInfoStore.menus)
-        if (route.path === defaultPath) return
+const currentPageTitle = computed(() => {
+    return route.meta.title || findMenuTitle(userInfoStore.menus, route.path) || '知识工作台'
+})
+
+const collapse = () => {
+    isCollapse.value = !isCollapse.value
+    localStorage.setItem('menuCollapse', JSON.stringify(isCollapse.value))
+}
+
+const goHome = async () => {
+    const defaultPath = findDefaultPath(userInfoStore.menus)
+    isMobileMenuOpen.value = false
+    if (route.path !== defaultPath) {
         await router.push(defaultPath)
     }
+}
 
-    const handleMenuClick = async (path) => {
-        console.log('handleMenuClick', path)
-        if (route.path === path) return
+const saveScrollPosition = () => {
+    if (!menuScrollContainerRef.value) return
+    localStorage.setItem('menuScrollPosition', JSON.stringify({
+        scrollTop: menuScrollContainerRef.value.scrollTop,
+        scrollLeft: menuScrollContainerRef.value.scrollLeft
+    }))
+}
 
-        // 保存当前菜单路径
-        localStorage.setItem('currentMenuPath', path)
-        // 保存当前滚动位置
-        saveScrollPosition()
-        await router.push(path)
+const restoreScrollPosition = () => {
+    let savedPosition = {}
+    try {
+        savedPosition = JSON.parse(localStorage.getItem('menuScrollPosition') || '{}')
+    } catch {
+        savedPosition = {}
     }
 
-    // 保存滚动位置
-    const saveScrollPosition = () => {
-        if (menuScrollContainerRef.value) {
-            localStorage.setItem('menuScrollPosition', JSON.stringify({
-                scrollTop: menuScrollContainerRef.value.scrollTop,
-                scrollLeft: menuScrollContainerRef.value.scrollLeft
-            }))
+    nextTick(() => {
+        if (menuScrollContainerRef.value && savedPosition.scrollTop !== undefined) {
+            menuScrollContainerRef.value.scrollTop = savedPosition.scrollTop
+            menuScrollContainerRef.value.scrollLeft = savedPosition.scrollLeft || 0
         }
+    })
+}
+
+const handleMenuClick = async (path) => {
+    isMobileMenuOpen.value = false
+    if (route.path === path) return
+    localStorage.setItem('currentMenuPath', path)
+    saveScrollPosition()
+    await router.push(path)
+}
+
+const openSearchModal = () => {
+    isShowSearch.value = true
+}
+
+const handleCommand = async (command) => {
+    if (command === 'loginOut') {
+        try {
+            const res = await toLoginOut({})
+            if (res.code === 200) await loginOutEffect()
+        } catch {
+            await loginOutEffect()
+        }
+        return
     }
 
-    // 恢复滚动位置
-    const restoreScrollPosition = () => {
-        const savedPosition = JSON.parse(localStorage.getItem('menuScrollPosition') || '{}')
-        nextTick(() => {
-            if (menuScrollContainerRef.value && savedPosition.scrollTop !== undefined) {
-                menuScrollContainerRef.value.scrollTop = savedPosition.scrollTop
-                menuScrollContainerRef.value.scrollLeft = savedPosition.scrollLeft
-            }
-        })
+    if (command === 'userInfo') {
+        await router.push('/userInfo')
     }
+}
 
-    // 滚动时自动保存位置
-    const handleScroll = () => {
-        saveScrollPosition()
-    }
-
-    let isShowSearch = ref(false)
-    // 打开搜索模态框
-    const openSearchModal = ()=>{
+const handleGlobalKeydown = (event) => {
+    if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'f') {
+        event.preventDefault()
         isShowSearch.value = true
     }
-    const handleCommand = function(command){
-        if(command=='loginOut'){
-            toLoginOut({}).then(res=>{
-                if(res.code==200){
-                    loginOutEffect()
-                }
-            })
-        }else if(command=='userInfo'){
-            router.push('/userInfo')
-        }
+    if (event.key === 'Escape') {
+        isShowSearch.value = false
+        isMobileMenuOpen.value = false
     }
-    // 初始化
-    onMounted(()=>{
-        // 恢复滚动位置
-        restoreScrollPosition()
-        // 绑定滚动事件
-        if (menuScrollContainerRef.value) {
-            menuScrollContainerRef.value.addEventListener('scroll', handleScroll)
-        }
-        window.addEventListener('keydown', (e) => {
-            if((e.ctrlKey||e.metaKey) && e.key === 'f'){
-                e.preventDefault()
-                isShowSearch.value = true
-            }
-            if(e.key === 'Escape'){
-                isShowSearch.value = false
-            }
-        })
-    })
-    
-    onBeforeUnmount(() => {
-        // 移除滚动事件
-        if (menuScrollContainerRef.value) {
-            menuScrollContainerRef.value.removeEventListener('scroll', handleScroll)
-        }
-    })
+}
+
+onMounted(() => {
+    restoreScrollPosition()
+    menuScrollContainerRef.value?.addEventListener('scroll', saveScrollPosition)
+    window.addEventListener('keydown', handleGlobalKeydown)
+})
+
+onBeforeUnmount(() => {
+    menuScrollContainerRef.value?.removeEventListener('scroll', saveScrollPosition)
+    window.removeEventListener('keydown', handleGlobalKeydown)
+})
 </script>
 
 <style lang="scss">
-@use "@/styles/home.scss";
+@use '@/styles/home.scss';
 </style>

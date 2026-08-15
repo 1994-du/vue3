@@ -1,81 +1,75 @@
 <template>
-    <div class="header_inner">
-        <button class="header_search">
-            <span class="search_icon select-none">
-                <el-icon><Search/></el-icon>
-                <span class="search_text">搜索</span>
-            </span>
-            <span class="search_btn">
-                <span>{{currentKey}}F</span>
-            </span>
+    <el-tooltip content="搜索菜单" placement="bottom">
+        <button type="button" class="header-search" aria-label="搜索菜单">
+            <el-icon><Search /></el-icon>
+            <span class="header-search__label">搜索</span>
+            <kbd>{{ currentKey }} F</kbd>
         </button>
-    </div>
+    </el-tooltip>
 </template>
 
-<script setup>
-import { Search } from '@element-plus/icons-vue'
+<script setup lang="ts">
 import { onMounted, ref } from 'vue'
-let currentKey = ref('Ctrl')
-// 键盘事件
-onMounted(()=>{
-    if(window.navigator.userAgent.includes('Macintosh')){
-        currentKey.value = '\u2318';
-    }else{
-        currentKey.value = 'Ctrl'
-    }
+import { Search } from '@element-plus/icons-vue'
+
+const currentKey = ref('Ctrl')
+
+onMounted(() => {
+    currentKey.value = window.navigator.userAgent.includes('Macintosh') ? '⌘' : 'Ctrl'
 })
 </script>
-<style scoped lang='less'>
-@headerTextColor:rgba(235,235,235,0.6);
 
-.header_inner{
+<style scoped lang="scss">
+.header-search {
+    height: 36px;
+    padding: 0 9px;
     display: flex;
     align-items: center;
-    height: 100%;
-    .header_search{
-        height: 100%;
-        border: none;
-        background: transparent;
-        display: flex;
-        align-items: center;
-        outline: none;
-        .search_icon{
-            display: flex;
-            align-items: center;
-            font-size: 13px;
-            color: var(--fontColor);
-            .vue3-icon{
-                // margin-right: 10px;
-                color: var(--fontColor);
-            }
-            .search_text{
-                margin-right: 10px;
-            }
-        }
-        .search_btn{
-            color: @headerTextColor;
-            height: 22px;
-            line-height: 22px;
-            padding: 0 6px;
-            border-width: 1px;
-            border-style: solid;
-            border-color: var(--borderColor);
-            border-radius: 4px;
-            font-size: 12px;
-        }
-        &:hover{
-            .search_icon{
-                color: var(--color);
-                font-weight: bold;
-                .vue3-icon{
-                    color: var(--color);
-                }
-            }
-            .search_btn{
-                border-color: var(--color);
-                color: var(--color);
-            }
-        }
+    gap: 7px;
+    color: var(--text-secondary);
+    background: transparent;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+}
+
+.header-search:hover {
+    color: var(--brand);
+    background: var(--brand-soft);
+    border-color: color-mix(in srgb, var(--brand) 40%, var(--border-color));
+}
+
+.header-search__label {
+    font-size: 12px;
+    font-weight: 600;
+}
+
+kbd {
+    min-width: 34px;
+    height: 20px;
+    padding: 0 5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-tertiary);
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xs);
+    font-family: var(--font-sans);
+    font-size: 10px;
+    line-height: 1;
+}
+
+@media (max-width: 620px) {
+    .header-search {
+        width: 36px;
+        padding: 0;
+        justify-content: center;
+    }
+
+    .header-search__label,
+    kbd {
+        display: none;
     }
 }
 </style>

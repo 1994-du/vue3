@@ -1,13 +1,12 @@
 <template>
     <div class="menu-management-container">
-        <div class="page-header">
-            <h2>菜单管理</h2>
-            <div class="header-actions">
+        <PageHeader title="菜单管理">
+            <template #actions>
                 <el-button type="primary" @click="handleAddMenu(null)" class="add-btn">
                     <el-icon><Plus /></el-icon>新建菜单
                 </el-button>
-            </div>
-        </div>
+            </template>
+        </PageHeader>
         
         <div class="table-card">
             <el-table 
@@ -32,9 +31,15 @@
                 <el-table-column label="操作" width="200" fixed="right">
                     <template #default="scope">
                         <div class="table-actions">
-                            <el-button link type="primary" @click="handleAddMenu(scope.row)" class="action-btn">新增</el-button>
-                            <el-button link type="primary" @click="handleEditMenu(scope.row)" class="action-btn">编辑</el-button>
-                            <el-button link type="danger" @click="handleDeleteMenu(scope.row)" class="action-btn">删除</el-button>
+                            <el-button link type="primary" @click="handleAddMenu(scope.row)" class="action-btn">
+                                <el-icon><Plus /></el-icon>新增
+                            </el-button>
+                            <el-button link type="primary" @click="handleEditMenu(scope.row)" class="action-btn">
+                                <el-icon><Edit /></el-icon>编辑
+                            </el-button>
+                            <el-button link type="danger" @click="handleDeleteMenu(scope.row)" class="action-btn">
+                                <el-icon><Delete /></el-icon>删除
+                            </el-button>
                         </div>
                     </template>
                 </el-table-column>
@@ -95,7 +100,7 @@
 import { ref, shallowRef, onMounted } from 'vue'
 import { getMenus, addMenu, setMenu, deleteMenu } from '@/api/menus'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { Plus } from '@element-plus/icons-vue'
+import { Delete, Edit, Plus } from '@element-plus/icons-vue'
 
 // 定义菜单数据接口
 interface MenuItem {

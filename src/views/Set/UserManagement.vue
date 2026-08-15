@@ -1,28 +1,32 @@
 <template>
     <div class="user-management-container">
-        <!-- 操作栏 -->
-        <div class="action-bar">
-            <el-button type="primary" @click="createUser" class="create-btn">
-                <el-icon><Plus /></el-icon>
-                新建用户
-            </el-button>
-            <div class="search-container">
+        <PageHeader title="用户管理">
+            <template #actions>
                 <el-input
                     v-model="searchKeyword"
                     placeholder="搜索用户名"
                     clearable
-                    prefix-icon="el-icon-search"
+                    :prefix-icon="Search"
                     @keyup.enter="handleSearch"
+                    @clear="handleSearch"
                     class="search-input"
                 >
                     <template #append>
-                        <el-button @click="handleSearch" type="primary" :disabled="!searchKeyword">
-                            搜索
+                        <el-button
+                            aria-label="搜索用户"
+                            title="搜索用户"
+                            @click="handleSearch"
+                            :disabled="!searchKeyword">
+                            <el-icon><Search /></el-icon>
                         </el-button>
                     </template>
                 </el-input>
-            </div>
-        </div>
+                <el-button type="primary" @click="createUser" class="create-btn">
+                    <el-icon><Plus /></el-icon>
+                    新建用户
+                </el-button>
+            </template>
+        </PageHeader>
         
         <!-- 数据表格 -->
         <el-card class="user-table-card" shadow="hover">
@@ -216,7 +220,7 @@ import { onMounted, ref } from 'vue'
 import axios from 'axios'
 import { getUsers,getRolesDict,updateUser,addUser, delUser,updateAvatar,toResetPassword } from '@/api/api'
 import { ElMessage } from 'element-plus'
-import { Plus, Edit, Delete, Refresh } from '@element-plus/icons-vue'
+import { Plus, Edit, Delete, Refresh, Search } from '@element-plus/icons-vue'
 
 // 定义用户数据接口
 interface UserItem {

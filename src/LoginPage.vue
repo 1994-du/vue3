@@ -1,116 +1,101 @@
 <template>
-    <div class="login-page">
-        <!-- 左侧品牌区 -->
-        <div class="login-brand">
-            <div class="brand-bg">
-                <div class="floating-shape shape-1"></div>
-                <div class="floating-shape shape-2"></div>
-                <div class="floating-shape shape-3"></div>
-            </div>
+    <main class="login-page">
+        <section class="login-brand" aria-labelledby="product-title">
+            <div class="brand-grid" aria-hidden="true"></div>
             <div class="brand-content">
-                <div class="brand-logo">
-                    <svg viewBox="0 0 120 120" fill="none">
-                        <circle cx="60" cy="60" r="54" stroke="url(#bg)" stroke-width="3" />
-                        <path d="M36 60L52 76L84 44" stroke="url(#bg)" stroke-width="4.5" stroke-linecap="round"
-                            stroke-linejoin="round" />
-                        <circle cx="60" cy="60" r="4" fill="url(#bg)" />
-                        <circle cx="60" cy="60" r="12" stroke="url(#bg)" stroke-width="1.5" stroke-dasharray="5 4">
-                            <animateTransform attributeName="transform" type="rotate" from="0 60 60" to="360 60 60"
-                                dur="12s" repeatCount="indefinite" />
-                        </circle>
-                        <defs>
-                            <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#00d4ff" />
-                                <stop offset="50%" stop-color="#6366f1" />
-                                <stop offset="100%" stop-color="#06b6d4" />
-                            </linearGradient>
-                        </defs>
-                    </svg>
+                <span class="brand-index">KE / WORKSPACE</span>
+                <div class="brand-lockup">
+                    <span class="brand-mark-large">KE</span>
+                    <span class="brand-rule" aria-hidden="true"></span>
                 </div>
-                <h1 class="brand-title">KNOWLEDGE ENGINE</h1>
-                <p class="brand-subtitle">构建你的知识体系，让学习更高效</p>
-                <div class="brand-stats">
-                    <div class="stat-item">
-                        <span class="stat-num">128+</span>
-                        <span class="stat-label">知识模块</span>
-                    </div>
-                    <div class="stat-divider"></div>
-                    <div class="stat-item">
-                        <span class="stat-num">50K+</span>
-                        <span class="stat-label">活跃用户</span>
-                    </div>
-                    <div class="stat-divider"></div>
-                    <div class="stat-item">
-                        <span class="stat-num">99%</span>
-                        <span class="stat-label">好评率</span>
-                    </div>
+                <h1 id="product-title">Knowledge Engine</h1>
+                <p>把零散知识整理成清晰、可检索、可复用的工作空间。</p>
+                <div class="brand-topics" aria-label="知识主题">
+                    <span>Engineering</span>
+                    <span>Frontend</span>
+                    <span>Operations</span>
                 </div>
             </div>
-        </div>
+            <div class="brand-footer">
+                <span>Internal Knowledge Workspace</span>
+                <span>2026</span>
+            </div>
+        </section>
 
-        <!-- 右侧登录区 -->
-        <div class="login-form-wrapper">
-            <div class="form-card">
+        <section class="login-form-wrapper" aria-labelledby="login-title">
+            <div class="mobile-brand">
+                <span>KE</span>
+                Knowledge Engine
+            </div>
+
+            <div class="form-panel">
                 <div class="form-header">
-                    <h2>欢迎回来</h2>
-                    <p>请登录您的账号以继续</p>
+                    <span class="form-kicker">ACCOUNT ACCESS</span>
+                    <h2 id="login-title">账户登录</h2>
+                    <p>使用你的工作空间账号继续</p>
                 </div>
 
-                <el-form :model="loginObj" ref="loginFormRef" class="login-form">
-                    <div class="field-group">
-                        <label class="field-label">
-                            <el-icon>
-                                <User />
-                            </el-icon>
-                            账号
-                        </label>
-                        <el-input type="text" v-focus placeholder="请输入账号" v-model="loginObj.username"
-                            :prefix-icon="User" size="large" />
-                    </div>
+                <el-form :model="loginObj" label-position="top" class="login-form">
+                    <el-form-item label="账号">
+                        <el-input
+                            v-focus
+                            v-model="loginObj.username"
+                            type="text"
+                            autocomplete="username"
+                            placeholder="请输入账号"
+                            :prefix-icon="User"
+                            size="large"
+                            @keyup.enter="handleLogin"
+                        />
+                    </el-form-item>
 
-                    <div class="field-group">
-                        <label class="field-label">
-                            <el-icon>
-                                <Lock />
-                            </el-icon>
-                            密码
-                        </label>
-                        <el-input type="password" placeholder="请输入密码" v-model="loginObj.password" :prefix-icon="Lock"
-                            size="large" show-password @keyup.enter="handleLogin" />
-                    </div>
+                    <el-form-item label="密码">
+                        <el-input
+                            v-model="loginObj.password"
+                            type="password"
+                            autocomplete="current-password"
+                            placeholder="请输入密码"
+                            :prefix-icon="Lock"
+                            size="large"
+                            show-password
+                            @keyup.enter="handleLogin"
+                        />
+                    </el-form-item>
 
                     <div class="form-options">
                         <el-checkbox v-model="loginObj.remember">记住密码</el-checkbox>
                     </div>
 
-                    <button type="button" class="btn-login" @click="handleLogin" :class="{ loading: isLoading }">
-                        <span v-if="!isLoading">登 录</span>
-                        <span v-else class="btn-spinner"></span>
-                        <div class="btn-glow"></div>
-                    </button>
+                    <el-button
+                        type="primary"
+                        size="large"
+                        class="login-submit"
+                        :loading="isLoading"
+                        @click="handleLogin">
+                        登录
+                    </el-button>
 
                     <div class="form-footer">
-                        <span class="footer-text">还没有账号？</span>
-                        <a href="javascript:;" class="link-register" @click="handleRegistry">立即注册</a>
+                        <span>还没有账号？</span>
+                        <el-button link type="primary" @click="handleRegistry">立即注册</el-button>
                     </div>
                 </el-form>
             </div>
-        </div>
-    </div>
+
+            <p class="login-legal">Knowledge Engine · Secure workspace access</p>
+        </section>
+    </main>
 </template>
 
 <script setup lang="ts">
+import { onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { ref, reactive, onMounted } from 'vue'
-import { User, Lock } from '@element-plus/icons-vue'
+import { Lock, User } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
 import { toLogin, toRegistry } from '@/api/auth'
 import useUserInfoStore from '@/store/pinia/userInfo'
 import { parseJWT, setupTokenExpiryCheck } from '@/utils/tokenManager'
 import { initRoutes } from '@/utils/generateRoutes'
-import { ElMessage } from 'element-plus'
-
-const userInfoStore = useUserInfoStore()
-const router = useRouter()
 
 interface LoginForm {
     username: string
@@ -118,29 +103,38 @@ interface LoginForm {
     remember: boolean
 }
 
-const loginFormRef = ref<any>(null)
+const userInfoStore = useUserInfoStore()
+const router = useRouter()
 const isLoading = ref(false)
-
-let loginObj = reactive<LoginForm>({
+const loginObj = reactive<LoginForm>({
     username: '',
     password: '',
     remember: false
 })
 
-// 恢复记住的凭据
 onMounted(() => {
     const saved = localStorage.getItem('loginCredentials')
-    if (saved) {
-        try {
-            const creds: LoginForm = JSON.parse(saved)
-            loginObj.username = creds.username || ''
-            loginObj.password = creds.password || ''
-            loginObj.remember = creds.remember || false
-        } catch { }
+    if (!saved) return
+
+    try {
+        const credentials: LoginForm = JSON.parse(saved)
+        loginObj.username = credentials.username || ''
+        loginObj.password = credentials.password || ''
+        loginObj.remember = Boolean(credentials.remember)
+    } catch {
+        localStorage.removeItem('loginCredentials')
     }
 })
 
-function saveCredentials(): void {
+const validateCredentials = (): boolean => {
+    if (!loginObj.username.trim() || !loginObj.password) {
+        ElMessage.warning('请输入账号和密码')
+        return false
+    }
+    return true
+}
+
+const saveCredentials = (): void => {
     if (loginObj.remember) {
         localStorage.setItem('loginCredentials', JSON.stringify(loginObj))
     } else {
@@ -148,31 +142,40 @@ function saveCredentials(): void {
     }
 }
 
-async function handleLogin(): Promise<void> {
+const handleLogin = async (): Promise<void> => {
+    if (!validateCredentials() || isLoading.value) return
+
     isLoading.value = true
     try {
         const res: any = await toLogin(loginObj)
-        console.log('登录', res)
-        const { token, menus, username, avatar } = res.data
-
-        if (res.code === 200) {
-            saveCredentials()
-            userInfoStore.setMenus(menus)
-            userInfoStore.setUserInfo({ name: username, avatar })
-            parseJWT(token)
-            setupTokenExpiryCheck()
-            const defaultPath = await initRoutes(menus)
-            await router.replace(defaultPath)
-        }else{
-            ElMessage.error(res.message || '登录失败，请检查账号密码')
+        if (res.code !== 200) {
+            ElMessage.error(res.message || res.msg || '登录失败，请检查账号密码')
+            return
         }
+
+        const { token, menus = [], username, avatar } = res.data || {}
+        saveCredentials()
+        userInfoStore.setMenus(menus)
+        userInfoStore.setUserInfo({ name: username, avatar })
+        parseJWT(token)
+        setupTokenExpiryCheck()
+        const defaultPath = await initRoutes(menus)
+        await router.replace(defaultPath)
     } finally {
         isLoading.value = false
     }
 }
 
-function handleRegistry(): void {
-    toLogin(loginObj).then((res: any) => console.log('注册', res))
+const handleRegistry = async (): Promise<void> => {
+    if (!validateCredentials()) return
+
+    const res: any = await toRegistry({
+        username: loginObj.username,
+        password: loginObj.password
+    })
+    if (res.code === 200) {
+        ElMessage.success(res.msg || '注册成功，请登录')
+    }
 }
 </script>
 

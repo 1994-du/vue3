@@ -1,36 +1,52 @@
 <template>
-    <!-- 有子菜单 -->
-    <div class="dx-sub-menu" v-if="hasChildren">
-        <div class="dx-sub-menu-title" @click="toggleOpen">
-            <div class="dx-sub-menu-title-left">
-                <SvgIcon v-if="menus.icon" :name="menus.icon" class="svg-icon22" />
-                <span v-if="!collapse" class="menu-title">{{ menus.name }}</span>
-            </div>
-            <SvgIcon v-if="!collapse" name="xiangyou" :class="menus.open ? 'open' : 'closed'" />
-        </div>
+    <div v-if="hasChildren" class="menu-group">
+        <button
+            type="button"
+            class="menu-row menu-row--parent"
+            :class="{ 'is-branch-active': isBranchActive }"
+            :title="collapse ? menus.name : undefined"
+            @click="toggleOpen">
+            <span class="menu-row__main">
+                <SvgIcon v-if="menus.icon" :name="menus.icon" class="menu-row__icon" />
+                <span v-else class="menu-row__dot" aria-hidden="true"></span>
+                <span v-if="!collapse" class="menu-row__label">{{ menus.name }}</span>
+            </span>
+            <el-icon v-if="!collapse" class="menu-row__arrow" :class="{ 'is-open': isOpen }">
+                <ArrowRight />
+            </el-icon>
+        </button>
 
-        <SubMenu 
-            v-if="!collapse &&menus.open" 
-            v-for="(item, index) in menus.children" 
-            :key="item.path || index" 
-            :menus="item"
-            :parent-path="fullPath" 
-            :collapse="collapse"
-            @menu-click="emitMenuClick" 
-            style="padding-left:20px;"/>
+        <div v-show="!collapse && isOpen" class="menu-children">
+            <SubMenu
+                v-for="(item, index) in menus.children"
+                :key="item.path || index"
+                :menus="item"
+                :parent-path="fullPath"
+                :collapse="collapse"
+                :active-path="activePath"
+                @menu-click="emitMenuClick"
+            />
+        </div>
     </div>
 
-    <!-- 没有子菜单 -->
-    <div v-else class="dx-menu-item" @click="handleLeafClick">
-        <div class="dx-sub-menu-title">
-            <SvgIcon v-if="menus.icon" :name="menus.icon" class="svg-icon22" />
-            <span v-if="!collapse" class="menu-title">{{ menus.name }}</span>
-        </div>
-    </div>
+    <button
+        v-else
+        type="button"
+        class="menu-row menu-row--leaf"
+        :class="{ 'is-active': isActive }"
+        :title="collapse ? menus.name : undefined"
+        @click="handleLeafClick">
+        <span class="menu-row__main">
+            <SvgIcon v-if="menus.icon" :name="menus.icon" class="menu-row__icon" />
+            <span v-else class="menu-row__dot" aria-hidden="true"></span>
+            <span v-if="!collapse" class="menu-row__label">{{ menus.name }}</span>
+        </span>
+    </button>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
+import { ArrowRight } from '@element-plus/icons-vue'
 import SvgIcon from './SvgIcon/index.vue'
 import { resolveMenuFullPath } from '@/utils/menuRoute'
 
@@ -51,37 +67,55 @@ const props = defineProps({
     parentPath: {
         type: String,
         default: ''
+    },
+    activePath: {
+        type: String,
+        default: ''
     }
 })
 
 const emit = defineEmits<{
-    (e: 'menu-click', payload: MenuClickEvent): void
+    (event: 'menu-click', payload: MenuClickEvent): void
 }>()
 
-/**
- * 是否存在子菜单
- */
-const hasChildren = computed(() => {
-    return !!props.menus.children?.length
+const fullPath = computed(() => resolveMenuFullPath(props.parentPath, props.menus.path))
+const hasChildren = computed(() => Boolean(props.menus.children?.length))
+const isActive = computed(() => props.activePath === fullPath.value)
+const isBranchActive = computed(() => {
+    return props.activePath === fullPath.value || props.activePath.startsWith(fullPath.value + '/')
 })
 
-/**
- * 当前菜单完整路径
- */
-const fullPath = computed(() => {
-    return resolveMenuFullPath(props.parentPath, props.menus.path)
-})
-
-/**
- * 展开/收起
- */
-const toggleOpen = () => {
-    props.menus.open = !props.menus.open
+const readInitialOpenState = (): boolean => {
+    try {
+        const menuState = JSON.parse(localStorage.getItem('menuState') || '{}')
+        return Boolean(menuState[fullPath.value] ?? props.menus.open ?? isBranchActive.value)
+    } catch {
+        return Boolean(props.menus.open || isBranchActive.value)
+    }
 }
 
-/**
- * 点击叶子菜单
- */
+const isOpen = ref(readInitialOpenState())
+
+watch(isBranchActive, active => {
+    if (active) isOpen.value = true
+})
+
+const saveOpenState = () => {
+    let menuState: Record<string, boolean> = {}
+    try {
+        menuState = JSON.parse(localStorage.getItem('menuState') || '{}')
+    } catch {
+        menuState = {}
+    }
+    menuState[fullPath.value] = isOpen.value
+    localStorage.setItem('menuState', JSON.stringify(menuState))
+}
+
+const toggleOpen = () => {
+    isOpen.value = !isOpen.value
+    saveOpenState()
+}
+
 const handleLeafClick = () => {
     emitMenuClick({
         menu: props.menus,
@@ -89,74 +123,120 @@ const handleLeafClick = () => {
     })
 }
 
-/**
- * 统一事件出口
- * 当前点击、子组件点击都走这里
- */
 const emitMenuClick = (payload: MenuClickEvent) => {
     emit('menu-click', payload)
 }
 </script>
 
 <style lang="scss" scoped>
-.dx-menu-item {
-    // height: 45px;
-    .dx-sub-menu-title {
-        cursor: pointer;
-        user-select: none;
-        padding: 10px 15px;
-        height: 100%;
-        color: #fff;
-        display: flex;
-        align-items: center;
-        justify-content:unset!important;
-        &:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-        .svg-icon22 {
-            font-size: 26px;
-            flex-shrink: 0;
-            margin-right: 10px;
-        }
-    }
+.menu-group,
+.menu-children {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 }
 
-.dx-sub-menu {
-    .dx-sub-menu-title {
-        // height: 45px;
-        cursor: pointer;
-        user-select: none;
-        padding: 10px 15px;
-        color: #fff;
-        display: flex;
-        align-items: center;
+.menu-children {
+    position: relative;
+    margin: 2px 0 4px 17px;
+    padding-left: 10px;
+}
+
+.menu-children::before {
+    content: '';
+    position: absolute;
+    inset: 2px auto 2px 0;
+    width: 1px;
+    background: #35443f;
+}
+
+.menu-row {
+    width: 100%;
+    min-width: 0;
+    height: 40px;
+    padding: 0 11px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    color: #aebdb7;
+    background: transparent;
+    border: 0;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    text-align: left;
+    transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.menu-row:hover,
+.menu-row.is-branch-active {
+    color: #f6faf8;
+    background: var(--sidebar-hover);
+}
+
+.menu-row.is-active {
+    color: #123029;
+    background: var(--sidebar-active);
+    font-weight: 700;
+}
+
+.menu-row__main {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.menu-row__icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    font-size: 18px;
+}
+
+.menu-row__dot {
+    width: 6px;
+    height: 6px;
+    margin: 0 6px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.55;
+}
+
+.menu-row__label {
+    min-width: 0;
+    overflow: hidden;
+    font-size: 13px;
+    line-height: 1.3;
+    font-weight: 600;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.menu-row__arrow {
+    flex-shrink: 0;
+    font-size: 12px;
+    transition: transform var(--transition-fast);
+}
+
+.menu-row__arrow.is-open {
+    transform: rotate(90deg);
+}
+
+:global(.layout_menu.collapsed) .menu-row {
+    justify-content: center;
+    padding: 0;
+}
+
+:global(.layout_menu.collapsed) .menu-row__main {
+    justify-content: center;
+}
+
+@media (max-width: 900px) {
+    :global(.layout_menu.collapsed) .menu-row {
         justify-content: space-between;
-
-        &:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .dx-sub-menu-title-left {
-            display: flex;
-            align-items: center;
-        }
-
-        .svg-icon22 {
-            font-size: 26px;
-            flex-shrink: 0;
-            margin-right: 10px;
-        }
-
-        .open {
-            font-size: 26px;
-            transform: rotate(90deg);
-            transition: .2s;
-        }
-
-        .closed {
-            font-size: 26px;
-            transition: .2s;
-        }
+        padding: 0 11px;
     }
 }
 </style>

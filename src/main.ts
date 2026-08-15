@@ -16,6 +16,8 @@ import '@1994-du/vue3-ui/lib/theme.css'
 import ElementPlus from 'element-plus'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import './styles/element_plus.scss'
+import './styles/design-system.scss'
+import './styles/admin-page.scss'
 
 // 工具
 import '@/utils/fontSize'

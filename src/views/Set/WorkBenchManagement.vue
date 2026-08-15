@@ -1,11 +1,13 @@
 <template>
     <div class="workbench-management-container">
-        <div v-if="isAdmin" class="action-bar">
-            <el-button type="primary" @click="openCreateDialog" class="create-btn">
-                <el-icon><Plus /></el-icon>
-                新建工作台
-            </el-button>
-        </div>
+        <PageHeader title="工作台管理">
+            <template v-if="isAdmin" #actions>
+                <el-button type="primary" @click="openCreateDialog" class="create-btn">
+                    <el-icon><Plus /></el-icon>
+                    新建工作台
+                </el-button>
+            </template>
+        </PageHeader>
 
         <el-card class="workbench-table-card" shadow="hover">
             <el-table

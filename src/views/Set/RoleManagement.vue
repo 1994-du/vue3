@@ -1,28 +1,32 @@
 <template>
     <div class="role-management-container">
-        <!-- 操作栏 -->
-        <div class="action-bar">
-            <el-button type="primary" @click="createRole" class="create-btn">
-                <el-icon><Plus /></el-icon>
-                新建角色
-            </el-button>
-            <div class="search-container">
+        <PageHeader title="角色管理">
+            <template #actions>
                 <el-input
                     v-model="searchKeyword"
                     placeholder="搜索角色名称"
                     clearable
-                    prefix-icon="el-icon-search"
+                    :prefix-icon="Search"
                     @keyup.enter="handleSearch"
+                    @clear="handleSearch"
                     class="search-input"
                 >
                     <template #append>
-                        <el-button @click="handleSearch" type="primary" :disabled="!searchKeyword">
-                            搜索
+                        <el-button
+                            aria-label="搜索角色"
+                            title="搜索角色"
+                            @click="handleSearch"
+                            :disabled="!searchKeyword">
+                            <el-icon><Search /></el-icon>
                         </el-button>
                     </template>
                 </el-input>
-            </div>
-        </div>
+                <el-button type="primary" @click="createRole" class="create-btn">
+                    <el-icon><Plus /></el-icon>
+                    新建角色
+                </el-button>
+            </template>
+        </PageHeader>
         
         <!-- 数据表格 -->
         <el-card class="role-table-card" shadow="hover">
@@ -125,7 +129,7 @@ import { getRoles,setRole,addRole, delRole } from '../../api/role'
 // @ts-ignore
 import { addMenu, getMenuTree } from '../../api/menus'
 import { ElMessage } from 'element-plus'
-import { Plus, Edit, Delete } from '@element-plus/icons-vue'
+import { Plus, Edit, Delete, Search } from '@element-plus/icons-vue'
 
 // 定义菜单树节点接口
 interface MenuNode {

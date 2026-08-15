@@ -1,0 +1,316 @@
+.user-management-container,
+.role-management-container,
+.menu-management-container,
+.org-structure-container,
+.workbench-management-container {
+    min-height: 100% !important;
+    padding: 0 !important;
+    color: var(--text-primary);
+    background: transparent !important;
+}
+
+.action-bar,
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.page-header {
+    min-height: 48px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.page-header h2 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 20px;
+    line-height: 1.3;
+    font-weight: 700;
+}
+
+.header-actions,
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.search-input {
+    width: 280px !important;
+}
+
+.search-input .el-input-group__append {
+    padding: 0 4px;
+    background: transparent;
+    border: 0;
+}
+
+.search-input .el-input-group__append .el-button {
+    min-height: 30px;
+}
+
+.table-card,
+.user-table-card,
+.role-table-card,
+.workbench-table-card {
+    overflow: hidden;
+    margin-bottom: 16px;
+    border: 1px solid var(--border-color) !important;
+    border-radius: var(--radius-md) !important;
+    background: var(--surface) !important;
+    box-shadow: none !important;
+}
+
+.table-card {
+    padding: 0 !important;
+}
+
+.user-table-card .el-card__body,
+.role-table-card .el-card__body,
+.workbench-table-card .el-card__body {
+    padding: 0 !important;
+}
+
+.table-card .el-table,
+.user-table-card .el-table,
+.role-table-card .el-table,
+.workbench-table-card .el-table {
+    border: 0 !important;
+    border-radius: 0 !important;
+}
+
+.user-management-container .el-table th.el-table__cell,
+.role-management-container .el-table th.el-table__cell,
+.menu-management-container .el-table th.el-table__cell,
+.org-structure-container .el-table th.el-table__cell,
+.workbench-management-container .el-table th.el-table__cell {
+    color: var(--text-primary) !important;
+    background: var(--surface-subtle) !important;
+    border-bottom-color: var(--border-color) !important;
+}
+
+.user-management-container .el-table .even-row,
+.role-management-container .el-table .even-row,
+.workbench-management-container .el-table .even-row,
+.user-management-container .el-table .odd-row,
+.role-management-container .el-table .odd-row,
+.workbench-management-container .el-table .odd-row {
+    background: var(--surface) !important;
+}
+
+.user-management-container .el-table__row:hover > td.el-table__cell,
+.role-management-container .el-table__row:hover > td.el-table__cell,
+.menu-management-container .el-table__row:hover > td.el-table__cell,
+.org-structure-container .el-table__row:hover > td.el-table__cell,
+.workbench-management-container .el-table__row:hover > td.el-table__cell {
+    background: var(--brand-soft) !important;
+}
+
+.table-card .el-table__inner-wrapper::before,
+.user-table-card .el-table__inner-wrapper::before,
+.role-table-card .el-table__inner-wrapper::before,
+.workbench-table-card .el-table__inner-wrapper::before {
+    display: none;
+}
+
+.table-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 3px;
+    flex-wrap: wrap;
+}
+
+.action-btn {
+    margin: 0 !important;
+    padding: 4px 5px !important;
+    font-size: 12px;
+}
+
+.pagination-container {
+    min-height: 58px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    border-top: 1px solid var(--border-color) !important;
+    background: var(--surface-subtle) !important;
+}
+
+.pagination-container .el-pagination {
+    padding: 0;
+}
+
+.user-info,
+.role-info,
+.org-name {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.avatar-small {
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+    object-fit: cover;
+    border-radius: 50%;
+    background: var(--brand-soft);
+}
+
+.username {
+    color: var(--text-primary);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.gender-tag {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    padding: 0 8px;
+    border-radius: var(--radius-xs);
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.gender-tag.male {
+    color: #24618a;
+    background: #e6f2fa;
+}
+
+.gender-tag.female {
+    color: #9d4c6b;
+    background: #faedf2;
+}
+
+.org-icon {
+    color: var(--brand);
+}
+
+.role-tag {
+    font-size: 12px;
+}
+
+.user-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.link-text {
+    color: var(--brand) !important;
+    word-break: break-all;
+}
+
+.text-muted {
+    color: var(--text-tertiary);
+    font-size: 12px;
+}
+
+.table-icon,
+.image-error {
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    object-fit: cover;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background: var(--surface-subtle);
+}
+
+.image-error {
+    color: var(--text-tertiary);
+    font-size: 10px;
+}
+
+.edit_user_form .el-form-item,
+.org-form .el-form-item {
+    margin-bottom: 18px;
+}
+
+.avatar,
+.edit_img {
+    object-fit: cover;
+    border-radius: 50%;
+    background: var(--brand-soft);
+}
+
+.edit_img {
+    border: 2px solid var(--brand-soft);
+}
+
+.dialog-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.user-select {
+    width: 100%;
+}
+
+.icon-uploader .el-upload {
+    width: 82px;
+    height: 82px;
+    overflow: hidden;
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+}
+
+.icon-uploader .el-upload:hover {
+    border-color: var(--brand);
+}
+
+.icon-placeholder,
+.icon-preview {
+    width: 82px;
+    height: 82px;
+}
+
+.icon-placeholder {
+    display: grid;
+    place-items: center;
+    color: var(--text-tertiary);
+    background: var(--surface-subtle);
+    font-size: 24px;
+}
+
+.icon-preview {
+    display: block;
+    object-fit: cover;
+}
+
+.menu-pagination {
+    margin-left: auto;
+}
+
+@media (max-width: 760px) {
+    .action-bar,
+    .page-header {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .header-actions,
+    .search-container {
+        width: 100%;
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .search-input {
+        width: 100%;
+    }
+
+    .pagination-container {
+        justify-content: center;
+        overflow-x: auto;
+    }
+}

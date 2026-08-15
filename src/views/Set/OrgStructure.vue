@@ -1,16 +1,15 @@
 <template>
     <div class="org-structure-container">
-        <div class="page-header">
-            <h2>组织架构管理</h2>
-            <div class="header-actions">
+        <PageHeader title="组织架构">
+            <template #actions>
                 <el-button type="primary" @click="handleAdd" class="add-btn">
                     <el-icon><Plus /></el-icon>新增组织
                 </el-button>
                 <el-button type="default" @click="refreshData" class="refresh-btn">
                     <el-icon><Refresh /></el-icon>刷新
                 </el-button>
-            </div>
-        </div>
+            </template>
+        </PageHeader>
         
         <div class="table-card">
             <el-table 
@@ -47,15 +46,21 @@
                 <el-table-column label="操作" width="250" fixed="right">
                     <template #default="{ row }">
                         <div class="table-actions">
-                            <el-button link type="primary" @click="handleAddChild(row)" class="action-btn">添加下级</el-button>
-                            <el-button link type="primary" @click="handleEdit(row)" class="action-btn">编辑</el-button>
+                            <el-button link type="primary" @click="handleAddChild(row)" class="action-btn">
+                                <el-icon><Plus /></el-icon>添加下级
+                            </el-button>
+                            <el-button link type="primary" @click="handleEdit(row)" class="action-btn">
+                                <el-icon><Edit /></el-icon>编辑
+                            </el-button>
                             <el-popconfirm 
                                 title="确定删除此组织?"
                                 @confirm="handleDelete(row.id)"
                                 confirm-button-text="确定"
                                 cancel-button-text="取消">
                                 <template #reference>
-                                    <el-button link type="danger" class="action-btn">删除</el-button>
+                                    <el-button link type="danger" class="action-btn">
+                                        <el-icon><Delete /></el-icon>删除
+                                    </el-button>
                                 </template>
                             </el-popconfirm>
                         </div>
@@ -112,7 +117,7 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted, computed } from 'vue'
 import { ElMessage } from 'element-plus'
-import { Refresh, OfficeBuilding, User, Plus } from '@element-plus/icons-vue'
+import { Delete, Edit, Refresh, OfficeBuilding, User, Plus } from '@element-plus/icons-vue'
 import { 
     getOrgTree, 
     addOrg, 

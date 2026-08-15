@@ -1,5 +1,5 @@
 <template>
-    <div class="dx-menu">
+    <nav class="dx-menu" aria-label="主导航">
         <SubMenu
             v-for="(item, index) in menuConfig"
             :key="item.path || index"
@@ -7,17 +7,17 @@
             :collapse="collapse"
             :active-path="activePath"
             parent-path=""
-            @menu-click="handleSelect" />
-    </div>
+            @menu-click="handleSelect"
+        />
+    </nav>
 </template>
 
 <script setup lang="ts">
-import { computed, type PropType } from 'vue'
+import type { PropType } from 'vue'
 import type { MenuItem } from '@/store/pinia/userInfo'
-import { resolveMenuFullPath } from '@/utils/menuRoute'
 import SubMenu from './subMenu.vue'
 
-const props = defineProps({
+defineProps({
     menuConfig: {
         type: Array as PropType<MenuItem[]>,
         required: true,
@@ -33,56 +33,20 @@ const props = defineProps({
     }
 })
 
-const emit = defineEmits(['menu-click'])
+const emit = defineEmits<{
+    (event: 'menu-click', path: string): void
+}>()
 
-function readMenuState(): Record<string, boolean> {
-    try {
-        return JSON.parse(localStorage.getItem('menuState') || '{}')
-    } catch {
-        return {}
-    }
-}
-
-function collectOpenPaths(menus: MenuItem[], activePath: string, parentPath: string = '', result: Set<string> = new Set()): Set<string> {
-    const menuState = readMenuState()
-
-    menus.forEach(menu => {
-        const fullPath = resolveMenuFullPath(parentPath, menu.path)
-
-        if (menu.children?.length) {
-            if (menuState[fullPath] || (activePath && activePath.startsWith(fullPath))) {
-                result.add(fullPath)
-            }
-            collectOpenPaths(menu.children, activePath, fullPath, result)
-        }
-    })
-
-    return result
-}
-
-const defaultOpeneds = computed(() => Array.from(collectOpenPaths(props.menuConfig, props.activePath)))
-
-const handleSelect = ({ menu, fullPath }) => {
+const handleSelect = ({ fullPath }: { fullPath: string }) => {
     emit('menu-click', fullPath)
-}
-
-const handleOpen = (path: string) => {
-    const menuState = readMenuState()
-    menuState[path] = true
-    localStorage.setItem('menuState', JSON.stringify(menuState))
-}
-
-const handleClose = (path: string) => {
-    const menuState = readMenuState()
-    menuState[path] = false
-    localStorage.setItem('menuState', JSON.stringify(menuState))
 }
 </script>
 
 <style lang="scss" scoped>
-.dx-menu{
+.dx-menu {
     width: 100%;
-    height: 100%;
-    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 }
 </style>

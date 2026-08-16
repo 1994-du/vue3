@@ -20,9 +20,9 @@
     display: flex;
     flex-direction: column;
     padding: 12px 10px;
-    color: #e8f0ed;
-    background: var(--sidebar);
-    border-right: 1px solid rgba(255, 255, 255, 0.07);
+    color: var(--menu-text-strong);
+    background: var(--menu-bg);
+    border-right: 1px solid var(--menu-border);
     transition: width var(--transition-base), transform var(--transition-base);
     z-index: 30;
 }
@@ -56,8 +56,8 @@
     display: grid;
     place-items: center;
     flex-shrink: 0;
-    color: #10231e;
-    background: #8fd1c3;
+    color: #ffffff;
+    background: var(--menu-accent);
     border-radius: var(--radius-sm);
     font-size: 12px;
     font-weight: 800;
@@ -72,7 +72,7 @@
 
 .brand-copy strong {
     overflow: hidden;
-    color: #f4f8f6;
+    color: var(--menu-text-strong);
     font-size: 14px;
     line-height: 1.2;
     font-weight: 700;
@@ -81,7 +81,7 @@
 }
 
 .brand-copy small {
-    color: #8fa39c;
+    color: var(--menu-text-muted);
     font-size: 11px;
     line-height: 1.2;
     text-transform: uppercase;
@@ -102,7 +102,7 @@
 }
 
 .menu_scroll_container::-webkit-scrollbar-thumb {
-    background: #485953;
+    background: var(--border-strong);
     border-radius: 3px;
 }
 
@@ -119,17 +119,17 @@
     justify-content: center;
     gap: 8px;
     flex-shrink: 0;
-    color: #aebcb7;
+    color: var(--menu-text);
     background: transparent;
-    border: 1px solid #34423d;
+    border: 1px solid var(--menu-border);
     border-radius: var(--radius-sm);
     cursor: pointer;
 }
 
 .custome_menu_btn:hover {
-    color: #ffffff;
-    background: var(--sidebar-hover);
-    border-color: #53645e;
+    color: var(--menu-active-text);
+    background: var(--menu-hover);
+    border-color: color-mix(in srgb, var(--menu-accent) 40%, var(--menu-border));
 }
 
 .custome_menu_btn span {

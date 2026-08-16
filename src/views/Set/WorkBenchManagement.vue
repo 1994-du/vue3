@@ -2,8 +2,8 @@
     <div class="workbench-management-container">
         <PageHeader title="工作台管理">
             <template v-if="isAdmin" #actions>
-                <el-button type="primary" @click="openCreateDialog" class="create-btn">
-                    <el-icon><Plus /></el-icon>
+                <el-button type="primary" @click="openCreateDialog" class="create-btn page-primary-action">
+                    <el-icon><CirclePlusFilled /></el-icon>
                     新建工作台
                 </el-button>
             </template>
@@ -137,7 +137,7 @@ import { computed, onMounted, ref } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import { ElMessage } from 'element-plus'
 import type { UploadRequestOptions } from 'element-plus'
-import { Delete, Edit, Plus, View } from '@element-plus/icons-vue'
+import { CirclePlusFilled, Delete, Edit, Plus, View } from '@element-plus/icons-vue'
 import { getCurrentUser, getUsers } from '@/api/api'
 import { uploadImage } from '@/api/upload'
 import {
@@ -416,19 +416,6 @@ onMounted(async () => {
     padding: 24px;
     background: #f5f7fa;
     min-height: 100vh;
-}
-
-.action-bar {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    margin-bottom: 20px;
-
-    .create-btn {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-    }
 }
 
 .workbench-table-card {

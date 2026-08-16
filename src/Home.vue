@@ -12,12 +12,12 @@
         <aside
             class="layout_menu"
             :class="{
-                collapsed: isCollapse,
+                collapsed: effectiveMenuCollapse,
                 'mobile-open': isMobileMenuOpen
             }">
             <button type="button" class="layout_menu_logo" @click="goHome">
                 <span class="brand-mark">KE</span>
-                <span v-show="!isCollapse || isMobileMenuOpen" class="brand-copy">
+                <span v-show="!effectiveMenuCollapse" class="brand-copy">
                     <strong>Knowledge Engine</strong>
                     <small>Workspace</small>
                 </span>
@@ -26,7 +26,7 @@
             <div class="menu_scroll_container" ref="menuScrollContainerRef">
                 <NativeMenu
                     :menu-config="menuConfig"
-                    :collapse="isCollapse && !isMobileMenuOpen"
+                    :collapse="effectiveMenuCollapse"
                     :active-path="onRoutes"
                     @menu-click="handleMenuClick"
                 />
@@ -131,6 +131,7 @@ const isCollapse = ref(JSON.parse(localStorage.getItem('menuCollapse') || 'false
 
 const onRoutes = computed(() => route.path)
 const menuConfig = computed(() => userInfoStore.menus)
+const effectiveMenuCollapse = computed(() => isCollapse.value && !isMobileMenuOpen.value)
 const avatarUrl = computed(() => {
     const avatar = userInfoStore.userInfo.avatar
     if (!avatar) return ''

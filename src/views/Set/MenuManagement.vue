@@ -2,8 +2,8 @@
     <div class="menu-management-container">
         <PageHeader title="菜单管理">
             <template #actions>
-                <el-button type="primary" @click="handleAddMenu(null)" class="add-btn">
-                    <el-icon><Plus /></el-icon>新建菜单
+                <el-button type="primary" @click="handleAddMenu(null)" class="add-btn page-primary-action">
+                    <el-icon><CirclePlusFilled /></el-icon>新建菜单
                 </el-button>
             </template>
         </PageHeader>
@@ -100,7 +100,7 @@
 import { ref, shallowRef, onMounted } from 'vue'
 import { getMenus, addMenu, setMenu, deleteMenu } from '@/api/menus'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { Delete, Edit, Plus } from '@element-plus/icons-vue'
+import { CirclePlusFilled, Delete, Edit, Plus } from '@element-plus/icons-vue'
 
 // 定义菜单数据接口
 interface MenuItem {
@@ -297,37 +297,6 @@ onMounted(() => {
     padding: 20px;
     background-color: var(--bg-primary);
     min-height: 100vh;
-}
-
-.page-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 24px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid var(--border-color);
-    
-    h2 {
-        font-size: 20px;
-        font-weight: 600;
-        color: var(--text-primary);
-        margin: 0;
-    }
-    
-    .header-actions {
-        display: flex;
-        gap: 12px;
-        
-        .add-btn {
-            border-radius: var(--border-radius);
-            transition: all var(--transition-fast);
-            
-            &:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 4px 12px rgba(93, 186, 171, 0.3);
-            }
-        }
-    }
 }
 
 .table-card {

@@ -58,6 +58,14 @@ h1 {
     flex-wrap: wrap;
 }
 
+.page-heading__actions :deep(.el-button) {
+    min-height: 36px;
+}
+
+.page-heading__actions :deep(.el-button + .el-button) {
+    margin-left: 0;
+}
+
 @media (max-width: 760px) {
     .page-heading {
         align-items: stretch;
@@ -65,6 +73,8 @@ h1 {
     }
 
     .page-heading__actions {
+        width: 100%;
+        align-items: stretch;
         justify-content: flex-start;
     }
 }

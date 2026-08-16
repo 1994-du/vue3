@@ -2,27 +2,14 @@
     <div class="role-management-container">
         <PageHeader title="角色管理">
             <template #actions>
-                <el-input
+                <PageSearch
                     v-model="searchKeyword"
                     placeholder="搜索角色名称"
-                    clearable
-                    :prefix-icon="Search"
-                    @keyup.enter="handleSearch"
-                    @clear="handleSearch"
-                    class="search-input"
-                >
-                    <template #append>
-                        <el-button
-                            aria-label="搜索角色"
-                            title="搜索角色"
-                            @click="handleSearch"
-                            :disabled="!searchKeyword">
-                            <el-icon><Search /></el-icon>
-                        </el-button>
-                    </template>
-                </el-input>
-                <el-button type="primary" @click="createRole" class="create-btn">
-                    <el-icon><Plus /></el-icon>
+                    aria-label="搜索角色"
+                    @search="handleSearch"
+                />
+                <el-button type="primary" @click="createRole" class="create-btn page-primary-action">
+                    <el-icon><CirclePlusFilled /></el-icon>
                     新建角色
                 </el-button>
             </template>
@@ -129,7 +116,8 @@ import { getRoles,setRole,addRole, delRole } from '../../api/role'
 // @ts-ignore
 import { addMenu, getMenuTree } from '../../api/menus'
 import { ElMessage } from 'element-plus'
-import { Plus, Edit, Delete, Search } from '@element-plus/icons-vue'
+import { CirclePlusFilled, Edit, Delete } from '@element-plus/icons-vue'
+import PageSearch from '@/components/PageSearch.vue'
 
 // 定义菜单树节点接口
 interface MenuNode {
@@ -398,29 +386,6 @@ onMounted(() => {
     min-height: 100vh;
 }
 
-/* 操作栏 */
-.action-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-    gap: 12px;
-    .create-btn {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-    }
-    .search-container {
-        .search-input {
-            width: 300px;
-            .el-input__wrapper {
-                border-radius: 8px;
-            }
-        }
-    }
-}
-
 /* 角色表格卡片 */
 .role-table-card {
     border-radius: 12px;
@@ -525,15 +490,6 @@ onMounted(() => {
 @media (max-width: 768px) {
     .role-management-container {
         padding: 16px;
-    }
-    .action-bar {
-        flex-direction: column;
-        align-items: stretch;
-        .search-container {
-            .search-input {
-                width: 100%;
-            }
-        }
     }
     .pagination-container {
         justify-content: center;

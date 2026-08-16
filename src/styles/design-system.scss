@@ -11,15 +11,31 @@
     --surface: #ffffff;
     --surface-subtle: #f8faf9;
     --surface-muted: #edf1ef;
-    --sidebar: #1b2421;
-    --sidebar-hover: #293632;
-    --sidebar-active: #d7eee8;
 
     --text-primary: #17211e;
     --text-secondary: #4d5c57;
     --text-tertiary: #7b8884;
     --border-color: #dce3e0;
     --border-strong: #c7d1cd;
+
+    --menu-accent: var(--el-color-primary, var(--brand));
+    --menu-bg: var(--surface);
+    --menu-text: var(--text-secondary);
+    --menu-text-strong: var(--text-primary);
+    --menu-text-muted: var(--text-tertiary);
+    --menu-border: var(--border-color);
+    --menu-divider: var(--border-color);
+    --menu-hover: color-mix(in srgb, var(--menu-accent) 8%, var(--menu-bg));
+    --menu-branch-bg: color-mix(in srgb, var(--menu-accent) 6%, var(--menu-bg));
+    --menu-active-bg: color-mix(in srgb, var(--menu-accent) 14%, var(--menu-bg));
+    --menu-active-text: color-mix(in srgb, var(--menu-accent) 76%, var(--menu-text-strong));
+    --menu-active-ring: color-mix(in srgb, var(--menu-accent) 28%, transparent);
+    --menu-shadow: var(--shadow-md);
+
+    /* Compatibility aliases used by the layout shell. */
+    --sidebar: var(--menu-bg);
+    --sidebar-hover: var(--menu-hover);
+    --sidebar-active: var(--menu-active-bg);
 
     --radius-xs: 4px;
     --radius-sm: 6px;
@@ -75,9 +91,6 @@ html[data-theme='dark'] {
     --surface: #18201d;
     --surface-subtle: #1d2723;
     --surface-muted: #26312d;
-    --sidebar: #0d1210;
-    --sidebar-hover: #202b27;
-    --sidebar-active: #234b43;
     --text-primary: #edf4f1;
     --text-secondary: #bdc9c4;
     --text-tertiary: #8e9b96;

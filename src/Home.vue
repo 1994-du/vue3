@@ -1,6 +1,6 @@
 <template>
     <ModalSearch v-if="isShowSearch" v-model="isShowSearch" />
-    <div class="layout">
+    <div ref="layoutRootRef" class="layout">
         <button
             v-if="isMobileMenuOpen"
             type="button"
@@ -92,8 +92,19 @@
                 </div>
             </header>
 
-            <main class="layout_content">
-                <router-view />
+            <main ref="contentShellRef" class="layout_content">
+                <router-view v-slot="{ Component, route: renderedRoute }">
+                    <Transition
+                        :css="false"
+                        mode="out-in"
+                        appear
+                        @enter="handleRouteEnter"
+                        @leave="handleRouteLeave">
+                        <div :key="renderedRoute.fullPath" class="route-stage">
+                            <component :is="Component" />
+                        </div>
+                    </Transition>
+                </router-view>
             </main>
         </section>
     </div>
@@ -114,6 +125,7 @@ import {
 } from '@element-plus/icons-vue'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { gsap } from 'gsap'
 import useUserInfoStore from '@/store/pinia/userInfo'
 import { loginOutEffect } from '@/utils/tokenManager'
 import { toLoginOut } from '@/api/auth'
@@ -124,10 +136,14 @@ const preUrl = `${import.meta.env.VITE_PROXY}`.replace(/\/$/, '')
 const userInfoStore = useUserInfoStore()
 const router = useRouter()
 const route = useRoute()
+const layoutRootRef = ref(null)
+const contentShellRef = ref(null)
 const menuScrollContainerRef = ref(null)
 const isShowSearch = ref(false)
 const isMobileMenuOpen = ref(false)
 const isCollapse = ref(JSON.parse(localStorage.getItem('menuCollapse') || 'false'))
+let layoutAnimationMedia = null
+let routeTween = null
 
 const onRoutes = computed(() => route.path)
 const menuConfig = computed(() => userInfoStore.menus)
@@ -159,6 +175,106 @@ const currentPageTitle = computed(() => {
 const collapse = () => {
     isCollapse.value = !isCollapse.value
     localStorage.setItem('menuCollapse', JSON.stringify(isCollapse.value))
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    nextTick(() => {
+        const mark = layoutRootRef.value?.querySelector('.brand-mark')
+        if (!mark) return
+        gsap.fromTo(
+            mark,
+            { scale: 0.84, rotation: -8 },
+            {
+                scale: 1,
+                rotation: 0,
+                duration: 0.42,
+                ease: 'back.out(2.2)',
+                clearProps: 'transform',
+                overwrite: 'auto'
+            }
+        )
+    })
+}
+
+const handleRouteEnter = (element, done) => {
+    contentShellRef.value?.scrollTo({ top: 0, left: 0 })
+    routeTween?.kill()
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        gsap.set(element, { clearProps: 'all' })
+        done()
+        return
+    }
+
+    routeTween = gsap.fromTo(
+        element,
+        { autoAlpha: 0, y: 18, scale: 0.995 },
+        {
+            autoAlpha: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.48,
+            ease: 'power3.out',
+            clearProps: 'transform,opacity,visibility',
+            overwrite: 'auto',
+            onComplete: done
+        }
+    )
+}
+
+const handleRouteLeave = (element, done) => {
+    routeTween?.kill()
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        done()
+        return
+    }
+
+    routeTween = gsap.to(element, {
+        autoAlpha: 0,
+        y: -8,
+        duration: 0.18,
+        ease: 'power2.in',
+        overwrite: 'auto',
+        onComplete: done
+    })
+}
+
+const initLayoutAnimations = () => {
+    if (!layoutRootRef.value) return
+
+    layoutAnimationMedia = gsap.matchMedia()
+    layoutAnimationMedia.add(
+        {
+            isDesktop: '(min-width: 901px)',
+            reduceMotion: '(prefers-reduced-motion: reduce)'
+        },
+        context => {
+            const { isDesktop, reduceMotion } = context.conditions
+            if (reduceMotion) return
+
+            const timeline = gsap.timeline({
+                defaults: { duration: 0.46, ease: 'power3.out' }
+            })
+
+            if (isDesktop) {
+                timeline
+                    .from('.layout_menu', { autoAlpha: 0, x: -28, duration: 0.62 }, 0)
+                    .from('.layout_menu_logo > *', { autoAlpha: 0, x: -10, stagger: 0.07 }, 0.16)
+                    .from(
+                        '.menu_scroll_container .dx-menu > *',
+                        { autoAlpha: 0, x: -12, duration: 0.36, stagger: 0.025 },
+                        0.26
+                    )
+                    .from('.custome_menu_btn', { autoAlpha: 0, y: 10, duration: 0.36 }, 0.38)
+            }
+
+            timeline
+                .from('.topbar', { autoAlpha: 0, y: -18, duration: 0.56 }, 0.08)
+                .from('.route-heading > *', { autoAlpha: 0, y: 8, stagger: 0.06 }, 0.2)
+                .from('.header_right > *', { autoAlpha: 0, x: 10, stagger: 0.055 }, 0.24)
+        },
+        layoutRootRef.value
+    )
 }
 
 const goHome = async () => {
@@ -236,9 +352,12 @@ onMounted(() => {
     restoreScrollPosition()
     menuScrollContainerRef.value?.addEventListener('scroll', saveScrollPosition)
     window.addEventListener('keydown', handleGlobalKeydown)
+    initLayoutAnimations()
 })
 
 onBeforeUnmount(() => {
+    layoutAnimationMedia?.revert()
+    routeTween?.kill()
     menuScrollContainerRef.value?.removeEventListener('scroll', saveScrollPosition)
     window.removeEventListener('keydown', handleGlobalKeydown)
 })

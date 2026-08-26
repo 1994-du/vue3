@@ -27,6 +27,11 @@
     z-index: 30;
 }
 
+.layout_menu,
+.topbar {
+    will-change: transform, opacity;
+}
+
 .layout_menu.collapsed {
     width: 72px;
 }
@@ -286,6 +291,12 @@
     text-align: left;
 }
 
+.route-stage {
+    width: 100%;
+    min-height: 100%;
+    will-change: transform, opacity;
+}
+
 .menu-overlay {
     display: none;
 }
@@ -350,5 +361,13 @@
 
     .user-trigger {
         padding: 0 2px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .layout_menu,
+    .topbar,
+    .route-stage {
+        will-change: auto;
     }
 }

@@ -293,8 +293,8 @@
 
 .route-stage {
     width: 100%;
-    min-height: 100%;
-    will-change: transform, opacity;
+    height: 100%;
+    overflow: hidden;
 }
 
 .menu-overlay {

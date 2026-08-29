@@ -3,89 +3,124 @@
         <PageHeader title="菜单管理">
             <template #actions>
                 <el-button type="primary" @click="handleAddMenu(null)" class="add-btn page-primary-action">
-                    <el-icon><CirclePlusFilled /></el-icon>新建菜单
+                    <el-icon><Plus /></el-icon>新建菜单
+                </el-button>
+                <el-button type="default" @click="getMenusList" class="refresh-btn">
+                    <el-icon><Refresh /></el-icon>刷新
                 </el-button>
             </template>
         </PageHeader>
-        
-        <div class="table-card">
-            <el-table 
-                class="menu-table"
-                border 
-                row-key="id" 
-                :data="menusList" 
-                style="width: 100%"
-                v-loading="loading">
-                <el-table-column prop="name" label="菜单名称" min-width="180">
-                    <!-- <template #default="{ row }">
-                        <div class="menu-name">
-                            <component v-if="row.icon" :is="`el-icon-${row.icon}`" class="menu-icon"></component>
-                            <span>{{ row.name }}</span>
-                        </div>
-                    </template> -->
-                </el-table-column>
-                <el-table-column prop="path" label="菜单路径" min-width="200" />
-                <el-table-column prop="component" label="组件" min-width="200" />
-                <el-table-column prop="sort" label="序号" width="80" />
 
-                <el-table-column label="操作" width="200" fixed="right">
-                    <template #default="scope">
-                        <div class="table-actions">
-                            <el-button link type="primary" @click="handleAddMenu(scope.row)" class="action-btn">
-                                <el-icon><Plus /></el-icon>新增
-                            </el-button>
-                            <el-button link type="primary" @click="handleEditMenu(scope.row)" class="action-btn">
-                                <el-icon><Edit /></el-icon>编辑
-                            </el-button>
-                            <el-button link type="danger" @click="handleDeleteMenu(scope.row)" class="action-btn">
-                                <el-icon><Delete /></el-icon>删除
-                            </el-button>
+        <div class="tree-card" v-loading="loading">
+            <div class="tree-card__header">
+                <div class="tree-card__heading">
+                    <span class="tree-card__eyebrow">菜单树</span>
+                    <h2>层级结构</h2>
+                </div>
+                <div class="tree-card__actions">
+                    <el-input
+                        v-model="filterText"
+                        placeholder="搜索菜单名称"
+                        clearable
+                        size="default"
+                        class="filter-input">
+                        <template #prefix>
+                            <el-icon><Search /></el-icon>
+                        </template>
+                    </el-input>
+                    <el-button @click="expandAll">全部展开</el-button>
+                    <el-button @click="collapseAll">全部收起</el-button>
+                </div>
+            </div>
+
+            <el-scrollbar class="tree-scroll">
+                <el-tree
+                    v-if="menuTree.length"
+                    ref="treeRef"
+                    :key="treeKey"
+                    :data="menuTree"
+                    :props="treeProps"
+                    node-key="id"
+                    :expand-on-click-node="true"
+                    :filter-node-method="filterNode"
+                    :default-expanded-keys="defaultExpandedKeys"
+                    :indent="24"
+                    accordion
+                    highlight-current
+                    class="menu-tree">
+                    <template #default="{ node, data }">
+                        <div class="menu-tree-node">
+                            <div class="menu-tree-node__main">
+                                <span class="menu-tree-node__icon" :class="{ 'is-leaf': !data.children?.length }">
+                                    <SvgIcon v-if="data.icon" :name="data.icon" />
+                                    <el-icon v-else>
+                                        <Folder v-if="data.children?.length" />
+                                        <Document v-else />
+                                    </el-icon>
+                                </span>
+                                <span class="menu-tree-node__content">
+                                    <span class="menu-tree-node__name">{{ data.name }}</span>
+                                    <span class="menu-tree-node__path">{{ data.path || '-' }}</span>
+                                </span>
+                            </div>
+                            <div class="menu-tree-node__actions">
+                                <el-tooltip content="新增子菜单" placement="top">
+                                    <el-button link type="primary" @click.stop="handleAddMenu(data)">
+                                        <el-icon><Plus /></el-icon>
+                                    </el-button>
+                                </el-tooltip>
+                                <el-tooltip content="编辑" placement="top">
+                                    <el-button link type="primary" @click.stop="handleEditMenu(data)">
+                                        <el-icon><Edit /></el-icon>
+                                    </el-button>
+                                </el-tooltip>
+                                <el-tooltip content="删除" placement="top">
+                                    <el-button link type="danger" @click.stop="handleDeleteMenu(data)">
+                                        <el-icon><Delete /></el-icon>
+                                    </el-button>
+                                </el-tooltip>
+                            </div>
                         </div>
                     </template>
-                </el-table-column>
-            </el-table>
-            
-            <div class="pagination-container">
-                <el-pagination
-                    v-model:current-page="currentPage4"
-                    v-model:page-size="pageSize4"
-                    :page-sizes="[20, 30, 40]"
-                    layout="total, sizes, prev, pager, next"
-                    :total="total"
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    class="menu-pagination"
-                />
-            </div>
+                </el-tree>
+                <el-empty v-else description="暂无菜单数据" :image-size="72" />
+            </el-scrollbar>
         </div>
     </div>
-    
-    <el-dialog 
-        :title="dialogTitle" 
-        v-model="createMenuVisible" 
-        width="450" 
+
+    <el-dialog
+        :title="dialogTitle"
+        v-model="createMenuVisible"
+        width="480"
         :close-on-click-modal="false"
         class="menu-dialog">
-        <el-form 
-            :model="createMenuObj" 
-            :rules="createMenuRules" 
-            ref="createMenuFormRef" 
-            label-width="90px"
+        <el-form
+            :model="createMenuObj"
+            :rules="createMenuRules"
+            ref="createMenuFormRef"
+            label-width="100px"
             class="menu-form">
+            <el-form-item v-if="dialogType === 'add' && parentMenuName" label="上级菜单">
+                <el-tag type="info" effect="plain">{{ parentMenuName || '根菜单' }}</el-tag>
+            </el-form-item>
             <el-form-item label="菜单名称" prop="name">
                 <el-input v-model="createMenuObj.name" placeholder="请输入菜单名称" class="custom-input" />
             </el-form-item>
             <el-form-item label="菜单路径" prop="path">
-                <el-input v-model="createMenuObj.path" placeholder="请输入菜单路径" class="custom-input" />
+                <el-input v-model="createMenuObj.path" placeholder="请输入菜单路径，如 /system/user" class="custom-input" />
             </el-form-item>
-            <el-form-item label="组件" prop="component">
-                <el-input v-model="createMenuObj.component" placeholder="请输入组件" class="custom-input" />
+            <el-form-item label="组件路径" prop="component">
+                <el-input v-model="createMenuObj.component" placeholder="请输入组件路径，如 views/Set/MenuManagement" class="custom-input" />
             </el-form-item>
-            <el-form-item label="序号" prop="sort">
-                <el-input v-model="createMenuObj.sort" placeholder="请输入序号" class="custom-input" />
+            <el-form-item label="排序" prop="sort">
+                <el-input-number v-model="createMenuObj.sort" :min="0" :max="999" controls-position="right" class="w-full" />
             </el-form-item>
             <el-form-item label="图标" prop="icon">
-                <el-input v-model="createMenuObj.icon" placeholder="请输入图标" class="custom-input" />
+                <el-input v-model="createMenuObj.icon" placeholder="请输入图标名称" class="custom-input">
+                    <template #suffix>
+                        <SvgIcon v-if="createMenuObj.icon" :name="createMenuObj.icon" class="icon-suffix" />
+                    </template>
+                </el-input>
             </el-form-item>
         </el-form>
         <template #footer>
@@ -96,195 +131,189 @@
         </template>
     </el-dialog>
 </template>
-<script setup lang="ts">
-import { ref, shallowRef, onMounted } from 'vue'
-import { getMenus, addMenu, setMenu, deleteMenu } from '@/api/menus'
-import { ElMessage, ElMessageBox } from 'element-plus'
-import { CirclePlusFilled, Delete, Edit, Plus } from '@element-plus/icons-vue'
 
-// 定义菜单数据接口
+<script setup lang="ts">
+import { ref, shallowRef, onMounted, nextTick, watch } from 'vue'
+import { getMenuTree, addMenu, setMenu, deleteMenu } from '@/api/menus'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { Plus, Delete, Edit, Refresh, Search, Folder, Document } from '@element-plus/icons-vue'
+import SvgIcon from '@/components/SvgIcon/index.vue'
+
 interface MenuItem {
     id: number | string
     name: string
     path: string
     component: string
-    sort: string | number
+    sort: number
     icon?: string
     parentId?: number | string
+    children?: MenuItem[]
 }
 
-// 定义菜单表单数据接口
 interface MenuFormData {
     id?: number | string
     parentId?: number | string
     name: string
     path: string
     component: string
-    sort: string | number
+    sort: number
     icon?: string
 }
 
-// 定义验证规则接口
-interface ValidationRule {
-    required: boolean
-    message: string
-    trigger: string
-}
-
-// 定义获取菜单列表响应接口
-interface GetMenusResponse {
-    code: number
-    data: MenuItem[]
-    msg?: string
-}
-
-// 定义菜单操作响应接口
-interface MenuOperationResponse {
-    code: number
-    msg?: string
-}
-
-let dialogTitle = ref('新增菜单')
-let dialogType = ref<'add' | 'edit'>('add')
-let currentPage4 = ref(1)
-let pageSize4 = ref(20)
-const total = ref(0)
+const treeRef = ref<any>(null)
+const filterText = ref('')
+const loading = ref(false)
+const menuTree = shallowRef<MenuItem[]>([])
 const createMenuVisible = ref(false)
+const createMenuFormRef = ref<any>(null)
+
+const dialogTitle = ref('新增菜单')
+const dialogType = ref<'add' | 'edit'>('add')
+const parentMenuName = ref('')
+
+const treeProps = {
+    children: 'children',
+    label: 'name'
+}
 
 const createMenuObj = ref<MenuFormData>({
     name: '',
     path: '',
     component: '',
-    sort: '',
+    sort: 0,
     icon: ''
 })
 
-const createMenuRules = ref<Record<string, ValidationRule[]>>({
+const createMenuRules = {
     name: [
         { required: true, message: '请输入菜单名称', trigger: 'blur' }
     ],
     path: [
         { required: true, message: '请输入菜单路径', trigger: 'blur' }
     ]
-})
-
-const createMenuFormRef = ref<any>(null)
-const loading = ref(false)
-
-// 新增菜单
-const handleCreateMenu = (): void => {
-    createMenuFormRef.value.validate((valid: boolean) => {
-        if (valid) {
-            if(dialogType.value === 'add'){
-                // 表单验证通过，提交数据
-                const params = {
-                    parentId: createMenuObj.value.parentId,
-                    name: createMenuObj.value.name,
-                    path: createMenuObj.value.path,
-                    component: createMenuObj.value.component,
-                    sort: createMenuObj.value.sort,
-                    icon: createMenuObj.value.icon || 'default'
-                }
-                addMenu(params).then((res: any) => {
-                    if(res.code === 200){
-                        createMenuVisible.value = false
-                        getMenusList()
-                    } else {
-                        ElMessage.error(res.msg || '新增失败')
-                    }
-                })
-            } else {
-                // 表单验证通过，提交数据
-                const params = {
-                    id: createMenuObj.value.id,
-                    parentId: createMenuObj.value.parentId,
-                    name: createMenuObj.value.name,
-                    path: createMenuObj.value.path,
-                    component: createMenuObj.value.component,
-                    sort: createMenuObj.value.sort,
-                    icon: createMenuObj.value.icon || 'default'
-                }
-                setMenu(params).then((res: any) => {
-                    if(res.code === 200){
-                        createMenuVisible.value = false
-                        getMenusList()
-                    } else {
-                        ElMessage.error(res.msg || '更新失败')
-                    }
-                })
-            }
-        } else {
-            // 表单验证不通过，提示用户
-            ElMessage.error('请填写完整信息');
-        }
-    });
 }
 
-const menusList = shallowRef<MenuItem[]>([])
+const filterNode = (value: string, data: MenuItem): boolean => {
+    if (!value) return true
+    return data.name.includes(value) || data.path.includes(value)
+}
 
-const getMenusList = (): void => {
+watch(filterText, val => {
+    treeRef.value?.filter(val)
+})
+
+const treeKey = ref(0)
+const defaultExpandedKeys = ref<(number | string)[]>([])
+
+const saveExpandedKey = (): void => {
+    const nodes = treeRef.value?.store?.nodesMap || {}
+    const expanded = Object.keys(nodes).find(key => nodes[key].expanded)
+    defaultExpandedKeys.value = expanded ? [expanded] : []
+}
+
+const getMenusList = (preserveExpand = true): void => {
+    if (preserveExpand) {
+        saveExpandedKey()
+    }
     loading.value = true
-    getMenus().then((res: any) => {
-        if(res.code === 200){
-            menusList.value = res.data
-            total.value = res.data.length
+    getMenuTree().then((res: any) => {
+        if (res.code === 200) {
+            menuTree.value = res.data || []
+            if (preserveExpand && defaultExpandedKeys.value.length) {
+                treeKey.value++
+            }
+            nextTick(() => {
+                treeRef.value?.setCurrentKey(null)
+            })
         }
     }).finally(() => {
         loading.value = false
     })
 }
 
-// 新增
+const expandAll = (): void => {
+    const nodes = treeRef.value?.store?.nodesMap || {}
+    Object.keys(nodes).forEach(key => {
+        nodes[key].expanded = true
+    })
+}
+
+const collapseAll = (): void => {
+    const nodes = treeRef.value?.store?.nodesMap || {}
+    Object.keys(nodes).forEach(key => {
+        nodes[key].expanded = false
+    })
+}
+
 const handleAddMenu = (row: MenuItem | null): void => {
-    console.log('新增菜单', row)
-    dialogTitle.value = '新增菜单'
+    dialogTitle.value = row ? '新增子菜单' : '新建菜单'
     dialogType.value = 'add'
-    createMenuObj.value = {} as MenuFormData
-    createMenuObj.value.parentId = row?.id || ''
+    parentMenuName.value = row?.name || ''
+    createMenuObj.value = {
+        name: '',
+        path: '',
+        component: '',
+        sort: 0,
+        icon: '',
+        parentId: row?.id || undefined
+    }
     createMenuVisible.value = true
 }
 
-// 编辑
 const handleEditMenu = (row: MenuItem): void => {
     dialogTitle.value = '编辑菜单'
     dialogType.value = 'edit'
-    createMenuObj.value = {...row}
+    parentMenuName.value = ''
+    createMenuObj.value = { ...row, sort: row.sort ?? 0 }
     createMenuVisible.value = true
-    console.log(row)
 }
 
-// 删除
 const handleDeleteMenu = (row: MenuItem): void => {
-    console.log(row)
-    ElMessageBox.confirm('确认删除该菜单吗？', '提示', {
+    const hasChildren = row.children?.length && row.children.length > 0
+    const tip = hasChildren
+        ? `该菜单下有 ${row.children?.length} 个子菜单，删除后子菜单也将被删除，确认继续吗？`
+        : '确认删除该菜单吗？'
+
+    ElMessageBox.confirm(tip, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
     }).then(() => {
-        deleteMenu({id: row.id}).then((res: any) => {
-            if(res.code === 200){
+        deleteMenu({ id: row.id }).then((res: any) => {
+            if (res.code === 200) {
+                ElMessage.success('删除成功')
                 getMenusList()
             } else {
                 ElMessage.error(res.msg || '删除失败')
             }
         })
-    }).catch(() => {
-        // 取消删除操作
-    });
+    }).catch(() => {})
 }
 
-// 分页大小改变
-const handleSizeChange = (val: number): void => {
-    console.log(`每页 ${val} 条`)
-    pageSize4.value = val
-    getMenusList()
-}
+const handleCreateMenu = (): void => {
+    createMenuFormRef.value.validate((valid: boolean) => {
+        if (!valid) {
+            ElMessage.error('请填写完整信息')
+            return
+        }
 
-// 分页当前页改变
-const handleCurrentChange = (val: number): void => {
-    console.log(`当前页: ${val}`)
-    currentPage4.value = val
-    getMenusList()
+        const params = {
+            ...createMenuObj.value,
+            icon: createMenuObj.value.icon || 'default'
+        }
+
+        const request = dialogType.value === 'add' ? addMenu(params) : setMenu(params)
+
+        request.then((res: any) => {
+            if (res.code === 200) {
+                createMenuVisible.value = false
+                ElMessage.success(dialogType.value === 'add' ? '新增成功' : '更新成功')
+                getMenusList()
+            } else {
+                ElMessage.error(res.msg || (dialogType.value === 'add' ? '新增失败' : '更新失败'))
+            }
+        })
+    })
 }
 
 onMounted(() => {
@@ -296,111 +325,162 @@ onMounted(() => {
 .menu-management-container {
     padding: 20px;
     background-color: var(--bg-primary);
-    min-height: 100vh;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
-.table-card {
+.tree-card {
     background-color: var(--bg-elevated);
     border-radius: var(--border-radius-lg);
     box-shadow: var(--shadow-md);
-    padding: 20px;
-    margin-bottom: 24px;
-}
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
 
-.menu-table {
-    :deep(.el-table) {
-        background-color: transparent;
-        border: none;
-        margin-bottom: 20px;
-        
-        .el-table__header-wrapper {
-            .el-table__header {
-                th {
-                    background-color: var(--bg-secondary);
-                    color: var(--text-secondary);
-                    font-weight: 600;
-                    border-bottom: 1px solid var(--border-color);
-                }
-            }
+    &__header {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        padding: 20px 24px 16px;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    &__heading {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+
+        h2 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
         }
-        
-        .el-table__body-wrapper {
-            .el-table__row {
-                transition: background-color var(--transition-fast);
-                
-                &:hover {
-                    background-color: var(--bg-secondary) !important;
-                }
-                
-                &.el-table__row--striped {
-                    background-color: var(--bg-elevated) !important;
-                }
-                
-                td {
-                    border-bottom: 1px solid var(--border-color);
-                    
-                    &:last-child {
-                        border-right: none;
-                    }
-                }
-            }
-        }
+    }
+
+    &__eyebrow {
+        font-size: 12px;
+        color: var(--text-tertiary);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    &__actions {
+        display: flex;
+        gap: 10px;
+        align-items: center;
     }
 }
 
-/* .menu-name {
+.filter-input {
+    width: 240px;
+}
+
+.tree-scroll {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+}
+
+.menu-tree {
+    background: transparent;
+    color: var(--text-primary);
+    padding: 12px 8px;
+
+    :deep(.el-tree-node__content) {
+        height: 48px;
+        border-radius: 8px;
+        margin: 2px 0;
+        padding: 0 8px;
+        transition: background-color var(--transition-fast);
+
+        &:hover {
+            background-color: var(--bg-secondary) !important;
+        }
+    }
+
+    :deep(.el-tree-node.is-current > .el-tree-node__content) {
+        background-color: var(--menu-bg-active) !important;
+        color: var(--primary);
+    }
+
+    :deep(.el-tree-node__expand-icon) {
+        color: var(--text-tertiary);
+    }
+}
+
+.menu-tree-node {
+    flex: 1;
     display: flex;
     align-items: center;
-    gap: 8px;
-    
-    .menu-icon {
-        color: var(--primary);
-        font-size: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    component {
-        color: var(--primary);
-        font-size: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    span {
-        display: flex;
-        align-items: center;
-    }
-} */
-
-.table-actions {
-    display: flex;
+    justify-content: space-between;
     gap: 12px;
-    
-    .action-btn {
-        padding: 4px 8px;
-        font-size: 14px;
+    padding-right: 8px;
+
+    &__main {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-width: 0;
     }
-}
 
-.pagination-container {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 20px;
-}
+    &__icon {
+        width: 30px;
+        height: 30px;
+        flex-shrink: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        background: linear-gradient(135deg, rgba(93, 186, 171, 0.15), rgba(99, 102, 241, 0.12));
+        color: var(--primary);
+        font-size: 16px;
 
-.menu-pagination {
-    :deep(.el-pagination) {
-        .el-pager li {
-            margin: 0 5px;
-            
-            &.is-active {
-                background-color: var(--primary);
-                color: white;
-            }
+        &.is-leaf {
+            background: rgba(148, 163, 184, 0.12);
+            color: var(--text-secondary);
         }
+
+        :deep(.el-icon) {
+            font-size: 16px;
+        }
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        min-width: 0;
+    }
+
+    &__name {
+        font-size: 14px;
+        font-weight: 500;
+        color: inherit;
+        line-height: 1.3;
+    }
+
+    &__path {
+        font-size: 12px;
+        color: var(--text-tertiary);
+        font-family: "SF Mono", "Monaco", "Consolas", monospace;
+        line-height: 1.2;
+    }
+
+    &__actions {
+        flex-shrink: 0;
+        display: flex;
+        gap: 4px;
+        opacity: 0;
+        transition: opacity var(--transition-fast);
+    }
+
+    &:hover &__actions {
+        opacity: 1;
     }
 }
 
@@ -409,17 +489,17 @@ onMounted(() => {
         border-bottom: 1px solid var(--border-color);
         padding: 20px;
     }
-    
+
     :deep(.el-dialog__title) {
         font-size: 18px;
         font-weight: 600;
         color: var(--text-primary);
     }
-    
+
     :deep(.el-dialog__body) {
         padding: 24px;
     }
-    
+
     :deep(.el-dialog__footer) {
         border-top: 1px solid var(--border-color);
         padding: 16px 24px;
@@ -430,10 +510,19 @@ onMounted(() => {
     .custom-input {
         border-radius: var(--border-radius);
         transition: all var(--transition-fast);
-        
+
         &:focus {
             box-shadow: 0 0 0 2px var(--primary) inset !important;
         }
+    }
+
+    :deep(.el-input-number) {
+        width: 100%;
+    }
+
+    .icon-suffix {
+        font-size: 18px;
+        color: var(--primary);
     }
 }
 
@@ -441,39 +530,22 @@ onMounted(() => {
     display: flex;
     justify-content: flex-end;
     gap: 12px;
-    
+
     .cancel-btn,
     .submit-btn {
         padding: 8px 20px;
         border-radius: var(--border-radius);
         transition: all var(--transition-fast);
-        
+
         &:hover {
             transform: translateY(-1px);
         }
     }
-    
+
     .submit-btn {
         &:hover {
             box-shadow: 0 4px 12px rgba(93, 186, 171, 0.3);
         }
     }
-}
-
-.text-muted {
-    color: var(--text-tertiary);
-    font-size: 14px;
-}
-
-.icon-preview {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    background-color: var(--bg-secondary);
-    border-radius: var(--border-radius);
-    color: var(--primary);
-    font-size: 16px;
 }
 </style>

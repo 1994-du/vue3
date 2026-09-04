@@ -32,7 +32,7 @@ const test='200px'
     </div>
 </div>
 </template>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .bg_wrap{
     display: flex;
     border-radius: 50%;

@@ -244,13 +244,13 @@ interface CreateUserForm {
 }
 
 // 响应式数据
-let tableData = ref<UserItem[]>([])
-let editUserVisible = ref(false)
-let editUserObj = ref<EditUserForm>({} as EditUserForm)
-let roleList = ref<RoleItem[]>([])
-let searchKeyword = ref('')
-let loading = ref(false)
-let hoverRow = ref<UserItem | null>(null)
+const tableData = ref<UserItem[]>([])
+const editUserVisible = ref(false)
+const editUserObj = ref<EditUserForm>({} as EditUserForm)
+const roleList = ref<RoleItem[]>([])
+const searchKeyword = ref('')
+const loading = ref(false)
+const hoverRow = ref<UserItem | null>(null)
 const preUrl = `${import.meta.env.VITE_PROXY}`.replace(/\/$/, '')
 
 interface GetUsersParams {
@@ -323,8 +323,8 @@ const getRoleDictList = (): void => {
 }
 
 //新建
-let createUserVisible = ref(false)
-let createUserObj = ref<CreateUserForm>({} as CreateUserForm)
+const createUserVisible = ref(false)
+const createUserObj = ref<CreateUserForm>({} as CreateUserForm)
 
 const createUser = (): void => {
     createUserObj.value = {} as CreateUserForm
@@ -412,12 +412,12 @@ const deleteUser = (userId: number): void => {
     })
 }
 
-let currentPage = ref(1)
-let pageSize4 = ref(10)
-let total = ref(0)
-let size = ref('small')
-let disabled = ref(false)
-let background = ref(false)
+const currentPage = ref(1)
+const pageSize4 = ref(10)
+const total = ref(0)
+const size = ref('small')
+const disabled = ref(false)
+const background = ref(false)
 
 const handleSizeChange = (val: number): void => {
     pageSize4.value = val
@@ -475,7 +475,6 @@ const handleAvatarUploadSuccessCreate = (response: any): void => {
 
 // 上传失败回调
 const handleAvatarUploadError = (err: Error): void => {
-    console.error('上传失败', err)
     ElMessage.error('头像上传失败，请稍后重试');
 }
 

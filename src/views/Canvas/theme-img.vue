@@ -13,7 +13,7 @@ let source = [
     {id:4,src: new URL('@/assets/vue.svg', import.meta.url).href},
 ]
 </script>
-<style scoped lang='less'>
+<style scoped lang='scss'>
 .theme-img-list{
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;

@@ -20,7 +20,7 @@ function debounce(fn, delay, immediate = false) {
   return function (...args) {
     const context = this
     if (immediate) {
-      const callNow = !timer  // 第一次触发时为 true
+      const callNow = !timer  // 第一次触发时为true
 
       timer = setTimeout(() => {
         timer = null
@@ -103,7 +103,7 @@ onMounted(()=>{
     console.log('debounceThrottling.vue');
 })
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 h2,p{
     text-align: left;
 }

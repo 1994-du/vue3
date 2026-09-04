@@ -187,7 +187,6 @@ const resolveImageMeta = (src: string) => {
             reject(new Error('图片解析失败'))
         }
     }).catch((error) => {
-        console.error(error)
         ElMessage.error('图片解析失败')
     })
 }
@@ -257,7 +256,6 @@ const submitImage = async () => {
         }
     } catch (error) {
         uploadStatus.value = 'error'
-        console.error('图片上传失败', error)
         ElMessage.error('图片上传失败，请稍后重试')
     } finally {
         uploading.value = false

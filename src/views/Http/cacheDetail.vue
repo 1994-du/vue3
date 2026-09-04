@@ -8,27 +8,27 @@
     </el-card>
     <el-card>
         <h2>缓存基本原理</h2>
-        <p>第一次请求时，浏览器缓存资源；</p>
-        <p>再次请求时，根据响应头中的<b>expires</b>或<b>cache-control</b>来判断是否命中 <b>强缓存</b></p>
+        <p>第一次请求时，浏览器缓存资源。</p>
+        <p>再次请求时，根据响应头中<b>expires</b>和<b>cache-control</b>来判断是否命中<b>强缓存</b></p>
     </el-card>
     <div class="cache_cards">
         <el-card class="box-card">
             <template #header>
-                <p>强缓存---状态码：200(from cache)</p>
-                <p>请求不会被服务器接收到</p>
+                <p>强缓存--状态码 200(from cache)</p>
+                <p>请求不会被服务器接收。</p>
             </template>
             <div class="card_content">
                 <el-row>
                     <el-col :span="24">
                         <p>cache-control:</p>
-                        <p>expires:资源过期时间；在过期时间内请求资源不会请求服务器，直接在缓存里面获取；</p>
+                        <p>expires:资源过期时间；在过期时间内请求资源不会请求服务器，直接在缓存里面获取。</p>
                     </el-col>
                 </el-row>
             </div>
         </el-card>
         <el-card class="box-card">
             <template #header>
-                <p>协商缓存---状态码：304(not modified)</p>
+                <p>协商缓存---状态码 304(not modified)</p>
             </template>
             <div class="card_content">
                 <el-row>
@@ -55,7 +55,7 @@
             <tr>
                 <td rowspan="2">强缓存</td>
                 <td>Cache-Control</td>
-                <td>请求/响应头，缓存控制字段，精确控制缓存策略；HTTP1.1新增字段，既能出现在请求头，也能出现在相应头，不同值代表不同意思</td>
+                <td>请求/响应头，缓存控制字段，精确控制缓存策略；HTTP1.1新增字段，既能出现在请求头，也能出现在相应头，不同值代表不同含义</td>
                 <td >\</td>
                 <td>\</td>
             </tr>
@@ -77,7 +77,7 @@
                 
             </tr>
             <tr>
-                <td rowspan="2">Last-modified <br> if-Modified-Since、</td>
+                <td rowspan="2">Last-modified <br> if-Modified-Since）</td>
                 <td>Last-modified：响应头，资源最近修改时间，由服务器告诉浏览器</td>
                 <td rowspan="2">当缓存有效时，服务器不会返回文件，直接返回304状态码，让客户端从缓存中获取文件。节省流量和宽带及服务器压力</td>
                 <td rowspan="2">过期时间只能精确到秒，如果同一秒即修改又获取了文件，客户端拿不到最新的文件</td>
@@ -87,7 +87,7 @@
             </tr>
         </tbody>
     </table>
-    <h2>Cache-Control:请求/响应头，缓存控制字段，精确控制缓存策略；HTTP1.1新增字段，既能出现在请求头，也能出现在相应头，不同值代表不同意思</h2>
+    <h2>Cache-Control:请求/响应头，缓存控制字段，精确控制缓存策略；HTTP1.1新增字段，既能出现在请求头，也能出现在相应头，不同值代表不同含义</h2>
     <h5>服务端参数</h5>
     <table border>
         <thead>
@@ -135,7 +135,7 @@
         <tbody>
             <tr>
                 <td>max-stale</td>
-                <td>例如：5;表示客户端到代理服务器上拿缓存的时候，即使代理缓存过期了也不要紧，只要在过期时间5秒内，还是可以从代理中获取</td>
+                <td>例如5;表示客户端到代理服务器上拿缓存的时候，即使代理缓存过期了也不要紧，只要在过期时间N秒内，还是可以从代理中获取</td>
             </tr>
             <tr>
                 <td>min-fresh</td>
@@ -143,7 +143,7 @@
             </tr>
             <tr>
                 <td>only-if-cached</td>
-                <td>表示客户端只会接受代理缓存，而不会接收源服务器的响应。如果代理缓存失效，则返回50</td>
+                <td>表示客户端只会接受代理缓存，而不会接收源服务器的响应。如果代理缓存失效，则返回504</td>
             </tr>
         </tbody>
     </table>
@@ -168,7 +168,7 @@ const tableData=reactive([
     }
 ])
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 p{
     font-size: 16px;
     color: #303030;

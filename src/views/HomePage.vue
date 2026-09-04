@@ -73,9 +73,8 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import Axios from 'axios';
-import { gsap } from 'gsap'
 
 const pageRootRef = ref<HTMLElement | null>(null)
 const tableData = ref<any[]>([])
@@ -83,30 +82,9 @@ const pageSize = ref(10)
 const pageNum = ref(1)
 const branch = ref('master')
 const isLoading = ref(false)
-let pageAnimationMedia: ReturnType<typeof gsap.matchMedia> | null = null
 
 onMounted(() => {
-    pageAnimationMedia = gsap.matchMedia()
-    pageAnimationMedia.add(
-        { reduceMotion: '(prefers-reduced-motion: reduce)' },
-        ({ conditions }) => {
-            if (conditions.reduceMotion || !pageRootRef.value) return
-            gsap.from('.home-page__hero > *, .home-page__stats > *, .home-page__table-shell', {
-                autoAlpha: 0,
-                y: 16,
-                duration: 0.46,
-                ease: 'power3.out',
-                stagger: 0.07,
-                clearProps: 'transform,opacity,visibility'
-            })
-        },
-        pageRootRef.value
-    )
     fetchData()
-})
-
-onUnmounted(() => {
-    pageAnimationMedia?.revert()
 })
 
 const fetchData = () => {

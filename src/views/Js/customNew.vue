@@ -25,7 +25,7 @@ console.log(p1.getName());
 
 <script setup lang="ts">
 </script>
-<style scoped lang='less'>
+<style scoped lang='scss'>
 .tip{
     margin-bottom: 20px;
     display: flex;

@@ -18,5 +18,5 @@ const allRoutes = router.getRoutes()//所有路由地址
 const currentRouter = router.currentRoute.value //当前路由对象
 // console.log(store,route,allRoutes,currentRouter)
 </script>
-<style lang='less' scoped>
+<style lang='scss' scoped>
 </style>

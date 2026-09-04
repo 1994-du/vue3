@@ -31,8 +31,6 @@ function createRouteRecord(menu: MenuItem, parentPath: string = ''): RouteRecord
                     title: menu.name
                 }
             })
-        } else {
-            console.warn(`[dynamic-route] view not found: ${componentPath}`)
         }
     }
 

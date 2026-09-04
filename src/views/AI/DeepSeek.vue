@@ -47,7 +47,6 @@ const send = async () => {
     await toChatDeepSeek({
         message: input.value
     }).then((res: any) => {
-        console.log('聊天成功', res)
         let content = JSON.parse(res.data).choices[0].message.content
         msg_box.value.push({
             type: 'assistant',
@@ -57,7 +56,6 @@ const send = async () => {
 
         input.value = ''
     }).catch((err: unknown) => {
-        console.log('聊天失败', err)
     })
 }
 </script>

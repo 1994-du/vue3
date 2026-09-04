@@ -18,7 +18,7 @@ $color:red;
     align-self: flex-start;
 }
 </style>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 @color:green;
 .vue3-text{
     align-self: flex-start;

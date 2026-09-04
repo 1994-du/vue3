@@ -25,8 +25,8 @@
   
   <script setup>
   import { ref, onMounted, watch, nextTick,onBeforeUnmount } from 'vue';
-  let wrapperRef = ref(null);
-  let textRef = ref(null);
+  const wrapperRef = ref(null);
+  const textRef = ref(null);
   // 接收外部传入的文字内容
   const props = defineProps(['content']);
   const isOverflow = ref(false); // 是否文本溢出
@@ -34,19 +34,13 @@
   // 检测文本是否溢出
   const checkOverflow = () => {
     const el = textRef.value;
-	console.log('el',el);
-	
     if (el) {
-		console.log('scrollHeight',el.scrollHeight);
-		console.log('offsetHeight',el.offsetHeight);
 		// 判断内容的实际高度是否大于容器高度
 		isOverflow.value = el.scrollHeight > el.offsetHeight;
     }
   };
   // 监听内容变化重新检测
   watch(() => props.content, () => {
-	console.log('watch');
-	
     nextTick(() => checkOverflow());
   });
   const resizeObserver = new ResizeObserver(() => {
@@ -58,7 +52,7 @@
 	resizeObserver.observe(wrapperRef.value);
   });
   onBeforeUnmount(() => {
-    resizeObserver.unobserve(wrapperRef.value);
+    resizeObserver.disconnect()
   })
   
   </script>

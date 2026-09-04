@@ -36,7 +36,6 @@ function decodeJWTPayload(token: string = ''): JWTPayload | null {
 
         return JSON.parse(decodeBase64Url(payload))
     } catch (error) {
-        console.error('JWT解析失败:', error)
         return null
     }
 }

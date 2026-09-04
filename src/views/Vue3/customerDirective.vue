@@ -3,7 +3,7 @@
     <input type="text" v-focus v-show="isShow" v-move style="width: 100px;height: 20px;border: none;border-radius: 3px;text-indent: 10px;">
     <input type="color" @change="colorHandle">
     <div class="test"></div>
-    <div :class="demo.democss" v-html="`<span class='${demo.demo_text}'>dddd</span>`"></div>
+    <div :class="demo.democss"><span :class="demo.demo_text">dddd</span></div>
 </div>
     
 </template>
@@ -31,13 +31,12 @@ let color = ref<string>('#000')
 
 const colorHandle = (event: Event): void => {
     const target = event.target as HTMLInputElement
-    console.log(target.value);
     color.value = target.value
 }
 
 const demo = useCssModule('democss')
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .customer_directive{
     width: 100%;
     display: flex;

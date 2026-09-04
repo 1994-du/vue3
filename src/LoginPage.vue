@@ -88,11 +88,10 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, onMounted, onUnmounted, reactive, ref } from 'vue'
+import { nextTick, onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { Lock, User } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
-import { gsap } from 'gsap'
 import { toLogin, toRegistry } from '@/api/auth'
 import useUserInfoStore from '@/store/pinia/userInfo'
 import { parseJWT, setupTokenExpiryCheck } from '@/utils/tokenManager'
@@ -114,108 +113,17 @@ const loginObj = reactive<LoginForm>({
     remember: false
 })
 
-let loginAnimationMedia = null
-
-const initLoginAnimations = () => {
-    if (!loginRootRef.value) return
-
-    loginAnimationMedia = gsap.matchMedia()
-    loginAnimationMedia.add(
-        {
-            isDesktop: '(min-width: 761px)',
-            reduceMotion: '(prefers-reduced-motion: reduce)'
-        },
-        context => {
-            const { isDesktop, reduceMotion } = context.conditions
-            const timeline = gsap.timeline({
-                defaults: { ease: 'power3.out' }
-            })
-
-            timeline
-                .from('.login-form-wrapper', {
-                    autoAlpha: 0,
-                    x: isDesktop ? 24 : 0,
-                    y: isDesktop ? 0 : 16,
-                    duration: reduceMotion ? 0 : 0.62
-                }, 0)
-                .from('.form-header > *', {
-                    autoAlpha: 0,
-                    y: reduceMotion ? 0 : 12,
-                    duration: reduceMotion ? 0 : 0.38,
-                    stagger: reduceMotion ? 0 : 0.08
-                }, reduceMotion ? 0 : 0.18)
-                .from('.login-form .el-form-item, .form-options, .form-footer', {
-                    autoAlpha: 0,
-                    y: reduceMotion ? 0 : 14,
-                    duration: reduceMotion ? 0 : 0.34,
-                    stagger: reduceMotion ? 0 : 0.06
-                }, reduceMotion ? 0 : 0.3)
-                .from('.login-legal', {
-                    autoAlpha: 0,
-                    duration: reduceMotion ? 0 : 0.3
-                }, reduceMotion ? 0 : 0.58)
-
-            if (isDesktop) {
-                timeline
-                    .from('.login-brand', {
-                        autoAlpha: 0,
-                        x: reduceMotion ? 0 : -20,
-                        duration: reduceMotion ? 0 : 0.7
-                    }, 0)
-                    .from('.brand-content > *', {
-                        autoAlpha: 0,
-                        y: reduceMotion ? 0 : 14,
-                        duration: reduceMotion ? 0 : 0.42,
-                        stagger: reduceMotion ? 0 : 0.08
-                    }, reduceMotion ? 0 : 0.2)
-                    .from('.brand-footer > *', {
-                        autoAlpha: 0,
-                        duration: reduceMotion ? 0 : 0.3,
-                        stagger: reduceMotion ? 0 : 0.05
-                    }, reduceMotion ? 0 : 0.62)
-            }
-
-            if (!reduceMotion) {
-                gsap.to('.brand-grid', {
-                    x: 18,
-                    y: 10,
-                    duration: 18,
-                    repeat: -1,
-                    yoyo: true,
-                    ease: 'sine.inOut'
-                })
-                gsap.fromTo('.brand-mark-large', {
-                    boxShadow: '0 0 0 0 rgba(143, 209, 195, 0.24)'
-                }, {
-                    boxShadow: '0 0 0 16px rgba(143, 209, 195, 0)',
-                    duration: 2.8,
-                    repeat: -1,
-                    ease: 'power1.out'
-                })
-            }
-        },
-        loginRootRef.value
-    )
-}
-
 onMounted(() => {
-    nextTick(initLoginAnimations)
-
     const saved = localStorage.getItem('loginCredentials')
     if (!saved) return
 
     try {
-        const credentials: LoginForm = JSON.parse(saved)
+        const credentials = JSON.parse(saved)
         loginObj.username = credentials.username || ''
-        loginObj.password = credentials.password || ''
         loginObj.remember = Boolean(credentials.remember)
     } catch {
         localStorage.removeItem('loginCredentials')
     }
-})
-
-onUnmounted(() => {
-    loginAnimationMedia?.revert()
 })
 
 const validateCredentials = (): boolean => {
@@ -228,7 +136,10 @@ const validateCredentials = (): boolean => {
 
 const saveCredentials = (): void => {
     if (loginObj.remember) {
-        localStorage.setItem('loginCredentials', JSON.stringify(loginObj))
+        localStorage.setItem('loginCredentials', JSON.stringify({
+            username: loginObj.username,
+            remember: true
+        }))
     } else {
         localStorage.removeItem('loginCredentials')
     }

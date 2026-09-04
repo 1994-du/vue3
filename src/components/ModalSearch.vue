@@ -42,10 +42,10 @@ const router = useRouter()
 const userInfoStore = useUserInfoStore()
 const emit = defineEmits(['update:modelValue'])
 
-let menuIpt = ref('')
-let menuData = ref([])
-let filterMenu = ref([])
-let isComposition = ref(false)
+const menuIpt = ref('')
+const menuData = ref([])
+const filterMenu = ref([])
+const isComposition = ref(false)
 
 const setIpt = (val) => {
     isComposition.value = val

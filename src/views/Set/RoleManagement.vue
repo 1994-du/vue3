@@ -164,15 +164,15 @@ interface RoleOperationResponse {
 }
 
 // 响应式数据
-let allMenus = ref<MenuNode[]>([])
-let dialogType = ref<'add' | 'edit'>('add')
-let dialogTitle = ref('新建角色')
-let tableData = ref<RoleItem[]>([])
-let currentPage4 = ref(1)
-let pageSize4 = ref(10)
-let total = ref(0)
-let searchKeyword = ref('')
-let loading = ref(false)
+const allMenus = ref<MenuNode[]>([])
+const dialogType = ref<'add' | 'edit'>('add')
+const dialogTitle = ref('新建角色')
+const tableData = ref<RoleItem[]>([])
+const currentPage4 = ref(1)
+const pageSize4 = ref(10)
+const total = ref(0)
+const searchKeyword = ref('')
+const loading = ref(false)
 
 interface GetMenuTreeParams {
     // 根据实际API参数定义
@@ -217,7 +217,6 @@ const getRoleList = (): void => {
         tableData.value = res.data.list || []
         total.value = res.data.total || 0
     }).catch((err: Error) => {
-        console.error('获取角色数据失败', err)
     }).finally(() => {
         loading.value = false
     })
@@ -244,15 +243,14 @@ const deleteRole = (roleId: number): void => {
             getRoleList()
         }
     }).catch((err: Error) => {
-        console.error('删除角色失败', err)
         ElMessage.error('删除角色失败')
     })
 }
 
-let formRef = ref<any>(null)
-let formTree = ref<any>(null)
-let dialogVisible = ref(false)
-let formData = ref<RoleFormData>({
+const formRef = ref<any>(null)
+const formTree = ref<any>(null)
+const dialogVisible = ref(false)
+const formData = ref<RoleFormData>({
     name: '',
     roleDesc: '',
     menus: []
@@ -277,7 +275,6 @@ const normalizeMenuIds = (menus: number[] | string | undefined): MenuId[] => {
             const parsedMenus = JSON.parse(menus)
             return Array.isArray(parsedMenus) ? parsedMenus : []
         } catch (error) {
-            console.error('解析角色菜单数据失败', error)
         }
     }
 
@@ -302,7 +299,6 @@ const handleRole = (): void => {
     
     const checkKeys = formTree.value.getCheckedKeys()
     const checkHalfKeys = formTree.value.getHalfCheckedKeys()
-    console.log('关闭弹窗', checkKeys, checkHalfKeys)
     
     formRef.value.validate((valid: boolean) => {
         if(valid){
@@ -313,13 +309,11 @@ const handleRole = (): void => {
                     menus: checkKeys
                 }
                 addRole(params).then((res: any) => {
-                    console.log('新增角色成功', res)
                     if(res.code === 200){
                         dialogVisible.value = false
                         getRoleList()
                     }
                 }).catch((err: Error) => {
-                    console.error('新增角色失败', err)
                 })
             } else {
                 // 编辑角色
@@ -328,13 +322,11 @@ const handleRole = (): void => {
                     menus: checkKeys
                 }
                 setRole(params).then((res: any) => {
-                    console.log('设置角色成功', res)
                     if(res.code === 200){
                         dialogVisible.value = false
                         getRoleList()
                     }
                 }).catch((err: Error) => {
-                    console.error('设置角色失败', err)
                 })
             }
         }
@@ -345,7 +337,6 @@ const editRole = (row: RoleItem): void => {
     dialogVisible.value = true
     dialogType.value = 'edit'
     dialogTitle.value = '编辑角色'
-    console.log('编辑角色', row)
     
     const normalizedMenus = normalizeMenuIds(row.menus)
     formData.value = {
@@ -354,7 +345,6 @@ const editRole = (row: RoleItem): void => {
         roleDesc: row.roleDesc,
         menus: normalizedMenus as number[]
     }
-    console.log('formData', formData.value)
     
     nextTick(() => {
         restoreCheckedMenus(normalizedMenus)

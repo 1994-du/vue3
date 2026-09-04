@@ -35,7 +35,6 @@ const userForm = reactive({
     chooseUser: []
 })
 const handleCheckedChange = (val) => {
-    console.log(val);
 }
 </script>
 

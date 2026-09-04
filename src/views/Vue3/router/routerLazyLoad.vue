@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 h2 , p{
     text-align: left;
 }

@@ -44,7 +44,7 @@ const registerEvent = () => {
     analyser = audioCtx.createAnalyser(); // 分析器
     source.connect(analyser); // 音频源节点连接到分析器节点
     analyser.fftSize = 512;
-    buffer = new Uint8Array(analyser.frequencyBinCount) // 类型化数组  512/2
+    buffer = new Uint8Array(analyser.frequencyBinCount) // 类型化数组 512/2
     analyser.connect(audioCtx.destination); // 分析器节点连接到音频上下文的输出节点
     isInit = true;
   });
@@ -83,7 +83,7 @@ onMounted(()=>{
 })
 </script>
 
-<style scoped lang='less'>
+<style scoped lang='scss'>
 .audio_visualization{
   position: relative;
   width: 100%;

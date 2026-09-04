@@ -25,7 +25,6 @@
   
       // 监听文件变化，在此处发起请求并处理文件
       handleChange(file, fileList) {
-        console.log('文件变化:', file, fileList);
         
         // 如果文件状态是 ready，我们还没开始上传
         if (file.status === 'ready') {
@@ -36,7 +35,6 @@
           this.fileList.push(file);
         } else if (file.status === 'fail') {
           // 上传失败时，执行失败的处理逻辑
-          console.log('上传失败:', file);
         }
       },
   
@@ -59,14 +57,12 @@
         // 使用 Promise 来处理请求结果
         simulatedRequest
           .then(response => {
-            console.log(response);
             // 上传成功后，手动更新 file 的状态为 success
             // this.$set(file, 'status', 'success');
             // 将文件添加到 fileList
             this.fileList.push(file);
           })
           .catch(error => {
-            console.log(error);
             // 上传失败时，手动更新 file 的状态为 fail
             // this.$set(file, 'status', 'fail');
           });

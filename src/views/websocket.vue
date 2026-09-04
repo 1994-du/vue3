@@ -96,7 +96,6 @@ const getCurrentTime = (): string => {
 const connectServer = (): void => {
   socket = new WebSocket(import.meta.env.VITE_WS);
   socket.onopen = () => {
-    console.log('WebSocket连接成功');
     const userMessage = {
       type: 'username',
       payload: {
@@ -109,7 +108,6 @@ const connectServer = (): void => {
   };
   socket.onmessage = (event: MessageEvent) => {
     const data: WebSocketPayload = JSON.parse(event.data);
-    console.log('收到服务器消息：', data);
     if (data.type === 'userJoined') {
       ElMessage({
         message: data.payload.message,
@@ -139,9 +137,6 @@ const connectServer = (): void => {
       }
       messageList.value.push(newMessage);
       nextTick(() => {
-        console.log(message_box.value?.scrollHeight);
-        console.log(message_box.value?.scrollTop);
-        
         if (message_box.value) {
           message_box.value.scrollTop = message_box.value.scrollHeight;
         }
@@ -149,7 +144,6 @@ const connectServer = (): void => {
     }
   };
   socket.onclose = (event: CloseEvent) => {
-    console.log('WebSocket连接已关闭', event);
   };
 };
 
@@ -166,10 +160,8 @@ const sendMessage = (): void => {
       },
     };
     socket.send(JSON.stringify(chatMessage));
-    console.log('发送消息：', message.value);
     message.value = '';
   } else {
-    console.error('WebSocket未连接');
   }
 };
 
@@ -216,7 +208,6 @@ const sendImage = async (event: Event): Promise<void> => {
         ElMessage({ message: '图片上传失败', type: 'error' });
       }
     } catch (error) {
-      console.error('上传图片失败:', error);
       ElMessage({ message: '图片上传失败，请重试', type: 'error' });
     }
   }
@@ -227,7 +218,6 @@ const sendImage = async (event: Event): Promise<void> => {
 const disConnectServer = (): void => {
   if (socket) {
     socket.close();
-    console.log('WebSocket连接已关闭');
   }
 };
 

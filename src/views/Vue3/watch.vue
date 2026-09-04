@@ -30,25 +30,21 @@ interface ReactiveObj2 {
 let single2 = reactive<ReactiveObj2>({ c: 1, d: 2 })
 
 watch(num, (newVal, oldVal) => {
-    console.log(newVal, oldVal);
 }, {
     immediate: true
 })
 
 watch([num, num2], (newVal, oldVal) => {
-    console.log(newVal, oldVal);
 }, {
     immediate: true
 })
 
 watch(single, (newVal, oldVal) => {
-    console.log(newVal, oldVal);
 }, {
     immediate: true
 })
 
 watch([single, single2], (newVal, oldVal) => {
-    console.log(newVal, oldVal);
 }, {
     immediate: true
 })

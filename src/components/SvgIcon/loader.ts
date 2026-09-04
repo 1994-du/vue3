@@ -68,7 +68,6 @@ async function loadSvg(iconName: string, svgPath?: string): Promise<boolean | nu
         
         return true
     } catch (err) {
-        console.error(`Error loading SVG icon: ${iconName} from path: ${path}`, err)
         return null
     }
 }

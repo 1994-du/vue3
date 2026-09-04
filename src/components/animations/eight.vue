@@ -6,35 +6,35 @@
         <div class="in_line in_line_3"></div>
         <div class="in_line in_line_4"></div>
         <div class="out_line out_line_1">
-            <yaos :yaoNm="['1','2']" name="震"></yaos>
+            <yaos :yaoNm="['1','2']" name="a"></yaos>
         </div>
         <div class="out_line out_line_3">
-            <yaos :yaoNm="['1','3']" name="坎"></yaos>
+            <yaos :yaoNm="['1','3']" name="b"></yaos>
         </div>
         <div class="out_line out_line_5">
-            <yaos :yaoNm="['2','3']" name="艮"></yaos>
+            <yaos :yaoNm="['2','3']" name="c"></yaos>
         </div>
         <div class="out_line out_line_7">
-            <yaos :yaoNm="[]" name="乾"></yaos>
+            <yaos :yaoNm="[]" name="d"></yaos>
         </div>
         <div class="out_line out_line_2">
-            <yaos :yaoNm="['2']" name="离"></yaos>
+            <yaos :yaoNm="['2']" name="e"></yaos>
         </div>
         <div class="out_line out_line_4">
-            <yaos :yaoNm="['3']" name="巽"></yaos>
+            <yaos :yaoNm="['3']" name="f"></yaos>
         </div>
         <div class="out_line out_line_6">
-            <yaos :yaoNm="['1']" name="兑"></yaos>
+            <yaos :yaoNm="['1']" name="g"></yaos>
         </div>
         <div class="out_line out_line_8">
-            <yaos :yaoNm="['1','2','3']" name="坤"></yaos>
+            <yaos :yaoNm="['1','2','3']" name="h"></yaos>
         </div>
     </div>
 </template>
 <script setup>
 import yaos from "./yaos.vue"
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .point{
     width: 100px;
     height: 100px;

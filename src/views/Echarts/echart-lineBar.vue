@@ -1,19 +1,17 @@
 <template>
-<div id="chart" style="width:100%;height:100%;"></div>
+<div ref="chartRef" style="width:100%;height:100%;"></div>
 </template>
 <script setup lang="ts">
-import * as echarts from 'echarts';
-import { onMounted } from 'vue';
-let chartConfig={
-    width:500,
-    height:500,
-}
+import * as echarts from 'echarts'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
+
+const chartRef = ref<HTMLElement | null>(null)
+let chartInstance: echarts.ECharts | null = null
+
 const initChart = () => {
-    // 初始化 ECharts 实例
-    var chart = echarts.init(document.getElementById('chart'));
-    // 配置项
-    // 配置项
-    var option = {
+    if (!chartRef.value) return
+    chartInstance = echarts.init(chartRef.value)
+    const option = {
     tooltip: {
         trigger: 'axis', // 提示框触发类型
         confine:true,
@@ -176,10 +174,14 @@ const initChart = () => {
     ]
 };
 
-    chart.setOption(option);
+    chartInstance.setOption(option)
 }
-onMounted(() => {
-    initChart()
+
+onMounted(() => initChart())
+
+onBeforeUnmount(() => {
+    chartInstance?.dispose()
+    chartInstance = null
 })
 </script>
 <style lang='scss' scoped>

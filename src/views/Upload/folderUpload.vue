@@ -201,7 +201,6 @@ const submitFolder = async (): Promise<void> => {
             ElMessage.error(res?.msg || '文件夹上传失败')
         }
     } catch (error) {
-        console.error('文件夹上传失败', error)
         ElMessage.error('文件夹上传失败，请稍后重试')
     } finally {
         uploading.value = false

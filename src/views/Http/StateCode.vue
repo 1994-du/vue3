@@ -53,7 +53,7 @@ const stateCodeList = ref([
     },
     {
         statusCode:401,
-        statusDesc:'未授权 - 请求需要用户验证，客户端需提供有效的身份验证凭据'
+        statusDesc:'未授权 - 请求需要用户验证，客户端需提供有效的身份验证凭证'
     },
     {
         statusCode:403,
@@ -89,7 +89,7 @@ const stateCodeList = ref([
     }
 ])
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 p{
     text-align: left;
 }

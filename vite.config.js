@@ -60,10 +60,8 @@ export default defineConfig(({mode,command}) => {
     ],
     server: {
       port: 3002,
-      host: '0.0.0.0', // 允许局域网访问
-      headers: {
-        'Access-Control-Allow-Origin': '*'
-      },
+      sourcemap: true,
+      host: '0.0.0.0',
       proxy: {
           '/api': {
               target: env.VITE_PROXY,// node服务
@@ -74,7 +72,7 @@ export default defineConfig(({mode,command}) => {
     },
     base:env.VITE_PROJECT_URL,
     build:{
-      sourcemap:true,
+      sourcemap:false,
       chunkSizeWarningLimit: 1200,
       // outDir:path.resolve(__dirname,'../../../dist/vue3'),
       outDir:path.resolve(__dirname,'./dist'),

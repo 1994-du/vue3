@@ -12,12 +12,12 @@ const props = defineProps({
         type: String
     }
 });
-let loaded = ref(false);
+const loaded = ref(false);
 onMounted(async () => {
     loaded.value = await svgLoader(props.name || 'default');
 });
 </script>
-<style scoped lang='less'>
+<style scoped lang='scss'>
 .svg-icon {
     width: 1em;
     height: 1em;

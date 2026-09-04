@@ -16,7 +16,7 @@
 import { ref,reactive } from 'vue'
 import popButton from '../../components/popButton.vue';
 import { ElMessage } from 'element-plus';
-let userList = ref([
+const userList = ref([
     {id:1,name:'张三'},
     {id:2,name:'李四'},
     {id:3,name:'王五'},
@@ -28,14 +28,14 @@ let userList = ref([
     {id:9,name:'郑十一'},
     {id:10,name:'王十二'}
 ])
-let tableData = reactive([
+const tableData = reactive([
     { handler: '张三' },
     { handler: '李四' },
     { handler: '王五' },
 ])
-let selectData = ref<any[]>([])
-let userBtnRef1 = ref<any>(null)
-let userBtnRef2 = ref<any>(null)
+const selectData = ref<any[]>([])
+const userBtnRef1 = ref<any>(null)
+const userBtnRef2 = ref<any>(null)
 const handleSelectionChange = (val: any[]) => {
     selectData.value = val
 }
@@ -60,7 +60,6 @@ const testOne2 = ()=>{
     }
 }
 const userSelect = (data: any) => {
-    console.log('确定',data)
 }
 </script>
 

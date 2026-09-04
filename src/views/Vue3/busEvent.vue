@@ -19,7 +19,6 @@ type BusEventHandler = (data: any) => void
 const bus = getCurrentInstance()?.appContext.config.globalProperties.$bus;
 
 bus.on('test', (data: any) => {
-    console.log(data);
 })
 
 bus.emit('test', 'hello world');

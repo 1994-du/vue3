@@ -7,21 +7,18 @@ declare module '@/api/api' {
         message?: string
     }
     export function getUsers(data?: { page?: number; pageSize?: number }): Promise<any>
-    export function toUpload(data: any): Promise<any>
     export function updateUser(data: any): Promise<any>
     export function addUser(data: any): Promise<any>
     export function toResetPassword(data: any): Promise<any>
     export function delUser(data: any): Promise<any>
     export function getRolesDict(data?: any): Promise<any>
-    export function fragmentUpload(data: any): Promise<any>
-    export function fragmentDownload(data: any): Promise<any>
     export function updateAvatar(data: any): Promise<any>
     export function uploadFile(data: any): Promise<any>
-    export function getOrgTree(data?: any): Promise<any>
-    export function getOrgDetail(data: any): Promise<any>
+    export function getOrgTree(params?: any): Promise<any>
+    export function getOrgDetail(id: number | string): Promise<any>
     export function addOrg(data: any): Promise<any>
-    export function updateOrg(data: any): Promise<any>
-    export function deleteOrg(data: any): Promise<any>
+    export function updateOrg(id: number | string, data: any): Promise<any>
+    export function deleteOrg(id: number | string): Promise<any>
 }
 
 declare module '@/api/chat' {

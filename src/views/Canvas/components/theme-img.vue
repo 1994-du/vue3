@@ -26,7 +26,7 @@ function extractDominantColor() {
   canvas.width = size
   canvas.height = size
 
-  // 画到小画布（用 naturalWidth/Height 更稳）
+  // 画到小画布（用 naturalWidth/Height 更稳定）
   const w = img.naturalWidth || img.width
   const h = img.naturalHeight || img.height
   if (!w || !h) return
@@ -37,8 +37,7 @@ function extractDominantColor() {
   try {
     imgData = ctx.getImageData(0, 0, size, size)
   } catch (e) {
-    // 跨域未设置或被 tainted canvas
-    console.warn('getImageData failed:', e)
+    // 跨域未设置或者是 tainted canvas
     return
   }
   if (!imgData) return;
@@ -49,7 +48,7 @@ function extractDominantColor() {
 // 颜色量化 + 频次统计（按饱和度加权）
 function getDominantColor(data: Uint8ClampedArray) {
   const bins = new Map()
-  const stride = 8 // 采样步长（可调大一点进一步加速，如 8、12）
+  const stride = 8 // 采样步长（可调大一点进一步加速，如8、16、32）
 
   for (let i = 0; i < data.length; i += 4 * stride) {
     const a = data[i + 3]
@@ -75,7 +74,7 @@ function getDominantColor(data: Uint8ClampedArray) {
 
   if (bins.size === 0) return '#888' // 兜底
 
-  // 找出现次数最多的桶
+  // 找出现次数最多的
   let best = null
   let bestCount = -1
   bins.forEach((v) => {
@@ -100,7 +99,7 @@ onMounted(tryExtract)
 watch(() => props.src, tryExtract)
 </script>
 
-<style scoped lang="less">
+<style scoped lang="scss">
 .theme-img {
     width: 300px;
     height: 300px;

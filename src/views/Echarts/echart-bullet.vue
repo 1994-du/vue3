@@ -1,21 +1,17 @@
 <template>
-    <div id="chart_bullet" style="width:400px;height:400px;"></div>
+    <div ref="chartRef" style="width:400px;height:400px;"></div>
 </template>
 <script setup lang="ts">
 import * as echarts from 'echarts'
-import { onMounted } from 'vue';
-let echart1: echarts.ECharts | null = null
-const initEchart1=()=>{
-    if(echart1!==null){
-        echart1.dispose()
-    }
-    echart1=echarts.init(document.getElementById('chart_bullet'))
-    window.onresize=()=>{
-        if (echart1) {
-            echart1.resize()
-        }
-    }
-    echart1.setOption({
+import { ref, onMounted, onBeforeUnmount } from 'vue'
+
+const chartRef = ref<HTMLElement | null>(null)
+let chartInstance: echarts.ECharts | null = null
+
+const initChart = () => {
+    if (!chartRef.value) return
+    chartInstance = echarts.init(chartRef.value)
+    chartInstance.setOption({
         title: {
             text: "子弹图示例"
         },
@@ -120,8 +116,12 @@ const initEchart1=()=>{
         ]
     })
 }
-onMounted(() => {
-    initEchart1()
+
+onMounted(() => initChart())
+
+onBeforeUnmount(() => {
+    chartInstance?.dispose()
+    chartInstance = null
 })
 </script>
 <style lang='scss' scoped>

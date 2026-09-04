@@ -2,11 +2,15 @@
 <div ref="echartRef" class="echart-container" style="width: 100%; height: 100%"></div>
 </template>
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 import * as echarts from 'echarts'
-let echartRef = ref<HTMLElement | null>(null)
+
+const echartRef = ref<HTMLElement | null>(null)
+let chartInstance: echarts.ECharts | null = null
+
 const initEchart = () => {
-    const myChart = echarts.init(echartRef.value)
+    if (!echartRef.value) return
+    chartInstance = echarts.init(echartRef.value)
     const option = {
         grid:[
             {left:'55',bottom:'60%', height: '30%'},
@@ -179,10 +183,14 @@ const initEchart = () => {
                 }
             ]
     }
-    myChart.setOption(option)
+    chartInstance.setOption(option)
 }
-onMounted(() => {
-    initEchart()
+
+onMounted(() => initEchart())
+
+onBeforeUnmount(() => {
+    chartInstance?.dispose()
+    chartInstance = null
 })
 </script>
 <style lang='scss' scoped>

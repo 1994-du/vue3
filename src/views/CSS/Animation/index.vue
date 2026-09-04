@@ -43,11 +43,11 @@ import animations from "@/json/animation.json"
 import { onActivated, onDeactivated, onUnmounted, ref } from "vue";
 import animationDemo1 from '@/components/animations/animationDemo1.vue';
 import eight from '@/components/animations/eight.vue';
-let animation = ref(animations)
-let drawer = ref(false)
-let direction = ref('rtl')
+const animation = ref(animations)
+const drawer = ref(false)
+const direction = ref('rtl')
 
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 @use "@/styles/animation.scss";
 </style>

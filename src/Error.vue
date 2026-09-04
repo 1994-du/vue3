@@ -7,7 +7,7 @@
 
 <script setup lang="ts">
 </script>
-<style scoped lang='less'>
+<style scoped lang='scss'>
 .box{
     font-size: 20px;
     font-weight: bold;

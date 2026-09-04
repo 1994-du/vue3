@@ -30,7 +30,6 @@ import { ref } from 'vue';
 
 let iptVal = ref<string>('')
 let textVal = useDebouncedRef<string>('', 2000)
-console.log('textVal', textVal);
 
 const changeIpt = (): void => {
     textVal.value = iptVal.value

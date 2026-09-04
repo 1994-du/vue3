@@ -20,7 +20,6 @@ import './styles/design-system.scss'
 import './styles/admin-page.scss'
 
 // 工具
-import '@/utils/fontSize'
 import { persistenceHtmlTheme } from '@/utils/saveHtmlTheme'
 import customDirective from '@/utils/customDirective'
 import IndexDB from '@/utils/indexedDB'

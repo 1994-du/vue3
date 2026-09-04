@@ -4,7 +4,7 @@
     <CodeEditor class="mb-[10px]" code="数组浅拷贝方法：Array.slice()、Array.concat()、[...arr]
 对象浅拷贝方法：Object.assign()、{...obj}"/>
     <h4>深拷贝方法</h4>
-    <CodeEditor code="1.使用 JSON.parse(JSON.stringify(obj))（这种方式有局限，无法拷贝 undefined、function、symbol 等特殊值，也不能处理循环引用）。
+<CodeEditor code="1.使用 JSON.parse(JSON.stringify(obj))（这种方式有局限，无法拷贝 undefined、function、symbol 等特殊值，也不能处理循环引用）。
 const original = { a: 1, b: { c: 2 } };
 const deepCopy = JSON.parse(JSON.stringify(original)); // 使用 JSON 方法进行深拷贝
 console.log(deepCopy); // { a: 1, b: { c: 2 } }
@@ -39,13 +39,13 @@ function deepClone(obj) {
   return copy;
 }
   
-3.使用第三方库（如 lodash 的 cloneDeep）
+3.使用第三方库（如 lodash 的cloneDeep）
 "/>
 </template>
 
 <script setup lang="ts">
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 h2,h4,p{
     text-align: left;
 }

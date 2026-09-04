@@ -14,18 +14,18 @@
   #balance = 1000; // 私有属性
 
   getBalance() {
-      return this.#balance; // ✅ 类内部可以访问
+      return this.#balance; // 在类内部可以访问
   }
 }
 
 const account = new BankAccount();
-console.log(account.getBalance()); // ✅ 1000
-console.log(BankAccount.#balance); // ❌ 报错 (SyntaxError: Private field '#balance' must be declared in an enclosing class)"
+console.log(account.getBalance()); // 输出1000
+console.log(BankAccount.#balance); // 报错 (SyntaxError: Private field '#balance' must be declared in an enclosing class)"
 />
 </template>
 
 <script setup lang="ts">
 
 </script>
-<style scoped lang='less'>
+<style scoped lang='scss'>
 </style>

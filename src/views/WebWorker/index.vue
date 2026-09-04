@@ -30,6 +30,7 @@ worker.onmessage = (e)=>{
 "></CodeEditor>
 </template>
 <script lang="ts" setup>
+import { onBeforeUnmount } from 'vue'
 
 const worker = new Worker(
   new URL('./work.ts', import.meta.url),
@@ -37,10 +38,12 @@ const worker = new Worker(
     type: 'module'
   }
 )
-console.log('worker',worker);
 worker.postMessage('1111')
 worker.onmessage = (e)=>{
-    console.log('e',e);
     worker.terminate()
 }
+
+onBeforeUnmount(() => {
+    worker.terminate()
+})
 </script>

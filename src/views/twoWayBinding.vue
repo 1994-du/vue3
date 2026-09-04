@@ -46,6 +46,6 @@ class Dep{
 
 <script setup lang="ts">
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 
 </style>

@@ -1,38 +1,34 @@
 <template>
     <div class="echart_bar">
-        <div id="echart_bar" style="width:100%;height:100%;"></div>
+        <div ref="chartRef" style="width:100%;height:100%;"></div>
     </div>
 </template>
 <script setup lang="ts">
 import * as echarts from 'echarts'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 
-let echartBar=null;
-const initEchartBar=()=>{
-    echartBar = echarts.init(document.getElementById('echart_bar'));
-    let option = {
-        tooltip:{
-            show:true
-        },
+const chartRef = ref<HTMLElement | null>(null)
+let chartInstance: echarts.ECharts | null = null
+
+const initChart = () => {
+    if (!chartRef.value) return
+    chartInstance = echarts.init(chartRef.value)
+    chartInstance.setOption({
+        tooltip: { show: true },
         xAxis: {
             type: 'category',
             data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
         },
-        yAxis: {
-            type: 'value'
-        },
-        series: [
-            {
-                data: [120, 200, 150, 80, 70, 110, 130],
-                type: 'bar'
-            }
-        ]
-    };
-
-    echartBar.setOption(option);
+        yAxis: { type: 'value' },
+        series: [{ data: [120, 200, 150, 80, 70, 110, 130], type: 'bar' }]
+    })
 }
-onMounted(()=>{
-    initEchartBar()
+
+onMounted(() => initChart())
+
+onBeforeUnmount(() => {
+    chartInstance?.dispose()
+    chartInstance = null
 })
 </script>
 <style lang='scss' scoped>

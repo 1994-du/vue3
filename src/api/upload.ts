@@ -4,7 +4,7 @@ import axios from './index'
  * @description 上传单个文件
  */
 export const uploadFile = (data: any, extraConfig: any = {}) => {
-    const requestConfig = {
+    return axios({
         url: '/file/upload',
         method: 'post',
         needAuth: true,
@@ -14,22 +14,14 @@ export const uploadFile = (data: any, extraConfig: any = {}) => {
         },
         data,
         ...extraConfig
-    }
-
-    return new Promise((resolve, reject) => {
-        axios(requestConfig as any).then((res: any) => {
-            resolve(res)
-        }).catch((err: any) => {
-            reject(err)
-        })
-    })
+    } as any)
 }
 
 /**
  * @description 上传单张图片
  */
 export const uploadImage = (data: any, extraConfig: any = {}) => {
-    const requestConfig = {
+    return axios({
         url: '/files/upload-image',
         method: 'post',
         needAuth: true,
@@ -39,22 +31,14 @@ export const uploadImage = (data: any, extraConfig: any = {}) => {
         },
         data,
         ...extraConfig
-    }
-
-    return new Promise((resolve, reject) => {
-        axios(requestConfig as any).then((res: any) => {
-            resolve(res)
-        }).catch((err: any) => {
-            reject(err)
-        })
-    })
+    } as any)
 }
 
 /**
  * @description 上传整个文件夹
  */
 export const uploadFolder = (data: any, extraConfig: any = {}) => {
-    const requestConfig = {
+    return axios({
         url: '/files/upload-folder',
         method: 'post',
         needAuth: true,
@@ -64,13 +48,5 @@ export const uploadFolder = (data: any, extraConfig: any = {}) => {
         },
         data,
         ...extraConfig
-    }
-
-    return new Promise((resolve, reject) => {
-        axios(requestConfig as any).then((res: any) => {
-            resolve(res)
-        }).catch((err: any) => {
-            reject(err)
-        })
-    })
+    } as any)
 }

@@ -2,7 +2,7 @@
     <el-table :data="tableData" height="800px">
         <el-table-column label="协议" prop="protocol"></el-table-column>
         <el-table-column label="描述" prop="description"></el-table-column>
-        <el-table-column label="用途" prop="usage"></el-table-column>
+        <el-table-column label="用法" prop="usage"></el-table-column>
         <el-table-column label="优缺点" prop="note"></el-table-column>
         <el-table-column label="示例" prop="example"></el-table-column>
     </el-table>
@@ -126,7 +126,7 @@ const tableData = [
         protocol: 'UDP',
         description: '用户数据报协议，用于实时应用，如视频会议、在线游戏等。',
         usage: '视频会议、在线游戏等',
-        note: '优点：头小、开销低、延迟低、简单、易于 NAT 穿透。缺点：不可靠、无顺序、不安全（需上层实现）、无拥塞控制风险网络拥塞。',
+        note: '优点：头小、开销低、延迟低、简单、易于NAT 穿透。缺点：不可靠、无顺序、不安全（需上层实现）、无拥塞控制风险网络拥塞。',
         example: 'voip、在线游戏等'
     },
     {
@@ -139,9 +139,9 @@ const tableData = [
     {
         protocol: 'ICMP',
         description: '互联网控制消息协议，用于在IP网络中发送错误消息和操作信息，如ping、traceroute等。',
-        usage: 'ping、traceroute等',
+        usage: 'ping、traceroute。',
         note: '优点：简单、易于实现。缺点：不可靠、无顺序、不安全（需上层实现）。',
-        example: 'ping、traceroute等'
+        example: 'ping、traceroute。'
     },
     {
         protocol: 'IGMP',
@@ -286,5 +286,5 @@ const tableData = [
 ];
 
 </script>
-<style scoped lang='less'>
+<style scoped lang='scss'>
 </style>

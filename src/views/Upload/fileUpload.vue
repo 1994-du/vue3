@@ -254,7 +254,6 @@ const submitFiles = async (): Promise<void> => {
                 }
             } catch (error) {
                 item.status = 'error'
-                console.error('文件上传失败', error)
             } finally {
                 uploadedSize += item.size
                 uploadProgress.value = Math.min(

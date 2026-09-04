@@ -14,7 +14,7 @@
             <pre>justify-content: center;</pre>
             <pre>align-items: center;</pre>
         </div>
-        <h4>知道元素宽高的情况(例如：宽高为100px)</h4>
+        <h4>知道元素宽高的情况（例如：宽高为100px)</h4>
         <div class="code">
             <pre>position: absolute;</pre>
             <pre>top: 50%;</pre>
@@ -35,7 +35,7 @@
 </template>
 <script setup lang="ts">
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .div_center{
     width: 100%;
     height: 100%;

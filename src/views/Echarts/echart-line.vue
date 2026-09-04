@@ -1,57 +1,43 @@
 <template>
-   <div id="echart_line" style="width:100%;height:100%;"></div>
+   <div ref="chartRef" style="width:100%;height:100%;"></div>
 </template>
 
 <script setup lang="ts">
 import * as echarts from 'echarts'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 
-let echartLine: echarts.ECharts | null = null;
-const initEchartBar=()=>{
-    echartLine = echarts.init(document.getElementById('echart_line'));
-    let option = {
+const chartRef = ref<HTMLElement | null>(null)
+let chartInstance: echarts.ECharts | null = null
+
+const initChart = () => {
+    if (!chartRef.value) return
+    chartInstance = echarts.init(chartRef.value)
+    const option = {
         xAxis: {
             type: 'category',
             data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-            axisPointer: {
-                type: 'shadow' // 阴影
-            }
+            axisPointer: { type: 'shadow' }
         },
-        yAxis: {
-            type: 'value'
-        },
-        tooltip: {
-            trigger: 'axis',
-            axisPointer: {
-                type: 'shadow'
-            }
-        },
-        series: [{
-            data: [120, 200, 150, 80, 70, 110, 130],
-            type: 'line'
-        }]
-    };
+        yAxis: { type: 'value' },
+        tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+        series: [{ data: [120, 200, 150, 80, 70, 110, 130], type: 'line' }]
+    }
 
-    echartLine.setOption(option);
-    // 获取点击时 axisPointer 当前指向的 axis 值
-    echartLine.getZr().on('click', function (params: any) {
-        if (!echartLine) return;
-        const pointInPixel = [params.offsetX, params.offsetY];
-        const pointInGrid = echartLine.convertFromPixel({ seriesIndex: 0 }, pointInPixel);
-        
-        if (!pointInGrid) return;
-
-        const xIndex = Math.round(pointInGrid[0]); // x 轴的 index
-        const xValue = option.xAxis.data[xIndex];  // x 轴的 label，如 'Tue'
-        const yValue = option.series[0].data[xIndex]; // 对应的 value，如 200
-
-        console.log(`点击了 ${xValue}，值为 ${yValue}`);
-    });
+    chartInstance.setOption(option)
+    chartInstance.getZr().on('click', (params: any) => {
+        if (!chartInstance) return
+        const pointInGrid = chartInstance.convertFromPixel({ seriesIndex: 0 }, [params.offsetX, params.offsetY])
+        if (!pointInGrid) return
+        const xIndex = Math.round(pointInGrid[0])
+    })
 }
 
-onMounted(()=>{
-    initEchartBar()
+onMounted(() => initChart())
+
+onBeforeUnmount(() => {
+    chartInstance?.dispose()
+    chartInstance = null
 })
 </script>
-<style scoped lang='less'>
+<style scoped lang='scss'>
 </style>

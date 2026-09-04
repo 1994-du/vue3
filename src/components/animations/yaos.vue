@@ -28,36 +28,36 @@ const props = defineProps({
 })
 const yaoNmString = computed(()=>{
     if(props.yaoNm.length==0){
-        return '乾'
+        return '— — —'
     }
     if(props.yaoNm.length==1){
         if(props.yaoNm.includes('1')){
-            return '兑'
+            return '— — —'
         }
         if(props.yaoNm.includes('2')){
-            return '离'
+            return '— — —'
         }
         if(props.yaoNm.includes('3')){
-            return '巽'
+            return '— — —'
         }
     }
     if(props.yaoNm.length==2){
         if(props.yaoNm.includes('1')&&props.yaoNm.includes('2')){
-            return '震'
+            return '— — —'
         }
         if(props.yaoNm.includes('1')&&props.yaoNm.includes('3')){
-            return '坎'
+            return '— — —'
         }
         if(props.yaoNm.includes('2')&&props.yaoNm.includes('3')){
-            return '艮'
+            return '— — —'
         }
     }
     if(props.yaoNm.length==3){
-        return '坤'
+        return '— — —'
     }
 })
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .yaos{
     margin: 10px;
     width: 12px;

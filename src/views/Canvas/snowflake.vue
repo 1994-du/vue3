@@ -9,12 +9,10 @@ const height = ref(window.innerHeight);
 
 const initCanvas = () => {
     if (!canvas.value) {
-        console.error('Canvas element not found');
         return;
     }
     ctx.value = canvas.value.getContext('2d');
     if (!ctx.value) {
-        console.error('Failed to get 2D context');
         return;
     }
     canvas.value.width = 1200;

@@ -33,18 +33,18 @@ const test='200px'
             </div>
         </div>
     </div>
-    <!-- 步骤条 -->
+    <!-- 步骤图-->
     <ArrowTmp 
       :steps="['步骤1', '步骤2', '步骤3', '步骤4']"
       :activeIndex="1"
     />
-    <!-- 五角星 -->
+    <!-- 五角星-->
     <div class="start_wrap"></div>
 
 </div>
 
 </template>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .bg_wrap{
     display: flex;
     border-radius: 50%;

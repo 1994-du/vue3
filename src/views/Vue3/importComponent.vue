@@ -13,23 +13,20 @@ import axios from 'axios';
 
 const toReq = (): void => {
     axios.get('/javaapi/firstReq').then(res => {
-        console.log('res', res);
     })
 }
 
 const toReqParam = (): void => {
     axios.get('/javaapi/getParam?name=123').then(res => {
-        console.log('resparas', res);
     })
 }
 
 const toPostReq = (): void => {
     axios.post('/javaapi/login', { account: '123', password: '123' }).then(res => {
-        console.log('postRes', res);
     })
 }
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 *{
     text-align: left;
 }

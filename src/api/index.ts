@@ -109,7 +109,6 @@ Axios.interceptors.response.use(
         return res.data
     },
     (err: AxiosError) => {
-        console.log('响应错误', err)
         if ((err as any).isTokenExpired) {
             hideLoading()
             return Promise.reject(err)

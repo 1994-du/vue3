@@ -62,7 +62,4 @@ declare module '@/api/menus' {
     export function addMenu(data: any): Promise<any>
 }
 
-declare module '@/api/wps' {
-    export function uploadToWPS(data: FormData, extraConfig?: Record<string, any>): Promise<any>
-    export function wpsUpload(data: FormData, extraConfig?: Record<string, any>): Promise<any>
-}
+

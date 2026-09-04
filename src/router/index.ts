@@ -4,7 +4,7 @@ import { initRoutes, hasDynamicRoutes } from '@/utils/generateRoutes'
 import useUserInfoStore from '@/store/pinia/userInfo'
 import routes, { ROUTE_MISS_NAME } from './routes'
 
-const WHITE_LIST = ['/login', '/error', '/web-office']
+const WHITE_LIST = ['/login', '/error']
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.VITE_PROJECT_URL),

@@ -71,16 +71,16 @@ declare module '@1994-du/vue3-ui' {
 
 // Web API 扩展
 interface Window {
-    showOpenFilePicker(options?: any): Promise<FileSystemFileHandle[]>
-    showDirectoryPicker(options?: any): Promise<FileSystemDirectoryHandle>
-    showSaveFilePicker(options?: any): Promise<FileSystemFileHandle>
+    showOpenFilePicker(options?: FilePickerOptions): Promise<FileSystemFileHandle[]>
+    showDirectoryPicker(options?: DirectoryPickerOptions): Promise<FileSystemDirectoryHandle>
+    showSaveFilePicker(options?: SaveFilePickerOptions): Promise<FileSystemFileHandle>
     db: IDBDatabase | null
     __MICRO_APP_ENVIRONMENT__?: boolean
     microApp?: {
-        addDataListener: (callback: (data: any) => void, immediate?: boolean) => void
-        removeDataListener: (callback: (data: any) => void) => void
+        addDataListener: (callback: (data: unknown) => void, immediate?: boolean) => void
+        removeDataListener: (callback: (data: unknown) => void) => void
         clearDataListener: () => void
-        getData: () => any
-        dispatch: (data: any) => void
+        getData: () => unknown
+        dispatch: (data: unknown) => void
     }
 }

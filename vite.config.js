@@ -40,7 +40,7 @@ function vendorChunkName(id) {
     return 'vendor-axios'
   }
 
-  return 'vendor-misc'
+  return undefined
 }
 
 export default defineConfig(({mode,command}) => {
@@ -76,7 +76,7 @@ export default defineConfig(({mode,command}) => {
       chunkSizeWarningLimit: 1200,
       // outDir:path.resolve(__dirname,'../../../dist/vue3'),
       outDir:path.resolve(__dirname,'./dist'),
-      emptyOutDir:false,
+      emptyOutDir: true,
       rollupOptions:{
         output:{
           manualChunks: vendorChunkName

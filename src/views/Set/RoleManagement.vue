@@ -5,7 +5,7 @@
                 <PageSearch
                     v-model="searchKeyword"
                     placeholder="搜索角色名称"
-                    aria-label="搜索角色"
+                    :ariaLabel="'搜索角色'"
                     @search="handleSearch"
                 />
                 <el-button type="primary" @click="createRole" class="create-btn page-primary-action">

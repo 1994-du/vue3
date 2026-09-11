@@ -11,15 +11,22 @@ jobs:
 
     steps:
       - name: 拉取代码
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: 安装 Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
 
       - name: 安装依赖
-        run: npm install
+        run: npm ci
+
+      - name: 类型检查
+        run: npm run typecheck
+
+      - name: 生产依赖审计
+        run: npm run audit:prod
 
       - name: 打包项目
         run: npm run build

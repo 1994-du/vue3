@@ -134,9 +134,10 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
-import type { FormInstance, FormRules } from 'element-plus'
+import type { FormInstance, FormRules } from 'element-plus/es/components/form'
 import { ElMessage } from 'element-plus'
-import type { UploadRequestOptions } from 'element-plus'
+import type { UploadRequestOptions } from 'element-plus/es/components/upload'
+import { UploadAjaxError } from 'element-plus/es/components/upload/src/ajax'
 import { CirclePlusFilled, Delete, Edit, Plus, View } from '@element-plus/icons-vue'
 import { getCurrentUser, getUsers } from '@/api/api'
 import { uploadImage } from '@/api/upload'
@@ -252,7 +253,7 @@ const uploadIcon = (options: UploadRequestOptions): void => {
             const iconUrl = getUploadUrl(res)
             if (!iconUrl) {
                 ElMessage.error('上传成功但未返回图片地址')
-                options.onError(new Error('未返回图片地址'))
+                options.onError(new UploadAjaxError('未返回图片地址', 422, 'POST', options.action))
                 return
             }
 
@@ -263,9 +264,9 @@ const uploadIcon = (options: UploadRequestOptions): void => {
             return
         }
 
-        options.onError(new Error(res?.msg || '图标上传失败'))
+        options.onError(new UploadAjaxError(res?.msg || '图标上传失败', 422, 'POST', options.action))
     }).catch((err: Error) => {
-        options.onError(err)
+        options.onError(new UploadAjaxError(err.message, 500, 'POST', options.action))
         ElMessage.error('图标上传失败')
     })
 }

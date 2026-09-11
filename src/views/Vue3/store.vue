@@ -55,8 +55,7 @@ const { info } = toRefs(reactiveGetters)</pre>
         </code>
         <h4>使用Pinia</h4>
         <div class="data_view">
-            <span>姓名：{{ piniaName }}</span>
-            <span>年龄：{{ piniaAge }}</span>
+            <span>计数器：{{ piniaCount }}</span>
             <el-button @click="incrementAge">修改年龄+</el-button>
             <el-button @click="decrementAge">修改年龄-</el-button>
         </div>
@@ -140,18 +139,10 @@ const asyncChangAge = ((num: number): void => {
     store.dispatch('ASYNC_CHANGE_AGE', { num: num })
 })
 
-import useCounterStore from '@/store/pinia/userInfo'
-import { storeToRefs } from 'pinia'
+import useCounterStore from '@/store/pinia/counter'
 const counter = useCounterStore()
 
-// 定义Pinia用户信息接口
-interface PiniaUserInfo {
-    name: string
-    age: number
-}
-
-// const { userInfo } = storeToRefs(counter)
-const { name: piniaName, age: piniaAge } = toRefs<PiniaUserInfo>(counter.userInfo as PiniaUserInfo)
+const piniaCount = computed(() => counter.count)
 
 const incrementAge = (): void => {
     counter.increment()

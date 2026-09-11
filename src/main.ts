@@ -1,9 +1,6 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
-import { initRoutes } from '@/utils/generateRoutes'
-import useUserInfoStore from '@/store/pinia/userInfo'
-import { getToken, isTokenExpired } from '@/utils/tokenManager'
 
 // Pinia
 import { createPinia } from 'pinia'
@@ -42,7 +39,7 @@ registryComponents(app)
 app.config.globalProperties.$bus = mitt()
 
 app.use(dxUI)
-app.use(ElementPlus as any, { locale: zhCn })
+app.use(ElementPlus, { locale: zhCn })
 app.use(createI18n({ locale: 'zh-cn', messages: { 'en-us': LanguageEN, 'zh-cn': LanguageZH } }))
 app.use(customDirective)
 
@@ -54,15 +51,8 @@ app.use(pinia)
 persistenceHtmlTheme(localStorage.getItem('theme') || 'light')
 IndexDB.openDatabase().then(db => (window.db = db)).catch(() => {})
 
-// 路由守卫中处理动态路由，这里直接挂载
+// 动态路由由路由守卫统一恢复，启动入口只负责注册并挂载应用。
 async function bootstrap(): Promise<void> {
-    const userInfoStore = useUserInfoStore()
-    const hasValidToken = !!getToken() && !isTokenExpired()
-
-    if (hasValidToken && userInfoStore.menus.length) {
-        await initRoutes()
-    }
-
     app.use(router)
     await router.isReady()
     app.mount('#vue3')
@@ -74,5 +64,5 @@ bootstrap().catch(error => {
 
 // 微前端环境监听
 if (window.__MICRO_APP_ENVIRONMENT__ && window.microApp) {
-    window.microApp.addDataListener((data: any) => console.info('来自主应用的数据', data), true)
+    window.microApp.addDataListener((data: unknown) => console.info('来自主应用的数据', data), true)
 }

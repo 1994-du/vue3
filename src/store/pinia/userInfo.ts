@@ -2,9 +2,8 @@ import { defineStore } from 'pinia'
 
 interface UserInfo {
     name: string
-    age: number
     avatar: string
-    [key: string]: any
+    username?: string
 }
 
 interface MenuItem {
@@ -12,7 +11,7 @@ interface MenuItem {
     name: string
     component?: string
     children?: MenuItem[]
-    [key: string]: any
+    [key: string]: unknown
 }
 
 interface UserInfoState {
@@ -30,8 +29,11 @@ function loadLegacyMenus(): MenuItem[] {
             return []
         }
 
-        const parsed = JSON.parse(raw)
-        return Array.isArray(parsed) ? parsed : []
+        const parsed: unknown = JSON.parse(raw)
+        if (!Array.isArray(parsed)) return []
+
+        localStorage.removeItem(LEGACY_MENUS_KEY)
+        return parsed as MenuItem[]
     } catch {
         return []
     }
@@ -39,7 +41,7 @@ function loadLegacyMenus(): MenuItem[] {
 
 const useUserInfoStore = defineStore('userInfo', {
     state: (): UserInfoState => ({
-        userInfo: { name: 'default', age: 0, avatar: '' },
+        userInfo: { name: 'default', avatar: '' },
         menus: loadLegacyMenus()
     }),
     actions: {
@@ -53,13 +55,7 @@ const useUserInfoStore = defineStore('userInfo', {
             this.userInfo = Object.assign({}, this.userInfo, userInfo)
         },
         clearUserInfo(): void {
-            this.userInfo = { name: 'default', age: 0, avatar: '' }
-        },
-        increment(): void {
-            this.userInfo.age++
-        },
-        decrement(): void {
-            this.userInfo.age--
+            this.userInfo = { name: 'default', avatar: '' }
         }
     },
     persist: {

@@ -1,54 +1,49 @@
-import axios, { AxiosInstance, AxiosError, InternalAxiosRequestConfig, AxiosResponse } from 'axios'
-import { ElMessage, ElLoading } from 'element-plus'
+import axios, { type AxiosInstance, type AxiosResponse } from 'axios'
+import { ElLoading, ElMessage } from 'element-plus'
 import { getToken, handleTokenExpire, isTokenExpired } from '@/utils/tokenManager'
-
-interface CustomConfig extends InternalAxiosRequestConfig {
-    needAuth?: boolean
-    operationType?: string
-}
+import { ApiError, type ApiRequestConfig, type ApiResponse } from './types'
 
 let loadingInstance: { close: () => void } | null = null
-let requestCount = 0
+let loadingRequestCount = 0
 
 const showLoading = (): void => {
-    if (requestCount === 0) {
+    if (loadingRequestCount === 0) {
         loadingInstance = ElLoading.service({
             lock: true,
             text: '加载中...',
             background: 'rgba(0,0,0,0.7)'
         })
     }
-    requestCount++
+    loadingRequestCount += 1
 }
 
 const hideLoading = (): void => {
-    requestCount = Math.max(requestCount - 1, 0)
-    if (requestCount === 0 && loadingInstance) {
+    loadingRequestCount = Math.max(loadingRequestCount - 1, 0)
+    if (loadingRequestCount === 0 && loadingInstance) {
         loadingInstance.close()
+        loadingInstance = null
     }
 }
 
-const isUnauthorized = (response: any): boolean => {
-    return response?.status === 401 || response?.data?.code === 401 || response?.data?.status === 401
+const isUnauthorized = (response?: AxiosResponse): boolean => {
+    return response?.status === 401
+        || response?.data?.code === 401
+        || response?.data?.status === 401
 }
 
-// 创建axios实例
+const createTokenExpiredError = (): ApiError => {
+    return new ApiError('token已过期', { status: 401 })
+}
+
 const Axios: AxiosInstance = axios.create({
     baseURL: '/api',
     timeout: 300000
 })
 
-const createTokenExpiredError = (): Error => {
-    const error = new Error('token已过期')
-    ;(error as any).isTokenExpired = true
-    return error
-}
-
-// 请求拦截器
 Axios.interceptors.request.use(
-    async (config: CustomConfig) => {
-        const needAuth = config.needAuth !== false // 默认值为true
-        if (needAuth) {
+    async config => {
+        const requestConfig = config as ApiRequestConfig
+        if (requestConfig.needAuth !== false) {
             if (isTokenExpired()) {
                 await handleTokenExpire()
                 return Promise.reject(createTokenExpiredError())
@@ -56,75 +51,66 @@ Axios.interceptors.request.use(
 
             const token = getToken()
             if (token) {
-                config.headers = config.headers || {}
-                config.headers['Authorization'] = `Bearer ${token}`
+                config.headers.set('Authorization', `Bearer ${token}`)
             }
         }
-        // 清理自定义参数，不传递给服务器
-        delete config.needAuth
-        showLoading()
-        config.headers = config.headers || {}
-        config.headers['Content-Type'] = config.headers['Content-Type'] || 'application/json;charset=UTF-8'
+
+        if (requestConfig.showLoading) {
+            showLoading()
+        }
+
+        if (!config.headers.has('Content-Type') && !(config.data instanceof FormData)) {
+            config.headers.set('Content-Type', 'application/json;charset=UTF-8')
+        }
         return config
     },
-    (err: AxiosError) => {
-        hideLoading()
-        return Promise.reject(err)
-    }
+    error => Promise.reject(error)
 )
 
 Axios.interceptors.response.use(
-    (res: AxiosResponse) => {
-        // 处理token过期的特定状态码（例如401或特定的错误码）
-        if (isUnauthorized(res)) {
-            hideLoading()
-            handleTokenExpire()
+    response => {
+        const requestConfig = response.config as ApiRequestConfig
+        if (requestConfig.showLoading) hideLoading()
+
+        if (isUnauthorized(response)) {
+            void handleTokenExpire()
             return Promise.reject(createTokenExpiredError())
         }
 
-        const operationType = (res.config as CustomConfig).operationType || ''
-        // 需要显示消息的操作类型列表
-        const showMessageOperations = ['operate']
-        if (res.status === 200) {
-            // 只有在特定操作类型时才显示成功消息
-            if ((res.data as any).code === 200 && showMessageOperations.includes(operationType)) {
-                ElMessage({
-                    message: (res.data as any).msg,
-                    type: 'success'
-                })
-            }
-            // 错误消息仍然全部显示，以便用户了解错误
-            if ((res.data as any).code !== 200) {
-                ElMessage({
-                    message: (res.data as any).msg,
-                    type: 'error'
-                })
-            }
+        const result = response.data as ApiResponse
+        const shouldShowSuccess = requestConfig.showSuccess ?? requestConfig.operationType === 'operate'
+
+        if (result.code !== 200) {
+            ElMessage.error(result.msg || result.message || '请求失败')
+        } else if (shouldShowSuccess && (result.msg || result.message)) {
+            ElMessage.success(result.msg || result.message)
         }
 
-        // 清理自定义参数，不传递给服务器
-        delete (res.config as CustomConfig).operationType
-
-        hideLoading()
-        return res.data
+        return result as unknown as AxiosResponse
     },
-    (err: AxiosError) => {
-        if ((err as any).isTokenExpired) {
-            hideLoading()
-            return Promise.reject(err)
+    error => {
+        const requestConfig = error.config as ApiRequestConfig | undefined
+        if (requestConfig?.showLoading) hideLoading()
+
+        if (error instanceof ApiError || error.name === 'CanceledError') {
+            return Promise.reject(error)
         }
-        // 处理网络错误中的401情况
-        if (isUnauthorized(err.response)) {
-            handleTokenExpire()
+
+        if (isUnauthorized(error.response)) {
+            void handleTokenExpire()
         } else {
-            ElMessage({
-                message: (err.response?.data as any)?.msg || '请求失败',
-                type: 'error'
-            })
+            const responseData = error.response?.data as ApiResponse | undefined
+            ElMessage.error(responseData?.msg || responseData?.message || '请求失败')
         }
-        hideLoading()
-        return Promise.reject(err)
+
+        return Promise.reject(error)
     }
 )
 
-export default Axios
+const request = async <T = unknown>(config: ApiRequestConfig): Promise<ApiResponse<T>> => {
+    return Axios.request<ApiResponse<T>>(config) as unknown as Promise<ApiResponse<T>>
+}
+
+export type { ApiRequestConfig, ApiResponse }
+export { ApiError }
+export default request

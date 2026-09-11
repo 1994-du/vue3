@@ -1,8 +1,8 @@
-import { App } from 'vue'
+import type { App, Component } from 'vue'
 
-const registryComponents = (app: App) => {
+const registryComponents = (app: App): void => {
     // 1. 深度扫描所有 vue 文件
-    const modules = import.meta.glob('./**/*.vue', { eager: true }) as Record<string, { default: any }>
+    const modules = import.meta.glob<{ default: Component }>('./**/*.vue', { eager: true })
 
     Object.entries(modules).forEach(([path, module]) => {
         // 移除开头 ./ 和 .vue 后缀

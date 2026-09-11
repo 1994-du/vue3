@@ -1,3 +1,5 @@
+export {}
+
 // Element Plus 类型扩展
 declare module 'element-plus' {
     import type { DefineComponent, ComponentOptionsBase, ComponentPublicInstance } from 'vue'
@@ -132,6 +134,7 @@ declare module '@element-plus/icons-vue' {
     export const WarnTriangleFilled: DefineComponent<{}, {}, any>
     export const SuccessFilled: DefineComponent<{}, {}, any>
     export const CircleCloseFilled: DefineComponent<{}, {}, any>
+    export const CirclePlusFilled: DefineComponent<{}, {}, any>
     export const WarnTriangle: DefineComponent<{}, {}, any>
     export const CircleCheckFilled: DefineComponent<{}, {}, any>
     export const Avatar: DefineComponent<{}, {}, any>

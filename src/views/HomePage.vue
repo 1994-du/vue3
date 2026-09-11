@@ -46,7 +46,7 @@
                 stripe
                 :header-cell-style="{ background: 'var(--surface-subtle)', color: 'var(--text-primary)', fontWeight: 'bold' }"
                 :cell-style="{ color: 'var(--text-secondary)' }"
-                :row-class-name="(row, index) => (index % 2 === 0 ? 'even-row' : 'odd-row')">
+                :row-class-name="tableRowClassName">
                 <el-table-column prop="sha" label="SHA" width="300">
                     <template #default="{ row }">
                         <code class="commit-sha">{{ row.sha?.slice(0, 12) }}</code>
@@ -66,7 +66,7 @@
                     :page-size="pageSize"
                     :total="100"
                     layout="prev, pager, next"
-                    @current-change="(page) => { pageNum = page; fetchData(); }" />
+                    @current-change="handlePageChange" />
             </div>
         </div>
     </section>
@@ -82,6 +82,15 @@ const pageSize = ref(10)
 const pageNum = ref(1)
 const branch = ref('master')
 const isLoading = ref(false)
+
+const tableRowClassName = (_row: unknown, index: number): string => {
+    return index % 2 === 0 ? 'even-row' : 'odd-row'
+}
+
+const handlePageChange = (page: number): void => {
+    pageNum.value = page
+    fetchData()
+}
 
 onMounted(() => {
     fetchData()

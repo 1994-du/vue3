@@ -3,103 +3,33 @@ import router from '@/router'
 import useUserInfoStore from '@/store/pinia/userInfo'
 import { resetRoutes } from '@/utils/generateRoutes'
 
-const TOKEN_KEY = 'token'
-const TOKEN_EXPIRE_KEY = 'tokenExpireTime'
-const USER_INFO_KEY = 'userInfo'
-const CLOCK_SKEW = 5000
+import {
+    clearToken,
+    getToken,
+    getTokenExpireTime,
+    hasToken,
+    isAuthenticated,
+    isTokenExpired,
+    saveToken
+} from '@/utils/authStorage'
+import type { JWTPayload } from '@/utils/authStorage'
+export {
+    clearToken,
+    getToken,
+    getTokenExpireTime,
+    hasToken,
+    isAuthenticated,
+    isTokenExpired,
+    saveToken
+}
+export type { JWTPayload }
 
 let tokenCheckTimer: number | null = null
 let isHandlingTokenExpire = false
 
-function decodeBase64Url(value: string = ''): string {
-    const normalizedValue = value.replace(/-/g, '+').replace(/_/g, '/')
-    const padding = normalizedValue.length % 4
-    const paddedValue = padding
-        ? normalizedValue.padEnd(normalizedValue.length + (4 - padding), '=')
-        : normalizedValue
+export const parseJWT = (token: string): JWTPayload | null => saveToken(token)
 
-    return atob(paddedValue)
-}
-
-interface JWTPayload {
-    exp?: number
-    [key: string]: any
-}
-
-function decodeJWTPayload(token: string = ''): JWTPayload | null {
-    try {
-        const parts = token.split('.')
-        const payload = parts[1] || ''
-        if (!payload) {
-            return null
-        }
-
-        return JSON.parse(decodeBase64Url(payload))
-    } catch (error) {
-        return null
-    }
-}
-
-export const getToken = (): string => {
-    return localStorage.getItem(TOKEN_KEY) || ''
-}
-
-export const getTokenExpireTime = (): number => {
-    const expireTime = Number(localStorage.getItem(TOKEN_EXPIRE_KEY))
-    return Number.isFinite(expireTime) && expireTime > 0 ? expireTime : 0
-}
-
-export const hasToken = (): boolean => {
-    return !!getToken()
-}
-
-export const saveToken = (token: string): JWTPayload | null => {
-    if (!token) {
-        clearToken()
-        return null
-    }
-
-    const payload = decodeJWTPayload(token)
-    if (!payload?.exp) {
-        clearToken()
-        return null
-    }
-
-    const expireTime = payload.exp! * 1000
-
-    localStorage.setItem(TOKEN_KEY, token)
-    localStorage.setItem(TOKEN_EXPIRE_KEY, expireTime.toString())
-
-    return payload
-}
-
-// 兼容现有调用
-export const parseJWT = (token: string): JWTPayload | null => {
-    return saveToken(token)
-}
-
-export const isTokenExpired = (): boolean => {
-    const token = getToken()
-    const expireTime = getTokenExpireTime()
-
-    if (!token || !expireTime) {
-        return true
-    }
-
-    return Date.now() >= expireTime - CLOCK_SKEW
-}
-
-export const isAuthenticated = (): boolean => {
-    return hasToken() && !isTokenExpired()
-}
-
-export const clearToken = (): void => {
-    localStorage.removeItem(TOKEN_KEY)
-    localStorage.removeItem(TOKEN_EXPIRE_KEY)
-    localStorage.removeItem(USER_INFO_KEY)
-}
-
-function clearAuthState(): void {
+export function clearAuthState(): void {
     clearToken()
     const userInfoStore = useUserInfoStore()
     userInfoStore.clearMenus()

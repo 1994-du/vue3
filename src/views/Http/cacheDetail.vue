@@ -41,6 +41,7 @@
         </el-card>
     </div>
     
+    <div class="table_wrapper">
     <table border cellspacing="0">
         <thead>
             <tr>
@@ -87,8 +88,10 @@
             </tr>
         </tbody>
     </table>
+    </div>
     <h2>Cache-Control:请求/响应头，缓存控制字段，精确控制缓存策略；HTTP1.1新增字段，既能出现在请求头，也能出现在相应头，不同值代表不同含义</h2>
     <h5>服务端参数</h5>
+    <div class="table_wrapper">
     <table border>
         <thead>
             <tr>
@@ -97,34 +100,16 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>max-age</td>
-                <td>在多少秒内有效，是一个相对时间，比Expires更精确</td>
-            </tr>
-            <tr>
-                <td>s-maxage</td>
-                <td>表示缓存服务器上的缓存的有效时间，并只对public缓存有效</td>
-            </tr>
-            <tr>
-                <td>no-cache</td>
-                <td>不使用本地强缓存，需要使用协商缓存</td>
-            </tr>
-            <tr>
-                <td>no-store</td>
-                <td>直接禁止浏览器缓存数据，每次请求都会向服务器发送一个请求，每次都会下载完整资源</td>
-            </tr>
-            <tr>
-                <td>public</td>
-                <td>可以被所有用户缓存，包括终端用户和中间代理服务器</td>
-            </tr>
-            <tr>
-                <td>private</td>
-                <td>只能被终端用户的浏览器缓存，不允许中间缓存代理进行缓存</td>
+            <tr v-for="item in serverDirectives" :key="item.name">
+                <td>{{ item.name }}</td>
+                <td>{{ item.description }}</td>
             </tr>
         </tbody>
         
     </table>
+    </div>
     <h5>客户端参数</h5>
+    <div class="table_wrapper">
     <table border>
         <thead>
             <tr>
@@ -133,40 +118,35 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>max-stale</td>
-                <td>例如5;表示客户端到代理服务器上拿缓存的时候，即使代理缓存过期了也不要紧，只要在过期时间N秒内，还是可以从代理中获取</td>
-            </tr>
-            <tr>
-                <td>min-fresh</td>
-                <td>表示代理缓存需要一定的新鲜度，一定要在缓存到期前5秒之前的时间拿，否则拿不到</td>
-            </tr>
-            <tr>
-                <td>only-if-cached</td>
-                <td>表示客户端只会接受代理缓存，而不会接收源服务器的响应。如果代理缓存失效，则返回504</td>
+            <tr v-for="item in clientDirectives" :key="item.name">
+                <td>{{ item.name }}</td>
+                <td>{{ item.description }}</td>
             </tr>
         </tbody>
     </table>
+    </div>
 </template>
 
 <script setup lang="ts">
-import {ref,reactive}from'vue'
-const tableData=reactive([
-    {
-        name:'1',
-        children:[
-            {
-                name:'1-1',
-                children:[
-                    {
-                        name:'1-1-1',
-                        children:[]
-                    }
-                ]
-            }
-        ],
-    }
-])
+interface CacheDirective {
+    name: string
+    description: string
+}
+
+const serverDirectives: CacheDirective[] = [
+    { name: 'max-age', description: '在多少秒内有效，是一个相对时间，比 Expires 更精确' },
+    { name: 's-maxage', description: '表示缓存服务器上的缓存有效时间，只对 public 缓存有效' },
+    { name: 'no-cache', description: '不使用本地强缓存，需要使用协商缓存' },
+    { name: 'no-store', description: '禁止浏览器缓存数据，每次请求都向服务器发送请求并下载完整资源' },
+    { name: 'public', description: '可以被所有用户缓存，包括终端用户和中间代理服务器' },
+    { name: 'private', description: '只能被终端用户的浏览器缓存，不允许中间缓存代理缓存' }
+]
+
+const clientDirectives: CacheDirective[] = [
+    { name: 'max-stale', description: '允许客户端在指定秒数内使用已过期的代理缓存' },
+    { name: 'min-fresh', description: '要求代理缓存至少在指定时间内保持新鲜' },
+    { name: 'only-if-cached', description: '只接受代理缓存；缓存失效时返回 504' }
+]
 </script>
 <style lang="scss" scoped>
 p{
@@ -189,6 +169,16 @@ td{
         width: 49.5%;
         // margin:10px 0;
     }
+}
+
+.table_wrapper {
+    overflow-x: auto;
+    margin-bottom: 16px;
+}
+
+table {
+    min-width: 720px;
+    width: 100%;
 }
 
 </style>

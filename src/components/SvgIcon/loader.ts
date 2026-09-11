@@ -49,10 +49,10 @@ async function loadSvg(iconName: string, svgPath?: string): Promise<boolean | nu
         }
         
         // 将symbol添加到全局svg精灵中
-        let svgContainer = document.getElementById('svg-icon-sprite')
+        let svgContainer = document.querySelector<SVGSVGElement>('#svg-icon-sprite')
         
         if (!svgContainer) {
-            const newSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg') as any
+            const newSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
             newSvg.setAttribute('id', 'svg-icon-sprite')
             newSvg.style.position = 'absolute'
             newSvg.style.width = '0'

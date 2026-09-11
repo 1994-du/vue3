@@ -439,6 +439,7 @@ const handleSubmit = async (): Promise<void> => {
     try {
         let res: any
         if (dialogType.value === 'edit') {
+            if (formData.id === null) return
             res = await updateOrg(formData.id, formData)
         } else {
             res = await addOrg(formData)

@@ -1,97 +1,99 @@
 import axios from './index'
+import type { ApiResponse } from './types'
+
+type JsonPayload = object
 
 /**
  * @description 获取用户列表
  */
-export const getUsers = (data: any) => {
+export const getUsers = (data: JsonPayload = {}): Promise<ApiResponse<unknown>> => {
     return axios({
         url: '/users/all',
         method: 'post',
         needAuth: true,
         data
-    } as any)
+    })
 }
 
 /**
  * @description 获取当前登录用户信息
  */
-export const getCurrentUser = () => {
+export const getCurrentUser = (): Promise<ApiResponse<unknown>> => {
     return axios({
-        baseURL: '',
-        url: '/api/users/me',
+        url: '/users/me',
         method: 'get',
         needAuth: true
-    } as any)
+    })
 }
 
 /**
  * @description 编辑用户
  */
-export const updateUser = (data: any) => {
+export const updateUser = (data: JsonPayload): Promise<ApiResponse<unknown>> => {
     return axios({
         url: '/users/setUser',
         method: 'post',
         needAuth: true,
         operationType: 'operate',
         data
-    } as any)
+    })
 }
 
 /**
  * @description 新建用户
  */
-export const addUser = (data: any) => {
+export const addUser = (data: JsonPayload): Promise<ApiResponse<unknown>> => {
     return axios({
         url: '/users/addUser',
         method: 'post',
         needAuth: true,
         operationType: 'operate',
         data
-    } as any)
+    })
 }
 
 /**
  * @description 重置用户密码
  */
-export const toResetPassword = (data: any) => {
+export const toResetPassword = (data: JsonPayload): Promise<ApiResponse<unknown>> => {
     return axios({
         url: '/users/resetPassword',
         method: 'post',
         needAuth: true,
         operationType: 'operate',
         data
-    } as any)
+    })
 }
 
 /**
  * @description 删除用户
  */
-export const delUser = (data: any) => {
+export const delUser = (data: JsonPayload): Promise<ApiResponse<unknown>> => {
     return axios({
         url: '/users/deleteUser',
         method: 'post',
         needAuth: true,
         operationType: 'operate',
         data
-    } as any)
+    })
 }
 
 /**
  * @description 获取角色词典
  */
-export const getRolesDict = (data?: any) => {
+export const getRolesDict = (data?: JsonPayload): Promise<ApiResponse<unknown>> => {
     return axios({
         url: '/getRoleDict',
         method: 'get',
         needAuth: true,
         data
-    } as any)
+    })
 }
 
 /**
  * @description 更新用户头像
  */
-export const updateAvatar = (data: any) => {
+export const updateAvatar = (data: FormData): Promise<ApiResponse<unknown>> => {
     return axios({
         url: '/users/updateAvatar',
         method: 'post',
@@ -101,13 +103,13 @@ export const updateAvatar = (data: any) => {
             'Content-Type': 'multipart/form-data'
         },
         operationType: 'operate'
-    } as any)
+    })
 }
 
 /**
  * @description 上传文件
  */
-export const uploadFile = (data: any) => {
+export const uploadFile = (data: FormData): Promise<ApiResponse<unknown>> => {
     return axios({
         url: '/file/upload',
         method: 'post',
@@ -117,13 +119,13 @@ export const uploadFile = (data: any) => {
         },
         operationType: 'operate',
         data
-    } as any)
+    })
 }
 
 /**
  * @description 获取组织架构树
  */
-export const getOrgTree = (params: any = { parentId: 0 }) => {
+export const getOrgTree = (params: JsonPayload = { parentId: 0 }): Promise<ApiResponse<unknown>> => {
     return axios({
         url: '/org-structures/tree',
         method: 'get',
@@ -132,54 +134,54 @@ export const getOrgTree = (params: any = { parentId: 0 }) => {
             parentId: 0,
             ...params
         }
-    } as any)
+    })
 }
 
 /**
  * @description 获取组织详情
  */
-export const getOrgDetail = (id: number | string) => {
+export const getOrgDetail = (id: number | string): Promise<ApiResponse<unknown>> => {
     return axios({
         url: `/org-structures/detail/${id}`,
         method: 'get',
         needAuth: true
-    } as any)
+    })
 }
 
 /**
  * @description 创建组织
  */
-export const addOrg = (data: any) => {
+export const addOrg = (data: JsonPayload): Promise<ApiResponse<unknown>> => {
     return axios({
         url: '/org-structures/create',
         method: 'post',
         needAuth: true,
         operationType: 'operate',
         data
-    } as any)
+    })
 }
 
 /**
  * @description 更新组织
  */
-export const updateOrg = (id: number | string, data: any) => {
+export const updateOrg = (id: number | string, data: JsonPayload): Promise<ApiResponse<unknown>> => {
     return axios({
         url: `/org-structures/update/${id}`,
         method: 'put',
         needAuth: true,
         operationType: 'operate',
         data
-    } as any)
+    })
 }
 
 /**
  * @description 删除组织
  */
-export const deleteOrg = (id: number | string) => {
+export const deleteOrg = (id: number | string): Promise<ApiResponse<unknown>> => {
     return axios({
         url: `/org-structures/delete/${id}`,
         method: 'delete',
         needAuth: true,
         operationType: 'operate'
-    } as any)
+    })
 }

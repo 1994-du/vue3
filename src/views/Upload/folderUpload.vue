@@ -91,6 +91,7 @@
 </template>
 
 <script setup lang="ts">
+import type { AxiosProgressEvent } from 'axios'
 import { computed, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { uploadFolder } from '@/api/upload'
@@ -182,7 +183,7 @@ const submitFolder = async (): Promise<void> => {
         uploadProgress.value = 0
 
         const res: any = await uploadFolder(formData, {
-            onUploadProgress: (progressEvent: ProgressEvent) => {
+            onUploadProgress: (progressEvent: AxiosProgressEvent) => {
                 const { loaded = 0, total = 0 } = progressEvent
                 if (!total) {
                     return

@@ -1,16 +1,17 @@
-import { defineAsyncComponent, AsyncComponentOptions } from 'vue'
-import loadingComponent from '@/components/LoadingComponent.vue'
+import { defineAsyncComponent } from 'vue'
+import type { Component, AsyncComponentLoader } from 'vue'
+import loadingComponent from '@/components/loadingComponent.vue'
 import errorComponent from '@/components/errorComponent.vue'
 
 interface CreateAsyncComponentOptions {
-    loader?: () => Promise<any>
-    loadingComponent?: any
-    errorComponent?: any
+    loader?: AsyncComponentLoader
+    loadingComponent?: Component
+    errorComponent?: Component
     delay?: number
     timeout?: number
 }
 
-export const createAsyncComponent = (path: string, options: CreateAsyncComponentOptions = {}): any => {
+export const createAsyncComponent = (path: string, options: CreateAsyncComponentOptions = {}): Component => {
     return defineAsyncComponent({
         loader: () => import(`@/views/${path}.vue`),
         loadingComponent,

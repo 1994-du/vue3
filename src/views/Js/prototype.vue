@@ -16,13 +16,10 @@
     <p>2.如果对象自身不存在，就会沿着原型链向上查找。</p>
     <p>3.如果找到顶层（即 Object.prototype）仍然没有该属性，则返回 undefined。</p>
 </template>
-<script>
-export default{
-    name:'prototype-proto'
-}
-</script>
 <script setup lang="ts">
-
+defineOptions({
+    name: 'prototype-proto'
+})
 </script>
 <style scoped>
 *{

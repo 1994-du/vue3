@@ -6,22 +6,39 @@ import { resolveMenuFullPath } from '@/utils/menuRoute'
 
 const modules = import.meta.glob('@/views/**/*.vue')
 const addedRouteNames = new Set<string>()
-const preloadedModulePaths = new Set<string>()
-const preloadModulePromises = new Map<string, Promise<unknown>>()
 
+function getComponent(menu: MenuItem): (() => Promise<unknown>) | undefined {
+    if (typeof menu.component !== 'string' || !menu.component.trim()) return undefined
+
+    const componentPath = `/src/views/${menu.component}.vue`
+    return Object.prototype.hasOwnProperty.call(modules, componentPath)
+        ? modules[componentPath]
+        : undefined
+}
+
+function isValidMenu(menu: MenuItem): boolean {
+    return typeof menu.path === 'string'
+        && menu.path.trim().length > 0
+        && typeof menu.name === 'string'
+        && menu.name.trim().length > 0
+        && (menu.children === undefined || Array.isArray(menu.children))
+}
 
 function buildRouteName(menu: MenuItem, fullPath: string): string {
-    return menu.name || fullPath
+    return menu.name.trim() || fullPath
 }
 
 function createRouteRecord(menu: MenuItem, parentPath: string = ''): RouteRecordRaw[] {
+    if (!isValidMenu(menu)) {
+        console.warn('[routes] invalid menu item skipped', menu)
+        return []
+    }
+
     const fullPath = resolveMenuFullPath(parentPath, menu.path)
     const routes: RouteRecordRaw[] = []
 
     if (menu.component) {
-        const componentPath = `/src/views/${menu.component}.vue`
-        const component = modules[componentPath]
-
+        const component = getComponent(menu)
         if (component) {
             routes.push({
                 path: fullPath,
@@ -31,6 +48,8 @@ function createRouteRecord(menu: MenuItem, parentPath: string = ''): RouteRecord
                     title: menu.name
                 }
             })
+        } else {
+            console.warn(`[routes] component not found: ${menu.component}`)
         }
     }
 
@@ -49,16 +68,17 @@ function menusToRoutes(menus: MenuItem[]): RouteRecordRaw[] {
 
 function findDefaultPath(menus: MenuItem[], parentPath: string = ''): string {
     for (const menu of menus) {
+        if (!isValidMenu(menu)) continue
         const fullPath = resolveMenuFullPath(parentPath, menu.path)
 
-        if (fullPath === '/home') return '/home'
-        if (fullPath === '/') return '/'
+        if ((fullPath === '/home' || fullPath === '/') && getComponent(menu)) return fullPath
     }
 
     for (const menu of menus) {
+        if (!isValidMenu(menu)) continue
         const fullPath = resolveMenuFullPath(parentPath, menu.path)
 
-        if (menu.component) return fullPath
+        if (menu.component && getComponent(menu)) return fullPath
         if (menu.children?.length) {
             const childPath = findDefaultPath(menu.children, fullPath)
             if (childPath) return childPath
@@ -68,19 +88,18 @@ function findDefaultPath(menus: MenuItem[], parentPath: string = ''): string {
     return '/home'
 }
 
-let isInited = false
-
 export async function initRoutes(menusFromLogin?: MenuItem[]): Promise<string> {
     const store = useUserInfoStore()
     const menus = menusFromLogin || store.menus
 
-    // if (!menus.length) return '/login'
-
     if (menusFromLogin) {
+        if (addedRouteNames.size > 0) {
+            resetRoutes()
+        }
         store.setMenus(menus)
     }
 
-    if (isInited) {
+    if (addedRouteNames.size > 0) {
         return findDefaultPath(menus)
     }
 
@@ -98,7 +117,6 @@ export async function initRoutes(menusFromLogin?: MenuItem[]): Promise<string> {
         addedRouteNames.add(routeName)
     })
 
-    isInited = true
     return findDefaultPath(menus)
 }
 
@@ -110,13 +128,10 @@ export function resetRoutes(): void {
     })
 
     addedRouteNames.clear()
-    preloadedModulePaths.clear()
-    preloadModulePromises.clear()
-    isInited = false
 }
 
 export function hasDynamicRoutes(): boolean {
-    return isInited
+    return addedRouteNames.size > 0
 }
 
 export { findDefaultPath }

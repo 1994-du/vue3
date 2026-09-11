@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { getToken, isTokenExpired, handleTokenExpire, setupTokenExpiryCheck } from '@/utils/tokenManager'
+import { clearAuthState, clearTokenCheckTimer, getToken, isTokenExpired, setupTokenExpiryCheck } from '@/utils/tokenManager'
 import { initRoutes, hasDynamicRoutes } from '@/utils/generateRoutes'
 import useUserInfoStore from '@/store/pinia/userInfo'
 import routes, { ROUTE_MISS_NAME } from './routes'
@@ -11,7 +11,7 @@ const router = createRouter({
     routes
 })
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async to => {
     const token = getToken()
     const userInfoStore = useUserInfoStore()
     const isRouteMiss = to.name === ROUTE_MISS_NAME
@@ -21,30 +21,27 @@ router.beforeEach(async (to, from, next) => {
             setupTokenExpiryCheck()
             if (userInfoStore.menus.length) {
                 const redirectPath = await initRoutes()
-                next({ path: redirectPath, replace: true })
-                return
+                return { path: redirectPath, replace: true }
             }
         }
 
-        next()
-        return
+        return true
     }
 
     if (!token || isTokenExpired()) {
-        await handleTokenExpire('')
-        next({ path: '/login', replace: true, query: { redirect: to.fullPath } })
-        return
+        clearTokenCheckTimer()
+        clearAuthState()
+        return { path: '/login', replace: true, query: { redirect: to.fullPath } }
     }
 
     setupTokenExpiryCheck()
 
     if (userInfoStore.menus.length && (!hasDynamicRoutes() || isRouteMiss)) {
         await initRoutes()
-        next({ path: to.fullPath, replace: true })
-        return
+        return { path: to.fullPath, replace: true }
     }
 
-    next()
+    return true
 })
 
 export default router

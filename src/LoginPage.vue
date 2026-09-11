@@ -150,13 +150,17 @@ const handleLogin = async (): Promise<void> => {
 
     isLoading.value = true
     try {
-        const res: any = await toLogin(loginObj)
+        const res = await toLogin(loginObj)
         if (res.code !== 200) {
             ElMessage.error(res.message || res.msg || '登录失败，请检查账号密码')
             return
         }
 
-        const { token, menus = [], username, avatar } = res.data || {}
+        const { token, menus = [], username, avatar } = res.data
+        if (!token) {
+            ElMessage.error('登录响应缺少 token')
+            return
+        }
         saveCredentials()
         userInfoStore.setMenus(menus)
         userInfoStore.setUserInfo({ name: username, avatar })
@@ -172,7 +176,7 @@ const handleLogin = async (): Promise<void> => {
 const handleRegistry = async (): Promise<void> => {
     if (!validateCredentials()) return
 
-    const res: any = await toRegistry({
+    const res = await toRegistry({
         username: loginObj.username,
         password: loginObj.password
     })

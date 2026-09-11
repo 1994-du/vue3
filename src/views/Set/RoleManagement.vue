@@ -2,31 +2,23 @@
     <div class="role-management-container">
         <PageHeader title="角色管理">
             <template #actions>
-                <PageSearch
-                    v-model="searchKeyword"
-                    placeholder="搜索角色名称"
-                    :ariaLabel="'搜索角色'"
-                    @search="handleSearch"
-                />
+                <PageSearch v-model="searchKeyword" placeholder="搜索角色名称" :ariaLabel="'搜索角色'" @search="handleSearch" />
                 <el-button type="primary" @click="createRole" class="create-btn page-primary-action">
-                    <el-icon><CirclePlusFilled /></el-icon>
+                    <el-icon>
+                        <CirclePlusFilled />
+                    </el-icon>
                     新建角色
                 </el-button>
             </template>
         </PageHeader>
-        
+
         <!-- 数据表格 -->
         <el-card class="role-table-card" shadow="hover">
-            <el-table 
-                v-loading="loading" 
-                :data="tableData" 
-                style="width: 100%"
-                :row-class-name="tableRowClassName"
-                :fit="true"
-            >
+            <el-table v-loading="loading" :data="tableData" style="width: 100%" :row-class-name="tableRowClassName"
+                :fit="true">
                 <el-table-column label="ID" prop="id" width="120" align="center"></el-table-column>
                 <el-table-column label="角色名称" prop="name" width="150">
-                    <template #default="{row}">
+                    <template #default="{ row }">
                         <div class="role-info">
                             <el-tag type="primary" size="small" class="role-tag">
                                 {{ row.name }}
@@ -36,28 +28,19 @@
                 </el-table-column>
                 <el-table-column label="角色描述" prop="roleDesc"></el-table-column>
                 <el-table-column label="操作" width="180" align="center">
-                    <template #default="{row}">
-                        <el-button 
-                            link 
-                            type="primary" 
-                            @click="editRole(row)"
-                            class="action-btn edit-btn"
-                        >
-                            <el-icon><Edit /></el-icon>
+                    <template #default="{ row }">
+                        <el-button link type="primary" @click="editRole(row)" class="action-btn edit-btn">
+                            <el-icon>
+                                <Edit />
+                            </el-icon>
                             编辑
                         </el-button>
-                        <el-popconfirm 
-                            title="确定删除此角色?"
-                            @confirm="deleteRole(row.id)"
-                            placement="top"
-                        >
+                        <el-popconfirm title="确定删除此角色?" @confirm="deleteRole(row.id)" placement="top">
                             <template #reference>
-                                <el-button 
-                                    link 
-                                    type="danger" 
-                                    class="action-btn delete-btn"
-                                >
-                                    <el-icon><Delete /></el-icon>
+                                <el-button link type="danger" class="action-btn delete-btn">
+                                    <el-icon>
+                                        <Delete />
+                                    </el-icon>
                                     删除
                                 </el-button>
                             </template>
@@ -65,27 +48,17 @@
                     </template>
                 </el-table-column>
             </el-table>
-            
+
             <!-- 分页 -->
             <div class="pagination-container">
-                <el-pagination
-                    v-model:current-page="currentPage4"
-                    v-model:page-size="pageSize4"
-                    :page-sizes="[10, 20, 30, 40]"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="total"
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    class="pagination"
-                />
+                <el-pagination v-model:current-page="currentPage4" v-model:page-size="pageSize4"
+                    :page-sizes="[10, 20, 30, 40]" layout="total, sizes, prev, pager, next, jumper" :total="total"
+                    @size-change="handleSizeChange" @current-change="handleCurrentChange" class="pagination" />
             </div>
         </el-card>
     </div>
-    <el-dialog
-        v-model="dialogVisible"
-        :title="dialogTitle"
-        width="50%">
-        <el-form ref="formRef"  :model="formData" :rules="rules" label-width="auto">
+    <el-dialog v-model="dialogVisible" :title="dialogTitle" width="50%">
+        <el-form ref="formRef" :model="formData" :rules="rules" label-width="auto">
             <el-form-item label="角色名称" prop="name">
                 <el-input v-model="formData.name"></el-input>
             </el-form-item>
@@ -93,14 +66,8 @@
                 <el-input v-model="formData.roleDesc"></el-input>
             </el-form-item>
             <el-form-item label="角色权限" prop="menus">
-                <el-tree
-                    ref="formTree"
-                    :data="allMenus"
-                    node-key="id"
-                    show-checkbox
-                    :default-expand-all="true"
-                    :props="defaultProps"
-                />
+                <el-tree ref="formTree" :data="allMenus" node-key="id" show-checkbox :default-expand-all="true"
+                    :props="defaultProps" />
             </el-form-item>
         </el-form>
         <template #footer>
@@ -112,7 +79,7 @@
 <script setup lang="ts">
 import { ref, onMounted, nextTick } from 'vue'
 // @ts-ignore
-import { getRoles,setRole,addRole, delRole } from '../../api/role'
+import { getRoles, setRole, addRole, delRole } from '../../api/role'
 // @ts-ignore
 import { addMenu, getMenuTree } from '../../api/menus'
 import { ElMessage } from 'element-plus'
@@ -180,15 +147,15 @@ interface GetMenuTreeParams {
 
 onMounted(() => {
     getMenuTree().then((res: any) => {
-        if(res.code === 200){
+        if (res.code === 200) {
             allMenus.value = res.data
         }
     })
 })
 
 const defaultProps = {
-  children: 'children',
-  label: 'name',
+    children: 'children',
+    label: 'name',
 }
 
 // const handleCheckChange = (checkedKeys, checkedNodes) => {
@@ -238,7 +205,7 @@ const deleteRole = (roleId: number): void => {
     delRole({
         id: roleId
     }).then((res: any) => {
-        if(res.code === 200){
+        if (res.code === 200) {
             ElMessage.success('角色删除成功')
             getRoleList()
         }
@@ -296,20 +263,20 @@ const restoreCheckedMenus = (menus: MenuId[] = []): void => {
 
 const handleRole = (): void => {
     if (!formTree.value) return
-    
+
     const checkKeys = formTree.value.getCheckedKeys()
     const checkHalfKeys = formTree.value.getHalfCheckedKeys()
-    
+
     formRef.value.validate((valid: boolean) => {
-        if(valid){
-            if(dialogType.value === 'add'){
+        if (valid) {
+            if (dialogType.value === 'add') {
                 // 新增角色
                 const params = {
                     ...formData.value,
                     menus: checkKeys
                 }
                 addRole(params).then((res: any) => {
-                    if(res.code === 200){
+                    if (res.code === 200) {
                         dialogVisible.value = false
                         getRoleList()
                     }
@@ -322,7 +289,7 @@ const handleRole = (): void => {
                     menus: checkKeys
                 }
                 setRole(params).then((res: any) => {
-                    if(res.code === 200){
+                    if (res.code === 200) {
                         dialogVisible.value = false
                         getRoleList()
                     }
@@ -337,7 +304,7 @@ const editRole = (row: RoleItem): void => {
     dialogVisible.value = true
     dialogType.value = 'edit'
     dialogTitle.value = '编辑角色'
-    
+
     const normalizedMenus = normalizeMenuIds(row.menus)
     formData.value = {
         id: row.id,
@@ -345,7 +312,7 @@ const editRole = (row: RoleItem): void => {
         roleDesc: row.roleDesc,
         menus: normalizedMenus as number[]
     }
-    
+
     nextTick(() => {
         restoreCheckedMenus(normalizedMenus)
     })
@@ -382,9 +349,11 @@ onMounted(() => {
     overflow: hidden;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
     transition: box-shadow 0.3s ease;
+
     &:hover {
         box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.15);
     }
+
     .el-card__body {
         padding: 0;
     }
@@ -394,8 +363,10 @@ onMounted(() => {
 :deep(.el-table) {
     border-radius: 12px 12px 0 0;
     overflow: hidden;
+
     .el-table__header-wrapper {
         background: #f8f9fa;
+
         .el-table__header {
             th {
                 background: #f8f9fa;
@@ -405,16 +376,20 @@ onMounted(() => {
             }
         }
     }
+
     .el-table__body-wrapper {
         .el-table__row {
             transition: background-color 0.2s ease;
+
             &:hover {
                 background-color: #f5f7fa !important;
             }
         }
+
         .even-row {
             background-color: #ffffff;
         }
+
         .odd-row {
             background-color: #fafafa;
         }
@@ -435,6 +410,7 @@ onMounted(() => {
     align-items: center;
     gap: 4px;
     margin: 0 4px;
+
     &:hover {
         opacity: 0.8;
     }
@@ -447,6 +423,7 @@ onMounted(() => {
     border-top: 1px solid #ebeef5;
     display: flex;
     justify-content: flex-end;
+
     .pagination {
         .el-pagination__sizes {
             margin-right: 16px;
@@ -458,17 +435,21 @@ onMounted(() => {
 :deep(.el-dialog) {
     border-radius: 12px;
     overflow: hidden;
+
     .el-dialog__header {
         background: #f8f9fa;
         border-bottom: 1px solid #ebeef5;
+
         .el-dialog__title {
             font-size: 18px;
             font-weight: 600;
         }
     }
+
     .el-dialog__body {
         padding: 24px;
     }
+
     .el-dialog__footer {
         padding: 16px 24px;
         border-top: 1px solid #ebeef5;
@@ -481,6 +462,7 @@ onMounted(() => {
     .role-management-container {
         padding: 16px;
     }
+
     .pagination-container {
         justify-content: center;
     }

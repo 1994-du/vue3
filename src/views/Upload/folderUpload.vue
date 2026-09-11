@@ -11,30 +11,15 @@
                 </div>
             </template>
 
-            <el-alert
-                title="上传时会同时提交文件内容和 webkitRelativePath，后端可以按相对路径还原目录结构。"
-                type="info"
-                :closable="false"
-                show-icon
-                class="mb-4"
-            />
+            <el-alert title="上传时会同时提交文件内容和 webkitRelativePath，后端可以按相对路径还原目录结构。" type="info" :closable="false" show-icon
+                class="mb-4" />
 
             <div class="actions">
-                <input
-                    ref="folderInputRef"
-                    class="folder-input"
-                    type="file"
-                    webkitdirectory
-                    multiple
-                    @change="handleFolderChange"
-                >
+                <input ref="folderInputRef" class="folder-input" type="file" webkitdirectory multiple
+                    @change="handleFolderChange">
                 <el-button type="primary" @click="chooseFolder">选择文件夹</el-button>
-                <el-button
-                    type="success"
-                    :disabled="!selectedFiles.length || uploading"
-                    :loading="uploading"
-                    @click="submitFolder"
-                >
+                <el-button type="success" :disabled="!selectedFiles.length || uploading" :loading="uploading"
+                    @click="submitFolder">
                     上传文件夹
                 </el-button>
                 <el-button :disabled="uploading" @click="clearSelection">清空</el-button>
@@ -55,23 +40,12 @@
                 </div>
             </div>
 
-            <el-progress
-                v-if="uploading || uploadProgress > 0"
-                :percentage="uploadProgress"
-                :stroke-width="14"
-                class="progress"
-            />
+            <el-progress v-if="uploading || uploadProgress > 0" :percentage="uploadProgress" :stroke-width="14"
+                class="progress" />
 
             <el-empty v-if="!selectedFiles.length" description="请选择一个本地文件夹" />
 
-            <el-table
-                v-else
-                :data="selectedFiles"
-                border
-                stripe
-                max-height="460"
-                class="file-table"
-            >
+            <el-table v-else :data="selectedFiles" border stripe max-height="460" class="file-table">
                 <el-table-column type="index" label="#" width="60" align="center" />
                 <el-table-column prop="name" label="文件名" min-width="220" show-overflow-tooltip />
                 <el-table-column prop="relativePath" label="相对路径" min-width="320" show-overflow-tooltip />

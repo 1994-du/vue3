@@ -11,29 +11,15 @@
                 </div>
             </template>
 
-            <el-alert
-                title="当前示例限制 JPG、PNG、WEBP，单张图片不超过 10MB。上传前会展示预览、尺寸和主色。"
-                type="info"
-                :closable="false"
-                show-icon
-                class="mb-4"
-            />
+            <el-alert title="当前示例限制 JPG、PNG、WEBP，单张图片不超过 10MB。上传前会展示预览、尺寸和主色。" type="info" :closable="false" show-icon
+                class="mb-4" />
 
             <div class="actions">
-                <input
-                    ref="imageInputRef"
-                    class="hidden-input"
-                    type="file"
-                    accept="image/jpeg,image/png,image/webp"
-                    @change="handleImageChange"
-                >
+                <input ref="imageInputRef" class="hidden-input" type="file" accept="image/jpeg,image/png,image/webp"
+                    @change="handleImageChange">
                 <el-button type="primary" @click="chooseImage">选择图片</el-button>
-                <el-button
-                    type="success"
-                    :disabled="!selectedImage || uploading"
-                    :loading="uploading"
-                    @click="submitImage"
-                >
+                <el-button type="success" :disabled="!selectedImage || uploading" :loading="uploading"
+                    @click="submitImage">
                     上传图片
                 </el-button>
                 <el-button :disabled="uploading" @click="clearImage">清空</el-button>
@@ -54,12 +40,8 @@
                 </div>
             </div>
 
-            <el-progress
-                v-if="uploading || uploadProgress > 0"
-                :percentage="uploadProgress"
-                :stroke-width="14"
-                class="progress"
-            />
+            <el-progress v-if="uploading || uploadProgress > 0" :percentage="uploadProgress" :stroke-width="14"
+                class="progress" />
 
             <el-empty v-if="!selectedImage" description="请选择一张图片" />
 

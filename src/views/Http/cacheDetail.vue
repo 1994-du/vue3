@@ -40,90 +40,90 @@
             </div>
         </el-card>
     </div>
-    
+
     <div class="table_wrapper">
-    <table border cellspacing="0">
-        <thead>
-            <tr>
-                <th style="width:80px">缓存类型</th>
-                <th style="width:150px">头字段</th>
-                <th>字段含义</th>
-                <th>优点</th>
-                <th>缺点</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td rowspan="2">强缓存</td>
-                <td>Cache-Control</td>
-                <td>请求/响应头，缓存控制字段，精确控制缓存策略；HTTP1.1新增字段，既能出现在请求头，也能出现在相应头，不同值代表不同含义</td>
-                <td >\</td>
-                <td>\</td>
-            </tr>
-            <tr>
-                <td>Expires</td>
-                <td>Expires:响应头，表示资源过期时间</td>
-                <td>在过期时间内请求，不需要请求服务器，直接在缓存里面拿，为用户节省流量，减少服务器重复读取磁盘文件压力</td>
-                <td>过期后，资源未变化还是会请求服务器，过期时间依赖客户端时间，时间不准确或者被改动，缓存也随之受影响</td>
-            </tr>
-            <tr>
-                <td rowspan="4">协商缓存</td>
-                <td rowspan="2">Etag <br> if-None-Match</td>
-                <td>Etag：响应头，资源标识，有服务器告诉浏览器，Etag由文件修改时间和大小计算而成</td>
-                <td  rowspan="2">当缓存有效时，服务器不会返回文件，直接返回304状态码，让客户端从缓存中获取文件，节省流量和宽带及服务器压力。并且解决了一秒内修改并读取文件的问题</td>
-                <td rowspan="2">/</td>
-            </tr>
-            <tr>
-                <td>if-None-Match:请求头，缓存资源标识，由浏览器告诉服务器，即第一次访问服务器时返回的Etag的值</td>
-                
-            </tr>
-            <tr>
-                <td rowspan="2">Last-modified <br> if-Modified-Since）</td>
-                <td>Last-modified：响应头，资源最近修改时间，由服务器告诉浏览器</td>
-                <td rowspan="2">当缓存有效时，服务器不会返回文件，直接返回304状态码，让客户端从缓存中获取文件。节省流量和宽带及服务器压力</td>
-                <td rowspan="2">过期时间只能精确到秒，如果同一秒即修改又获取了文件，客户端拿不到最新的文件</td>
-            </tr>
-            <tr>
-                <td>if-Modified-Since：请求头，资源最近修改时间。即第一次访问服务器时返回的Last-Modified的值</td>
-            </tr>
-        </tbody>
-    </table>
+        <table border cellspacing="0">
+            <thead>
+                <tr>
+                    <th style="width:80px">缓存类型</th>
+                    <th style="width:150px">头字段</th>
+                    <th>字段含义</th>
+                    <th>优点</th>
+                    <th>缺点</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td rowspan="2">强缓存</td>
+                    <td>Cache-Control</td>
+                    <td>请求/响应头，缓存控制字段，精确控制缓存策略；HTTP1.1新增字段，既能出现在请求头，也能出现在相应头，不同值代表不同含义</td>
+                    <td>\</td>
+                    <td>\</td>
+                </tr>
+                <tr>
+                    <td>Expires</td>
+                    <td>Expires:响应头，表示资源过期时间</td>
+                    <td>在过期时间内请求，不需要请求服务器，直接在缓存里面拿，为用户节省流量，减少服务器重复读取磁盘文件压力</td>
+                    <td>过期后，资源未变化还是会请求服务器，过期时间依赖客户端时间，时间不准确或者被改动，缓存也随之受影响</td>
+                </tr>
+                <tr>
+                    <td rowspan="4">协商缓存</td>
+                    <td rowspan="2">Etag <br> if-None-Match</td>
+                    <td>Etag：响应头，资源标识，有服务器告诉浏览器，Etag由文件修改时间和大小计算而成</td>
+                    <td rowspan="2">当缓存有效时，服务器不会返回文件，直接返回304状态码，让客户端从缓存中获取文件，节省流量和宽带及服务器压力。并且解决了一秒内修改并读取文件的问题</td>
+                    <td rowspan="2">/</td>
+                </tr>
+                <tr>
+                    <td>if-None-Match:请求头，缓存资源标识，由浏览器告诉服务器，即第一次访问服务器时返回的Etag的值</td>
+
+                </tr>
+                <tr>
+                    <td rowspan="2">Last-modified <br> if-Modified-Since）</td>
+                    <td>Last-modified：响应头，资源最近修改时间，由服务器告诉浏览器</td>
+                    <td rowspan="2">当缓存有效时，服务器不会返回文件，直接返回304状态码，让客户端从缓存中获取文件。节省流量和宽带及服务器压力</td>
+                    <td rowspan="2">过期时间只能精确到秒，如果同一秒即修改又获取了文件，客户端拿不到最新的文件</td>
+                </tr>
+                <tr>
+                    <td>if-Modified-Since：请求头，资源最近修改时间。即第一次访问服务器时返回的Last-Modified的值</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
     <h2>Cache-Control:请求/响应头，缓存控制字段，精确控制缓存策略；HTTP1.1新增字段，既能出现在请求头，也能出现在相应头，不同值代表不同含义</h2>
     <h5>服务端参数</h5>
     <div class="table_wrapper">
-    <table border>
-        <thead>
-            <tr>
-                <th>值</th>
-                <th>含义</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="item in serverDirectives" :key="item.name">
-                <td>{{ item.name }}</td>
-                <td>{{ item.description }}</td>
-            </tr>
-        </tbody>
-        
-    </table>
+        <table border>
+            <thead>
+                <tr>
+                    <th>值</th>
+                    <th>含义</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="item in serverDirectives" :key="item.name">
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.description }}</td>
+                </tr>
+            </tbody>
+
+        </table>
     </div>
     <h5>客户端参数</h5>
     <div class="table_wrapper">
-    <table border>
-        <thead>
-            <tr>
-                <th>值</th>
-                <th>含义</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="item in clientDirectives" :key="item.name">
-                <td>{{ item.name }}</td>
-                <td>{{ item.description }}</td>
-            </tr>
-        </tbody>
-    </table>
+        <table border>
+            <thead>
+                <tr>
+                    <th>值</th>
+                    <th>含义</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="item in clientDirectives" :key="item.name">
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.description }}</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </template>
 
@@ -149,23 +149,32 @@ const clientDirectives: CacheDirective[] = [
 ]
 </script>
 <style lang="scss" scoped>
-p{
+p {
     font-size: 16px;
     color: #303030;
 }
-h2,h4,h5,h6,p{
+
+h2,
+h4,
+h5,
+h6,
+p {
     text-align: left;
 }
-td{
+
+td {
     text-align: left;
 }
-.el-card{
+
+.el-card {
     margin-bottom: 10px;
 }
-.cache_cards{
-    display:flex;
+
+.cache_cards {
+    display: flex;
     justify-content: space-between;
-    .box-card{
+
+    .box-card {
         width: 49.5%;
         // margin:10px 0;
     }
@@ -180,5 +189,4 @@ table {
     min-width: 720px;
     width: 100%;
 }
-
 </style>

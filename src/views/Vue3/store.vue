@@ -153,16 +153,18 @@ const decrementAge = (): void => {
 }
 </script>
 <style scoped lang="scss">
-.use_store{
+.use_store {
     display: flex;
     flex-direction: column;
-    .data_view{
+
+    .data_view {
         display: flex;
         flex-wrap: wrap;
         justify-content: flex-start;
         align-items: center;
         margin-bottom: .5rem;
-        span{
+
+        span {
             margin: 0 5px;
         }
     }

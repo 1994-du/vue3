@@ -2,32 +2,23 @@
     <div class="user-management-container">
         <PageHeader title="用户管理">
             <template #actions>
-                <PageSearch
-                    v-model="searchKeyword"
-                    placeholder="搜索用户名"
-                    :ariaLabel="'搜索用户'"
-                    @search="handleSearch"
-                />
+                <PageSearch v-model="searchKeyword" placeholder="搜索用户名" :ariaLabel="'搜索用户'" @search="handleSearch" />
                 <el-button type="primary" @click="createUser" class="create-btn page-primary-action">
-                    <el-icon><CirclePlusFilled /></el-icon>
+                    <el-icon>
+                        <CirclePlusFilled />
+                    </el-icon>
                     新建用户
                 </el-button>
             </template>
         </PageHeader>
-        
+
         <!-- 数据表格 -->
         <el-card class="user-table-card" shadow="hover">
-            <el-table 
-                v-loading="loading" 
-                :data="tableData" 
-                style="width: 100%"
-                :row-class-name="tableRowClassName"
-                @row-hover="handleRowHover"
-                :fit="true"
-            >
+            <el-table v-loading="loading" :data="tableData" style="width: 100%" :row-class-name="tableRowClassName"
+                @row-hover="handleRowHover" :fit="true">
                 <el-table-column label="ID" prop="id" width="80" align="center"></el-table-column>
                 <el-table-column label="用户名" prop="username" width="150">
-                    <template #default="{row}">
+                    <template #default="{ row }">
                         <div class="user-info">
                             <img :src="`${preUrl}${row.avatar}`" alt="" class="avatar-small">
                             <span class="username">{{ row.username }}</span>
@@ -35,14 +26,14 @@
                     </template>
                 </el-table-column>
                 <el-table-column label="性别" prop="gender" width="80" align="center">
-                    <template #default="{row}">
+                    <template #default="{ row }">
                         <span class="gender-tag" :class="row.gender === '1' ? 'male' : 'female'">
                             {{ row.gender === '1' ? '男' : row.gender === '2' ? '女' : '未知' }}
                         </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="角色" prop="roleName" width="120">
-                    <template #default="{row}">
+                    <template #default="{ row }">
                         <el-tag :type="row.roleId === 7608901 ? 'primary' : 'success'">
                             {{ row.roleName }}
                         </el-tag>
@@ -50,43 +41,28 @@
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template #default="{ row }">
-                        <el-button 
-                            link 
-                            type="primary" 
-                            @click="editUser(row)"
-                            class="action-btn edit-btn"
-                        >
-                            <el-icon><Edit /></el-icon>
+                        <el-button link type="primary" @click="editUser(row)" class="action-btn edit-btn">
+                            <el-icon>
+                                <Edit />
+                            </el-icon>
                             编辑
                         </el-button>
-                        <el-popconfirm 
-                            title="确定删除此用户?"
-                            @confirm="deleteUser(row.id)"
-                            placement="top"
-                        >
+                        <el-popconfirm title="确定删除此用户?" @confirm="deleteUser(row.id)" placement="top">
                             <template #reference>
-                                <el-button 
-                                    link 
-                                    type="danger" 
-                                    class="action-btn delete-btn"
-                                >
-                                    <el-icon><Delete /></el-icon>
+                                <el-button link type="danger" class="action-btn delete-btn">
+                                    <el-icon>
+                                        <Delete />
+                                    </el-icon>
                                     删除
                                 </el-button>
                             </template>
                         </el-popconfirm>
-                        <el-popconfirm 
-                            title="确定重置此用户的密码?"
-                            @confirm="resetPassword(row.id)"
-                            placement="top"
-                        >
+                        <el-popconfirm title="确定重置此用户的密码?" @confirm="resetPassword(row.id)" placement="top">
                             <template #reference>
-                                <el-button 
-                                    link 
-                                    type="warning" 
-                                    class="action-btn reset-btn"
-                                >
-                                    <el-icon><Refresh /></el-icon>
+                                <el-button link type="warning" class="action-btn reset-btn">
+                                    <el-icon>
+                                        <Refresh />
+                                    </el-icon>
                                     密码重置
                                 </el-button>
                             </template>
@@ -94,27 +70,17 @@
                     </template>
                 </el-table-column>
             </el-table>
-            
+
             <!-- 分页 -->
             <div class="pagination-container">
-                <el-pagination
-                    v-model:current-page="currentPage"
-                    v-model:page-size="pageSize4"
-                    :page-sizes="[10, 20, 30, 40]"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="total"
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    class="pagination"
-                />
+                <el-pagination v-model:current-page="currentPage" v-model:page-size="pageSize4"
+                    :page-sizes="[10, 20, 30, 40]" layout="total, sizes, prev, pager, next, jumper" :total="total"
+                    @size-change="handleSizeChange" @current-change="handleCurrentChange" class="pagination" />
             </div>
         </el-card>
     </div>
     <!-- 编辑用户 -->
-     <el-dialog 
-        title="编辑用户"
-        v-model="editUserVisible"
-        width="30%">
+    <el-dialog title="编辑用户" v-model="editUserVisible" width="30%">
         <div class="edit_user_form">
             <el-form>
                 <el-form-item label="用户名">
@@ -127,23 +93,14 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="头像">
-                    <el-upload
-                        :on-success="handleAvatarUploadSuccess"
-                        :on-error="handleAvatarUploadError"
-                        :show-file-list="false"
-                        :before-upload="beforeAvatarUpload"
-                        :http-request="customUpload"
-                    >
+                    <el-upload :on-success="handleAvatarUploadSuccess" :on-error="handleAvatarUploadError"
+                        :show-file-list="false" :before-upload="beforeAvatarUpload" :http-request="customUpload">
                         <img class="edit_img" :src="`${preUrl}${editUserObj.avatar}`" alt="">
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="角色">
                     <el-select v-model="editUserObj.roleId" placeholder="请选择">
-                        <el-option
-                            v-for="item in roleList"
-                            :key="item.id"
-                            :label="item.name"
-                            :value="item.id">
+                        <el-option v-for="item in roleList" :key="item.id" :label="item.name" :value="item.id">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -155,24 +112,16 @@
                 <el-button @click="editUserVisible = false">取消</el-button>
             </div>
         </template>
-     </el-dialog>
-     <!-- 新建用户 -->
-    <el-dialog
-        title="新建用户"
-        v-model="createUserVisible"
-        width="30%">
+    </el-dialog>
+    <!-- 新建用户 -->
+    <el-dialog title="新建用户" v-model="createUserVisible" width="30%">
         <el-form>
             <el-form-item label="用户名">
                 <el-input v-model="createUserObj.username"></el-input>
             </el-form-item>
             <el-form-item label="头像">
-                <el-upload
-                    :on-success="handleAvatarUploadSuccessCreate"
-                    :on-error="handleAvatarUploadError"
-                    :show-file-list="false"
-                    :before-upload="beforeAvatarUpload"
-                    :http-request="customUpload"
-                >
+                <el-upload :on-success="handleAvatarUploadSuccessCreate" :on-error="handleAvatarUploadError"
+                    :show-file-list="false" :before-upload="beforeAvatarUpload" :http-request="customUpload">
                     <img class="edit_img" :src="`${preUrl}${createUserObj.avatar}`" alt="">
                 </el-upload>
             </el-form-item>
@@ -184,11 +133,7 @@
             </el-form-item>
             <el-form-item label="角色">
                 <el-select v-model="createUserObj.roleId" placeholder="请选择">
-                    <el-option
-                        v-for="item in roleList"
-                        :key="item.id"
-                        :label="item.name"
-                        :value="item.id">
+                    <el-option v-for="item in roleList" :key="item.id" :label="item.name" :value="item.id">
                     </el-option>
                 </el-select>
             </el-form-item>
@@ -205,7 +150,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import axios from 'axios'
-import { getUsers,getRolesDict,updateUser,addUser, delUser,updateAvatar,toResetPassword } from '@/api/api'
+import { getUsers, getRolesDict, updateUser, addUser, delUser, updateAvatar, toResetPassword } from '@/api/api'
 import { ElMessage } from 'element-plus'
 import { CirclePlusFilled, Edit, Delete, Refresh } from '@element-plus/icons-vue'
 import PageSearch from '@/components/PageSearch.vue'
@@ -277,13 +222,13 @@ const getUsersList = (): void => {
     }
     getUsers(params).then((res: any) => {
         const { code, data, msg } = res
-        if(code !== 200){
+        if (code !== 200) {
             ElMessage({
                 message: msg,
                 type: 'error'
             })
         }
-        if(code === 200){
+        if (code === 200) {
             tableData.value = data.list
             total.value = data.total
         }
@@ -316,7 +261,7 @@ interface GetRolesDictResponse {
 const getRoleDictList = (): void => {
     getRolesDict().then((res: any) => {
         const { code, data, msg } = res
-        if(code === 200){
+        if (code === 200) {
             roleList.value = data
         }
     })
@@ -338,7 +283,7 @@ interface AddUserResponse {
 
 const handleCreateUser = (): void => {
     addUser(createUserObj.value).then((res: any) => {
-        if(res.code === 200){
+        if (res.code === 200) {
             createUserVisible.value = false
             getUsersList()
         }
@@ -365,7 +310,7 @@ const resetPassword = (userId: number): void => {
     toResetPassword({
         id: userId
     }).then((res: any) => {
-        if(res.code === 200){
+        if (res.code === 200) {
             ElMessage.success('密码重置成功');
             // 刷新用户列表
             getUsersList();
@@ -385,7 +330,7 @@ interface UpdateUserResponse {
 
 const handleEditUser = (): void => {
     updateUser(editUserObj.value).then((res: any) => {
-        if(res.code === 200){
+        if (res.code === 200) {
             editUserVisible.value = false
             getUsersList()
         }
@@ -406,7 +351,7 @@ const deleteUser = (userId: number): void => {
     delUser({
         id: userId
     }).then((res: any) => {
-        if(res.code === 200){
+        if (res.code === 200) {
             getUsersList()
         }
     })
@@ -491,9 +436,9 @@ const customUpload = (param: UploadParam): void => {
     updateAvatar(formData).then((response: any) => {
         param.onSuccess(response); // 调用成功回调
     })
-    .catch((error: Error) => {
-        param.onError(error); // 调用失败回调
-    });
+        .catch((error: Error) => {
+            param.onError(error); // 调用失败回调
+        });
 }
 </script>
 <style scoped lang='scss'>
@@ -509,9 +454,11 @@ const customUpload = (param: UploadParam): void => {
     overflow: hidden;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
     transition: box-shadow 0.3s ease;
+
     &:hover {
         box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.15);
     }
+
     .el-card__body {
         padding: 0;
     }
@@ -521,8 +468,10 @@ const customUpload = (param: UploadParam): void => {
 :deep(.el-table) {
     border-radius: 12px 12px 0 0;
     overflow: hidden;
+
     .el-table__header-wrapper {
         background: #f8f9fa;
+
         .el-table__header {
             th {
                 background: #f8f9fa;
@@ -532,16 +481,20 @@ const customUpload = (param: UploadParam): void => {
             }
         }
     }
+
     .el-table__body-wrapper {
         .el-table__row {
             transition: background-color 0.2s ease;
+
             &:hover {
                 background-color: #f5f7fa !important;
             }
         }
+
         .even-row {
             background-color: #ffffff;
         }
+
         .odd-row {
             background-color: #fafafa;
         }
@@ -553,6 +506,7 @@ const customUpload = (param: UploadParam): void => {
     display: flex;
     align-items: center;
     gap: 12px;
+
     .avatar-small {
         width: 32px;
         height: 32px;
@@ -560,6 +514,7 @@ const customUpload = (param: UploadParam): void => {
         object-fit: cover;
         border: 2px solid #f0f0f0;
     }
+
     .username {
         font-size: 14px;
         color: #303133;
@@ -574,10 +529,12 @@ const customUpload = (param: UploadParam): void => {
     border-radius: 12px;
     font-size: 12px;
     font-weight: 500;
+
     &.male {
         background-color: #e6f7ff;
         color: #1890ff;
     }
+
     &.female {
         background-color: #fff0f6;
         color: #f5222d;
@@ -590,6 +547,7 @@ const customUpload = (param: UploadParam): void => {
     align-items: center;
     gap: 4px;
     margin: 0 4px;
+
     &:hover {
         opacity: 0.8;
     }
@@ -602,6 +560,7 @@ const customUpload = (param: UploadParam): void => {
     border-top: 1px solid #ebeef5;
     display: flex;
     justify-content: flex-end;
+
     .pagination {
         .el-pagination__sizes {
             margin-right: 16px;
@@ -615,6 +574,7 @@ const customUpload = (param: UploadParam): void => {
         margin-bottom: 20px;
         display: flex;
         align-items: center;
+
         .el-form-item__label {
             width: 80px;
             flex-shrink: 0;
@@ -639,6 +599,7 @@ const customUpload = (param: UploadParam): void => {
     border: 2px solid #f0f0f0;
     cursor: pointer;
     transition: all 0.3s ease;
+
     &:hover {
         transform: scale(1.05);
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
@@ -649,17 +610,21 @@ const customUpload = (param: UploadParam): void => {
 :deep(.el-dialog) {
     border-radius: 12px;
     overflow: hidden;
+
     .el-dialog__header {
         background: #f8f9fa;
         border-bottom: 1px solid #ebeef5;
+
         .el-dialog__title {
             font-size: 18px;
             font-weight: 600;
         }
     }
+
     .el-dialog__body {
         padding: 24px;
     }
+
     .el-dialog__footer {
         padding: 16px 24px;
         border-top: 1px solid #ebeef5;
@@ -672,11 +637,13 @@ const customUpload = (param: UploadParam): void => {
     .user-management-container {
         padding: 16px;
     }
+
     .user-info {
         flex-direction: column;
         align-items: flex-start;
         gap: 8px;
     }
+
     .pagination-container {
         justify-content: center;
     }

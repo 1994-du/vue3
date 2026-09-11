@@ -37,40 +37,21 @@
 
                 <el-form :model="loginObj" label-position="top" class="login-form">
                     <el-form-item label="账号">
-                        <el-input
-                            v-focus
-                            v-model="loginObj.username"
-                            type="text"
-                            autocomplete="username"
-                            placeholder="请输入账号"
-                            :prefix-icon="User"
-                            size="large"
-                            @keyup.enter="handleLogin"
-                        />
+                        <el-input v-focus v-model="loginObj.username" type="text" autocomplete="username"
+                            placeholder="请输入账号" :prefix-icon="User" size="large" @keyup.enter="handleLogin" />
                     </el-form-item>
 
                     <el-form-item label="密码">
-                        <el-input
-                            v-model="loginObj.password"
-                            type="password"
-                            autocomplete="current-password"
-                            placeholder="请输入密码"
-                            :prefix-icon="Lock"
-                            size="large"
-                            show-password
-                            @keyup.enter="handleLogin"
-                        />
+                        <el-input v-model="loginObj.password" type="password" autocomplete="current-password"
+                            placeholder="请输入密码" :prefix-icon="Lock" size="large" show-password
+                            @keyup.enter="handleLogin" />
                     </el-form-item>
 
                     <div class="form-options">
                         <el-checkbox v-model="loginObj.remember">记住密码</el-checkbox>
                     </div>
 
-                    <el-button
-                        type="primary"
-                        size="large"
-                        class="login-submit"
-                        :loading="isLoading"
+                    <el-button type="primary" size="large" class="login-submit" :loading="isLoading"
                         @click="handleLogin">
                         登录
                     </el-button>

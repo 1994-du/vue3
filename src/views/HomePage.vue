@@ -38,15 +38,9 @@
                 </div>
                 <span class="home-page__table-note">GitHub API</span>
             </div>
-            <el-table
-                v-loading="isLoading"
-                :data="tableData"
-                style="width: 100%"
-                border
-                stripe
+            <el-table v-loading="isLoading" :data="tableData" style="width: 100%" border stripe
                 :header-cell-style="{ background: 'var(--surface-subtle)', color: 'var(--text-primary)', fontWeight: 'bold' }"
-                :cell-style="{ color: 'var(--text-secondary)' }"
-                :row-class-name="tableRowClassName">
+                :cell-style="{ color: 'var(--text-secondary)' }" :row-class-name="tableRowClassName">
                 <el-table-column prop="sha" label="SHA" width="300">
                     <template #default="{ row }">
                         <code class="commit-sha">{{ row.sha?.slice(0, 12) }}</code>
@@ -61,11 +55,7 @@
                 </el-table-column>
             </el-table>
             <div class="home-page__pagination">
-                <el-pagination
-                    :current-page="pageNum"
-                    :page-size="pageSize"
-                    :total="100"
-                    layout="prev, pager, next"
+                <el-pagination :current-page="pageNum" :page-size="pageSize" :total="100" layout="prev, pager, next"
                     @current-change="handlePageChange" />
             </div>
         </div>

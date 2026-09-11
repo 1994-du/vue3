@@ -3,14 +3,18 @@
         <PageHeader title="组织架构">
             <template #actions>
                 <el-button type="primary" @click="handleAdd" class="add-btn page-primary-action">
-                    <el-icon><CirclePlusFilled /></el-icon>新增组织
+                    <el-icon>
+                        <CirclePlusFilled />
+                    </el-icon>新增组织
                 </el-button>
                 <el-button type="default" @click="refreshData" class="refresh-btn">
-                    <el-icon><Refresh /></el-icon>刷新
+                    <el-icon>
+                        <Refresh />
+                    </el-icon>刷新
                 </el-button>
             </template>
         </PageHeader>
-        
+
         <div class="org-workspace" v-loading="loading">
             <aside class="org-tree-panel">
                 <div class="org-panel-heading">
@@ -27,19 +31,9 @@
                 </div>
 
                 <el-scrollbar class="org-tree-scroll">
-                    <el-tree
-                        v-if="tableData.length"
-                        ref="treeRef"
-                        :data="tableData"
-                        :props="treeProps"
-                        :current-node-key="selectedOrgId"
-                        :expand-on-click-node="false"
-                        :indent="26"
-                        node-key="id"
-                        default-expand-all
-                        highlight-current
-                        class="org-tree"
-                        @node-click="handleNodeClick">
+                    <el-tree v-if="tableData.length" ref="treeRef" :data="tableData" :props="treeProps"
+                        :current-node-key="selectedOrgId" :expand-on-click-node="false" :indent="26" node-key="id"
+                        default-expand-all highlight-current class="org-tree" @node-click="handleNodeClick">
                         <template #default="{ node, data }">
                             <div class="org-tree-node">
                                 <span class="org-tree-node__icon" :class="{ 'is-leaf': !data.children?.length }">
@@ -83,19 +77,22 @@
 
                         <div class="org-detail-actions">
                             <el-button type="primary" plain @click="handleAddChild(currentOrg)">
-                                <el-icon><Plus /></el-icon>添加下级
+                                <el-icon>
+                                    <Plus />
+                                </el-icon>添加下级
                             </el-button>
                             <el-button @click="handleEdit(currentOrg)">
-                                <el-icon><Edit /></el-icon>编辑
+                                <el-icon>
+                                    <Edit />
+                                </el-icon>编辑
                             </el-button>
-                            <el-popconfirm
-                                title="确定删除此组织?"
-                                confirm-button-text="确定"
-                                cancel-button-text="取消"
+                            <el-popconfirm title="确定删除此组织?" confirm-button-text="确定" cancel-button-text="取消"
                                 @confirm="handleDelete(currentOrg.id)">
                                 <template #reference>
                                     <el-button type="danger" plain>
-                                        <el-icon><Delete /></el-icon>删除
+                                        <el-icon>
+                                            <Delete />
+                                        </el-icon>删除
                                     </el-button>
                                 </template>
                             </el-popconfirm>
@@ -163,11 +160,7 @@
     </div>
 
     <!-- 新增/编辑对话框 -->
-    <el-dialog 
-        :title="dialogTitle"
-        v-model="dialogVisible"
-        width="500px"
-        class="org-dialog"
+    <el-dialog :title="dialogTitle" v-model="dialogVisible" width="500px" class="org-dialog"
         :close-on-click-modal="false">
         <el-form :model="formData" :rules="rules" ref="formRef" label-width="100px" class="org-form">
             <el-form-item label="上级组织" v-if="formData.parentId !== 0">
@@ -189,12 +182,8 @@
                 </el-radio-group>
             </el-form-item>
             <el-form-item label="备注">
-                <el-input 
-                    v-model="formData.remark" 
-                    type="textarea" 
-                    :rows="3"
-                    placeholder="请输入备注" 
-                    class="custom-textarea"/>
+                <el-input v-model="formData.remark" type="textarea" :rows="3" placeholder="请输入备注"
+                    class="custom-textarea" />
             </el-form-item>
         </el-form>
         <template #footer>
@@ -210,12 +199,12 @@
 import { ref, reactive, onMounted, computed, nextTick } from 'vue'
 import { ElMessage } from 'element-plus'
 import { CirclePlusFilled, Delete, Edit, Refresh, OfficeBuilding, User, Plus } from '@element-plus/icons-vue'
-import { 
-    getOrgTree, 
-    addOrg, 
-    updateOrg, 
+import {
+    getOrgTree,
+    addOrg,
+    updateOrg,
     deleteOrg,
-    getOrgDetail 
+    getOrgDetail
 } from '@/api/api'
 
 // 定义组织数据接口
@@ -444,7 +433,7 @@ const handleSubmit = async (): Promise<void> => {
         } else {
             res = await addOrg(formData)
         }
-        
+
         if (res.code === 200) {
             ElMessage.success(dialogType.value === 'edit' ? '更新成功' : '添加成功')
             dialogVisible.value = false
@@ -718,7 +707,7 @@ onMounted(() => {
     justify-content: flex-end;
     gap: 8px;
 
-    .el-button + .el-button {
+    .el-button+.el-button {
         margin-left: 0;
     }
 }
@@ -819,17 +808,17 @@ onMounted(() => {
         border-bottom: 1px solid var(--border-color);
         padding: 20px;
     }
-    
+
     :deep(.el-dialog__title) {
         font-size: 18px;
         font-weight: 600;
         color: var(--text-primary);
     }
-    
+
     :deep(.el-dialog__body) {
         padding: 24px;
     }
-    
+
     :deep(.el-dialog__footer) {
         border-top: 1px solid var(--border-color);
         padding: 16px 24px;
@@ -837,29 +826,30 @@ onMounted(() => {
 }
 
 .org-form {
+
     .custom-input,
     .disabled-input,
     .custom-textarea {
         border-radius: var(--border-radius);
         transition: all var(--transition-fast);
-        
+
         &:focus {
             box-shadow: 0 0 0 2px var(--primary) inset !important;
         }
     }
-    
+
     .custom-input-number {
         border-radius: var(--border-radius);
-        
+
         :deep(.el-input__wrapper) {
             border-radius: var(--border-radius);
         }
     }
-    
+
     .status-radio {
         display: flex;
         gap: 24px;
-        
+
         :deep(.el-radio) {
             margin-right: 0;
         }
@@ -870,18 +860,18 @@ onMounted(() => {
     display: flex;
     justify-content: flex-end;
     gap: 12px;
-    
+
     .cancel-btn,
     .submit-btn {
         padding: 8px 20px;
         border-radius: var(--border-radius);
         transition: all var(--transition-fast);
-        
+
         &:hover {
             transform: translateY(-1px);
         }
     }
-    
+
     .submit-btn {
         &:hover {
             box-shadow: 0 4px 12px rgba(93, 186, 171, 0.3);

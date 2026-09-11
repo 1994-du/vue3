@@ -3,30 +3,23 @@
         <PageHeader title="工作台管理">
             <template v-if="isAdmin" #actions>
                 <el-button type="primary" @click="openCreateDialog" class="create-btn page-primary-action">
-                    <el-icon><CirclePlusFilled /></el-icon>
+                    <el-icon>
+                        <CirclePlusFilled />
+                    </el-icon>
                     新建工作台
                 </el-button>
             </template>
         </PageHeader>
 
         <el-card class="workbench-table-card" shadow="hover">
-            <el-table
-                v-loading="loading"
-                :data="tableData"
-                style="width: 100%"
-                :row-class-name="tableRowClassName"
+            <el-table v-loading="loading" :data="tableData" style="width: 100%" :row-class-name="tableRowClassName"
                 :fit="true">
                 <el-table-column label="ID" prop="id" width="100" align="center" />
                 <el-table-column label="名称" prop="name" min-width="150" />
                 <el-table-column label="图标" prop="icon" min-width="160">
                     <template #default="{ row }">
-                        <el-image
-                            v-if="row.icon"
-                            :src="getIconUrl(row.icon)"
-                            :preview-src-list="[getIconUrl(row.icon)]"
-                            fit="cover"
-                            preview-teleported
-                            class="table-icon">
+                        <el-image v-if="row.icon" :src="getIconUrl(row.icon)" :preview-src-list="[getIconUrl(row.icon)]"
+                            fit="cover" preview-teleported class="table-icon">
                             <template #error>
                                 <div class="image-error">加载失败</div>
                             </template>
@@ -42,12 +35,7 @@
                 <el-table-column v-if="isAdmin" label="所属用户" min-width="240">
                     <template #default="{ row }">
                         <div v-if="row.users?.length" class="user-tags">
-                            <el-tag
-                                v-for="user in row.users"
-                                :key="user.id"
-                                size="small"
-                                type="success"
-                                effect="plain">
+                            <el-tag v-for="user in row.users" :key="user.id" size="small" type="success" effect="plain">
                                 {{ user.username }}
                             </el-tag>
                         </div>
@@ -58,20 +46,26 @@
                     <template #default="{ row }">
                         <template v-if="isAdmin">
                             <el-button link type="primary" @click="openEditDialog(row)" class="action-btn">
-                                <el-icon><Edit /></el-icon>
+                                <el-icon>
+                                    <Edit />
+                                </el-icon>
                                 编辑
                             </el-button>
                             <el-popconfirm title="确定删除此工作台?" @confirm="handleDeleteWorkbench(row.id)" placement="top">
                                 <template #reference>
                                     <el-button link type="danger" class="action-btn">
-                                        <el-icon><Delete /></el-icon>
+                                        <el-icon>
+                                            <Delete />
+                                        </el-icon>
                                         删除
                                     </el-button>
                                 </template>
                             </el-popconfirm>
                         </template>
                         <el-button v-else link type="primary" @click="viewWorkbench(row)" class="action-btn">
-                            <el-icon><View /></el-icon>
+                            <el-icon>
+                                <View />
+                            </el-icon>
                             查看
                         </el-button>
                     </template>
@@ -80,26 +74,20 @@
         </el-card>
     </div>
 
-    <el-dialog
-        v-model="dialogVisible"
-        :title="dialogTitle"
-        width="520px"
-        :close-on-click-modal="false"
+    <el-dialog v-model="dialogVisible" :title="dialogTitle" width="520px" :close-on-click-modal="false"
         @closed="resetForm">
         <el-form ref="formRef" :model="formData" :rules="rules" label-width="90px">
             <el-form-item label="名称" prop="name">
                 <el-input v-model="formData.name" placeholder="请输入工作台名称" />
             </el-form-item>
             <el-form-item label="图标" prop="icon">
-                <el-upload
-                    class="icon-uploader"
-                    accept="image/*"
-                    :show-file-list="false"
-                    :http-request="uploadIcon"
+                <el-upload class="icon-uploader" accept="image/*" :show-file-list="false" :http-request="uploadIcon"
                     :before-upload="beforeIconUpload">
                     <img v-if="formData.icon" :src="getIconUrl(formData.icon)" class="icon-preview" alt="">
                     <div v-else class="icon-placeholder">
-                        <el-icon><Plus /></el-icon>
+                        <el-icon>
+                            <Plus />
+                        </el-icon>
                     </div>
                 </el-upload>
             </el-form-item>
@@ -107,19 +95,9 @@
                 <el-input v-model="formData.link" placeholder="例如 /micro/approval" />
             </el-form-item>
             <el-form-item label="所属用户" prop="userIds">
-                <el-select
-                    v-model="formData.userIds"
-                    multiple
-                    filterable
-                    clearable
-                    placeholder="请选择所属用户"
-                    class="user-select"
-                    :loading="usersLoading">
-                    <el-option
-                        v-for="user in userOptions"
-                        :key="user.id"
-                        :label="user.username"
-                        :value="user.id" />
+                <el-select v-model="formData.userIds" multiple filterable clearable placeholder="请选择所属用户"
+                    class="user-select" :loading="usersLoading">
+                    <el-option v-for="user in userOptions" :key="user.id" :label="user.username" :value="user.id" />
                 </el-select>
             </el-form-item>
         </el-form>

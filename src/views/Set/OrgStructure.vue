@@ -196,7 +196,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted, computed, nextTick } from 'vue'
+import { inject, ref, reactive, onMounted, computed, nextTick } from 'vue'
+import { breadcrumbKey } from '@/utils/breadcrumb'
+
+inject(breadcrumbKey)?.setItems([
+    { label: '设置', to: '/set' },
+    { label: '组织架构' }
+])
 import { ElMessage } from 'element-plus'
 import { CirclePlusFilled, Delete, Edit, Refresh, OfficeBuilding, User, Plus } from '@element-plus/icons-vue'
 import {

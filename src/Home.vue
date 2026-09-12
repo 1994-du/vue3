@@ -92,6 +92,8 @@
                 </div>
             </header>
 
+            <Breadcrumb :items="breadcrumbItems" />
+
             <main ref="contentShellRef" class="layout_content">
                 <router-view v-slot="{ Component, route: renderedRoute }">
                     <div :key="renderedRoute.fullPath" class="route-stage">
@@ -116,13 +118,15 @@ import {
     SwitchButton,
     User
 } from '@element-plus/icons-vue'
-import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, provide, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import useUserInfoStore from '@/store/pinia/userInfo'
 import { loginOutEffect } from '@/utils/tokenManager'
 import { toLoginOut } from '@/api/auth'
 import { findDefaultPath } from '@/utils/generateRoutes'
 import { resolveMenuFullPath } from '@/utils/menuRoute'
+import Breadcrumb from '@/components/Breadcrumb.vue'
+import { breadcrumbKey } from '@/utils/breadcrumb'
 
 const preUrl = `${import.meta.env.VITE_PROXY}`.replace(/\/$/, '')
 const userInfoStore = useUserInfoStore()
@@ -134,6 +138,7 @@ const menuScrollContainerRef = ref(null)
 const isShowSearch = ref(false)
 const isMobileMenuOpen = ref(false)
 const isCollapse = ref(JSON.parse(localStorage.getItem('menuCollapse') || 'false'))
+const breadcrumbItems = ref([{ label: '工作台', to: '/home' }])
 
 const onRoutes = computed(() => route.path)
 const menuConfig = computed(() => userInfoStore.menus)
@@ -161,6 +166,16 @@ const findMenuTitle = (menus, targetPath, parentPath = '') => {
 const currentPageTitle = computed(() => {
     return route.meta.title || findMenuTitle(userInfoStore.menus, route.path) || '知识工作台'
 })
+
+const setBreadcrumb = (items) => {
+    breadcrumbItems.value = items.length ? items : [{ label: currentPageTitle.value }]
+}
+
+provide(breadcrumbKey, { items: breadcrumbItems, setItems: setBreadcrumb })
+
+watch(() => route.fullPath, () => {
+    setBreadcrumb([{ label: currentPageTitle.value }])
+}, { immediate: true })
 
 const collapse = () => {
     isCollapse.value = !isCollapse.value

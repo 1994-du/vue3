@@ -6,8 +6,14 @@
     </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue'
+import { inject, ref } from 'vue'
 import useUserInfoStore from '../store/pinia/userInfo'
+import { breadcrumbKey } from '@/utils/breadcrumb'
+
+inject(breadcrumbKey)?.setItems([
+    { label: '工作台', to: '/home' },
+    { label: '个人信息' }
+])
 
 // 定义用户信息接口
 interface UserInfo {

@@ -111,7 +111,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, inject, onMounted, ref } from 'vue'
+import { breadcrumbKey } from '@/utils/breadcrumb'
+
+inject(breadcrumbKey)?.setItems([
+    { label: '设置', to: '/set' },
+    { label: '工作台管理' }
+])
 import type { FormInstance, FormRules } from 'element-plus/es/components/form'
 import { ElMessage } from 'element-plus'
 import type { UploadRequestOptions } from 'element-plus/es/components/upload'

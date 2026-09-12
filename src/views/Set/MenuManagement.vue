@@ -133,7 +133,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, shallowRef, onMounted, nextTick, watch } from 'vue'
+import { inject, ref, shallowRef, onMounted, nextTick, watch } from 'vue'
+import { breadcrumbKey } from '@/utils/breadcrumb'
+
+inject(breadcrumbKey)?.setItems([
+    { label: '设置', to: '/set' },
+    { label: '菜单管理' }
+])
 import { getMenuTree, addMenu, setMenu, deleteMenu } from '@/api/menus'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus, Delete, Edit, Refresh, Search, Folder, Document } from '@element-plus/icons-vue'

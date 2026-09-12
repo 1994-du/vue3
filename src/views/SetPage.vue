@@ -14,8 +14,13 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { inject, ref, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
+import { breadcrumbKey } from '@/utils/breadcrumb'
+
+inject(breadcrumbKey)?.setItems([
+    { label: '设置' }
+])
 
 const router = useRouter();
 const route = useRoute();

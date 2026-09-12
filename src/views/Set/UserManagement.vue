@@ -148,7 +148,13 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { inject, onMounted, ref } from 'vue'
+import { breadcrumbKey } from '@/utils/breadcrumb'
+
+inject(breadcrumbKey)?.setItems([
+    { label: '设置', to: '/set' },
+    { label: '用户管理' }
+])
 import axios from 'axios'
 import { getUsers, getRolesDict, updateUser, addUser, delUser, updateAvatar, toResetPassword } from '@/api/api'
 import { ElMessage } from 'element-plus'

@@ -77,7 +77,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, nextTick } from 'vue'
+import { inject, ref, onMounted, nextTick } from 'vue'
+import { breadcrumbKey } from '@/utils/breadcrumb'
+
+inject(breadcrumbKey)?.setItems([
+    { label: '设置', to: '/set' },
+    { label: '角色管理' }
+])
 // @ts-ignore
 import { getRoles, setRole, addRole, delRole } from '../../api/role'
 // @ts-ignore

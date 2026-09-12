@@ -63,8 +63,16 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { inject, onMounted, ref } from 'vue'
 import Axios from 'axios';
+import { breadcrumbKey } from '@/utils/breadcrumb'
+
+const breadcrumb = inject(breadcrumbKey)
+
+breadcrumb?.setItems([
+    { label: '工作台', to: '/home' },
+    { label: '代码变更' }
+])
 
 const pageRootRef = ref<HTMLElement | null>(null)
 const tableData = ref<any[]>([])

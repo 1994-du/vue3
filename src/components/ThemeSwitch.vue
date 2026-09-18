@@ -18,10 +18,10 @@ import { onMounted, ref } from 'vue'
 import { Moon, Sunny } from '@element-plus/icons-vue'
 import { persistenceHtmlTheme } from '@/utils/saveHtmlTheme'
 
-const currentTheme = ref('light')
+const currentTheme = ref('dark')
 
 onMounted(() => {
-    currentTheme.value = document.documentElement.getAttribute('data-theme') || 'light'
+    currentTheme.value = document.documentElement.getAttribute('data-theme') || 'dark'
 })
 
 const toggleTheme = () => {
@@ -37,15 +37,26 @@ const toggleTheme = () => {
     display: grid;
     place-items: center;
     color: var(--text-secondary);
-    background: transparent;
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-sm);
+    background: var(--glass);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-pill);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
     cursor: pointer;
+    transition: transform var(--transition-fast), color var(--transition-fast),
+        background-color var(--transition-fast), border-color var(--transition-fast),
+        box-shadow var(--transition-fast);
 }
 
 .theme-switch:hover {
-    color: var(--accent);
-    background: color-mix(in srgb, var(--accent) 10%, var(--surface));
-    border-color: color-mix(in srgb, var(--accent) 40%, var(--border-color));
+    transform: translateY(-2px);
+    color: var(--text-primary);
+    background: var(--glass-strong);
+    border-color: color-mix(in srgb, var(--brand) 45%, var(--hairline));
+    box-shadow: 0 10px 26px -14px rgba(124, 58, 237, 0.7);
+}
+
+.theme-switch:active {
+    transform: translateY(0);
 }
 </style>

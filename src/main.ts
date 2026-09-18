@@ -47,8 +47,8 @@ const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
 app.use(pinia)
 
-// 挂载前初始化
-persistenceHtmlTheme(localStorage.getItem('theme') || 'light')
+// 挂载前初始化（未来玻璃主题默认深色，浅色为备选）
+persistenceHtmlTheme(localStorage.getItem('theme') || 'dark')
 IndexDB.openDatabase().then(db => (window.db = db)).catch(() => {})
 
 // 动态路由由路由守卫统一恢复，启动入口只负责注册并挂载应用。

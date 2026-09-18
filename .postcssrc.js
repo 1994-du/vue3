@@ -1,22 +1,13 @@
-export default{
+/* 这里原先挂着 postcss-px-to-viewport-8-plugin（viewportWidth 1920 / viewportUnit rem），
+   它把样式里写的每一个 px 都换成 rem。1920 设计稿下 1rem 应等于 19.2px，而项目根字号是
+   浏览器默认的 16px，于是 22px 被渲染成 18.33px —— 全站恒定缩到 83.3%。除了尺寸对不上稿，
+   DevTools 里看到的也是 1.14583rem / 0.416667rem 这类读不出设计意图的值（含圆角、行高、间距）。
+
+   现在按需求移除该转换：样式里写 px 就是 px，所见即所得。
+   注：@tailwindcss/postcss 保留原样。它其实一直没生效 —— Tailwind v4 需要 src 里显式
+   `@import "tailwindcss"` 才会产出样式，项目里没有这个入口。 */
+export default {
     plugins: {
-        '@tailwindcss/postcss': {},
-        'postcss-px-to-viewport-8-plugin': {
-            viewportWidth: 1920, // 设计稿宽度
-            viewportHeight: 1080, // 设计稿高度
-            unitToConvert: 'px', // 需要转换的单位
-            unitPrecision: 6, // 转换后的精度，即小数点位数
-            propList: ['*'], // 需要转换的属性
-            viewportUnit: 'rem', // 转换后的单位
-            fontViewportUnit: 'rem', // 字体转换后的单位
-            selectorBlackList: [], // 忽略转换的类名
-            minPixelValue: 1, // 小于或等于1px不转换
-            mediaQuery: false, // 媒体查询是否需要转换
-            exclude: [], // 忽略某些文件夹下的文件或特定文件
-            include: undefined, // 如果设置了include，那将只有匹配到的文件才会被转换
-            landscape: false, // 是否处理横屏情况
-            landscapeUnit: 'rem', // 横屏时使用的单位
-            landscapeWidth: 1920 // 横屏时使用的视口宽度
-        }
+        '@tailwindcss/postcss': {}
     }
 }

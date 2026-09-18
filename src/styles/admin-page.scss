@@ -15,10 +15,12 @@
 .workbench-table-card {
     overflow: hidden;
     margin-bottom: 16px;
-    border: 1px solid var(--border-color) !important;
-    border-radius: var(--radius-md) !important;
-    background: var(--surface) !important;
-    box-shadow: none !important;
+    border: 1px solid var(--hairline) !important;
+    border-radius: var(--radius-lg) !important;
+    background: var(--glass) !important;
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    box-shadow: var(--shadow-md) !important;
 }
 
 .table-card {
@@ -45,17 +47,19 @@
 .org-structure-container .el-table th.el-table__cell,
 .workbench-management-container .el-table th.el-table__cell {
     color: var(--text-primary) !important;
-    background: var(--surface-subtle) !important;
+    background: var(--table-header-bg) !important;
     border-bottom-color: var(--border-color) !important;
 }
 
+/* 行底走 --table-row-bg（不透明）。用 --surface 这类半透明色会让固定列漏出下方
+   滚动过的单元格，与固定列的文字叠在一起。见 design-system.scss 的说明。 */
 .user-management-container .el-table .even-row,
 .role-management-container .el-table .even-row,
 .workbench-management-container .el-table .even-row,
 .user-management-container .el-table .odd-row,
 .role-management-container .el-table .odd-row,
 .workbench-management-container .el-table .odd-row {
-    background: var(--surface) !important;
+    background: var(--table-row-bg) !important;
 }
 
 .user-management-container .el-table__row:hover > td.el-table__cell,
@@ -63,7 +67,7 @@
 .menu-management-container .el-table__row:hover > td.el-table__cell,
 .org-structure-container .el-table__row:hover > td.el-table__cell,
 .workbench-management-container .el-table__row:hover > td.el-table__cell {
-    background: var(--brand-soft) !important;
+    background: var(--table-row-hover-bg) !important;
 }
 
 .table-card .el-table__inner-wrapper::before,
@@ -82,9 +86,27 @@
 }
 
 .action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
     margin: 0 !important;
     padding: 4px 5px !important;
     font-size: 12px;
+}
+
+/* 数字主键列：等宽 + 弱化。原来 120px 的格子里只有一个居中的 7 位数字，
+   看起来像一竖条空白；换成等宽小字后读起来是"编号"，不再发呆。 */
+.el-table .col-id .cell {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+    color: var(--text-tertiary);
+}
+
+/* 空单元格给一个弱化破折号，否则整列看着像没渲染出来 */
+.cell-empty {
+    color: var(--text-tertiary);
 }
 
 .page-primary-action.el-button {
@@ -136,6 +158,10 @@
     padding: 0;
 }
 
+.pagination-container .el-pagination__sizes {
+    margin-right: 16px;
+}
+
 .user-info,
 .role-info,
 .org-name {
@@ -163,20 +189,23 @@
     display: inline-flex;
     align-items: center;
     min-height: 24px;
-    padding: 0 8px;
-    border-radius: var(--radius-xs);
+    padding: 0 9px;
+    border: 1px solid transparent;
+    border-radius: var(--radius-pill);
     font-size: 11px;
     font-weight: 700;
 }
 
 .gender-tag.male {
-    color: #24618a;
-    background: #e6f2fa;
+    color: color-mix(in srgb, var(--aqua) 72%, var(--text-primary));
+    background: color-mix(in srgb, var(--aqua) 16%, transparent);
+    border-color: color-mix(in srgb, var(--aqua) 34%, transparent);
 }
 
 .gender-tag.female {
-    color: #9d4c6b;
-    background: #faedf2;
+    color: color-mix(in srgb, var(--accent) 72%, var(--text-primary));
+    background: color-mix(in srgb, var(--accent) 16%, transparent);
+    border-color: color-mix(in srgb, var(--accent) 34%, transparent);
 }
 
 .org-icon {
@@ -225,21 +254,46 @@
     margin-bottom: 18px;
 }
 
-.avatar,
-.edit_img {
+.edit_user_form .el-form-item {
+    display: flex;
+    align-items: center;
+}
+
+.edit_user_form .el-form-item__label {
+    width: 80px;
+    flex-shrink: 0;
+}
+
+.avatar {
+    width: 50px;
+    height: 50px;
     object-fit: cover;
     border-radius: 50%;
     background: var(--brand-soft);
 }
 
 .edit_img {
+    width: 80px;
+    height: 80px;
+    margin: 0 20px;
+    object-fit: cover;
+    border-radius: 50%;
     border: 2px solid var(--brand-soft);
+    background: var(--brand-soft);
+    cursor: pointer;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 
-.dialog-footer {
+.edit_img:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-md);
+}
+
+.dialog-footer,
+.dialog_footer {
     display: flex;
     justify-content: flex-end;
-    gap: 8px;
+    gap: 10px;
 }
 
 .user-select {
@@ -282,9 +336,15 @@
     margin-left: auto;
 }
 
-@media (max-width: 760px) {
+@media (max-width: 768px) {
     .pagination-container {
         justify-content: center;
         overflow-x: auto;
+    }
+
+    .user-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
     }
 }

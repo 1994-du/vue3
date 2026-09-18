@@ -29,7 +29,7 @@
                     @keydown.down.prevent="flyoutVisible = true"
                     @keydown.escape.prevent="flyoutVisible = false">
                     <span class="menu-row__content">
-                        <SvgIcon v-if="menus.icon" :name="menus.icon" class="menu-row__icon" />
+                        <SvgIcon v-if="hasIcon" :name="menus.icon" class="menu-row__icon" />
                         <span v-else class="menu-row__dot" aria-hidden="true"></span>
                     </span>
                     <el-icon class="menu-row__flyout-hint" aria-hidden="true">
@@ -105,7 +105,7 @@
                         :aria-expanded="nestedFlyoutVisible"
                         @click.stop="handleParentPrimary">
                         <span class="menu-row__content">
-                            <SvgIcon v-if="menus.icon" :name="menus.icon" class="menu-row__icon" />
+                            <SvgIcon v-if="hasIcon" :name="menus.icon" class="menu-row__icon" />
                             <span v-else class="menu-row__dot" aria-hidden="true"></span>
                             <span class="menu-row__label">{{ menus.name }}</span>
                         </span>
@@ -129,7 +129,7 @@
                     @keydown.right.prevent="nestedFlyoutVisible = true"
                     @keydown.escape.prevent="nestedFlyoutVisible = false">
                     <span class="menu-row__content">
-                        <SvgIcon v-if="menus.icon" :name="menus.icon" class="menu-row__icon" />
+                        <SvgIcon v-if="hasIcon" :name="menus.icon" class="menu-row__icon" />
                         <span v-else class="menu-row__dot" aria-hidden="true"></span>
                         <span class="menu-row__label">{{ menus.name }}</span>
                     </span>
@@ -193,7 +193,7 @@
                     :aria-current="isActive ? 'page' : undefined"
                     @click="handleParentPrimary">
                     <span class="menu-row__content">
-                        <SvgIcon v-if="menus.icon" :name="menus.icon" class="menu-row__icon" />
+                        <SvgIcon v-if="hasIcon" :name="menus.icon" class="menu-row__icon" />
                         <span v-else class="menu-row__dot" aria-hidden="true"></span>
                         <span class="menu-row__label">{{ menus.name }}</span>
                     </span>
@@ -223,7 +223,7 @@
                 @click="toggleOpen"
                 @keydown="handleParentKeydown">
                 <span class="menu-row__content">
-                    <SvgIcon v-if="menus.icon" :name="menus.icon" class="menu-row__icon" />
+                    <SvgIcon v-if="hasIcon" :name="menus.icon" class="menu-row__icon" />
                     <span v-else class="menu-row__dot" aria-hidden="true"></span>
                     <span class="menu-row__label">{{ menus.name }}</span>
                 </span>
@@ -274,7 +274,7 @@
             :aria-current="isActive ? 'page' : undefined"
             @click="handleLeafClick">
             <span class="menu-row__content">
-                <SvgIcon v-if="menus.icon" :name="menus.icon" class="menu-row__icon" />
+                <SvgIcon v-if="hasIcon" :name="menus.icon" class="menu-row__icon" />
                 <span v-else class="menu-row__dot" aria-hidden="true"></span>
                 <span v-if="!collapse" class="menu-row__label">{{ menus.name }}</span>
             </span>
@@ -348,6 +348,10 @@ let rootCloseTimer: number | undefined
 const fullPath = computed(() => resolveMenuFullPath(props.parentPath, props.menus.path))
 const hasChildren = computed(() => Boolean(props.menus.children?.length))
 const hasPage = computed(() => Boolean(props.menus.component))
+/* 'default' is the placeholder the menu API sends for items without an icon.
+   public/icons/default.svg is a plain square outline, which reads as a broken
+   checkbox in the rail, so treat it as "no icon" and let the dot render. */
+const hasIcon = computed(() => Boolean(props.menus.icon) && props.menus.icon !== 'default')
 const isOpen = computed(() => props.openPaths.includes(fullPath.value))
 const isActive = computed(() => props.activePath === fullPath.value)
 const nestedFlyoutVisible = computed({
@@ -500,6 +504,10 @@ const emitMenuClick = (payload: MenuClickEvent) => {
 .menu-children-shell {
     display: grid;
     grid-template-rows: 1fr;
+    /* An implicit grid column is sized to max-content, so a long child label
+       would widen the whole group and get hard-clipped by this shell's
+       overflow instead of ellipsizing. Pin the track to the available width. */
+    grid-template-columns: minmax(0, 1fr);
     overflow: hidden;
 }
 

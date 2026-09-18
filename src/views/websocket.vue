@@ -249,10 +249,14 @@ onUnmounted(() => {
 .message_box {
   height: clamp(300px, 300px, 500px);
   overflow-y: auto;
-  border: 1px dashed var(--fontColor);
-  border-radius: 5px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
   margin-bottom: 10px;
-  background-color: #f3f3f3;
+  background: var(--glass);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  box-shadow: var(--shadow-md);
+  padding: 8px 4px;
   .message_box_item {
     display: flex;
     flex-direction: column;
@@ -260,7 +264,10 @@ onUnmounted(() => {
     margin: 20px 10px 20px 10px;
     .message_box_item_time{
       margin-bottom: 10px;
-      color: #aaa;
+      color: var(--text-tertiary);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.02em;
     }
     .message_box_item_content{
       display: flex;
@@ -269,8 +276,9 @@ onUnmounted(() => {
       .message_box_item_username {
         width: 50px;
         height: 50px;
-        border-radius: 5px;
-        background-color: var(--background);
+        border-radius: var(--radius-md);
+        background: var(--glass-strong);
+        border: 1px solid var(--hairline);
         line-height: 40px;
         font-size: 16px;
         padding: 5px;
@@ -278,18 +286,19 @@ onUnmounted(() => {
         justify-content: center;
         align-items: center;
         position: relative;
-        filter: drop-shadow(0px 2px 5px var(--fontColor));
+        filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.45));
         img{
           width: 100%;
           height: 100%;
-          border-radius: 5px;
+          border-radius: var(--radius-sm);
         }
       }
       .message_box_item_username_other {
         width: 50px;
         height: 50px;
-        border-radius: 5px;
-        background-color: var(--background);
+        border-radius: var(--radius-md);
+        background: var(--glass-strong);
+        border: 1px solid var(--hairline);
         line-height: 40px;
         font-size: 16px;
         padding: 5px;
@@ -297,23 +306,23 @@ onUnmounted(() => {
         display: flex;
         justify-content: center;
         align-items: center;
-        filter: drop-shadow(0px 2px 5px var(--fontColor));
+        filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.45));
         img{
           width: 100%;
           height: 100%;
-          border-radius: 5px;
+          border-radius: var(--radius-sm);
         }
       }
       .message_box_item_message {
-        font-size: 18px;
+        font-size: 15px;
         margin: 0 10px;
-        color: var(--fontColor);
+        color: var(--text-primary);
         img {
           max-width: 200px; /* 设置图片最大宽度 */
           max-height: 200px; /* 设置图片最大高度 */
           cursor: pointer; // 添加鼠标指针样式
-          border-radius: 5px;
-          border: 1px solid #aaa;
+          border-radius: var(--radius-sm);
+          border: 1px solid var(--hairline-strong);
         }
         .message_rows{
           font-size: 14px;
@@ -321,39 +330,24 @@ onUnmounted(() => {
           text-wrap: break-word;
           text-align: left;
           padding: 10px 15px;
-          border-radius: 5px;
+          border-radius: var(--radius-md);
           position: relative;
+          line-height: 1.6;
           
         }
         .other{
-          background: rgb(255, 255, 255);
-          &::after {
-            content: '';
-            position: absolute;
-            left: -10px;
-            top: 12px;
-            width: 10px;
-            height: 10px;
-            border-top: 5px solid transparent;
-            border-bottom: 5px solid transparent;
-            border-left: 5px solid transparent;
-            border-right: 5px solid rgb(255, 255, 255);
-          }
+          background: var(--glass-strong);
+          color: var(--text-primary);
+          border: 1px solid var(--hairline);
+          border-top-left-radius: var(--radius-xs);
+          backdrop-filter: blur(14px);
+          -webkit-backdrop-filter: blur(14px);
         }
         .me{
-          background-color: rgb(53, 247, 53);
-          &::after {
-            content: '';
-            position: absolute;
-            right: -10px;
-            top: 12px;
-            width: 10px;
-            height: 10px;
-            border-top: 5px solid transparent;
-            border-bottom: 5px solid transparent;
-            border-left: 5px solid rgb(53, 247, 53);
-            border-right: 5px solid transparent;
-          }
+          background: var(--grad);
+          color: #ffffff;
+          border-top-right-radius: var(--radius-xs);
+          box-shadow: var(--shadow-glow);
         }
       }
     }    

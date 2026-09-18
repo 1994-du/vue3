@@ -1,6 +1,6 @@
 <template>
     <div class="menu-management-container">
-        <PageHeader title="菜单管理">
+        <PageHeader>
             <template #actions>
                 <el-button type="primary" @click="handleAddMenu(null)" class="add-btn page-primary-action">
                     <el-icon><Plus /></el-icon>新建菜单
@@ -133,13 +133,8 @@
 </template>
 
 <script setup lang="ts">
-import { inject, ref, shallowRef, onMounted, nextTick, watch } from 'vue'
-import { breadcrumbKey } from '@/utils/breadcrumb'
+import { ref, shallowRef, onMounted, nextTick, watch } from 'vue'
 
-inject(breadcrumbKey)?.setItems([
-    { label: '设置', to: '/set' },
-    { label: '菜单管理' }
-])
 import { getMenuTree, addMenu, setMenu, deleteMenu } from '@/api/menus'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus, Delete, Edit, Refresh, Search, Folder, Document } from '@element-plus/icons-vue'

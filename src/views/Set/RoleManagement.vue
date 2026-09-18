@@ -1,6 +1,6 @@
 <template>
     <div class="role-management-container">
-        <PageHeader title="角色管理">
+        <PageHeader>
             <template #actions>
                 <PageSearch v-model="searchKeyword" placeholder="搜索角色名称" :ariaLabel="'搜索角色'" @search="handleSearch" />
                 <el-button type="primary" @click="createRole" class="create-btn page-primary-action">
@@ -16,7 +16,8 @@
         <el-card class="role-table-card" shadow="hover">
             <el-table v-loading="loading" :data="tableData" style="width: 100%" :row-class-name="tableRowClassName"
                 :fit="true">
-                <el-table-column label="ID" prop="id" width="120" align="center"></el-table-column>
+                <el-table-column label="ID" prop="id" width="88" align="center" class-name="col-id"
+                    label-class-name="col-id"></el-table-column>
                 <el-table-column label="角色名称" prop="name" width="150">
                     <template #default="{ row }">
                         <div class="role-info">
@@ -26,7 +27,12 @@
                         </div>
                     </template>
                 </el-table-column>
-                <el-table-column label="角色描述" prop="roleDesc"></el-table-column>
+                <el-table-column label="角色描述" prop="roleDesc">
+                    <template #default="{ row }">
+                        <span v-if="row.roleDesc">{{ row.roleDesc }}</span>
+                        <span v-else class="cell-empty">—</span>
+                    </template>
+                </el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template #default="{ row }">
                         <el-button link type="primary" @click="editRole(row)" class="action-btn edit-btn">
@@ -77,13 +83,8 @@
 </template>
 
 <script setup lang="ts">
-import { inject, ref, onMounted, nextTick } from 'vue'
-import { breadcrumbKey } from '@/utils/breadcrumb'
+import { ref, onMounted, nextTick } from 'vue'
 
-inject(breadcrumbKey)?.setItems([
-    { label: '设置', to: '/set' },
-    { label: '角色管理' }
-])
 // @ts-ignore
 import { getRoles, setRole, addRole, delRole } from '../../api/role'
 // @ts-ignore
@@ -342,135 +343,4 @@ onMounted(() => {
     getRoleList()
 })
 </script>
-<style scoped lang='scss'>
-.role-management-container {
-    padding: 24px;
-    background: #f5f7fa;
-    min-height: 100vh;
-}
 
-/* 角色表格卡片 */
-.role-table-card {
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s ease;
-
-    &:hover {
-        box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.15);
-    }
-
-    .el-card__body {
-        padding: 0;
-    }
-}
-
-/* 表格样式 */
-:deep(.el-table) {
-    border-radius: 12px 12px 0 0;
-    overflow: hidden;
-
-    .el-table__header-wrapper {
-        background: #f8f9fa;
-
-        .el-table__header {
-            th {
-                background: #f8f9fa;
-                border-bottom: 1px solid #ebeef5;
-                font-weight: 600;
-                color: #303133;
-            }
-        }
-    }
-
-    .el-table__body-wrapper {
-        .el-table__row {
-            transition: background-color 0.2s ease;
-
-            &:hover {
-                background-color: #f5f7fa !important;
-            }
-        }
-
-        .even-row {
-            background-color: #ffffff;
-        }
-
-        .odd-row {
-            background-color: #fafafa;
-        }
-    }
-}
-
-/* 角色信息 */
-.role-info {
-    .role-tag {
-        font-size: 14px;
-        font-weight: 500;
-    }
-}
-
-/* 操作按钮 */
-.action-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    margin: 0 4px;
-
-    &:hover {
-        opacity: 0.8;
-    }
-}
-
-/* 分页容器 */
-.pagination-container {
-    padding: 20px;
-    background: #ffffff;
-    border-top: 1px solid #ebeef5;
-    display: flex;
-    justify-content: flex-end;
-
-    .pagination {
-        .el-pagination__sizes {
-            margin-right: 16px;
-        }
-    }
-}
-
-/* 对话框样式 */
-:deep(.el-dialog) {
-    border-radius: 12px;
-    overflow: hidden;
-
-    .el-dialog__header {
-        background: #f8f9fa;
-        border-bottom: 1px solid #ebeef5;
-
-        .el-dialog__title {
-            font-size: 18px;
-            font-weight: 600;
-        }
-    }
-
-    .el-dialog__body {
-        padding: 24px;
-    }
-
-    .el-dialog__footer {
-        padding: 16px 24px;
-        border-top: 1px solid #ebeef5;
-        background: #f8f9fa;
-    }
-}
-
-/* 响应式设计 */
-@media (max-width: 768px) {
-    .role-management-container {
-        padding: 16px;
-    }
-
-    .pagination-container {
-        justify-content: center;
-    }
-}
-</style>

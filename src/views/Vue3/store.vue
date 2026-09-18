@@ -162,7 +162,7 @@ const decrementAge = (): void => {
         flex-wrap: wrap;
         justify-content: flex-start;
         align-items: center;
-        margin-bottom: .5rem;
+        margin-bottom: 8px;
 
         span {
             margin: 0 5px;

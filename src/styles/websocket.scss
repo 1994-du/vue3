@@ -27,10 +27,20 @@
           // justify-content: flex-end;
         }
         .message{
-          padding: 5px;
-          background-color: white;
-          color: #000;
-          border-radius: 5px;
+          padding: 7px 12px;
+          background: var(--glass);
+          color: var(--text-primary);
+          border: 1px solid var(--hairline);
+          border-radius: var(--radius-md);
+          backdrop-filter: blur(14px);
+          -webkit-backdrop-filter: blur(14px);
+        }
+        .isSelf .message,
+        .message.isSelf{
+          background: var(--grad);
+          color: #ffffff;
+          border-color: transparent;
+          box-shadow: var(--shadow-glow);
         }
       }
     }

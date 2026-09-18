@@ -1,6 +1,6 @@
 <template>
     <div class="user-management-container">
-        <PageHeader title="用户管理">
+        <PageHeader>
             <template #actions>
                 <PageSearch v-model="searchKeyword" placeholder="搜索用户名" :ariaLabel="'搜索用户'" @search="handleSearch" />
                 <el-button type="primary" @click="createUser" class="create-btn page-primary-action">
@@ -16,7 +16,8 @@
         <el-card class="user-table-card" shadow="hover">
             <el-table v-loading="loading" :data="tableData" style="width: 100%" :row-class-name="tableRowClassName"
                 @row-hover="handleRowHover" :fit="true">
-                <el-table-column label="ID" prop="id" width="80" align="center"></el-table-column>
+                <el-table-column label="ID" prop="id" width="88" align="center" class-name="col-id"
+                    label-class-name="col-id"></el-table-column>
                 <el-table-column label="用户名" prop="username" width="150">
                     <template #default="{ row }">
                         <div class="user-info">
@@ -148,13 +149,8 @@
 </template>
 
 <script setup lang="ts">
-import { inject, onMounted, ref } from 'vue'
-import { breadcrumbKey } from '@/utils/breadcrumb'
+import { onMounted, ref } from 'vue'
 
-inject(breadcrumbKey)?.setItems([
-    { label: '设置', to: '/set' },
-    { label: '用户管理' }
-])
 import axios from 'axios'
 import { getUsers, getRolesDict, updateUser, addUser, delUser, updateAvatar, toResetPassword } from '@/api/api'
 import { ElMessage } from 'element-plus'
@@ -447,211 +443,3 @@ const customUpload = (param: UploadParam): void => {
         });
 }
 </script>
-<style scoped lang='scss'>
-.user-management-container {
-    padding: 24px;
-    background: #f5f7fa;
-    min-height: 100vh;
-}
-
-/* 用户表格卡片 */
-.user-table-card {
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s ease;
-
-    &:hover {
-        box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.15);
-    }
-
-    .el-card__body {
-        padding: 0;
-    }
-}
-
-/* 表格样式 */
-:deep(.el-table) {
-    border-radius: 12px 12px 0 0;
-    overflow: hidden;
-
-    .el-table__header-wrapper {
-        background: #f8f9fa;
-
-        .el-table__header {
-            th {
-                background: #f8f9fa;
-                border-bottom: 1px solid #ebeef5;
-                font-weight: 600;
-                color: #303133;
-            }
-        }
-    }
-
-    .el-table__body-wrapper {
-        .el-table__row {
-            transition: background-color 0.2s ease;
-
-            &:hover {
-                background-color: #f5f7fa !important;
-            }
-        }
-
-        .even-row {
-            background-color: #ffffff;
-        }
-
-        .odd-row {
-            background-color: #fafafa;
-        }
-    }
-}
-
-/* 用户信息 */
-.user-info {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-
-    .avatar-small {
-        width: 32px;
-        height: 32px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 2px solid #f0f0f0;
-    }
-
-    .username {
-        font-size: 14px;
-        color: #303133;
-        font-weight: 500;
-    }
-}
-
-/* 性别标签 */
-.gender-tag {
-    display: inline-block;
-    padding: 2px 10px;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: 500;
-
-    &.male {
-        background-color: #e6f7ff;
-        color: #1890ff;
-    }
-
-    &.female {
-        background-color: #fff0f6;
-        color: #f5222d;
-    }
-}
-
-/* 操作按钮 */
-.action-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    margin: 0 4px;
-
-    &:hover {
-        opacity: 0.8;
-    }
-}
-
-/* 分页容器 */
-.pagination-container {
-    padding: 20px;
-    background: #ffffff;
-    border-top: 1px solid #ebeef5;
-    display: flex;
-    justify-content: flex-end;
-
-    .pagination {
-        .el-pagination__sizes {
-            margin-right: 16px;
-        }
-    }
-}
-
-/* 编辑表单 */
-.edit_user_form {
-    :deep(.el-form-item) {
-        margin-bottom: 20px;
-        display: flex;
-        align-items: center;
-
-        .el-form-item__label {
-            width: 80px;
-            flex-shrink: 0;
-        }
-    }
-}
-
-/* 头像样式 */
-.avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.edit_img {
-    width: 80px;
-    height: 80px;
-    margin: 0 20px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid #f0f0f0;
-    cursor: pointer;
-    transition: all 0.3s ease;
-
-    &:hover {
-        transform: scale(1.05);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    }
-}
-
-/* 对话框样式 */
-:deep(.el-dialog) {
-    border-radius: 12px;
-    overflow: hidden;
-
-    .el-dialog__header {
-        background: #f8f9fa;
-        border-bottom: 1px solid #ebeef5;
-
-        .el-dialog__title {
-            font-size: 18px;
-            font-weight: 600;
-        }
-    }
-
-    .el-dialog__body {
-        padding: 24px;
-    }
-
-    .el-dialog__footer {
-        padding: 16px 24px;
-        border-top: 1px solid #ebeef5;
-        background: #f8f9fa;
-    }
-}
-
-/* 响应式设计 */
-@media (max-width: 768px) {
-    .user-management-container {
-        padding: 16px;
-    }
-
-    .user-info {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-    }
-
-    .pagination-container {
-        justify-content: center;
-    }
-}
-</style>

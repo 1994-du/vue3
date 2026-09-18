@@ -1,35 +1,121 @@
-:root {
-    --brand: #0f766e;
-    --brand-hover: #115e59;
-    --brand-soft: #e7f3f0;
-    --accent: #c66a16;
-    --danger: #c2413b;
-    --warning: #b7791f;
-    --success: #34865f;
+/* ============================================================================
+   Knowledge Engine · design system
+   Future glass: deep indigo cosmos, floating frosted panels, violet to neon
+   pink gradient, aqua as the third voice.
 
-    --app-bg: #f2f5f3;
-    --surface: #ffffff;
-    --surface-subtle: #f8faf9;
-    --surface-muted: #edf1ef;
+   One theme lock. Every colour, radius, shadow and easing on the page resolves
+   from the tokens below, so flipping data-theme on <html> retunes the entire
+   application. Dark is the default; light is the alternate.
 
-    --text-primary: #17211e;
-    --text-secondary: #4d5c57;
-    --text-tertiary: #7b8884;
-    --border-color: #dce3e0;
-    --border-strong: #c7d1cd;
+   Token names from the previous palette are preserved as aliases so the older
+   demo pages keep working untouched.
+   ========================================================================== */
 
-    --menu-accent: var(--el-color-primary, var(--brand));
-    --menu-bg: var(--surface);
+/* 选择器用 html:root（权重 0,1,1）而不是 :root（0,1,0）：
+   Element Plus 的按需样式由懒加载路由在主题之后注入，同权重下会反过来覆盖
+   这里的 --el-* 令牌。提高一级权重后，无论样式注入顺序如何，主题都稳定生效。 */
+html:root {
+    color-scheme: dark;
+
+    /* ---- brand ---------------------------------------------------------- */
+    --brand: #7c3aed;
+    --brand-hover: #6d28d9;
+    --brand-soft: rgba(124, 58, 237, 0.16);
+    --accent: #ec4899;
+    --aqua: #06b6d4;
+    --danger: #f43f5e;
+    --warning: #f59e0b;
+    --success: #10b981;
+
+    --grad: linear-gradient(115deg, #7c3aed 0%, #a855f7 36%, #ec4899 100%);
+    --grad-line: linear-gradient(115deg, #7c3aed, #ec4899);
+    --grad-text: linear-gradient(100deg, #c4b5fd 0%, #f472b6 52%, #ec4899 100%);
+    --grad-soft: linear-gradient(115deg, rgba(124, 58, 237, 0.22), rgba(236, 72, 153, 0.22));
+
+    /* ---- surface -------------------------------------------------------- */
+    --app-bg: #0a0b1a;
+    --surface: rgba(255, 255, 255, 0.055);
+    --surface-solid: #101228;
+    --surface-raised: #141733;
+    --surface-subtle: rgba(255, 255, 255, 0.03);
+    --surface-muted: rgba(255, 255, 255, 0.075);
+
+    /* ---- table surfaces -------------------------------------------------
+       表格行必须是不透明色。Element Plus 给固定列（fixed="right"）的单元格设的是
+       background: inherit，只从 <tr> 继承；行色一旦半透明，横向滚动时被压在固定列
+       底下的单元格就会透出来，和「操作」列的文字叠成一团。
+       数值按原先 rgba 叠加后的结果反推，观感基本不变。 */
+    --table-row-bg: color-mix(in srgb, #ffffff 11%, var(--app-bg));
+    --table-header-bg: color-mix(in srgb, #ffffff 8%, var(--app-bg));
+    --table-row-hover-bg: color-mix(in srgb, var(--brand) 20%, var(--table-row-bg));
+
+    /* ---- glass ---------------------------------------------------------- */
+    --glass: rgba(255, 255, 255, 0.05);
+    --glass-strong: rgba(255, 255, 255, 0.085);
+    --glass-blur: 22px;
+    --glass-saturate: 150%;
+    --hairline: rgba(255, 255, 255, 0.1);
+    --hairline-strong: rgba(255, 255, 255, 0.2);
+
+    /* ---- type ----------------------------------------------------------- */
+    --text-primary: #f8fafc;
+    --text-secondary: rgba(248, 250, 252, 0.7);
+    --text-tertiary: rgba(248, 250, 252, 0.46);
+    --border-color: rgba(255, 255, 255, 0.1);
+    --border-strong: rgba(255, 255, 255, 0.2);
+
+    /* ---- ambient field -------------------------------------------------- */
+    --glow-1: rgba(124, 58, 237, 0.42);
+    --glow-2: rgba(236, 72, 153, 0.24);
+    --glow-3: rgba(6, 182, 212, 0.18);
+    --glow-k: 1;
+    --dot: rgba(255, 255, 255, 0.11);
+    --dot-k: 0.6;
+    --grain-k: 0.045;
+    --grain-blend: soft-light;
+    --veil: rgba(8, 9, 22, 0.64);
+
+    /* ---- elevation ------------------------------------------------------ */
+    --shadow-sm: 0 6px 18px -10px rgba(0, 0, 0, 0.6);
+    --shadow-md: 0 22px 54px -30px rgba(0, 0, 0, 0.85), 0 1px 0 rgba(255, 255, 255, 0.05) inset;
+    --shadow-lg: 0 40px 90px -40px rgba(0, 0, 0, 0.9), 0 1px 0 rgba(255, 255, 255, 0.07) inset;
+    --shadow-glow: 0 16px 44px -18px rgba(124, 58, 237, 0.7);
+    --shadow-glow-pink: 0 20px 50px -18px rgba(236, 72, 153, 0.62);
+
+    /* ---- geometry ------------------------------------------------------- */
+    /* 圆角刻度。postcss 的 px->rem 转换已移除，所以这里的数字就是渲染值。
+       --radius-2xs 是最小一级，专供复选框那类小方块：它的边长只有 14px，
+       用 --radius-xs 会在 14px 的边上放两个圆角，两个半径相加超过边长时浏览器
+       会把它们钳到半边，方块被画成正圆，看起来像单选钮。
+       其中 --radius-sm 也叫「控件圆角」，是 --el-border-radius-base，输入框、
+       按钮、表格、下拉都从这里取；--radius-md 往上只用于卡片与弹窗外壳。 */
+    --radius-2xs: 3px;
+    --radius-xs: 6px;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 8px;
+    --radius-xl: 20px;
+    --radius-pill: 999px;
+
+    /* ---- motion --------------------------------------------------------- */
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-soft: cubic-bezier(0.22, 0.61, 0.36, 1);
+    --transition-fast: 170ms var(--ease-soft);
+    --transition-base: 320ms var(--ease);
+
+    /* ---- menu shell ----------------------------------------------------- */
+    --menu-accent: var(--brand);
+    --menu-bg: var(--surface-raised);
     --menu-text: var(--text-secondary);
     --menu-text-strong: var(--text-primary);
     --menu-text-muted: var(--text-tertiary);
-    --menu-border: var(--border-color);
-    --menu-divider: var(--border-color);
-    --menu-hover: color-mix(in srgb, var(--menu-accent) 8%, var(--menu-bg));
-    --menu-branch-bg: color-mix(in srgb, var(--menu-accent) 6%, var(--menu-bg));
-    --menu-active-bg: color-mix(in srgb, var(--menu-accent) 14%, var(--menu-bg));
-    --menu-active-text: color-mix(in srgb, var(--menu-accent) 76%, var(--menu-text-strong));
-    --menu-active-ring: color-mix(in srgb, var(--menu-accent) 28%, transparent);
+    --menu-border: var(--hairline);
+    --menu-divider: var(--hairline);
+    --menu-hover: var(--glass-strong);
+    --menu-branch-bg: var(--glass);
+    --menu-active-bg: linear-gradient(115deg, rgba(124, 58, 237, 0.34), rgba(236, 72, 153, 0.26));
+    --menu-active-text: #ffffff;
+    --menu-active-ring: rgba(168, 85, 247, 0.42);
     --menu-shadow: var(--shadow-md);
 
     /* Compatibility aliases used by the layout shell. */
@@ -37,77 +123,281 @@
     --sidebar-hover: var(--menu-hover);
     --sidebar-active: var(--menu-active-bg);
 
-    --radius-xs: 4px;
-    --radius-sm: 6px;
-    --radius-md: 8px;
-    --shadow-sm: 0 1px 2px rgba(20, 35, 30, 0.05);
-    --shadow-md: 0 8px 24px rgba(20, 35, 30, 0.08);
-    --transition-fast: 160ms ease;
-    --transition-base: 220ms ease;
-    --font-sans: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    --font-sans: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+        'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
     /* Compatibility aliases used by older demo pages. */
     --primary: var(--brand);
-    --primary-light: #2b9388;
+    --primary-light: #a855f7;
     --secondary: var(--accent);
-    --secondary-light: #dc8b3d;
+    --secondary-light: #f472b6;
     --bg-primary: var(--app-bg);
     --bg-secondary: var(--app-bg);
     --bg-tertiary: var(--surface-muted);
-    --bg-elevated: var(--surface);
-    --background: var(--surface);
+    --bg-elevated: var(--surface-raised);
+    --background: var(--surface-raised);
     --fontColor: var(--text-primary);
     --borderColor: var(--border-color);
     --color: var(--brand);
-    --maskBg: rgba(12, 20, 17, 0.46);
+    --maskBg: var(--veil);
     --border-radius: var(--radius-sm);
     --border-radius-lg: var(--radius-md);
     --font-size-sm: 13px;
     --font-size-base: 14px;
     --font-size-lg: 18px;
+    --focus-ring: rgba(168, 85, 247, 0.5);
 
+    /* ---- Element Plus --------------------------------------------------- */
     --el-color-primary: var(--brand);
-    --el-color-primary-light-3: #4b9e95;
-    --el-color-primary-light-5: #75b5ae;
-    --el-color-primary-light-7: #acd4cf;
-    --el-color-primary-light-8: #c9e3df;
-    --el-color-primary-light-9: var(--brand-soft);
+    --el-color-primary-light-3: #9a6bf3;
+    --el-color-primary-light-5: #b48cf7;
+    --el-color-primary-light-7: #cdacfa;
+    --el-color-primary-light-8: #d9c0fb;
+    --el-color-primary-light-9: rgba(124, 58, 237, 0.16);
     --el-color-primary-dark-2: var(--brand-hover);
-    --el-border-radius-base: var(--radius-sm);
-    --el-border-radius-small: var(--radius-xs);
-    --el-bg-color-page: var(--app-bg);
-    --el-bg-color: var(--surface);
-    --el-fill-color-light: var(--surface-subtle);
-    --el-fill-color-lighter: #fbfcfb;
-    --el-border-color: var(--border-color);
-    --el-border-color-light: #e7ece9;
+    --el-color-success: var(--success);
+    --el-color-warning: var(--warning);
+    --el-color-danger: var(--danger);
+    --el-color-error: var(--danger);
+    --el-color-info: #94a3b8;
+
+    /* EP 的 light-3/5/7/8 色阶原来只给 primary 配了值，其余语义色一直沿用 EP
+       默认的「白底向浅色渐变」——在暗色主题里就是刺眼的薄荷绿和浅橙（plain 标签
+       的描边就取自 light-5）。这里按主题统一推导：light-9 最淡（当底色用），
+       light-3 最实（当 hover 用）。 */
+    --el-color-success-light-3: color-mix(in srgb, var(--success) 72%, var(--app-bg));
+    --el-color-success-light-5: color-mix(in srgb, var(--success) 48%, var(--app-bg));
+    --el-color-success-light-7: color-mix(in srgb, var(--success) 26%, var(--app-bg));
+    --el-color-success-light-8: color-mix(in srgb, var(--success) 18%, var(--app-bg));
+    --el-color-success-light-9: rgba(16, 185, 129, 0.16);
+    --el-color-warning-light-3: color-mix(in srgb, var(--warning) 72%, var(--app-bg));
+    --el-color-warning-light-5: color-mix(in srgb, var(--warning) 48%, var(--app-bg));
+    --el-color-warning-light-7: color-mix(in srgb, var(--warning) 26%, var(--app-bg));
+    --el-color-warning-light-8: color-mix(in srgb, var(--warning) 18%, var(--app-bg));
+    --el-color-warning-light-9: rgba(245, 158, 11, 0.16);
+    --el-color-danger-light-3: color-mix(in srgb, var(--danger) 72%, var(--app-bg));
+    --el-color-danger-light-5: color-mix(in srgb, var(--danger) 48%, var(--app-bg));
+    --el-color-danger-light-7: color-mix(in srgb, var(--danger) 26%, var(--app-bg));
+    --el-color-danger-light-8: color-mix(in srgb, var(--danger) 18%, var(--app-bg));
+    --el-color-danger-light-9: rgba(244, 63, 94, 0.16);
+    --el-color-error-light-3: color-mix(in srgb, var(--danger) 72%, var(--app-bg));
+    --el-color-error-light-5: color-mix(in srgb, var(--danger) 48%, var(--app-bg));
+    --el-color-error-light-7: color-mix(in srgb, var(--danger) 26%, var(--app-bg));
+    --el-color-error-light-8: color-mix(in srgb, var(--danger) 18%, var(--app-bg));
+    --el-color-error-light-9: rgba(244, 63, 94, 0.16);
+    --el-color-info-light-3: color-mix(in srgb, var(--el-color-info) 72%, var(--app-bg));
+    --el-color-info-light-5: color-mix(in srgb, var(--el-color-info) 48%, var(--app-bg));
+    --el-color-info-light-7: color-mix(in srgb, var(--el-color-info) 26%, var(--app-bg));
+    --el-color-info-light-8: color-mix(in srgb, var(--el-color-info) 18%, var(--app-bg));
+    --el-color-info-light-9: rgba(148, 163, 184, 0.16);
+
+    --el-bg-color-page: transparent;
+    --el-bg-color: var(--surface-raised);
+    --el-bg-color-overlay: var(--surface-raised);
     --el-text-color-primary: var(--text-primary);
     --el-text-color-regular: var(--text-secondary);
     --el-text-color-secondary: var(--text-tertiary);
+    --el-text-color-placeholder: var(--text-tertiary);
+    --el-text-color-disabled: rgba(248, 250, 252, 0.3);
+    --el-border-color: var(--border-color);
+    --el-border-color-light: rgba(255, 255, 255, 0.08);
+    --el-border-color-lighter: rgba(255, 255, 255, 0.06);
+    --el-border-color-extra-light: rgba(255, 255, 255, 0.04);
+    --el-border-color-dark: var(--border-strong);
+    --el-border-color-darker: var(--border-strong);
+    --el-border-radius-base: var(--radius-sm);
+    --el-border-radius-small: var(--radius-xs);
+    --el-border-radius-round: var(--radius-pill);
+    --el-fill-color: rgba(255, 255, 255, 0.06);
+    --el-fill-color-light: rgba(255, 255, 255, 0.045);
+    --el-fill-color-lighter: rgba(255, 255, 255, 0.03);
+    --el-fill-color-extra-light: rgba(255, 255, 255, 0.02);
+    --el-fill-color-dark: rgba(255, 255, 255, 0.09);
+    --el-fill-color-darker: rgba(255, 255, 255, 0.12);
+    --el-fill-color-blank: transparent;
+    --el-mask-color: rgba(8, 9, 22, 0.68);
+    --el-mask-color-extra-light: rgba(8, 9, 22, 0.32);
+    --el-overlay-color-lighter: rgba(8, 9, 22, 0.6);
+    --el-disabled-bg-color: rgba(255, 255, 255, 0.04);
+    --el-disabled-text-color: rgba(248, 250, 252, 0.32);
+    --el-disabled-border-color: rgba(255, 255, 255, 0.08);
+    --el-box-shadow: var(--shadow-md);
+    --el-box-shadow-light: var(--shadow-sm);
+    --el-box-shadow-lighter: var(--shadow-sm);
+    --el-box-shadow-dark: var(--shadow-lg);
 }
 
-html[data-theme='dark'] {
-    --app-bg: #111714;
-    --surface: #18201d;
-    --surface-subtle: #1d2723;
-    --surface-muted: #26312d;
-    --text-primary: #edf4f1;
-    --text-secondary: #bdc9c4;
-    --text-tertiary: #8e9b96;
-    --border-color: #303b37;
-    --border-strong: #43504b;
-    --brand-soft: #1e3934;
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
-    --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.24);
-    --maskBg: rgba(2, 6, 4, 0.68);
+/* ---------------------------------------------------------------------------
+   Light alternate. Same tokens, daylight values. Nothing downstream changes.
+   ------------------------------------------------------------------------ */
+
+html:root[data-theme='light'] {
+    color-scheme: light;
+
+    --brand-soft: rgba(124, 58, 237, 0.1);
+    --grad-text: linear-gradient(100deg, #6d28d9 0%, #c026d3 50%, #db2777 100%);
+    --grad-soft: linear-gradient(115deg, rgba(124, 58, 237, 0.12), rgba(236, 72, 153, 0.12));
+
+    --app-bg: #e9ebf8;
+    --surface: rgba(255, 255, 255, 0.62);
+    --surface-solid: #ffffff;
+    --surface-raised: #ffffff;
+    --surface-subtle: rgba(11, 13, 31, 0.035);
+    --surface-muted: rgba(11, 13, 31, 0.06);
+
+    /* 同暗色：行底必须不透明，否则固定列会漏出下方滚动过的单元格。 */
+    --table-row-bg: color-mix(in srgb, #ffffff 68%, var(--app-bg));
+    --table-header-bg: color-mix(in srgb, var(--text-primary) 4%, var(--table-row-bg));
+    --table-row-hover-bg: color-mix(in srgb, var(--brand) 10%, var(--table-row-bg));
+
+    --glass: rgba(255, 255, 255, 0.55);
+    --glass-strong: rgba(255, 255, 255, 0.82);
+    --hairline: rgba(11, 13, 31, 0.12);
+    --hairline-strong: rgba(11, 13, 31, 0.22);
+
+    --text-primary: #0b0d1f;
+    --text-secondary: rgba(11, 13, 31, 0.7);
+    --text-tertiary: rgba(11, 13, 31, 0.48);
+    --border-color: rgba(11, 13, 31, 0.12);
+    --border-strong: rgba(11, 13, 31, 0.22);
+
+    --glow-1: rgba(124, 58, 237, 0.36);
+    --glow-2: rgba(236, 72, 153, 0.28);
+    --glow-3: rgba(6, 182, 212, 0.26);
+    --glow-k: 1;
+    --dot: rgba(11, 13, 31, 0.16);
+    --dot-k: 0.7;
+    --grain-k: 0.028;
+    --grain-blend: multiply;
+    --veil: rgba(233, 235, 248, 0.66);
+
+    --shadow-sm: 0 6px 18px -10px rgba(28, 22, 72, 0.28);
+    --shadow-md: 0 22px 50px -30px rgba(28, 22, 72, 0.34), 0 1px 0 rgba(255, 255, 255, 0.85) inset;
+    --shadow-lg: 0 38px 84px -40px rgba(28, 22, 72, 0.36), 0 1px 0 rgba(255, 255, 255, 0.9) inset;
+    --shadow-glow: 0 16px 40px -20px rgba(124, 58, 237, 0.55);
+    --shadow-glow-pink: 0 20px 44px -20px rgba(236, 72, 153, 0.46);
+
+    --menu-hover: rgba(255, 255, 255, 0.7);
+    --menu-active-bg: linear-gradient(115deg, rgba(124, 58, 237, 0.2), rgba(236, 72, 153, 0.16));
+    --menu-active-text: #4c1d95;
+    --menu-active-ring: rgba(124, 58, 237, 0.3);
+
+    --el-bg-color-page: transparent;
+    --el-bg-color: #ffffff;
+    --el-bg-color-overlay: #ffffff;
+    --el-text-color-primary: #0b0d1f;
+    --el-text-color-regular: rgba(11, 13, 31, 0.72);
+    --el-text-color-secondary: rgba(11, 13, 31, 0.5);
+    --el-text-color-placeholder: rgba(11, 13, 31, 0.42);
+    --el-text-color-disabled: rgba(11, 13, 31, 0.32);
+    --el-border-color: rgba(11, 13, 31, 0.12);
+    --el-border-color-light: rgba(11, 13, 31, 0.09);
+    --el-border-color-lighter: rgba(11, 13, 31, 0.07);
+    --el-border-color-extra-light: rgba(11, 13, 31, 0.05);
+    --el-border-color-dark: rgba(11, 13, 31, 0.22);
+    --el-border-color-darker: rgba(11, 13, 31, 0.28);
+    --el-fill-color: rgba(11, 13, 31, 0.05);
+    --el-fill-color-light: rgba(11, 13, 31, 0.04);
+    --el-fill-color-lighter: rgba(11, 13, 31, 0.03);
+    --el-fill-color-extra-light: rgba(11, 13, 31, 0.02);
+    --el-fill-color-dark: rgba(11, 13, 31, 0.08);
+    --el-fill-color-darker: rgba(11, 13, 31, 0.11);
+    --el-mask-color: rgba(241, 242, 251, 0.7);
+    --el-mask-color-extra-light: rgba(241, 242, 251, 0.36);
+    --el-overlay-color-lighter: rgba(28, 22, 72, 0.32);
+    --el-disabled-bg-color: rgba(11, 13, 31, 0.04);
+    --el-disabled-text-color: rgba(11, 13, 31, 0.32);
+    --el-disabled-border-color: rgba(11, 13, 31, 0.08);
+    --el-color-primary-light-9: rgba(124, 58, 237, 0.1);
+    /* 浅色主题下 EP 默认色阶本就为白底设计，这里只是把色相统一到本项目的语义色，
+       避免 primary（紫）与 success（原 EP 黄绿）色相不一致。 */
+    --el-color-success-light-3: color-mix(in srgb, var(--success) 70%, #ffffff);
+    --el-color-success-light-5: color-mix(in srgb, var(--success) 50%, #ffffff);
+    --el-color-success-light-7: color-mix(in srgb, var(--success) 30%, #ffffff);
+    --el-color-success-light-8: color-mix(in srgb, var(--success) 20%, #ffffff);
+    --el-color-success-light-9: rgba(16, 185, 129, 0.12);
+    --el-color-warning-light-3: color-mix(in srgb, var(--warning) 70%, #ffffff);
+    --el-color-warning-light-5: color-mix(in srgb, var(--warning) 50%, #ffffff);
+    --el-color-warning-light-7: color-mix(in srgb, var(--warning) 30%, #ffffff);
+    --el-color-warning-light-8: color-mix(in srgb, var(--warning) 20%, #ffffff);
+    --el-color-warning-light-9: rgba(245, 158, 11, 0.14);
+    --el-color-danger-light-3: color-mix(in srgb, var(--danger) 70%, #ffffff);
+    --el-color-danger-light-5: color-mix(in srgb, var(--danger) 50%, #ffffff);
+    --el-color-danger-light-7: color-mix(in srgb, var(--danger) 30%, #ffffff);
+    --el-color-danger-light-8: color-mix(in srgb, var(--danger) 20%, #ffffff);
+    --el-color-danger-light-9: rgba(244, 63, 94, 0.12);
+    --el-color-error-light-3: color-mix(in srgb, var(--danger) 70%, #ffffff);
+    --el-color-error-light-5: color-mix(in srgb, var(--danger) 50%, #ffffff);
+    --el-color-error-light-7: color-mix(in srgb, var(--danger) 30%, #ffffff);
+    --el-color-error-light-8: color-mix(in srgb, var(--danger) 20%, #ffffff);
+    --el-color-error-light-9: rgba(244, 63, 94, 0.12);
+    --el-color-info-light-3: color-mix(in srgb, var(--el-color-info) 70%, #ffffff);
+    --el-color-info-light-5: color-mix(in srgb, var(--el-color-info) 50%, #ffffff);
+    --el-color-info-light-7: color-mix(in srgb, var(--el-color-info) 30%, #ffffff);
+    --el-color-info-light-8: color-mix(in srgb, var(--el-color-info) 20%, #ffffff);
+    --el-color-info-light-9: rgba(100, 116, 139, 0.12);
 }
 
-html,
-body {
+/* ============================================================================
+   Ambient field. Aurora washes sit behind everything, a dot lattice fades out
+   down the page, and a whisper of grain keeps the gradients from banding.
+   ========================================================================== */
+
+html {
     font-family: var(--font-sans);
     color: var(--text-primary);
     background: var(--app-bg);
 }
+
+body {
+    font-family: var(--font-sans);
+    color: var(--text-primary);
+    background-color: var(--app-bg);
+    background-image:
+        radial-gradient(920px 620px at 8% -12%, var(--glow-1), transparent 62%),
+        radial-gradient(1040px 720px at 96% -12%, var(--glow-2), transparent 66%),
+        radial-gradient(1000px 720px at 46% 116%, var(--glow-3), transparent 64%);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* dot lattice */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: calc(var(--dot-k) * var(--glow-k));
+    background-image: radial-gradient(circle, var(--dot) 1px, transparent 1.35px);
+    background-size: 30px 30px;
+    -webkit-mask-image: radial-gradient(130% 78% at 50% -8%, #000 0%, rgba(0, 0, 0, 0.3) 54%, transparent 76%);
+    mask-image: radial-gradient(130% 78% at 50% -8%, #000 0%, rgba(0, 0, 0, 0.3) 54%, transparent 76%);
+}
+
+/* film grain */
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: var(--grain-k);
+    mix-blend-mode: var(--grain-blend);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+#vue3 {
+    position: relative;
+    z-index: 1;
+}
+
+/* ============================================================================
+   Base elements
+   ========================================================================== */
 
 button,
 input,
@@ -116,23 +406,137 @@ select {
     font: inherit;
 }
 
+code,
+pre,
+kbd,
+samp,
+.mono {
+    font-family: var(--font-mono);
+    font-feature-settings: 'liga' 0;
+}
+
 button:focus-visible,
 a:focus-visible,
-[role='button']:focus-visible {
-    outline: 2px solid var(--brand);
+[role='button']:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+    outline: 2px solid var(--focus-ring);
     outline-offset: 2px;
 }
+
+::selection {
+    color: #ffffff;
+    background: rgba(168, 85, 247, 0.42);
+}
+
+/* ============================================================================
+   Glass primitives, available to every view
+   ========================================================================== */
+
+.glass-panel {
+    background: var(--glass);
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+}
+
+.glass-panel--flat {
+    box-shadow: none;
+}
+
+.glass-nav {
+    background: var(--veil);
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    border-bottom: 1px solid var(--hairline);
+}
+
+/* gradient text, used sparingly on page titles */
+.grad-text {
+    background: var(--grad-text);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+}
+
+/* small uppercase label */
+.kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55em;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+}
+
+/* shared entrance used by views that opt in */
+.enter {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 620ms var(--ease), transform 620ms var(--ease);
+    transition-delay: calc(var(--i, 0) * 55ms);
+}
+
+.enter.is-in {
+    opacity: 1;
+    transform: none;
+}
+
+/* ============================================================================
+   Scrollbars
+   ========================================================================== */
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-strong);
+    border: 2px solid transparent;
+    border-radius: var(--radius-pill);
+    background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in srgb, var(--brand) 55%, var(--border-strong));
+    background-clip: content-box;
+}
+
+/* ============================================================================
+   Element Plus, retuned to glass
+   ========================================================================== */
 
 .el-button {
     min-height: 34px;
     border-radius: var(--radius-sm);
     font-weight: 600;
     letter-spacing: 0;
-    transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+    transition: transform var(--transition-fast), background-color var(--transition-fast),
+        border-color var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .el-button + .el-button {
     margin-left: 8px;
+}
+
+.el-button:not(.is-link):not(.is-text):not(.is-plain):not(.is-disabled):hover {
+    transform: translateY(-1px);
+}
+
+.el-button:not(.is-link):not(.is-text):not(.is-disabled):active {
+    transform: translateY(0);
 }
 
 .el-button.is-link {
@@ -140,21 +544,54 @@ a:focus-visible,
     padding: 4px 6px;
 }
 
+/* the one loud button on a page */
 .el-button--primary:not(.is-link):not(.is-text):not(.is-plain) {
     color: #ffffff !important;
-    background-color: var(--brand) !important;
-    border-color: var(--brand) !important;
+    background: var(--grad) !important;
+    /* background 简写会把 background-origin 重置回初始值 padding-box，而
+       background-clip 仍是初始值 border-box；按钮有 1px 边框，两者正好差 1px，
+       梯度图按 298px 平铺，于是左右各露出 1px 邻块的颜色（左粉右紫），
+       看起来像描了一圈反色边。把 origin 拉回 border-box 再禁掉平铺。 */
+    background-origin: border-box !important;
+    background-repeat: no-repeat !important;
+    border-color: transparent !important;
+    box-shadow: var(--shadow-glow);
 }
 
 .el-button--primary:not(.is-link):not(.is-text):not(.is-plain):hover,
 .el-button--primary:not(.is-link):not(.is-text):not(.is-plain):focus-visible {
-    background-color: var(--brand-hover) !important;
-    border-color: var(--brand-hover) !important;
+    background: var(--grad) !important;
+    background-origin: border-box !important;
+    background-repeat: no-repeat !important;
+    box-shadow: var(--shadow-glow-pink);
 }
 
 .el-button--primary.is-link,
 .el-button--primary.is-text {
     color: var(--brand) !important;
+}
+
+/* everything else reads as frosted glass */
+.el-button--default:not(.is-link):not(.is-text):not(.is-plain) {
+    color: var(--text-secondary);
+    background: var(--glass);
+    border-color: var(--hairline);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+.el-button--default:not(.is-link):not(.is-text):not(.is-plain):hover,
+.el-button--default:not(.is-link):not(.is-text):not(.is-plain):focus-visible {
+    color: var(--text-primary);
+    background: var(--glass-strong);
+    border-color: var(--hairline-strong);
+}
+
+.el-button--info,
+.el-button--success,
+.el-button--warning,
+.el-button--danger {
+    border-color: transparent !important;
 }
 
 .el-input__wrapper,
@@ -167,30 +604,51 @@ a:focus-visible,
 .el-input__wrapper,
 .el-select__wrapper {
     min-height: 36px;
-    box-shadow: 0 0 0 1px var(--border-color) inset;
+    background: var(--surface-subtle) !important;
+    box-shadow: 0 0 0 1px var(--border-color) inset !important;
+    transition: box-shadow var(--transition-fast), background-color var(--transition-fast);
 }
 
 .el-input__wrapper:hover,
 .el-select__wrapper:hover {
-    box-shadow: 0 0 0 1px var(--border-strong) inset;
+    background: var(--surface-muted) !important;
+    box-shadow: 0 0 0 1px var(--border-strong) inset !important;
 }
 
 .el-input__wrapper.is-focus,
 .el-select__wrapper.is-focused {
-    box-shadow: 0 0 0 2px color-mix(in srgb, var(--brand) 65%, transparent) inset !important;
+    background: var(--surface-subtle) !important;
+    box-shadow: 0 0 0 1px var(--brand) inset, 0 0 0 4px rgba(168, 85, 247, 0.14) !important;
+}
+
+.el-textarea__inner {
+    background: var(--surface-subtle);
+    box-shadow: 0 0 0 1px var(--border-color) inset;
 }
 
 .el-card {
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    box-shadow: none !important;
-    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-lg);
+    background: var(--glass);
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    box-shadow: var(--shadow-md) !important;
 }
 
-.el-dialog {
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md) !important;
-    box-shadow: var(--shadow-md);
+.el-card__header {
+    border-bottom: 1px solid var(--hairline);
+}
+
+/* floating layers stay readable, so they get a near-opaque body */
+.el-dialog,
+.el-drawer,
+.el-message-box {
+    border: 1px solid var(--hairline-strong);
+    border-radius: var(--radius-lg) !important;
+    background: var(--surface-raised);
+    backdrop-filter: blur(28px) saturate(150%);
+    -webkit-backdrop-filter: blur(28px) saturate(150%);
+    box-shadow: var(--shadow-lg);
     overflow: hidden;
 }
 
@@ -198,8 +656,8 @@ a:focus-visible,
     min-height: 56px;
     margin: 0 !important;
     padding: 16px 20px !important;
-    border-bottom: 1px solid var(--border-color);
-    background: var(--surface);
+    border-bottom: 1px solid var(--hairline);
+    background: transparent;
 }
 
 .el-dialog__title {
@@ -210,56 +668,219 @@ a:focus-visible,
 
 .el-dialog__body {
     padding: 20px !important;
-    background: var(--surface);
+    color: var(--text-secondary);
 }
 
 .el-dialog__footer {
     padding: 14px 20px !important;
-    border-top: 1px solid var(--border-color);
+    border-top: 1px solid var(--hairline);
     background: var(--surface-subtle);
 }
 
+.el-message-box__title {
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+.el-message-box__content {
+    color: var(--text-secondary);
+}
+
+.el-popper.is-light,
+.el-popper.is-dark,
+.el-dropdown__popper,
+.el-select__popper,
+.el-picker__popper {
+    border: 1px solid var(--hairline-strong) !important;
+    border-radius: var(--radius-md) !important;
+    background: var(--surface-raised) !important;
+    backdrop-filter: blur(26px) saturate(150%);
+    -webkit-backdrop-filter: blur(26px) saturate(150%);
+    box-shadow: var(--shadow-lg) !important;
+}
+
+.el-popper.is-light > .el-popper__arrow::before,
+.el-popper.is-dark > .el-popper__arrow::before {
+    border-color: var(--hairline-strong) !important;
+    background: var(--surface-raised) !important;
+}
+
+.el-select-dropdown__item.is-selected {
+    color: var(--brand);
+    background: var(--brand-soft);
+}
+
 .el-table {
-    --el-table-header-bg-color: var(--surface-subtle);
-    --el-table-row-hover-bg-color: var(--brand-soft);
-    --el-table-border-color: var(--border-color);
+    --el-table-header-bg-color: var(--table-header-bg);
+    --el-table-row-hover-bg-color: var(--table-row-hover-bg);
+    --el-table-border-color: var(--hairline);
     --el-table-text-color: var(--text-secondary);
     --el-table-header-text-color: var(--text-primary);
+    /* 表格本体保持透明，让玻璃卡片透出来；行底走不透明的 --table-row-bg。 */
+    --el-table-bg-color: transparent;
+    --el-table-tr-bg-color: var(--table-row-bg);
+    --el-table-expanded-cell-bg-color: var(--table-row-bg);
+    background: transparent;
     border-radius: var(--radius-sm);
 }
 
+/* 这里刻意不给 tr/td 写 `background: transparent`（以前是这么写的）。
+   EP 只给固定列的单元格设了 background: inherit，它从 <tr> 取色；一旦把 tr 改回
+   透明，横向滚动时被压在固定列下面的单元格（例如同一行的标签）就会透出来，和固定
+   列里的「编辑 / 删除」叠成一团。行底必须始终是不透明色。 */
 .el-table th.el-table__cell {
     height: 44px;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border-bottom-color: var(--hairline) !important;
 }
 
 .el-table td.el-table__cell {
     height: 48px;
+    border-bottom-color: var(--hairline) !important;
 }
 
-.el-tag {
-    border-radius: var(--radius-xs);
+.el-table__inner-wrapper::before {
+    display: none;
+}
+
+/* 表格外壳必须是透明的。视图里遗留的 scoped 样式曾把 .el-table__header-wrapper
+   刷成 #f8f9fa（近白），暗色主题下只要内层表格盖不满就闪白块。这里钉死。 */
+.el-table__header-wrapper,
+.el-table__body-wrapper,
+.el-table__footer-wrapper {
+    background: transparent;
+}
+
+.el-table__empty-block {
+    background: transparent;
+}
+
+.el-table__empty-text {
+    color: var(--text-tertiary);
+}
+
+/* 标签统一成「语义色淡底 + 同源描边」的芯片。
+   - 用 html:root 提高一级权重：EP 的 el-tag.css 是懒加载注入的，同级会被反向覆盖。
+   - 用 :not(.el-tag--dark) 把 dark 变体排除，它本来就是实心色块，保持 EP 原样。
+   - 底与描边都取自 currentColor（即该变体的文字色 / 语义色），所以五套语义变体、
+     明暗两套主题都自动成立，无需逐个枚举，也不会和令牌层脱节。 */
+html:root .el-tag:not(.el-tag--dark) {
+    --el-tag-bg-color: color-mix(in srgb, currentColor 15%, transparent);
+    --el-tag-border-color: color-mix(in srgb, currentColor 38%, transparent);
+    border-radius: var(--radius-pill);
     font-weight: 600;
 }
 
 .el-pagination {
     --el-pagination-button-bg-color: transparent;
+    --el-pagination-hover-color: var(--brand);
 }
 
-.el-dropdown-menu {
-    padding: 6px;
-    border-radius: var(--radius-md);
+.el-pagination button,
+.el-pagination .el-pager li {
+    border-radius: var(--radius-xs);
 }
 
-.el-dropdown-menu__item {
-    min-height: 34px;
-    border-radius: var(--radius-sm);
+.el-pagination .el-pager li.is-active {
+    color: #ffffff;
+    background: var(--grad);
 }
+
+.el-tabs__item {
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.el-tabs__item.is-active {
+    color: var(--text-primary);
+}
+
+.el-tabs__active-bar {
+    height: 2px;
+    border-radius: var(--radius-pill);
+    background: var(--grad-line);
+}
+
+.el-tabs__nav-wrap::after {
+    background-color: var(--hairline);
+}
+
+.el-form-item__label {
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.el-switch.is-checked .el-switch__core {
+    background: var(--grad);
+    border-color: transparent;
+}
+
+/* Element Plus wires the checkbox box radius to --el-border-radius-small, which in
+   this project is raised to --radius-xs so that tags and small buttons read as
+   pills-ish chips. The checkbox box is only 14px across, so it belongs on the
+   smallest rung of the scale rather than on a control-level radius; when it used
+   the control rung the two corner radii exceeded the 14px edge and the browser
+   clamped them to half the side, painting the square as a perfect circle - it read
+   as a radio button. Point the checkbox at its own rung instead of weakening
+   --el-border-radius-small globally.
+   Must be scoped to .el-checkbox/.el-checkbox__inner with raised specificity: EP
+   declares this var on .el-checkbox itself, so a value inherited from html:root
+   alone would be overridden. */
+html:root .el-checkbox,
+html:root .el-checkbox__inner {
+    --el-checkbox-border-radius: var(--radius-2xs);
+}
+
+.el-checkbox__input.is-checked .el-checkbox__inner,
+.el-radio__input.is-checked .el-radio__inner {
+    background: var(--brand);
+    border-color: var(--brand);
+}
+
+.el-message {
+    border: 1px solid var(--hairline-strong);
+    border-radius: var(--radius-pill);
+    background: var(--surface-raised);
+    box-shadow: var(--shadow-md);
+}
+
+.el-loading-mask {
+    background: var(--veil);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+}
+
+.el-avatar {
+    background: var(--grad-soft);
+    color: var(--text-primary);
+}
+
+.el-empty__description p {
+    color: var(--text-tertiary);
+}
+
+/* ============================================================================
+   Responsive
+   ========================================================================== */
 
 @media (max-width: 760px) {
     .el-dialog {
         width: calc(100vw - 24px) !important;
         margin: 12px auto !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .enter {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+
+    .el-button:not(.is-link):not(.is-text):not(.is-disabled):hover,
+    .el-button:not(.is-link):not(.is-text):not(.is-disabled):active {
+        transform: none;
     }
 }

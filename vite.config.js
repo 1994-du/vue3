@@ -49,6 +49,10 @@ export default defineConfig(({mode,command}) => {
   const env = loadEnv(mode,process.cwd())
   return{
     plugins: [vue(),
+      // 注意：src/styles/element_plus.scss 经 additionalData 注入后会把 $namespace
+      // 变成 vue3-，那份 CSS 与运行时 el- 类名对不上。真正生效的是下面按需注入的
+      // 组件样式，因此不要关闭 importStyle。主题覆盖靠 design-system.scss 的
+      // html:root 提高优先级来解决，而不是靠调整引入顺序。
       AutoImport({
         resolvers: [ElementPlusResolver()],
       }),

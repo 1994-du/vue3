@@ -26,10 +26,12 @@ defineProps<{
     display: flex;
     align-items: center;
     gap: 9px;
-    padding: 0 20px 12px;
+    padding: 12px 4px 0;
     color: var(--text-tertiary);
-    font-size: 12px;
+    font-family: var(--font-mono);
+    font-size: 11px;
     line-height: 1.4;
+    letter-spacing: 0.04em;
 }
 
 .breadcrumb__separator {
@@ -55,8 +57,8 @@ defineProps<{
 
 @media (max-width: 900px) {
     .breadcrumb {
-        padding-right: 14px;
-        padding-left: 14px;
+        padding-right: 2px;
+        padding-left: 2px;
     }
 }
 </style>

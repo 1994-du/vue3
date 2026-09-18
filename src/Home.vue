@@ -56,7 +56,6 @@
                         <el-icon><Menu /></el-icon>
                     </button>
                     <div class="route-heading">
-                        <span>Workspace</span>
                         <strong>{{ currentPageTitle }}</strong>
                     </div>
                 </div>
@@ -92,7 +91,7 @@
                 </div>
             </header>
 
-            <Breadcrumb :items="breadcrumbItems" />
+            <Breadcrumb v-if="breadcrumbItems.length > 1" :items="breadcrumbItems" />
 
             <main ref="contentShellRef" class="layout_content">
                 <router-view v-slot="{ Component, route: renderedRoute }">
@@ -167,6 +166,8 @@ const currentPageTitle = computed(() => {
     return route.meta.title || findMenuTitle(userInfoStore.menus, route.path) || '知识工作台'
 })
 
+/* 顶栏只放页面名。曾经在这里再加一枚"所属分组"小胶囊（例如 CSS），但它读起来
+   像按钮、又和侧栏高亮/页内大标题重复，已按用户要求去掉。 */
 const setBreadcrumb = (items) => {
     breadcrumbItems.value = items.length ? items : [{ label: currentPageTitle.value }]
 }

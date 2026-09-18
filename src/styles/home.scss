@@ -1,9 +1,12 @@
+/* Application shell: floating glass rail, frosted header, open content stage.
+   The ambient field lives on <body>, so the shell itself stays transparent. */
+
 #vue3 {
     width: 100%;
     height: 100%;
     overflow: hidden;
     color: var(--text-primary);
-    background: var(--app-bg);
+    background: transparent;
 }
 
 .layout {
@@ -13,33 +16,43 @@
     overflow: hidden;
 }
 
+/* --------------------------------------------------------------------------
+   Side rail
+   ----------------------------------------------------------------------- */
+
 .layout_menu {
     width: 248px;
-    height: 100%;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
+    margin: 12px 0 12px 12px;
     padding: 12px 10px;
     color: var(--menu-text-strong);
-    background: var(--menu-bg);
-    border-right: 1px solid var(--menu-border);
+    background: var(--glass);
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
     transition: width var(--transition-base), transform var(--transition-base);
     z-index: 30;
 }
 
-.layout_menu,
-.topbar {
+/* will-change 只给真正会动的元素。顶栏是静止的，给它提升合成层没有收益，
+   反而会让 backdrop-filter 的取景在重绘时整块失效——左上角会闪出一块
+   没被模糊的原始背景（"好像背景的东西"）。侧栏在窄屏下靠 transform 滑入，保留。 */
+.layout_menu {
     will-change: transform, opacity;
 }
 
 .layout_menu.collapsed {
-    width: 72px;
+    width: 76px;
 }
 
 .layout_menu_logo {
     width: 100%;
     height: 54px;
-    padding: 0 10px;
+    padding: 0 8px;
     display: flex;
     align-items: center;
     gap: 11px;
@@ -49,23 +62,26 @@
     border-radius: var(--radius-sm);
     cursor: pointer;
     text-align: left;
+    transition: background-color var(--transition-fast);
 }
 
 .layout_menu_logo:hover {
-    background: var(--sidebar-hover);
+    background: var(--menu-hover);
 }
 
 .brand-mark {
-    width: 32px;
-    height: 32px;
+    width: 34px;
+    height: 34px;
     display: grid;
     place-items: center;
     flex-shrink: 0;
     color: #ffffff;
-    background: var(--menu-accent);
+    background: var(--grad);
     border-radius: var(--radius-sm);
+    box-shadow: 0 10px 24px -12px rgba(236, 72, 153, 0.9);
     font-size: 12px;
     font-weight: 800;
+    letter-spacing: 0.02em;
 }
 
 .brand-copy {
@@ -87,8 +103,10 @@
 
 .brand-copy small {
     color: var(--menu-text-muted);
-    font-size: 11px;
+    font-family: var(--font-mono);
+    font-size: 10px;
     line-height: 1.2;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
 }
 
@@ -106,14 +124,15 @@
     width: 6px;
 }
 
-.menu_scroll_container::-webkit-scrollbar-thumb {
-    background: var(--border-strong);
-    border-radius: 3px;
-}
-
+.menu_scroll_container::-webkit-scrollbar-thumb,
 .layout_content::-webkit-scrollbar-thumb {
     background: var(--border-strong);
-    border-radius: 3px;
+    border-radius: var(--radius-pill);
+}
+
+.menu_scroll_container::-webkit-scrollbar-thumb:hover,
+.layout_content::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in srgb, var(--brand) 55%, var(--border-strong));
 }
 
 .custome_menu_btn {
@@ -125,16 +144,19 @@
     gap: 8px;
     flex-shrink: 0;
     color: var(--menu-text);
-    background: transparent;
-    border: 1px solid var(--menu-border);
-    border-radius: var(--radius-sm);
+    background: var(--glass);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-pill);
     cursor: pointer;
+    transition: color var(--transition-fast), background-color var(--transition-fast),
+        border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .custome_menu_btn:hover {
     color: var(--menu-active-text);
-    background: var(--menu-hover);
-    border-color: color-mix(in srgb, var(--menu-accent) 40%, var(--menu-border));
+    background: var(--grad-soft);
+    border-color: color-mix(in srgb, var(--brand) 45%, var(--hairline));
+    box-shadow: 0 12px 28px -16px rgba(124, 58, 237, 0.8);
 }
 
 .custome_menu_btn span {
@@ -142,25 +164,42 @@
     font-weight: 600;
 }
 
+/* --------------------------------------------------------------------------
+   Content column
+   ----------------------------------------------------------------------- */
+
 .layout_container {
     min-width: 0;
     flex: 1;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    background: var(--app-bg);
+    /* Mirror the rail's 12px gutter on the left too, otherwise the header's
+       rounded corner butts straight into the rail's and reads as one seam. */
+    padding: 12px;
+    background: transparent;
 }
 
+/* 顶栏不再用近乎透明的 --glass。它背后只有静态底色 + 左上角那团极光，
+   5% 白 + backdrop-filter 等于给这团光开了扇窗：标题左边会浮出一块
+   "像背景"的亮斑（实测左角 rgb(67,42,118) vs 中部 rgb(56,28,65)），
+   顺带把侧栏 --shadow-md 的暗角也一起透上来。
+   给足自身底色后，顶栏是一条均匀的磨砂条，两种主题下都成立
+   （亮色 --surface-raised 是 #fff → 0.82 白，暗色是 #141733）。 */
 .topbar {
     height: 64px;
-    padding: 0 20px;
+    padding: 0 16px;
     flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 20px;
-    background: color-mix(in srgb, var(--surface) 94%, transparent);
-    border-bottom: 1px solid var(--border-color);
+    background: color-mix(in srgb, var(--surface-raised) 82%, transparent);
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
 }
 
 .header_left,
@@ -178,28 +217,24 @@
     gap: 8px;
 }
 
+/* 顶栏是全局唯一的页面标题位。这里只放页面名，一个 20px 的标题就够了——
+   以前主标题前面还挂过一枚"所属分组"胶囊（CSS），那东西有描边和底色、看着像按钮，
+   又和侧栏高亮 + 页内大标题三处重复，已去掉。 */
 .route-heading {
     min-width: 0;
     display: flex;
-    flex-direction: column;
-    gap: 1px;
+    align-items: center;
     text-align: left;
 }
 
-.route-heading span {
-    color: var(--text-tertiary);
-    font-size: 10px;
-    line-height: 1.2;
-    font-weight: 700;
-    text-transform: uppercase;
-}
-
 .route-heading strong {
+    min-width: 0;
     overflow: hidden;
     color: var(--text-primary);
-    font-size: 16px;
-    line-height: 1.4;
+    font-size: 20px;
+    line-height: 1.25;
     font-weight: 700;
+    letter-spacing: -0.01em;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -220,34 +255,42 @@
     width: 36px;
     height: 36px;
     place-items: center;
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-sm);
+    background: var(--glass);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-pill);
 }
 
 .topbar-divider {
     width: 1px;
     height: 24px;
     margin: 0 2px;
-    background: var(--border-color);
+    background: var(--hairline);
 }
 
 .user-trigger {
     height: 44px;
-    padding: 0 6px;
+    padding: 0 8px 0 6px;
     display: flex;
     align-items: center;
     gap: 9px;
-    border-radius: var(--radius-sm);
+    border: 1px solid transparent;
+    border-radius: var(--radius-pill);
+    transition: background-color var(--transition-fast), border-color var(--transition-fast);
 }
 
 .user-trigger:hover {
-    background: var(--surface-subtle);
+    background: var(--glass);
+    border-color: var(--hairline);
 }
 
+/* 头像只保留渐变填充，不加发光/描边。
+   之前这里是 box-shadow: 0 0 0 2px rgba(255,255,255,.12), 0 10px 22px -12px rgba(236,72,153,.9)，
+   在暗色顶栏上圈出一层白边和一团粉色光晕，看起来像头像浮着一块脏阴影；
+   头像本身有渐变底和 34px 的圆形轮廓，已经足够和底色区分。 */
 .user-trigger .el-avatar {
     flex-shrink: 0;
-    color: #14352e;
-    background: #9bd4c8;
+    color: #ffffff;
+    background: var(--grad);
     font-size: 13px;
     font-weight: 800;
 }
@@ -287,7 +330,7 @@
     flex: 1;
     overflow-x: hidden;
     overflow-y: auto;
-    padding: 20px;
+    padding: 14px 4px 4px;
     text-align: left;
 }
 
@@ -301,14 +344,19 @@
     display: none;
 }
 
+/* --------------------------------------------------------------------------
+   Responsive
+   ----------------------------------------------------------------------- */
+
 @media (max-width: 900px) {
     .layout_menu,
     .layout_menu.collapsed {
         position: fixed;
-        inset: 0 auto 0 0;
+        inset: 12px auto 12px 12px;
         width: min(82vw, 280px);
-        transform: translateX(-100%);
-        box-shadow: 16px 0 40px rgba(0, 0, 0, 0.2);
+        margin: 0;
+        transform: translateX(calc(-100% - 24px));
+        box-shadow: var(--shadow-lg);
     }
 
     .layout_menu.mobile-open {
@@ -325,7 +373,9 @@
         inset: 0;
         display: block;
         padding: 0;
-        background: rgba(13, 20, 17, 0.5);
+        background: var(--veil);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
         border: 0;
         z-index: 20;
     }
@@ -338,17 +388,16 @@
         display: none;
     }
 
-    .topbar {
-        padding: 0 14px;
+    .layout_container {
+        padding: 12px;
     }
 
     .layout_content {
-        padding: 14px;
+        padding: 12px 4px 4px;
     }
 }
 
 @media (max-width: 620px) {
-    .route-heading span,
     .topbar-divider,
     .user-copy,
     .user-chevron {

@@ -1,6 +1,6 @@
 <template>
     <div class="workbench-management-container">
-        <PageHeader title="工作台管理">
+        <PageHeader>
             <template v-if="isAdmin" #actions>
                 <el-button type="primary" @click="openCreateDialog" class="create-btn page-primary-action">
                     <el-icon>
@@ -14,7 +14,8 @@
         <el-card class="workbench-table-card" shadow="hover">
             <el-table v-loading="loading" :data="tableData" style="width: 100%" :row-class-name="tableRowClassName"
                 :fit="true">
-                <el-table-column label="ID" prop="id" width="100" align="center" />
+                <el-table-column label="ID" prop="id" width="88" align="center" class-name="col-id"
+                    label-class-name="col-id" />
                 <el-table-column label="名称" prop="name" min-width="150" />
                 <el-table-column label="图标" prop="icon" min-width="160">
                     <template #default="{ row }">
@@ -111,13 +112,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, inject, onMounted, ref } from 'vue'
-import { breadcrumbKey } from '@/utils/breadcrumb'
+import { computed, onMounted, ref } from 'vue'
 
-inject(breadcrumbKey)?.setItems([
-    { label: '设置', to: '/set' },
-    { label: '工作台管理' }
-])
 import type { FormInstance, FormRules } from 'element-plus/es/components/form'
 import { ElMessage } from 'element-plus'
 import type { UploadRequestOptions } from 'element-plus/es/components/upload'
@@ -395,150 +391,3 @@ onMounted(async () => {
     }
 })
 </script>
-
-<style scoped lang="scss">
-.workbench-management-container {
-    padding: 24px;
-    background: #f5f7fa;
-    min-height: 100vh;
-}
-
-.workbench-table-card {
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s ease;
-
-    &:hover {
-        box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.15);
-    }
-
-    :deep(.el-card__body) {
-        padding: 0;
-    }
-}
-
-:deep(.el-table) {
-    border-radius: 12px;
-    overflow: hidden;
-
-    .el-table__header-wrapper {
-        background: #f8f9fa;
-
-        .el-table__header {
-            th {
-                background: #f8f9fa;
-                border-bottom: 1px solid #ebeef5;
-                font-weight: 600;
-                color: #303133;
-            }
-        }
-    }
-
-    .el-table__body-wrapper {
-        .el-table__row {
-            transition: background-color 0.2s ease;
-
-            &:hover {
-                background-color: #f5f7fa !important;
-            }
-        }
-
-        .even-row {
-            background-color: #ffffff;
-        }
-
-        .odd-row {
-            background-color: #fafafa;
-        }
-    }
-}
-
-.user-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-}
-
-.link-text {
-    color: #409eff;
-    word-break: break-all;
-}
-
-.text-muted {
-    color: #909399;
-    font-size: 14px;
-}
-
-.table-icon {
-    display: block;
-    width: 40px;
-    height: 40px;
-    border-radius: 8px;
-    border: 1px solid #ebeef5;
-    background: #f5f7fa;
-}
-
-.image-error {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    color: #909399;
-    font-size: 12px;
-    background: #f5f7fa;
-}
-
-.action-btn {
-    margin: 0 4px;
-
-    .el-icon {
-        margin-right: 4px;
-    }
-}
-
-.user-select {
-    width: 100%;
-}
-
-.icon-uploader {
-    :deep(.el-upload) {
-        width: 88px;
-        height: 88px;
-        border: 1px dashed #c0c4cc;
-        border-radius: 8px;
-        overflow: hidden;
-        cursor: pointer;
-        transition: border-color 0.2s ease;
-
-        &:hover {
-            border-color: #409eff;
-        }
-    }
-}
-
-.icon-placeholder {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 88px;
-    height: 88px;
-    color: #8c939d;
-    font-size: 28px;
-    background: #fafafa;
-}
-
-.icon-preview {
-    display: block;
-    width: 88px;
-    height: 88px;
-    object-fit: cover;
-}
-
-.dialog-footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
-}
-</style>

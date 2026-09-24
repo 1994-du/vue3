@@ -135,12 +135,22 @@ html:root {
     --sidebar-active: var(--menu-active-bg);
 
     /* ---- typography -----------------------------------------------------
-       单一等宽字族贯穿界面与代码。recipe 明确禁止 sans-serif 正文——等宽字
-       就是这套配方的签名。中文回落到 Noto Sans Mono SC。 */
-    --font-sans: 'IBM Plex Mono', 'Noto Sans Mono SC', ui-monospace, SFMono-Regular,
-        Menlo, Consolas, monospace;
-    --font-mono: 'IBM Plex Mono', 'Noto Sans Mono SC', ui-monospace, SFMono-Regular,
-        Menlo, Consolas, monospace;
+       Platform-native type stack — 苹方优先，其余平台各自回落到原生中文字体。
+       不引用任何网络字体（原先的 Google Fonts 在国内不可达，首屏只会被拖住）：
+         · Apple（iOS / macOS）   → PingFang SC 苹方 + SF Pro（-apple-system）
+         · Android                → Noto Sans SC 思源黑体 + Roboto
+         · Windows                → Microsoft YaHei 微软雅黑 + Segoe UI
+         · Linux                  → Noto Sans SC / Noto Sans CJK SC
+       英文排在中文前面，是因为苹方/思源自带的西文比 Roboto 更贴各自的平台观感，
+       反过来写会让 iOS 上的数字变成 Roboto 的形状。 */
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'PingFang SC',
+        'PingFang TC', 'Hiragino Sans GB', 'Noto Sans SC', 'Noto Sans CJK SC',
+        'Microsoft YaHei', Roboto, 'Segoe UI', Arial, sans-serif;
+    /* 等宽栈沿用 Terminal 配方而来的那些场景：代码、SHA、时间戳、表格里的数字，
+       必须按位对齐。西文走平台系统等宽字，中文仍回落到苹方/雅黑。 */
+    --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
+        'Roboto Mono', 'Liberation Mono', 'Noto Sans Mono', 'PingFang SC',
+        'Microsoft YaHei', monospace;
 
     /* Compatibility aliases used by older demo pages. */
     --primary: var(--brand);
@@ -171,6 +181,9 @@ html:root {
     --focus-ring: var(--brand);
 
     /* ---- Element Plus --------------------------------------------------- */
+    /* EP 自带一套 Helvetica 字体栈，不接管的话表格/按钮/输入框会和苹方正文
+       混排成两种字体。 */
+    --el-font-family: var(--font-sans);
     --el-color-primary: var(--brand);
     --el-color-primary-light-3: color-mix(in srgb, var(--brand) 72%, var(--app-bg));
     --el-color-primary-light-5: color-mix(in srgb, var(--brand) 48%, var(--app-bg));

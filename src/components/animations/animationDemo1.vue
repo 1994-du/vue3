@@ -78,7 +78,7 @@ $animationTime:2s;
             border-radius: 50%;
         }
         &::before{
-            top:-$inWidth;
+            top:0px;
             background-color: black;
             animation: rotate-black $animationTime infinite;
             @keyframes rotate-black {
@@ -100,7 +100,7 @@ $animationTime:2s;
             }
         }
         &::after{
-            top:-$inWidth;
+            top:15px;
             background-color: white;
             animation: rotate-white $animationTime infinite;
             @keyframes rotate-white {

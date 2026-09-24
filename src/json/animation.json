@@ -1,43 +1,73 @@
 [
     {
-        "name":"animation-name",
-        "content":"动画名称",
-        "values":[]
-    },
-    {
-        "name":"animation-duration",
-        "content":"动画完成时间",
-        "values":[
-            "例如：1s"
+        "name": "animation-name",
+        "content": "动画名称",
+        "values": [
+            "对应 @keyframes 定义的名字，例如：fade-in"
         ]
     },
     {
-        "name":"animation-timing-function",
-        "content":"动画速度曲线",
-        "values":[
-            "ease:低俗开始然后加速结束前变慢",
+        "name": "animation-duration",
+        "content": "动画完成一个周期的时间",
+        "values": [
+            "例如：1s / 300ms"
+        ]
+    },
+    {
+        "name": "animation-timing-function",
+        "content": "动画速度曲线",
+        "values": [
+            "ease:低速开始，然后加速，结束前变慢（默认）",
             "linear:匀速执行",
             "ease-in:低速开始",
-            "ease-out:低俗结束",
-            "ease-in-out：低速开始并结束"
+            "ease-out:低速结束",
+            "ease-in-out:低速开始并结束",
+            "cubic-bezier(n,n,n,n):自定义贝塞尔曲线",
+            "steps(n):分 n 步跳变，无过渡"
         ]
     },
     {
-        "name":"animation-fill-mode",
-        "content":"动画暂停状态",
-        "values":[]
+        "name": "animation-fill-mode",
+        "content": "动画结束后的填充状态",
+        "values": [
+            "none:动画结束后回到原始样式（默认）",
+            "forwards:停在最后一帧",
+            "backwards:延迟期间先应用第一帧",
+            "both:同时应用 backwards 与 forwards"
+        ]
     },
     {
-        "name":"animation-delay",
-        "content":"动画延迟播放时间",
-        "values":[]
+        "name": "animation-delay",
+        "content": "动画延迟播放时间",
+        "values": [
+            "例如：0.5s",
+            "负值:动画立即开始，但已播过对应时长（用于错帧）"
+        ]
     },
     {
-        "name":"animation-interation-count",
-        "content":"动画播放次数",
-        "values":[
-            "n",
-            "infinite"
+        "name": "animation-iteration-count",
+        "content": "动画播放次数",
+        "values": [
+            "n:正整数，例如 3",
+            "infinite:无限循环"
+        ]
+    },
+    {
+        "name": "animation-direction",
+        "content": "动画播放方向",
+        "values": [
+            "normal:每次都正向播放（默认）",
+            "reverse:每次都反向播放",
+            "alternate:正反向交替，往返播放",
+            "alternate-reverse:从反向开始的往返播放"
+        ]
+    },
+    {
+        "name": "animation-play-state",
+        "content": "动画运行状态",
+        "values": [
+            "running:运行中（默认）",
+            "paused:暂停——配合 :hover 可做悬停暂停交互"
         ]
     }
 ]

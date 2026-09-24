@@ -468,7 +468,8 @@ onMounted(() => {
     &__path {
         font-size: 12px;
         color: var(--text-tertiary);
-        font-family: "SF Mono", "Monaco", "Consolas", monospace;
+        /* 走统一的等宽令牌，别在这里另起一套字栈——否则换了字体栈后唯独这列没跟上。 */
+        font-family: var(--font-mono);
         line-height: 1.2;
     }
 

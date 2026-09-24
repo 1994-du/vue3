@@ -160,7 +160,7 @@ let msChart: echarts.ECharts | null = null
 const modes = [
     { label: '分组', value: 'group' },
     { label: '堆叠', value: 'stack' },
-]
+] as const
 const mode = ref<'group' | 'stack'>('group')
 
 function buildMultiOption() {

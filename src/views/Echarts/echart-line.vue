@@ -185,7 +185,7 @@ const shapes = [
     { label: '折线', value: 'polyline' },
     { label: '平滑', value: 'smooth' },
     { label: '阶梯', value: 'step' },
-]
+] as const
 const overlays = [
     { key: 'area', label: '面积渐变' },
     { key: 'mark', label: '极值与均值' },

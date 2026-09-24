@@ -1,8 +1,27 @@
-@forward "element-plus/theme-chalk/src/common/var.scss" with (
-    $colors:(
-        "primary":(
-            'base': #7c3aed,
-        )
-    )
-);
-@use "element-plus/theme-chalk/src/index.scss" as *;
+/* ============================================================================
+   已停用：请勿重新 import 本文件
+   ============================================================================
+
+   本文件原本做两件事，现在两件都不成立：
+
+   1) 用 $colors 把 EP 的主色改成紫色 #7c3aed
+      —— 那是上一版「future glass」主题的残留。当前主色由 design-system.scss
+      的 `--el-color-primary: var(--brand)` 提供（暗色琥珀 #FFA02F / 亮色
+      #9A5B00）。这份紫色若生效，会与琥珀主题直接冲突。
+
+   2) @use "element-plus/theme-chalk/src/index.scss" 全量编译 EP 样式
+      —— 这一步在本项目里产出的是废码。vite.config.js 的 css.preprocessorOptions
+      会给每个 scss 文件预置 `@use "@/styles/element_index.scss" as *`，而
+      element_index.scss 把 $namespace 配成了 'vue3'。于是 EP 的 mixin 生成出
+      .vue3-button 这类选择器，而运行时 DOM 用的是 .el-button —— 一条都不匹配。
+      实测：构建产物中 5622 条 .vue3-* 规则、约 195KB，占 index.css 的 46%，
+      而真正生效的 .el- 规则只有 100 处。
+
+   所以本文件已从 main.ts 的 import 列表里移除。请勿加回来；真需要全量 EP 样式
+   时，应当先解决 $namespace 与运行时类名的对齐问题，否则同样只是白背一份 CSS。
+
+   当前 EP 样式的来源：
+   - 生效样式：vite.config.js 的 Components 解析器 + importStyle: 'css' 按需注入
+   - 主题覆盖：src/styles/design-system.scss 的「Element Plus, retuned to a
+     terminal」区块，用 html:root 提权 + 覆盖 --el-* 变量
+   ========================================================================== */

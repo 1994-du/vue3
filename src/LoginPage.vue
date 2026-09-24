@@ -1,75 +1,54 @@
 <template>
-    <main ref="loginRootRef" class="login-page">
-        <section class="login-brand" aria-labelledby="product-title">
-            <div class="brand-grid" aria-hidden="true"></div>
-            <div class="brand-content">
-                <span class="brand-index">KE / WORKSPACE</span>
-                <div class="brand-lockup">
-                    <span class="brand-mark-large">KE</span>
-                    <span class="brand-rule" aria-hidden="true"></span>
-                </div>
-                <h1 id="product-title">Knowledge Engine</h1>
-                <p>把零散知识整理成清晰、可检索、可复用的工作空间。</p>
-                <div class="brand-topics" aria-label="知识主题">
-                    <span>Engineering</span>
-                    <span>Frontend</span>
-                    <span>Operations</span>
-                </div>
+    <main class="login-page">
+        <section class="login-panel" aria-labelledby="login-title">
+            <div class="login-logo">
+                <span class="login-logo__mark">KE</span>
+                <span class="login-logo__caret" aria-hidden="true"></span>
             </div>
-            <div class="brand-footer">
-                <span>Internal Knowledge Workspace</span>
+            <p class="login-logo__sub">KNOWLEDGE ENGINE</p>
+
+            <div class="login-head">
+                <span class="data-label">TERMINAL ACCESS</span>
+                <h1 id="login-title">账户登录</h1>
+                <p>使用你的工作空间账号继续。登录后进入多面板工作区。</p>
+            </div>
+
+            <el-form :model="loginObj" label-position="top" class="login-form">
+                <el-form-item label="账号">
+                    <el-input v-focus v-model="loginObj.username" type="text" autocomplete="username"
+                        placeholder="enter username" :prefix-icon="User" @keyup.enter="handleLogin" />
+                </el-form-item>
+
+                <el-form-item label="密码">
+                    <el-input v-model="loginObj.password" type="password" autocomplete="current-password"
+                        placeholder="enter password" :prefix-icon="Lock" show-password
+                        @keyup.enter="handleLogin" />
+                </el-form-item>
+
+                <div class="form-options">
+                    <el-checkbox v-model="loginObj.remember">记住密码</el-checkbox>
+                </div>
+
+                <el-button type="primary" class="login-submit" :loading="isLoading" @click="handleLogin">
+                    登录
+                </el-button>
+
+                <div class="form-footer">
+                    <span>还没有账号？</span>
+                    <el-button link type="primary" @click="handleRegistry">立即注册</el-button>
+                </div>
+            </el-form>
+
+            <div class="login-foot">
+                <span>KE · SECURE WORKSPACE ACCESS</span>
                 <span>2026</span>
             </div>
-        </section>
-
-        <section class="login-form-wrapper" aria-labelledby="login-title">
-            <div class="mobile-brand">
-                <span>KE</span>
-                Knowledge Engine
-            </div>
-
-            <div class="form-panel">
-                <div class="form-header">
-                    <span class="form-kicker">ACCOUNT ACCESS</span>
-                    <h2 id="login-title">账户登录</h2>
-                    <p>使用你的工作空间账号继续</p>
-                </div>
-
-                <el-form :model="loginObj" label-position="top" class="login-form">
-                    <el-form-item label="账号">
-                        <el-input v-focus v-model="loginObj.username" type="text" autocomplete="username"
-                            placeholder="请输入账号" :prefix-icon="User" size="large" @keyup.enter="handleLogin" />
-                    </el-form-item>
-
-                    <el-form-item label="密码">
-                        <el-input v-model="loginObj.password" type="password" autocomplete="current-password"
-                            placeholder="请输入密码" :prefix-icon="Lock" size="large" show-password
-                            @keyup.enter="handleLogin" />
-                    </el-form-item>
-
-                    <div class="form-options">
-                        <el-checkbox v-model="loginObj.remember">记住密码</el-checkbox>
-                    </div>
-
-                    <el-button type="primary" size="large" class="login-submit" :loading="isLoading"
-                        @click="handleLogin">
-                        登录
-                    </el-button>
-
-                    <div class="form-footer">
-                        <span>还没有账号？</span>
-                        <el-button link type="primary" @click="handleRegistry">立即注册</el-button>
-                    </div>
-                </el-form>
-            </div>
-
-            <p class="login-legal">Knowledge Engine · Secure workspace access</p>
         </section>
     </main>
 </template>
 
 <script setup lang="ts">
-import { nextTick, onMounted, reactive, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { Lock, User } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
@@ -86,7 +65,6 @@ interface LoginForm {
 
 const userInfoStore = useUserInfoStore()
 const router = useRouter()
-const loginRootRef = ref(null)
 const isLoading = ref(false)
 const loginObj = reactive<LoginForm>({
     username: '',

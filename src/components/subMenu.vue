@@ -588,7 +588,7 @@ button.menu-row--parent:not(.menu-row--collapsed) {
     position: absolute;
     inset: 7px auto 7px 0;
     width: 3px;
-    border-radius: 0 3px 3px 0;
+    border-radius: 0;
     background: var(--menu-accent);
 }
 

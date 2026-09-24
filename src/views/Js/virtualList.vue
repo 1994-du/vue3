@@ -65,7 +65,7 @@ onMounted(() => {
     position: absolute;
     width: 100%;
     box-sizing: border-box;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid var(--hairline);
     display: flex;
     align-items: center;
     padding: 0 16px;

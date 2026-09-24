@@ -104,16 +104,19 @@ const sendRequest = () => {
 </script>
 
 <style lang="scss" scoped>
+/* 这里原来是「紫粉渐变 + hover 上浮 2px + 彩色投影」的一套按钮，外加一块为暗色
+   主题写死的响应框（rgba(15,15,35,.8)）——在亮色主题下会变成突兀的近黑方块。
+   改成终端语汇：平色底 + hairline 描边 + 0 圆角，交互只改底色与描边，不位移。
+   容器的 padding 也去掉了：.layout_content 已经给了 16px，叠起来会到 36px。 */
 .use-axios-container {
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    padding: 20px;
+    gap: 16px;
 }
 
 .button-group {
     display: flex;
-    gap: 16px;
+    gap: 8px;
     flex-wrap: wrap;
 }
 
@@ -121,71 +124,80 @@ const sendRequest = () => {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 12px 24px;
-    font-size: 14px;
+    min-height: 32px;
+    padding: 0 14px;
+    font-family: inherit;
+    font-size: 12px;
     font-weight: 500;
-    border: none;
-    border-radius: 8px;
+    letter-spacing: 0.04em;
+    color: var(--text-secondary);
+    background: transparent;
+    border: 1px solid var(--hairline);
+    border-radius: 0;
     cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
+    transition: color var(--transition-fast), background-color var(--transition-fast), border-color var(--transition-fast);
 
     &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        color: var(--brand);
+        background: var(--surface-muted);
+        border-color: var(--brand);
     }
 
-    &:active {
-        transform: translateY(0);
-    }
-
+    /* 一页里最响的那一个：琥珀实底，字取地面色 */
     &.btn-primary {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
+        color: var(--app-bg);
+        background: var(--brand);
+        border-color: var(--brand);
 
         &:hover {
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            color: var(--app-bg);
+            background: var(--brand-hover);
+            border-color: var(--brand-hover);
         }
     }
 
+    /* 破坏性操作用语义红描边，不靠填充抢戏 */
     &.btn-danger {
-        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        color: white;
+        color: var(--danger);
+        border-color: color-mix(in srgb, var(--danger) 42%, transparent);
 
         &:hover {
-            box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
+            color: var(--danger);
+            background: color-mix(in srgb, var(--danger) 10%, transparent);
+            border-color: var(--danger);
         }
     }
 }
 
 .response-box {
-    background: rgba(15, 15, 35, 0.8);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    padding: 20px;
-    backdrop-filter: blur(10px);
+    padding: 14px;
+    border: 1px solid var(--hairline);
+    background: var(--surface);
 }
 
 .response-title {
-    font-size: 16px;
-    color: var(--primary);
-    margin-bottom: 12px;
+    margin: 0 0 10px;
     display: flex;
     align-items: center;
     gap: 8px;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
 }
 
+/* 响应体是数据，就按数据排版：等宽、可滚动、贴地色。 */
 .response-content {
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 6px;
-    padding: 16px;
-    color: #e0e0e0;
-    font-size: 13px;
-    line-height: 1.6;
-    overflow-x: auto;
+    margin: 0;
+    padding: 12px;
     max-height: 300px;
-    overflow-y: auto;
+    overflow: auto;
+    border: 1px solid var(--hairline);
+    background: var(--app-bg);
+    color: var(--text-secondary);
+    font-size: 12px;
+    line-height: 1.6;
 }
 
 h2, p {

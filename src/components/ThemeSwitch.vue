@@ -31,32 +31,30 @@ const toggleTheme = () => {
 </script>
 
 <style scoped lang="scss">
+/* 主题开关。原来带 14px 磨砂和 hover 上浮 + 紫色投影（#7c3aed 的残留），
+   终端里这些都去掉：方角、平色、只换描边和文字色。 */
 .theme-switch {
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
     display: grid;
     place-items: center;
     color: var(--text-secondary);
-    background: var(--glass);
+    background: transparent;
     border: 1px solid var(--hairline);
-    border-radius: var(--radius-pill);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    border-radius: 0;
     cursor: pointer;
-    transition: transform var(--transition-fast), color var(--transition-fast),
-        background-color var(--transition-fast), border-color var(--transition-fast),
-        box-shadow var(--transition-fast);
+    transition: color var(--transition-fast), border-color var(--transition-fast),
+        background-color var(--transition-fast);
 }
 
 .theme-switch:hover {
-    transform: translateY(-2px);
-    color: var(--text-primary);
-    background: var(--glass-strong);
-    border-color: color-mix(in srgb, var(--brand) 45%, var(--hairline));
-    box-shadow: 0 10px 26px -14px rgba(124, 58, 237, 0.7);
+    color: var(--brand);
+    background: var(--surface-muted);
+    border-color: var(--brand);
 }
 
-.theme-switch:active {
-    transform: translateY(0);
+.theme-switch:focus-visible {
+    outline: 1px solid var(--brand);
+    outline-offset: 1px;
 }
 </style>

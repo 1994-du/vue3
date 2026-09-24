@@ -56,7 +56,7 @@ p{
 table{
     width: 100%;
     max-height: 400px;
-    border: 1px solid #aaa;
+    border: 1px solid var(--hairline);
     margin: 0;
     padding: 0;
     margin-bottom: 0.5em;
@@ -67,7 +67,7 @@ table{
         }
     }
     th{
-        border: 1px solid #aaa;
+        border: 1px solid var(--hairline);
     }
     th:first-of-type{
         font-weight: bold;
@@ -75,7 +75,7 @@ table{
         color: white;
     }
     td{
-        border: 1px solid #aaa;
+        border: 1px solid var(--hairline);
     }
     td:nth-of-type(1){
         font-weight: bold;

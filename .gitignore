@@ -27,3 +27,6 @@ components.d.ts
 
 # WorkBuddy 本地工作目录（记忆、截图、生成图，不进版本库）
 .workbuddy/
+
+# CodeGraph 本地索引（自动生成的 SQLite 数据库，不进版本库）
+.codegraph/

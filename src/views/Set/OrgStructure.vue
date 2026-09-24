@@ -454,9 +454,11 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .org-structure-container {
-    padding: 20px;
+    /* padding 去掉了：.layout_content 已经给了 16px，这里再加 20px 会叠成 36px。
+       min-height 也从 100vh 改成 100% —— 100vh 没有扣掉顶栏高度，会让页面永远
+       比可视区高一截，多出一条无意义的滚动条。 */
     background-color: var(--bg-primary);
-    min-height: 100vh;
+    min-height: 100%;
 }
 
 .org-workspace {
@@ -538,12 +540,10 @@ onMounted(() => {
 
     &.is-enabled {
         background: var(--success);
-        box-shadow: 0 0 0 3px color-mix(in srgb, var(--success) 14%, transparent);
     }
 
     &.is-disabled {
         background: var(--danger);
-        box-shadow: 0 0 0 3px color-mix(in srgb, var(--danger) 12%, transparent);
     }
 }
 
@@ -668,10 +668,10 @@ onMounted(() => {
     align-items: center;
     justify-content: center;
     flex: 0 0 auto;
-    border-radius: 12px;
+    border-radius: 0;
     color: var(--brand);
     background: var(--brand-soft);
-    font-size: 23px;
+    font-size: 18px;
 }
 
 .org-detail-title {
@@ -864,18 +864,13 @@ onMounted(() => {
 
     .cancel-btn,
     .submit-btn {
-        padding: 8px 20px;
-        border-radius: var(--border-radius);
-        transition: all var(--transition-fast);
+        min-height: 32px;
+        padding: 0 14px;
+        border-radius: 0;
+        transition: background-color var(--transition-fast), border-color var(--transition-fast);
 
         &:hover {
-            transform: translateY(-1px);
-        }
-    }
-
-    .submit-btn {
-        &:hover {
-            box-shadow: 0 4px 12px rgba(93, 186, 171, 0.3);
+            border-color: var(--brand);
         }
     }
 }

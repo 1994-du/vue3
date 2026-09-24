@@ -125,7 +125,7 @@ const test='200px'
         justify-content: center;
         align-items: center;
         border-radius: 50%;
-        background-color: #F0F1FE;
+        background-color: var(--surface-raised);
         color: rgb(97, 114, 247);
         font-size: 20px;
         margin: 0 10px;

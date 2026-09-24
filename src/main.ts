@@ -12,7 +12,12 @@ import '@1994-du/vue3-ui/lib/style.css'
 import '@1994-du/vue3-ui/lib/theme.css'
 import ElementPlus from 'element-plus'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
-import './styles/element_plus.scss'
+/* 这里刻意不引 './styles/element_plus.scss'。那份文件把 EP 的 theme-chalk 全量
+   编译了一遍，但 vite.config.js 的 additionalData 会先注入 element_index.scss
+   的 $namespace: 'vue3'，于是它产出的 5622 条规则全是 .vue3-* 前缀，而运行时
+   DOM 用的是 .el-*，一条都匹配不上（实测占 index.css 的 46%、约 195KB）。
+   真正生效的 EP 样式来自 vite.config.js 里 importStyle: 'css' 的按需注入，
+   主题覆盖来自 design-system.scss。详见 element_plus.scss 顶部说明。 */
 import './styles/design-system.scss'
 import './styles/admin-page.scss'
 

@@ -250,12 +250,8 @@ onUnmounted(() => {
   height: clamp(300px, 300px, 500px);
   overflow-y: auto;
   border: 1px solid var(--hairline);
-  border-radius: var(--radius-lg);
   margin-bottom: 10px;
-  background: var(--glass);
-  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-  box-shadow: var(--shadow-md);
+  background: var(--surface);
   padding: 8px 4px;
   .message_box_item {
     display: flex;
@@ -286,7 +282,6 @@ onUnmounted(() => {
         justify-content: center;
         align-items: center;
         position: relative;
-        filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.45));
         img{
           width: 100%;
           height: 100%;
@@ -306,7 +301,6 @@ onUnmounted(() => {
         display: flex;
         justify-content: center;
         align-items: center;
-        filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.45));
         img{
           width: 100%;
           height: 100%;
@@ -340,14 +334,11 @@ onUnmounted(() => {
           color: var(--text-primary);
           border: 1px solid var(--hairline);
           border-top-left-radius: var(--radius-xs);
-          backdrop-filter: blur(14px);
-          -webkit-backdrop-filter: blur(14px);
         }
         .me{
-          background: var(--grad);
-          color: #ffffff;
+          background: var(--brand);
+          color: var(--app-bg);
           border-top-right-radius: var(--radius-xs);
-          box-shadow: var(--shadow-glow);
         }
       }
     }    

@@ -151,7 +151,7 @@ const clientDirectives: CacheDirective[] = [
 <style lang="scss" scoped>
 p {
     font-size: 16px;
-    color: #303030;
+    color: var(--text-primary);
 }
 
 h2,

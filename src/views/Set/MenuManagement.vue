@@ -324,7 +324,7 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .menu-management-container {
-    padding: 20px;
+    /* padding 去掉了：.layout_content 已经给了 16px，这里再加 20px 会叠成 36px。 */
     background-color: var(--bg-primary);
     height: 100%;
     display: flex;
@@ -393,8 +393,8 @@ onMounted(() => {
     padding: 12px 8px;
 
     :deep(.el-tree-node__content) {
-        height: 48px;
-        border-radius: 8px;
+        height: 32px;
+        border-radius: 0;
         margin: 2px 0;
         padding: 0 8px;
         transition: background-color var(--transition-fast);
@@ -436,13 +436,13 @@ onMounted(() => {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        border-radius: 8px;
-        background: linear-gradient(135deg, rgba(93, 186, 171, 0.15), rgba(99, 102, 241, 0.12));
-        color: var(--primary);
-        font-size: 16px;
+        border-radius: 0;
+        background: var(--brand-soft);
+        color: var(--brand);
+        font-size: 14px;
 
         &.is-leaf {
-            background: rgba(148, 163, 184, 0.12);
+            background: var(--surface-muted);
             color: var(--text-secondary);
         }
 
@@ -534,18 +534,13 @@ onMounted(() => {
 
     .cancel-btn,
     .submit-btn {
-        padding: 8px 20px;
-        border-radius: var(--border-radius);
-        transition: all var(--transition-fast);
+        min-height: 32px;
+        padding: 0 14px;
+        border-radius: 0;
+        transition: background-color var(--transition-fast), border-color var(--transition-fast);
 
         &:hover {
-            transform: translateY(-1px);
-        }
-    }
-
-    .submit-btn {
-        &:hover {
-            box-shadow: 0 4px 12px rgba(93, 186, 171, 0.3);
+            border-color: var(--brand);
         }
     }
 }

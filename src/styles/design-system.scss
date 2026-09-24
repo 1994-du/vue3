@@ -1,137 +1,152 @@
 /* ============================================================================
-   Knowledge Engine · design system
-   Future glass: deep indigo cosmos, floating frosted panels, violet to neon
-   pink gradient, aqua as the third voice.
+   Knowledge Engine · terminal design system
+   Anchor: Bloomberg Terminal (Information Architecture school, dark-first).
+   Deep navy ground. Amber as the only accent, reserved for data that matters.
+   Monospace everywhere. Radius 0. Elevation through 1px hairlines, never
+   shadow. No gradient, no glass, no ambient field, no eased motion — a
+   terminal's pixels are either data or chrome, and nothing else.
 
-   One theme lock. Every colour, radius, shadow and easing on the page resolves
-   from the tokens below, so flipping data-theme on <html> retunes the entire
-   application. Dark is the default; light is the alternate.
+   One theme lock. Every colour, radius, border and easing resolves from the
+   tokens below, so flipping data-theme on <html> retunes the whole app.
+   Dark is the default; light is the "paper terminal" alternate.
 
-   Token names from the previous palette are preserved as aliases so the older
-   demo pages keep working untouched.
+   Token names from the previous "future glass" palette are preserved as
+   aliases so the demo views keep working untouched. Where the old palette
+   carried a gradient or a blur, the alias now resolves to a flat value —
+   terminals don't gradient, and they don't frost.
    ========================================================================== */
 
-/* 选择器用 html:root（权重 0,1,1）而不是 :root（0,1,0）：
-   Element Plus 的按需样式由懒加载路由在主题之后注入，同权重下会反过来覆盖
-   这里的 --el-* 令牌。提高一级权重后，无论样式注入顺序如何，主题都稳定生效。 */
+/* 选择器用 html:root（权重 0,1,1）而不是 :root（0,1,0）：Element Plus 的按需
+   样式由懒加载路由在主题之后注入，同权重下会反过来覆盖这里的 --el-* 令牌。
+   提高一级权重后，无论样式注入顺序如何，主题都稳定生效。 */
 html:root {
     color-scheme: dark;
 
-    /* ---- brand ---------------------------------------------------------- */
-    --brand: #7c3aed;
-    --brand-hover: #6d28d9;
-    --brand-soft: rgba(124, 58, 237, 0.16);
-    --accent: #ec4899;
-    --aqua: #06b6d4;
-    --danger: #f43f5e;
-    --warning: #f59e0b;
-    --success: #10b981;
+    /* ---- data ink -------------------------------------------------------
+       琥珀是唯一的强调色，只出现在关键数据上。recipe 的硬约束：一套配色里
+       只允许一个饱和色，所以 success / warning / danger 只承担涨跌与告警语义，
+       不参与装饰。 */
+    --brand: #FFA02F;
+    --brand-hover: #FFB453;
+    --brand-soft: rgba(255, 160, 47, 0.12);
+    --accent: #FFA02F;
+    --aqua: #5E6680;
+    --danger: #F23645;
+    --warning: #FFA02F;
+    --success: #00B96B;
 
-    --grad: linear-gradient(115deg, #7c3aed 0%, #a855f7 36%, #ec4899 100%);
-    --grad-line: linear-gradient(115deg, #7c3aed, #ec4899);
-    --grad-text: linear-gradient(100deg, #c4b5fd 0%, #f472b6 52%, #ec4899 100%);
-    --grad-soft: linear-gradient(115deg, rgba(124, 58, 237, 0.22), rgba(236, 72, 153, 0.22));
+    /* 旧调色板的渐变令牌保留名字，值全部压成纯色：终端不渐变。 */
+    --grad: #FFA02F;
+    --grad-line: #FFA02F;
+    --grad-text: #FFA02F;
+    --grad-soft: rgba(255, 160, 47, 0.12);
 
-    /* ---- surface -------------------------------------------------------- */
-    --app-bg: #0a0b1a;
-    --surface: rgba(255, 255, 255, 0.055);
-    --surface-solid: #101228;
-    --surface-raised: #141733;
-    --surface-subtle: rgba(255, 255, 255, 0.03);
-    --surface-muted: rgba(255, 255, 255, 0.075);
+    /* ---- surfaces ------------------------------------------------------
+       全部不透明。终端的层与层之间靠 hairline 分行，不靠透明度叠色。
+       半透明面板在终端美学里是"脏"，因为它让底下的数据透出来。 */
+    --app-bg: #0A0E1A;
+    --surface: #11172A;
+    --surface-solid: #11172A;
+    --surface-raised: #161D33;
+    --surface-subtle: rgba(255, 255, 255, 0.02);
+    --surface-muted: rgba(255, 255, 255, 0.045);
 
-    /* ---- table surfaces -------------------------------------------------
-       表格行必须是不透明色。Element Plus 给固定列（fixed="right"）的单元格设的是
+    /* 表格行必须是不透明色。Element Plus 给固定列（fixed="right"）的单元格设的是
        background: inherit，只从 <tr> 继承；行色一旦半透明，横向滚动时被压在固定列
-       底下的单元格就会透出来，和「操作」列的文字叠成一团。
-       数值按原先 rgba 叠加后的结果反推，观感基本不变。 */
-    --table-row-bg: color-mix(in srgb, #ffffff 11%, var(--app-bg));
-    --table-header-bg: color-mix(in srgb, #ffffff 8%, var(--app-bg));
-    --table-row-hover-bg: color-mix(in srgb, var(--brand) 20%, var(--table-row-bg));
+       底下的单元格就会透出来，和「操作」列的文字叠成一团。 */
+    --table-row-bg: #11172A;
+    --table-header-bg: #1A2138;
+    --table-row-hover-bg: color-mix(in srgb, var(--brand) 14%, var(--table-row-bg));
 
-    /* ---- glass ---------------------------------------------------------- */
-    --glass: rgba(255, 255, 255, 0.05);
-    --glass-strong: rgba(255, 255, 255, 0.085);
-    --glass-blur: 22px;
-    --glass-saturate: 150%;
-    --hairline: rgba(255, 255, 255, 0.1);
-    --hairline-strong: rgba(255, 255, 255, 0.2);
+    /* ---- "glass" tokens demoted to flat surfaces -----------------------
+       名字保留（home.scss / Login.scss / 旧 demo 页仍在引用），值改成不透明底、
+       blur 归零。这样那些页面不用改一行也能自动变成平色终端面板。 */
+    --glass: #11172A;
+    --glass-strong: #1A2138;
+    --glass-blur: 0px;
+    --glass-saturate: 100%;
+    --hairline: #2A3050;
+    --hairline-strong: #3A4268;
 
     /* ---- type ----------------------------------------------------------- */
-    --text-primary: #f8fafc;
-    --text-secondary: rgba(248, 250, 252, 0.7);
-    --text-tertiary: rgba(248, 250, 252, 0.46);
-    --border-color: rgba(255, 255, 255, 0.1);
-    --border-strong: rgba(255, 255, 255, 0.2);
+    --text-primary: #E8ECF4;
+    --text-secondary: rgba(232, 236, 244, 0.72);
+    --text-tertiary: #5E6680;
+    --border-color: #2A3050;
+    --border-strong: #3A4268;
 
-    /* ---- ambient field -------------------------------------------------- */
-    --glow-1: rgba(124, 58, 237, 0.42);
-    --glow-2: rgba(236, 72, 153, 0.24);
-    --glow-3: rgba(6, 182, 212, 0.18);
-    --glow-k: 1;
-    --dot: rgba(255, 255, 255, 0.11);
-    --dot-k: 0.6;
-    --grain-k: 0.045;
-    --grain-blend: soft-light;
-    --veil: rgba(8, 9, 22, 0.64);
+    /* ---- ambient field: removed ----------------------------------------
+       starfield / dot lattice / film grain 全部归零。终端背景只有一种颜色。 */
+    --glow-1: transparent;
+    --glow-2: transparent;
+    --glow-3: transparent;
+    --glow-k: 0;
+    --dot: transparent;
+    --dot-k: 0;
+    --grain-k: 0;
+    --grain-blend: normal;
+    --veil: rgba(10, 14, 26, 0.86);
 
-    /* ---- elevation ------------------------------------------------------ */
-    --shadow-sm: 0 6px 18px -10px rgba(0, 0, 0, 0.6);
-    --shadow-md: 0 22px 54px -30px rgba(0, 0, 0, 0.85), 0 1px 0 rgba(255, 255, 255, 0.05) inset;
-    --shadow-lg: 0 40px 90px -40px rgba(0, 0, 0, 0.9), 0 1px 0 rgba(255, 255, 255, 0.07) inset;
-    --shadow-glow: 0 16px 44px -18px rgba(124, 58, 237, 0.7);
-    --shadow-glow-pink: 0 20px 50px -18px rgba(236, 72, 153, 0.62);
+    /* ---- elevation: terminals don't cast shadows ------------------------ */
+    --shadow-sm: none;
+    --shadow-md: none;
+    --shadow-lg: none;
+    --shadow-glow: none;
+    --shadow-glow-pink: none;
 
-    /* ---- geometry ------------------------------------------------------- */
-    /* 圆角刻度。postcss 的 px->rem 转换已移除，所以这里的数字就是渲染值。
-       --radius-2xs 是最小一级，专供复选框那类小方块：它的边长只有 14px，
-       用 --radius-xs 会在 14px 的边上放两个圆角，两个半径相加超过边长时浏览器
-       会把它们钳到半边，方块被画成正圆，看起来像单选钮。
-       其中 --radius-sm 也叫「控件圆角」，是 --el-border-radius-base，输入框、
-       按钮、表格、下拉都从这里取；--radius-md 往上只用于卡片与弹窗外壳。 */
-    --radius-2xs: 3px;
-    --radius-xs: 6px;
-    --radius-sm: 8px;
-    --radius-md: 12px;
-    --radius-lg: 8px;
-    --radius-xl: 20px;
-    --radius-pill: 999px;
+    /* ---- geometry -------------------------------------------------------
+       圆角刻度整体归零。form field 是唯一允许 2px 的地方，走单独的
+       --radius-field。 */
+    --radius-2xs: 0;
+    --radius-xs: 0;
+    --radius-sm: 0;
+    --radius-md: 0;
+    --radius-lg: 0;
+    --radius-xl: 0;
+    --radius-pill: 0;
+    --radius-field: 2px;
 
-    /* ---- motion --------------------------------------------------------- */
-    --ease: cubic-bezier(0.16, 1, 0.3, 1);
-    --ease-soft: cubic-bezier(0.22, 0.61, 0.36, 1);
-    --transition-fast: 170ms var(--ease-soft);
-    --transition-base: 320ms var(--ease);
+    /* ---- motion ---------------------------------------------------------
+       终端只有两种动效：ticker 匀速滚动，状态位闪烁。没有 eased 过渡。 */
+    --ease: linear;
+    --ease-soft: linear;
+    --transition-fast: 80ms linear;
+    --transition-base: 160ms linear;
+    --blink: 60ms;
 
     /* ---- menu shell ----------------------------------------------------- */
     --menu-accent: var(--brand);
-    --menu-bg: var(--surface-raised);
+    --menu-bg: var(--surface);
     --menu-text: var(--text-secondary);
     --menu-text-strong: var(--text-primary);
     --menu-text-muted: var(--text-tertiary);
     --menu-border: var(--hairline);
     --menu-divider: var(--hairline);
-    --menu-hover: var(--glass-strong);
-    --menu-branch-bg: var(--glass);
-    --menu-active-bg: linear-gradient(115deg, rgba(124, 58, 237, 0.34), rgba(236, 72, 153, 0.26));
-    --menu-active-text: #ffffff;
-    --menu-active-ring: rgba(168, 85, 247, 0.42);
-    --menu-shadow: var(--shadow-md);
+    --menu-hover: #1A2138;
+    --menu-branch-bg: #1A2138;
+    --menu-active-bg: rgba(255, 160, 47, 0.08);
+    --menu-active-text: var(--brand);
+    --menu-active-ring: var(--brand);
+    --menu-shadow: none;
 
     /* Compatibility aliases used by the layout shell. */
     --sidebar: var(--menu-bg);
     --sidebar-hover: var(--menu-hover);
     --sidebar-active: var(--menu-active-bg);
 
-    --font-sans: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI',
-        'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
-    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    /* ---- typography -----------------------------------------------------
+       单一等宽字族贯穿界面与代码。recipe 明确禁止 sans-serif 正文——等宽字
+       就是这套配方的签名。中文回落到 Noto Sans Mono SC。 */
+    --font-sans: 'IBM Plex Mono', 'Noto Sans Mono SC', ui-monospace, SFMono-Regular,
+        Menlo, Consolas, monospace;
+    --font-mono: 'IBM Plex Mono', 'Noto Sans Mono SC', ui-monospace, SFMono-Regular,
+        Menlo, Consolas, monospace;
 
     /* Compatibility aliases used by older demo pages. */
     --primary: var(--brand);
-    --primary-light: #a855f7;
-    --secondary: var(--accent);
-    --secondary-light: #f472b6;
+    --primary-light: var(--brand-hover);
+    --secondary: var(--brand);
+    --secondary-light: var(--brand-hover);
     --bg-primary: var(--app-bg);
     --bg-secondary: var(--app-bg);
     --bg-tertiary: var(--surface-muted);
@@ -141,207 +156,252 @@ html:root {
     --borderColor: var(--border-color);
     --color: var(--brand);
     --maskBg: var(--veil);
-    --border-radius: var(--radius-sm);
-    --border-radius-lg: var(--radius-md);
-    --font-size-sm: 13px;
-    --font-size-base: 14px;
-    --font-size-lg: 18px;
-    --focus-ring: rgba(168, 85, 247, 0.5);
+    /* 补漏：下面三个别名此前缺失，导致 3 个文件共 5 处 var() 引用无 fallback 地
+       指向空值——CSS 会整条声明作废，而且不报错。受影响的是
+       styles/setPage.scss 的 tab 高亮、Set/MenuManagement.vue 树节点当前项
+       底色、Vue3/customerDirective.vue 指令设置的字色。 */
+    --tabFontColor: var(--brand);
+    --inputColor: var(--text-primary);
+    --menu-bg-active: var(--menu-active-bg);
+    --border-radius: 0;
+    --border-radius-lg: 0;
+    --font-size-sm: 12px;
+    --font-size-base: 13px;
+    --font-size-lg: 15px;
+    --focus-ring: var(--brand);
 
     /* ---- Element Plus --------------------------------------------------- */
     --el-color-primary: var(--brand);
-    --el-color-primary-light-3: #9a6bf3;
-    --el-color-primary-light-5: #b48cf7;
-    --el-color-primary-light-7: #cdacfa;
-    --el-color-primary-light-8: #d9c0fb;
-    --el-color-primary-light-9: rgba(124, 58, 237, 0.16);
+    --el-color-primary-light-3: color-mix(in srgb, var(--brand) 72%, var(--app-bg));
+    --el-color-primary-light-5: color-mix(in srgb, var(--brand) 48%, var(--app-bg));
+    --el-color-primary-light-7: color-mix(in srgb, var(--brand) 26%, var(--app-bg));
+    --el-color-primary-light-8: color-mix(in srgb, var(--brand) 18%, var(--app-bg));
+    --el-color-primary-light-9: rgba(255, 160, 47, 0.12);
     --el-color-primary-dark-2: var(--brand-hover);
     --el-color-success: var(--success);
     --el-color-warning: var(--warning);
     --el-color-danger: var(--danger);
     --el-color-error: var(--danger);
-    --el-color-info: #94a3b8;
+    --el-color-info: var(--aqua);
 
     /* EP 的 light-3/5/7/8 色阶原来只给 primary 配了值，其余语义色一直沿用 EP
-       默认的「白底向浅色渐变」——在暗色主题里就是刺眼的薄荷绿和浅橙（plain 标签
-       的描边就取自 light-5）。这里按主题统一推导：light-9 最淡（当底色用），
-       light-3 最实（当 hover 用）。 */
+       默认的「白底向浅色渐变」——在暗色主题里就是刺眼的薄荷绿和浅橙。这里按
+       主题统一推导：light-9 最淡（当底色用），light-3 最实（当 hover 用）。 */
     --el-color-success-light-3: color-mix(in srgb, var(--success) 72%, var(--app-bg));
     --el-color-success-light-5: color-mix(in srgb, var(--success) 48%, var(--app-bg));
     --el-color-success-light-7: color-mix(in srgb, var(--success) 26%, var(--app-bg));
     --el-color-success-light-8: color-mix(in srgb, var(--success) 18%, var(--app-bg));
-    --el-color-success-light-9: rgba(16, 185, 129, 0.16);
+    --el-color-success-light-9: rgba(0, 185, 107, 0.12);
     --el-color-warning-light-3: color-mix(in srgb, var(--warning) 72%, var(--app-bg));
     --el-color-warning-light-5: color-mix(in srgb, var(--warning) 48%, var(--app-bg));
     --el-color-warning-light-7: color-mix(in srgb, var(--warning) 26%, var(--app-bg));
     --el-color-warning-light-8: color-mix(in srgb, var(--warning) 18%, var(--app-bg));
-    --el-color-warning-light-9: rgba(245, 158, 11, 0.16);
+    --el-color-warning-light-9: rgba(255, 160, 47, 0.12);
     --el-color-danger-light-3: color-mix(in srgb, var(--danger) 72%, var(--app-bg));
     --el-color-danger-light-5: color-mix(in srgb, var(--danger) 48%, var(--app-bg));
     --el-color-danger-light-7: color-mix(in srgb, var(--danger) 26%, var(--app-bg));
     --el-color-danger-light-8: color-mix(in srgb, var(--danger) 18%, var(--app-bg));
-    --el-color-danger-light-9: rgba(244, 63, 94, 0.16);
+    --el-color-danger-light-9: rgba(242, 54, 69, 0.12);
     --el-color-error-light-3: color-mix(in srgb, var(--danger) 72%, var(--app-bg));
     --el-color-error-light-5: color-mix(in srgb, var(--danger) 48%, var(--app-bg));
     --el-color-error-light-7: color-mix(in srgb, var(--danger) 26%, var(--app-bg));
     --el-color-error-light-8: color-mix(in srgb, var(--danger) 18%, var(--app-bg));
-    --el-color-error-light-9: rgba(244, 63, 94, 0.16);
+    --el-color-error-light-9: rgba(242, 54, 69, 0.12);
     --el-color-info-light-3: color-mix(in srgb, var(--el-color-info) 72%, var(--app-bg));
     --el-color-info-light-5: color-mix(in srgb, var(--el-color-info) 48%, var(--app-bg));
     --el-color-info-light-7: color-mix(in srgb, var(--el-color-info) 26%, var(--app-bg));
     --el-color-info-light-8: color-mix(in srgb, var(--el-color-info) 18%, var(--app-bg));
-    --el-color-info-light-9: rgba(148, 163, 184, 0.16);
+    --el-color-info-light-9: rgba(94, 102, 128, 0.12);
 
     --el-bg-color-page: transparent;
-    --el-bg-color: var(--surface-raised);
+    --el-bg-color: var(--surface);
     --el-bg-color-overlay: var(--surface-raised);
     --el-text-color-primary: var(--text-primary);
     --el-text-color-regular: var(--text-secondary);
     --el-text-color-secondary: var(--text-tertiary);
     --el-text-color-placeholder: var(--text-tertiary);
-    --el-text-color-disabled: rgba(248, 250, 252, 0.3);
+    --el-text-color-disabled: rgba(232, 236, 244, 0.3);
     --el-border-color: var(--border-color);
-    --el-border-color-light: rgba(255, 255, 255, 0.08);
-    --el-border-color-lighter: rgba(255, 255, 255, 0.06);
-    --el-border-color-extra-light: rgba(255, 255, 255, 0.04);
+    --el-border-color-light: #242A45;
+    --el-border-color-lighter: #1E2438;
+    --el-border-color-extra-light: #1A2033;
     --el-border-color-dark: var(--border-strong);
     --el-border-color-darker: var(--border-strong);
-    --el-border-radius-base: var(--radius-sm);
-    --el-border-radius-small: var(--radius-xs);
-    --el-border-radius-round: var(--radius-pill);
-    --el-fill-color: rgba(255, 255, 255, 0.06);
-    --el-fill-color-light: rgba(255, 255, 255, 0.045);
-    --el-fill-color-lighter: rgba(255, 255, 255, 0.03);
-    --el-fill-color-extra-light: rgba(255, 255, 255, 0.02);
-    --el-fill-color-dark: rgba(255, 255, 255, 0.09);
-    --el-fill-color-darker: rgba(255, 255, 255, 0.12);
+    --el-border-radius-base: 0;
+    --el-border-radius-small: 0;
+    --el-border-radius-round: 0;
+    --el-fill-color: rgba(255, 255, 255, 0.05);
+    --el-fill-color-light: rgba(255, 255, 255, 0.035);
+    --el-fill-color-lighter: rgba(255, 255, 255, 0.025);
+    --el-fill-color-extra-light: rgba(255, 255, 255, 0.015);
+    --el-fill-color-dark: rgba(255, 255, 255, 0.075);
+    --el-fill-color-darker: rgba(255, 255, 255, 0.1);
     --el-fill-color-blank: transparent;
-    --el-mask-color: rgba(8, 9, 22, 0.68);
-    --el-mask-color-extra-light: rgba(8, 9, 22, 0.32);
-    --el-overlay-color-lighter: rgba(8, 9, 22, 0.6);
-    --el-disabled-bg-color: rgba(255, 255, 255, 0.04);
-    --el-disabled-text-color: rgba(248, 250, 252, 0.32);
-    --el-disabled-border-color: rgba(255, 255, 255, 0.08);
-    --el-box-shadow: var(--shadow-md);
-    --el-box-shadow-light: var(--shadow-sm);
-    --el-box-shadow-lighter: var(--shadow-sm);
-    --el-box-shadow-dark: var(--shadow-lg);
+    --el-mask-color: rgba(10, 14, 26, 0.78);
+    --el-mask-color-extra-light: rgba(10, 14, 26, 0.4);
+    --el-overlay-color-lighter: rgba(10, 14, 26, 0.72);
+    --el-disabled-bg-color: rgba(255, 255, 255, 0.035);
+    --el-disabled-text-color: rgba(232, 236, 244, 0.32);
+    --el-disabled-border-color: #242A45;
+
+    /* ---- Radius: 终端在明暗两套主题里都是直角，故此组变量与主题无关，
+            只在这里声明一次，不在 light 块重复。
+
+            必须用变量、而不是 `.el-button { border-radius: 0 }` 这类类选择器：
+            Element Plus 的组件样式是随懒加载路由注入的，落在本文件之后；同权重
+            后缀者胜，组件自己的 `border-radius: var(--el-border-radius-base)`
+            会把圆角拿回去（这正是按钮/输入框仍然是圆角的原因）。改成覆盖变量，
+            任何消费方都只能解析出 0，跟谁赢得层叠无关。 */
+    --el-border-radius-base: 0;
+    --el-border-radius-small: 0;
+    --el-border-radius-round: 0;
+    --el-card-border-radius: 0;
+
+    /* 刻意不动 --el-border-radius-circle。它是「形状」语义（100%），供单选钮和头像
+       这类本就该是圆的控件用，不是「圆角」。把它归 0 会把单选钮变成复选框、头像变
+       方块，是功能退化而不是风格统一。终端的规矩是方框不留圆角，不是消灭圆形。 */
+
+    --el-box-shadow: none;
+    --el-box-shadow-light: none;
+    --el-box-shadow-lighter: none;
+    --el-box-shadow-dark: none;
 }
 
 /* ---------------------------------------------------------------------------
-   Light alternate. Same tokens, daylight values. Nothing downstream changes.
+   Light alternate — "paper terminal". Same monospace skeleton, same 0 radius,
+   same hairline discipline; ground and ink invert. Amber darkens to keep
+   >= 4.5:1 against the pale ground (pure #FFA02F would fail here).
    ------------------------------------------------------------------------ */
 
 html:root[data-theme='light'] {
     color-scheme: light;
 
-    --brand-soft: rgba(124, 58, 237, 0.1);
-    --grad-text: linear-gradient(100deg, #6d28d9 0%, #c026d3 50%, #db2777 100%);
-    --grad-soft: linear-gradient(115deg, rgba(124, 58, 237, 0.12), rgba(236, 72, 153, 0.12));
+    --brand: #9A5B00;
+    --brand-hover: #B36B00;
+    --brand-soft: rgba(154, 91, 0, 0.1);
+    --accent: #9A5B00;
+    --aqua: #6B7280;
+    --danger: #C0272D;
+    --warning: #9A5B00;
+    --success: #0A7A46;
 
-    --app-bg: #e9ebf8;
-    --surface: rgba(255, 255, 255, 0.62);
-    --surface-solid: #ffffff;
-    --surface-raised: #ffffff;
-    --surface-subtle: rgba(11, 13, 31, 0.035);
-    --surface-muted: rgba(11, 13, 31, 0.06);
+    --grad: #9A5B00;
+    --grad-line: #9A5B00;
+    --grad-text: #9A5B00;
+    --grad-soft: rgba(154, 91, 0, 0.1);
 
-    /* 同暗色：行底必须不透明，否则固定列会漏出下方滚动过的单元格。 */
-    --table-row-bg: color-mix(in srgb, #ffffff 68%, var(--app-bg));
-    --table-header-bg: color-mix(in srgb, var(--text-primary) 4%, var(--table-row-bg));
-    --table-row-hover-bg: color-mix(in srgb, var(--brand) 10%, var(--table-row-bg));
+    --app-bg: #EDEEF1;
+    --surface: #FFFFFF;
+    --surface-solid: #FFFFFF;
+    --surface-raised: #F6F7F9;
+    --surface-subtle: rgba(10, 14, 26, 0.025);
+    --surface-muted: rgba(10, 14, 26, 0.05);
 
-    --glass: rgba(255, 255, 255, 0.55);
-    --glass-strong: rgba(255, 255, 255, 0.82);
-    --hairline: rgba(11, 13, 31, 0.12);
-    --hairline-strong: rgba(11, 13, 31, 0.22);
+    --table-row-bg: #FFFFFF;
+    --table-header-bg: #F1F2F5;
+    --table-row-hover-bg: color-mix(in srgb, var(--brand) 8%, var(--table-row-bg));
 
-    --text-primary: #0b0d1f;
-    --text-secondary: rgba(11, 13, 31, 0.7);
-    --text-tertiary: rgba(11, 13, 31, 0.48);
-    --border-color: rgba(11, 13, 31, 0.12);
-    --border-strong: rgba(11, 13, 31, 0.22);
+    --glass: #FFFFFF;
+    --glass-strong: #F6F7F9;
+    --glass-blur: 0px;
+    --glass-saturate: 100%;
+    --hairline: #D4D7DE;
+    --hairline-strong: #B8BCC6;
 
-    --glow-1: rgba(124, 58, 237, 0.36);
-    --glow-2: rgba(236, 72, 153, 0.28);
-    --glow-3: rgba(6, 182, 212, 0.26);
-    --glow-k: 1;
-    --dot: rgba(11, 13, 31, 0.16);
-    --dot-k: 0.7;
-    --grain-k: 0.028;
-    --grain-blend: multiply;
-    --veil: rgba(233, 235, 248, 0.66);
+    --text-primary: #0A0E1A;
+    --text-secondary: rgba(10, 14, 26, 0.72);
+    --text-tertiary: #6B7280;
+    --border-color: #D4D7DE;
+    --border-strong: #B8BCC6;
 
-    --shadow-sm: 0 6px 18px -10px rgba(28, 22, 72, 0.28);
-    --shadow-md: 0 22px 50px -30px rgba(28, 22, 72, 0.34), 0 1px 0 rgba(255, 255, 255, 0.85) inset;
-    --shadow-lg: 0 38px 84px -40px rgba(28, 22, 72, 0.36), 0 1px 0 rgba(255, 255, 255, 0.9) inset;
-    --shadow-glow: 0 16px 40px -20px rgba(124, 58, 237, 0.55);
-    --shadow-glow-pink: 0 20px 44px -20px rgba(236, 72, 153, 0.46);
+    --glow-1: transparent;
+    --glow-2: transparent;
+    --glow-3: transparent;
+    --glow-k: 0;
+    --dot: transparent;
+    --dot-k: 0;
+    --grain-k: 0;
+    --grain-blend: normal;
+    --veil: rgba(237, 238, 241, 0.88);
 
-    --menu-hover: rgba(255, 255, 255, 0.7);
-    --menu-active-bg: linear-gradient(115deg, rgba(124, 58, 237, 0.2), rgba(236, 72, 153, 0.16));
-    --menu-active-text: #4c1d95;
-    --menu-active-ring: rgba(124, 58, 237, 0.3);
+    --shadow-sm: none;
+    --shadow-md: none;
+    --shadow-lg: none;
+    --shadow-glow: none;
+    --shadow-glow-pink: none;
+
+    --menu-hover: #F1F2F5;
+    /* `--menu-branch-bg` marks a *group* that contains the current page (the
+       parent row), so it must stay quieter than `--menu-active-bg` on the row
+       that is actually current. It needs an explicit light value — the dark
+       block's #1A2138 would otherwise leak through and paint a near-black
+       slab onto the white rail. Tint it with the accent at roughly half the
+       active wash so branch and active read as one family. */
+    --menu-branch-bg: rgba(154, 91, 0, 0.045);
+    --menu-active-bg: rgba(154, 91, 0, 0.07);
+    --menu-active-text: var(--brand);
+    --menu-active-ring: var(--brand);
 
     --el-bg-color-page: transparent;
-    --el-bg-color: #ffffff;
-    --el-bg-color-overlay: #ffffff;
-    --el-text-color-primary: #0b0d1f;
-    --el-text-color-regular: rgba(11, 13, 31, 0.72);
-    --el-text-color-secondary: rgba(11, 13, 31, 0.5);
-    --el-text-color-placeholder: rgba(11, 13, 31, 0.42);
-    --el-text-color-disabled: rgba(11, 13, 31, 0.32);
-    --el-border-color: rgba(11, 13, 31, 0.12);
-    --el-border-color-light: rgba(11, 13, 31, 0.09);
-    --el-border-color-lighter: rgba(11, 13, 31, 0.07);
-    --el-border-color-extra-light: rgba(11, 13, 31, 0.05);
-    --el-border-color-dark: rgba(11, 13, 31, 0.22);
-    --el-border-color-darker: rgba(11, 13, 31, 0.28);
-    --el-fill-color: rgba(11, 13, 31, 0.05);
-    --el-fill-color-light: rgba(11, 13, 31, 0.04);
-    --el-fill-color-lighter: rgba(11, 13, 31, 0.03);
-    --el-fill-color-extra-light: rgba(11, 13, 31, 0.02);
-    --el-fill-color-dark: rgba(11, 13, 31, 0.08);
-    --el-fill-color-darker: rgba(11, 13, 31, 0.11);
-    --el-mask-color: rgba(241, 242, 251, 0.7);
-    --el-mask-color-extra-light: rgba(241, 242, 251, 0.36);
-    --el-overlay-color-lighter: rgba(28, 22, 72, 0.32);
-    --el-disabled-bg-color: rgba(11, 13, 31, 0.04);
-    --el-disabled-text-color: rgba(11, 13, 31, 0.32);
-    --el-disabled-border-color: rgba(11, 13, 31, 0.08);
-    --el-color-primary-light-9: rgba(124, 58, 237, 0.1);
-    /* 浅色主题下 EP 默认色阶本就为白底设计，这里只是把色相统一到本项目的语义色，
-       避免 primary（紫）与 success（原 EP 黄绿）色相不一致。 */
+    --el-bg-color: #FFFFFF;
+    --el-bg-color-overlay: #FFFFFF;
+    --el-text-color-primary: #0A0E1A;
+    --el-text-color-regular: rgba(10, 14, 26, 0.72);
+    --el-text-color-secondary: #6B7280;
+    --el-text-color-placeholder: #8B90A0;
+    --el-text-color-disabled: rgba(10, 14, 26, 0.32);
+    --el-border-color: #D4D7DE;
+    --el-border-color-light: #DEE1E7;
+    --el-border-color-lighter: #E6E8EE;
+    --el-border-color-extra-light: #EDEEF2;
+    --el-border-color-dark: #B8BCC6;
+    --el-border-color-darker: #9CA1AE;
+    --el-fill-color: rgba(10, 14, 26, 0.045);
+    --el-fill-color-light: rgba(10, 14, 26, 0.035);
+    --el-fill-color-lighter: rgba(10, 14, 26, 0.025);
+    --el-fill-color-extra-light: rgba(10, 14, 26, 0.015);
+    --el-fill-color-dark: rgba(10, 14, 26, 0.07);
+    --el-fill-color-darker: rgba(10, 14, 26, 0.1);
+    --el-mask-color: rgba(237, 238, 241, 0.8);
+    --el-mask-color-extra-light: rgba(237, 238, 241, 0.45);
+    --el-overlay-color-lighter: rgba(10, 14, 26, 0.32);
+    --el-disabled-bg-color: rgba(10, 14, 26, 0.035);
+    --el-disabled-text-color: rgba(10, 14, 26, 0.32);
+    --el-disabled-border-color: #DEE1E7;
+    --el-color-primary-light-9: rgba(154, 91, 0, 0.09);
+    --el-color-primary-light-3: color-mix(in srgb, var(--brand) 72%, #ffffff);
+    --el-color-primary-light-5: color-mix(in srgb, var(--brand) 48%, #ffffff);
+    --el-color-primary-light-7: color-mix(in srgb, var(--brand) 26%, #ffffff);
+    --el-color-primary-light-8: color-mix(in srgb, var(--brand) 18%, #ffffff);
     --el-color-success-light-3: color-mix(in srgb, var(--success) 70%, #ffffff);
     --el-color-success-light-5: color-mix(in srgb, var(--success) 50%, #ffffff);
     --el-color-success-light-7: color-mix(in srgb, var(--success) 30%, #ffffff);
     --el-color-success-light-8: color-mix(in srgb, var(--success) 20%, #ffffff);
-    --el-color-success-light-9: rgba(16, 185, 129, 0.12);
+    --el-color-success-light-9: rgba(10, 122, 70, 0.1);
     --el-color-warning-light-3: color-mix(in srgb, var(--warning) 70%, #ffffff);
     --el-color-warning-light-5: color-mix(in srgb, var(--warning) 50%, #ffffff);
     --el-color-warning-light-7: color-mix(in srgb, var(--warning) 30%, #ffffff);
     --el-color-warning-light-8: color-mix(in srgb, var(--warning) 20%, #ffffff);
-    --el-color-warning-light-9: rgba(245, 158, 11, 0.14);
+    --el-color-warning-light-9: rgba(154, 91, 0, 0.1);
     --el-color-danger-light-3: color-mix(in srgb, var(--danger) 70%, #ffffff);
     --el-color-danger-light-5: color-mix(in srgb, var(--danger) 50%, #ffffff);
     --el-color-danger-light-7: color-mix(in srgb, var(--danger) 30%, #ffffff);
     --el-color-danger-light-8: color-mix(in srgb, var(--danger) 20%, #ffffff);
-    --el-color-danger-light-9: rgba(244, 63, 94, 0.12);
+    --el-color-danger-light-9: rgba(192, 39, 45, 0.1);
     --el-color-error-light-3: color-mix(in srgb, var(--danger) 70%, #ffffff);
     --el-color-error-light-5: color-mix(in srgb, var(--danger) 50%, #ffffff);
     --el-color-error-light-7: color-mix(in srgb, var(--danger) 30%, #ffffff);
     --el-color-error-light-8: color-mix(in srgb, var(--danger) 20%, #ffffff);
-    --el-color-error-light-9: rgba(244, 63, 94, 0.12);
+    --el-color-error-light-9: rgba(192, 39, 45, 0.1);
     --el-color-info-light-3: color-mix(in srgb, var(--el-color-info) 70%, #ffffff);
     --el-color-info-light-5: color-mix(in srgb, var(--el-color-info) 50%, #ffffff);
     --el-color-info-light-7: color-mix(in srgb, var(--el-color-info) 30%, #ffffff);
     --el-color-info-light-8: color-mix(in srgb, var(--el-color-info) 20%, #ffffff);
-    --el-color-info-light-9: rgba(100, 116, 139, 0.12);
+    --el-color-info-light-9: rgba(107, 114, 128, 0.1);
 }
 
 /* ============================================================================
-   Ambient field. Aurora washes sit behind everything, a dot lattice fades out
-   down the page, and a whisper of grain keeps the gradients from banding.
+   Base
    ========================================================================== */
 
 html {
@@ -350,44 +410,16 @@ html {
     background: var(--app-bg);
 }
 
+/* 终端数字必须等宽对齐：所有列里的数字（SHA、提交量、时间戳）都要按位对齐，
+   否则数据的纵向可扫读性就没了。这是这套配方里最重要的一条排版规则。 */
 body {
     font-family: var(--font-sans);
+    font-variant-numeric: tabular-nums;
     color: var(--text-primary);
     background-color: var(--app-bg);
-    background-image:
-        radial-gradient(920px 620px at 8% -12%, var(--glow-1), transparent 62%),
-        radial-gradient(1040px 720px at 96% -12%, var(--glow-2), transparent 66%),
-        radial-gradient(1000px 720px at 46% 116%, var(--glow-3), transparent 64%);
-    background-attachment: fixed;
-    background-repeat: no-repeat;
+    background-image: none;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-}
-
-/* dot lattice */
-body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    opacity: calc(var(--dot-k) * var(--glow-k));
-    background-image: radial-gradient(circle, var(--dot) 1px, transparent 1.35px);
-    background-size: 30px 30px;
-    -webkit-mask-image: radial-gradient(130% 78% at 50% -8%, #000 0%, rgba(0, 0, 0, 0.3) 54%, transparent 76%);
-    mask-image: radial-gradient(130% 78% at 50% -8%, #000 0%, rgba(0, 0, 0, 0.3) 54%, transparent 76%);
-}
-
-/* film grain */
-body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    opacity: var(--grain-k);
-    mix-blend-mode: var(--grain-blend);
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 #vue3 {
@@ -421,26 +453,25 @@ a:focus-visible,
 input:focus-visible,
 textarea:focus-visible,
 select:focus-visible {
-    outline: 2px solid var(--focus-ring);
-    outline-offset: 2px;
+    outline: 1px solid var(--focus-ring);
+    outline-offset: 1px;
 }
 
 ::selection {
-    color: #ffffff;
-    background: rgba(168, 85, 247, 0.42);
+    color: var(--app-bg);
+    background: var(--brand);
 }
 
 /* ============================================================================
-   Glass primitives, available to every view
+   Panel primitives. Previously frosted-glass panels; now flat terminal panes
+   bounded by a single hairline. Names kept for the views that reference them.
    ========================================================================== */
 
 .glass-panel {
-    background: var(--glass);
-    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    background: var(--surface);
     border: 1px solid var(--hairline);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-md);
+    border-radius: 0;
+    box-shadow: none;
 }
 
 .glass-panel--flat {
@@ -448,22 +479,18 @@ select:focus-visible {
 }
 
 .glass-nav {
-    background: var(--veil);
-    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    background: var(--surface);
     border-bottom: 1px solid var(--hairline);
 }
 
-/* gradient text, used sparingly on page titles */
+/* 旧调色板里的渐变文字。终端不渐变，所以这个名字现在只表示「强调色文字」——
+   保留它是为了不让 DeepSeek 那类旧页面丢掉标题强调。 */
 .grad-text {
-    background: var(--grad-text);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    -webkit-text-fill-color: transparent;
+    color: var(--brand);
+    -webkit-text-fill-color: var(--brand);
 }
 
-/* small uppercase label */
+/* 小号全大写标签：终端里承担"面板标题"的角色（COMMITS / BRANCH / PAGE）。 */
 .kicker {
     display: inline-flex;
     align-items: center;
@@ -471,22 +498,88 @@ select:focus-visible {
     font-family: var(--font-mono);
     font-size: 10px;
     font-weight: 500;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--text-tertiary);
 }
 
-/* shared entrance used by views that opt in */
+/* data-ink primitives used by the cockpit views */
+.data-label {
+    display: block;
+    color: var(--text-tertiary);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.data-value {
+    color: var(--brand);
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+}
+
+.data-value--ink {
+    color: var(--text-primary);
+}
+
+.data-delta--up {
+    color: var(--success);
+}
+
+.data-delta--down {
+    color: var(--danger);
+}
+
+/* 状态位：终端的"在线/同步中"指示。唯一允许的闪烁。 */
+.status-dot {
+    width: 6px;
+    height: 6px;
+    display: inline-block;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--success);
+}
+
+.status-dot.is-busy {
+    background: var(--brand);
+    animation: ke-blink calc(var(--blink) * 8) steps(2, end) infinite;
+}
+
+@keyframes ke-blink {
+    0%, 50% { opacity: 1; }
+    50.01%, 100% { opacity: 0.25; }
+}
+
+/* 快捷键芯片：终端界面的肌肉记忆提示。 */
+.kbd-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    color: var(--text-tertiary);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.kbd-chip > kbd {
+    color: var(--brand);
+    font-family: inherit;
+    font-size: inherit;
+}
+
+/* 共享入场：终端的入场是"上电"——一次短促的透明度切换，无位移无缓动。 */
 .enter {
     opacity: 0;
-    transform: translateY(16px);
-    transition: opacity 620ms var(--ease), transform 620ms var(--ease);
-    transition-delay: calc(var(--i, 0) * 55ms);
+    transition: opacity 120ms linear;
+    transition-delay: calc(var(--i, 0) * 24ms);
 }
 
 .enter.is-in {
     opacity: 1;
-    transform: none;
 }
 
 /* ============================================================================
@@ -505,65 +598,44 @@ select:focus-visible {
 ::-webkit-scrollbar-thumb {
     background: var(--border-strong);
     border: 2px solid transparent;
-    border-radius: var(--radius-pill);
+    border-radius: 0;
     background-clip: content-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: color-mix(in srgb, var(--brand) 55%, var(--border-strong));
+    background: var(--brand);
     background-clip: content-box;
 }
 
 /* ============================================================================
-   Element Plus, retuned to glass
+   Element Plus, retuned to a terminal
    ========================================================================== */
 
 .el-button {
-    min-height: 34px;
-    border-radius: var(--radius-sm);
-    font-weight: 600;
-    letter-spacing: 0;
-    transition: transform var(--transition-fast), background-color var(--transition-fast),
-        border-color var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast);
+    min-height: 32px;
+    border-radius: 0;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    transition: none;
 }
 
 .el-button + .el-button {
     margin-left: 8px;
 }
 
-.el-button:not(.is-link):not(.is-text):not(.is-plain):not(.is-disabled):hover {
-    transform: translateY(-1px);
-}
-
-.el-button:not(.is-link):not(.is-text):not(.is-disabled):active {
-    transform: translateY(0);
-}
-
-.el-button.is-link {
-    min-height: 30px;
-    padding: 4px 6px;
-}
-
-/* the one loud button on a page */
+/* the one loud button on a page: amber fill, ground-coloured type */
 .el-button--primary:not(.is-link):not(.is-text):not(.is-plain) {
-    color: #ffffff !important;
-    background: var(--grad) !important;
-    /* background 简写会把 background-origin 重置回初始值 padding-box，而
-       background-clip 仍是初始值 border-box；按钮有 1px 边框，两者正好差 1px，
-       梯度图按 298px 平铺，于是左右各露出 1px 邻块的颜色（左粉右紫），
-       看起来像描了一圈反色边。把 origin 拉回 border-box 再禁掉平铺。 */
-    background-origin: border-box !important;
-    background-repeat: no-repeat !important;
-    border-color: transparent !important;
-    box-shadow: var(--shadow-glow);
+    color: var(--app-bg) !important;
+    background: var(--brand) !important;
+    border-color: var(--brand) !important;
+    box-shadow: none !important;
 }
 
 .el-button--primary:not(.is-link):not(.is-text):not(.is-plain):hover,
 .el-button--primary:not(.is-link):not(.is-text):not(.is-plain):focus-visible {
-    background: var(--grad) !important;
-    background-origin: border-box !important;
-    background-repeat: no-repeat !important;
-    box-shadow: var(--shadow-glow-pink);
+    color: var(--app-bg) !important;
+    background: var(--brand-hover) !important;
+    border-color: var(--brand-hover) !important;
 }
 
 .el-button--primary.is-link,
@@ -571,115 +643,111 @@ select:focus-visible {
     color: var(--brand) !important;
 }
 
-/* everything else reads as frosted glass */
+/* everything else is a hairline-outlined key */
 .el-button--default:not(.is-link):not(.is-text):not(.is-plain) {
     color: var(--text-secondary);
-    background: var(--glass);
+    background: transparent;
     border-color: var(--hairline);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
 }
 
 .el-button--default:not(.is-link):not(.is-text):not(.is-plain):hover,
 .el-button--default:not(.is-link):not(.is-text):not(.is-plain):focus-visible {
-    color: var(--text-primary);
-    background: var(--glass-strong);
-    border-color: var(--hairline-strong);
+    color: var(--brand);
+    background: var(--surface-muted);
+    border-color: var(--brand);
 }
 
 .el-button--info,
 .el-button--success,
 .el-button--warning,
 .el-button--danger {
-    border-color: transparent !important;
+    background: transparent !important;
+    box-shadow: none !important;
 }
 
 .el-input__wrapper,
 .el-select__wrapper,
 .el-textarea__inner,
 .el-input-number {
-    border-radius: var(--radius-sm) !important;
+    border-radius: var(--radius-field) !important;
 }
 
 .el-input__wrapper,
 .el-select__wrapper {
-    min-height: 36px;
-    background: var(--surface-subtle) !important;
+    min-height: 34px;
+    background: var(--app-bg) !important;
     box-shadow: 0 0 0 1px var(--border-color) inset !important;
-    transition: box-shadow var(--transition-fast), background-color var(--transition-fast);
+    transition: none;
 }
 
 .el-input__wrapper:hover,
 .el-select__wrapper:hover {
-    background: var(--surface-muted) !important;
+    background: var(--app-bg) !important;
     box-shadow: 0 0 0 1px var(--border-strong) inset !important;
 }
 
 .el-input__wrapper.is-focus,
 .el-select__wrapper.is-focused {
-    background: var(--surface-subtle) !important;
-    box-shadow: 0 0 0 1px var(--brand) inset, 0 0 0 4px rgba(168, 85, 247, 0.14) !important;
+    background: var(--app-bg) !important;
+    box-shadow: 0 0 0 1px var(--brand) inset !important;
 }
 
 .el-textarea__inner {
-    background: var(--surface-subtle);
+    background: var(--app-bg);
     box-shadow: 0 0 0 1px var(--border-color) inset;
 }
 
 .el-card {
     border: 1px solid var(--hairline);
-    border-radius: var(--radius-lg);
-    background: var(--glass);
-    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-    box-shadow: var(--shadow-md) !important;
+    border-radius: 0;
+    background: var(--surface);
+    box-shadow: none !important;
 }
 
 .el-card__header {
     border-bottom: 1px solid var(--hairline);
 }
 
-/* floating layers stay readable, so they get a near-opaque body */
+/* floating layers get a hairline frame instead of a bloom */
 .el-dialog,
 .el-drawer,
 .el-message-box {
     border: 1px solid var(--hairline-strong);
-    border-radius: var(--radius-lg) !important;
+    border-radius: 0 !important;
     background: var(--surface-raised);
-    backdrop-filter: blur(28px) saturate(150%);
-    -webkit-backdrop-filter: blur(28px) saturate(150%);
-    box-shadow: var(--shadow-lg);
+    box-shadow: none;
     overflow: hidden;
 }
 
 .el-dialog__header {
-    min-height: 56px;
+    min-height: 48px;
     margin: 0 !important;
-    padding: 16px 20px !important;
+    padding: 12px 16px !important;
     border-bottom: 1px solid var(--hairline);
     background: transparent;
 }
 
 .el-dialog__title {
-    font-size: 16px;
-    font-weight: 700;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
     color: var(--text-primary);
 }
 
 .el-dialog__body {
-    padding: 20px !important;
+    padding: 16px !important;
     color: var(--text-secondary);
 }
 
 .el-dialog__footer {
-    padding: 14px 20px !important;
+    padding: 12px 16px !important;
     border-top: 1px solid var(--hairline);
-    background: var(--surface-subtle);
+    background: var(--surface-muted);
 }
 
 .el-message-box__title {
     color: var(--text-primary);
-    font-weight: 700;
+    font-weight: 500;
 }
 
 .el-message-box__content {
@@ -692,11 +760,9 @@ select:focus-visible {
 .el-select__popper,
 .el-picker__popper {
     border: 1px solid var(--hairline-strong) !important;
-    border-radius: var(--radius-md) !important;
+    border-radius: 0 !important;
     background: var(--surface-raised) !important;
-    backdrop-filter: blur(26px) saturate(150%);
-    -webkit-backdrop-filter: blur(26px) saturate(150%);
-    box-shadow: var(--shadow-lg) !important;
+    box-shadow: none !important;
 }
 
 .el-popper.is-light > .el-popper__arrow::before,
@@ -715,30 +781,29 @@ select:focus-visible {
     --el-table-row-hover-bg-color: var(--table-row-hover-bg);
     --el-table-border-color: var(--hairline);
     --el-table-text-color: var(--text-secondary);
-    --el-table-header-text-color: var(--text-primary);
-    /* 表格本体保持透明，让玻璃卡片透出来；行底走不透明的 --table-row-bg。 */
+    --el-table-header-text-color: var(--text-tertiary);
     --el-table-bg-color: transparent;
     --el-table-tr-bg-color: var(--table-row-bg);
     --el-table-expanded-cell-bg-color: var(--table-row-bg);
     background: transparent;
-    border-radius: var(--radius-sm);
+    border-radius: 0;
 }
 
-/* 这里刻意不给 tr/td 写 `background: transparent`（以前是这么写的）。
-   EP 只给固定列的单元格设了 background: inherit，它从 <tr> 取色；一旦把 tr 改回
-   透明，横向滚动时被压在固定列下面的单元格（例如同一行的标签）就会透出来，和固定
-   列里的「编辑 / 删除」叠成一团。行底必须始终是不透明色。 */
+/* 这里刻意不给 tr/td 写 `background: transparent`。EP 只给固定列的单元格设了
+   background: inherit，它从 <tr> 取色；一旦把 tr 改回透明，横向滚动时被压在固定列
+   下面的单元格就会透出来，和固定列里的「编辑 / 删除」叠成一团。 */
 .el-table th.el-table__cell {
-    height: 44px;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.04em;
+    height: 34px;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     border-bottom-color: var(--hairline) !important;
 }
 
 .el-table td.el-table__cell {
-    height: 48px;
+    height: 36px;
+    font-size: 12px;
     border-bottom-color: var(--hairline) !important;
 }
 
@@ -762,16 +827,16 @@ select:focus-visible {
     color: var(--text-tertiary);
 }
 
-/* 标签统一成「语义色淡底 + 同源描边」的芯片。
+/* 标签统一成「语义色描边 + 无底色」的终端芯片。终端没有填充胶囊，只有方角描边。
    - 用 html:root 提高一级权重：EP 的 el-tag.css 是懒加载注入的，同级会被反向覆盖。
    - 用 :not(.el-tag--dark) 把 dark 变体排除，它本来就是实心色块，保持 EP 原样。
-   - 底与描边都取自 currentColor（即该变体的文字色 / 语义色），所以五套语义变体、
-     明暗两套主题都自动成立，无需逐个枚举，也不会和令牌层脱节。 */
+   - 底与描边都取自 currentColor，所以五套语义变体、明暗两套主题都自动成立。 */
 html:root .el-tag:not(.el-tag--dark) {
-    --el-tag-bg-color: color-mix(in srgb, currentColor 15%, transparent);
-    --el-tag-border-color: color-mix(in srgb, currentColor 38%, transparent);
-    border-radius: var(--radius-pill);
-    font-weight: 600;
+    --el-tag-bg-color: transparent;
+    --el-tag-border-color: color-mix(in srgb, currentColor 42%, transparent);
+    border-radius: 0;
+    font-weight: 500;
+    letter-spacing: 0.04em;
 }
 
 .el-pagination {
@@ -781,27 +846,30 @@ html:root .el-tag:not(.el-tag--dark) {
 
 .el-pagination button,
 .el-pagination .el-pager li {
-    border-radius: var(--radius-xs);
+    border-radius: 0;
+    border: 1px solid var(--hairline);
+    font-variant-numeric: tabular-nums;
 }
 
 .el-pagination .el-pager li.is-active {
-    color: #ffffff;
-    background: var(--grad);
+    color: var(--app-bg);
+    background: var(--brand);
+    border-color: var(--brand);
 }
 
 .el-tabs__item {
     color: var(--text-secondary);
-    font-weight: 600;
+    font-weight: 500;
 }
 
 .el-tabs__item.is-active {
-    color: var(--text-primary);
+    color: var(--brand);
 }
 
 .el-tabs__active-bar {
     height: 2px;
-    border-radius: var(--radius-pill);
-    background: var(--grad-line);
+    border-radius: 0;
+    background: var(--brand);
 }
 
 .el-tabs__nav-wrap::after {
@@ -809,29 +877,25 @@ html:root .el-tag:not(.el-tag--dark) {
 }
 
 .el-form-item__label {
-    color: var(--text-secondary);
-    font-weight: 600;
+    color: var(--text-tertiary);
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
 }
 
 .el-switch.is-checked .el-switch__core {
-    background: var(--grad);
-    border-color: transparent;
+    background: var(--brand);
+    border-color: var(--brand);
 }
 
-/* Element Plus wires the checkbox box radius to --el-border-radius-small, which in
-   this project is raised to --radius-xs so that tags and small buttons read as
-   pills-ish chips. The checkbox box is only 14px across, so it belongs on the
-   smallest rung of the scale rather than on a control-level radius; when it used
-   the control rung the two corner radii exceeded the 14px edge and the browser
-   clamped them to half the side, painting the square as a perfect circle - it read
-   as a radio button. Point the checkbox at its own rung instead of weakening
-   --el-border-radius-small globally.
-   Must be scoped to .el-checkbox/.el-checkbox__inner with raised specificity: EP
-   declares this var on .el-checkbox itself, so a value inherited from html:root
-   alone would be overridden. */
+/* Element Plus wires the checkbox box radius to --el-border-radius-small. Radius is
+   0 across this theme, so the box is a hard square — which is exactly what a
+   terminal wants. Kept scoped with raised specificity because EP declares the var
+   on .el-checkbox itself. */
 html:root .el-checkbox,
 html:root .el-checkbox__inner {
-    --el-checkbox-border-radius: var(--radius-2xs);
+    --el-checkbox-border-radius: 0;
 }
 
 .el-checkbox__input.is-checked .el-checkbox__inner,
@@ -842,24 +906,311 @@ html:root .el-checkbox__inner {
 
 .el-message {
     border: 1px solid var(--hairline-strong);
-    border-radius: var(--radius-pill);
+    border-radius: 0;
     background: var(--surface-raised);
-    box-shadow: var(--shadow-md);
+    box-shadow: none;
 }
 
 .el-loading-mask {
     background: var(--veil);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
 }
 
 .el-avatar {
-    background: var(--grad-soft);
-    color: var(--text-primary);
+    background: var(--brand);
+    color: var(--app-bg);
+    font-variant-numeric: tabular-nums;
+}
+
+/* ---------------------------------------------------------------------------
+   空状态：EP 默认给一张 3D 灰色插画，跟终端无关，而且在暗色主题里是全页唯一一
+   块亮灰。换成终端自己的记号——一个方角描边的空槽，双线用 inset 阴影叠出来，
+   不引图片也不用渐变。
+   ------------------------------------------------------------------------ */
+html:root .el-empty {
+    --el-empty-fill-color: transparent;
+    padding: 48px 0;
+}
+
+html:root .el-empty__image {
+    display: none !important;
+}
+
+html:root .el-empty::before {
+    content: '';
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 14px;
+    display: block;
+    border: 1px solid var(--hairline);
+    box-shadow:
+        inset 0 0 0 3px var(--app-bg),
+        inset 0 0 0 4px var(--hairline);
 }
 
 .el-empty__description p {
     color: var(--text-tertiary);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+}
+
+/* ---------------------------------------------------------------------------
+   Alert：默认是「浅色填充 + 圆角」的气泡。终端里改成 hairline 描边，边框取语义
+   色的 40% 混色，底色统一用最淡的中性面。
+   ------------------------------------------------------------------------ */
+html:root .el-alert {
+    padding: 10px 12px;
+    border: 1px solid var(--hairline);
+    border-radius: 0;
+    background: var(--surface-muted) !important;
+    color: var(--text-secondary);
+}
+
+html:root .el-alert--info {
+    border-color: color-mix(in srgb, var(--aqua) 42%, transparent);
+}
+
+html:root .el-alert--success {
+    border-color: color-mix(in srgb, var(--success) 42%, transparent);
+}
+
+html:root .el-alert--warning {
+    border-color: color-mix(in srgb, var(--warning) 42%, transparent);
+}
+
+html:root .el-alert--error {
+    border-color: color-mix(in srgb, var(--danger) 42%, transparent);
+}
+
+html:root .el-alert .el-alert__title {
+    color: var(--text-primary);
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+html:root .el-alert .el-alert__description {
+    color: var(--text-tertiary);
+}
+
+html:root .el-alert .el-alert__close-btn {
+    color: var(--text-tertiary);
+}
+
+/* 进度条：轨道用最淡中性面，条体取 accent，全直角。 */
+html:root .el-progress-bar__outer {
+    border-radius: 0;
+    background: var(--surface-muted);
+}
+
+html:root .el-progress-bar__inner {
+    border-radius: 0;
+    background: var(--brand);
+}
+
+html:root .el-progress__text {
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+}
+
+/* 上传拖拽区：虚线框是终端里表示「待填槽位」的既有语汇，保留虚线但压成 hairline。 */
+html:root .el-upload-dragger {
+    padding: 32px 16px;
+    border: 1px dashed var(--hairline-strong);
+    border-radius: 0;
+    background: transparent;
+}
+
+html:root .el-upload-dragger:hover {
+    border-color: var(--brand);
+}
+
+html:root .el-upload-list__item {
+    border-radius: 0;
+    color: var(--text-secondary);
+}
+
+/* 树：与侧栏菜单同一套状态语汇，方便复用记忆。 */
+html:root .el-tree {
+    background: transparent;
+    color: var(--text-secondary);
+}
+
+html:root .el-tree-node__content {
+    height: 32px;
+    border-radius: 0;
+}
+
+html:root .el-tree-node__content:hover {
+    background: var(--menu-hover);
+}
+
+html:root .el-tree-node.is-current > .el-tree-node__content {
+    color: var(--menu-active-text);
+    background: var(--menu-active-bg);
+}
+
+/* 单选钮保持圆形（形状语义，不是圆角），只把描边和文字接到 token 上。 */
+html:root .el-radio {
+    color: var(--text-secondary);
+}
+
+html:root .el-radio__inner {
+    border-color: var(--border-strong);
+}
+
+html:root .el-scrollbar__thumb {
+    border-radius: 0;
+    background: var(--hairline-strong);
+    opacity: 0.7;
+}
+
+/* ---------------------------------------------------------------------------
+   @1994-du/vue3-ui —— 拟物风格的小库，只在 Vue3/toRefs.vue 与 SetPage.vue 里
+   各用了一个按钮。它的 defaults 是「灰色渐变 + 8px 双向投影（neumorphism）+
+   蓝色 #409eff」，在终端主题里完全出戏。这里把它的变量接到 token 上：渐变消失、
+   投影归零、主色换成 accent，控件本身的语义（type 颜色）保留。
+   ------------------------------------------------------------------------ */
+html:root {
+    --dx-color-primary: var(--brand);
+    --dx-color-success: var(--success);
+    --dx-color-warning: var(--warning);
+    --dx-color-danger: var(--danger);
+    --dx-color-info: var(--aqua);
+    --dx-color-text-primary: var(--text-primary);
+    --dx-color-text-regular: var(--text-secondary);
+    --dx-color-text-secondary: var(--text-tertiary);
+    --dx-color-border-base: var(--hairline);
+    --dx-color-border-light: var(--hairline);
+    --dx-border-radius-base: 0;
+    --dx-border-radius-small: 0;
+    --dx-border-radius-round: 0;
+    --dx-button-box-shadow: none;
+    --dx-button-default-image: none;
+    --dx-button-default-image-hover: none;
+    --dx-button-primary-image: none;
+    --dx-button-primary-image-hover: none;
+    --dx-button-success-image: none;
+    --dx-button-success-image-hover: none;
+    --dx-button-warning-image: none;
+    --dx-button-warning-image-hover: none;
+    --dx-button-danger-image: none;
+    --dx-button-danger-image-hover: none;
+}
+
+html:root .dx_button {
+    width: auto;
+    min-width: 96px;
+    height: 32px;
+    line-height: 30px;
+    border-radius: 0;
+    box-shadow: none;
+    font-family: inherit;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+}
+
+html:root .dx_button_default {
+    color: var(--text-secondary);
+    background-color: transparent;
+    border: 1px solid var(--hairline);
+}
+
+html:root .dx_button_primary,
+html:root .dx_button_success,
+html:root .dx_button_warning,
+html:root .dx_button_danger {
+    color: var(--app-bg);
+}
+
+/* ============================================================================
+   Shared page primitives
+   Pages used to re-declare these locally, each with its own Tailwind greys and
+   12–16px radii. Declaring them once keeps every page on the same hairline
+   geometry; the per-page sweep can then just drop its private copy.
+   ========================================================================== */
+
+/* 页面根节点。.layout_content 已经负责 16px 外边距，页面不得再加自己的
+   padding —— 以前页面写 24px 会叠成 40px。 */
+.page {
+    min-width: 0;
+}
+
+/* 分节面板：hairline 方框，无圆角、无阴影。 */
+.panel {
+    border: 1px solid var(--hairline);
+    background: var(--surface);
+}
+
+.panel + .panel {
+    margin-top: 16px;
+}
+
+.panel__head {
+    min-height: 44px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border-bottom: 1px solid var(--hairline);
+}
+
+.panel__title {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--text-primary);
+}
+
+.panel__meta {
+    margin: 2px 0 0;
+    font-size: 12px;
+    color: var(--text-tertiary);
+}
+
+.panel__body {
+    padding: 14px;
+}
+
+/* 只读指标格：上标签下数值，数字等宽对齐。用 1px 间隙 + 底色当作分隔线，
+   这样每个格子不用各自描边也不会叠出双线。 */
+.stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1px;
+    border: 1px solid var(--hairline);
+    background: var(--hairline);
+}
+
+.stat {
+    padding: 10px 12px;
+    background: var(--surface);
+}
+
+.stat__label {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+}
+
+.stat__value {
+    font-size: 14px;
+    color: var(--text-primary);
+    font-variant-numeric: tabular-nums;
+    word-break: break-all;
+}
+
+/* 一排终端键。 */
+.btn-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
 }
 
 /* ============================================================================
@@ -876,11 +1227,9 @@ html:root .el-checkbox__inner {
 @media (prefers-reduced-motion: reduce) {
     .enter {
         opacity: 1 !important;
-        transform: none !important;
     }
 
-    .el-button:not(.is-link):not(.is-text):not(.is-disabled):hover,
-    .el-button:not(.is-link):not(.is-text):not(.is-disabled):active {
-        transform: none;
+    .status-dot.is-busy {
+        animation: none;
     }
 }

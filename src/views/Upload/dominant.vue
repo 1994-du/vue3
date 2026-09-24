@@ -1,80 +1,79 @@
 <template>
-    <div class="image-upload-page">
-        <el-card shadow="hover" class="page-card">
-            <template #header>
-                <div class="card-header">
-                    <div>
-                        <h2>图片上传示例</h2>
-                        <p>示例接口：`POST /api/files/upload-image`</p>
+    <div class="page">
+        <section class="panel">
+            <header class="panel__head">
+                <div>
+                    <h2 class="panel__title">图片上传示例</h2>
+                    <p class="panel__meta">示例接口：POST /api/files/upload-image</p>
+                </div>
+                <el-tag type="warning">图片预览 + 主色提取</el-tag>
+            </header>
+
+            <div class="panel__body">
+                <el-alert title="当前示例限制 JPG、PNG、WEBP，单张图片不超过 10MB。上传前会展示预览、尺寸和主色。" type="info"
+                    :closable="false" show-icon />
+
+                <div class="btn-row actions">
+                    <input ref="imageInputRef" class="hidden-input" type="file" accept="image/jpeg,image/png,image/webp"
+                        @change="handleImageChange">
+                    <el-button type="primary" @click="chooseImage">选择图片</el-button>
+                    <el-button type="success" :disabled="!selectedImage || uploading" :loading="uploading"
+                        @click="submitImage">
+                        上传图片
+                    </el-button>
+                    <el-button :disabled="uploading" @click="clearImage">清空</el-button>
+                </div>
+
+                <div class="stat-grid" v-if="selectedImage">
+                    <div class="stat">
+                        <span class="stat__label">文件名</span>
+                        <span class="stat__value">{{ selectedImage.name }}</span>
                     </div>
-                    <el-tag type="warning">图片预览 + 主色提取</el-tag>
-                </div>
-            </template>
-
-            <el-alert title="当前示例限制 JPG、PNG、WEBP，单张图片不超过 10MB。上传前会展示预览、尺寸和主色。" type="info" :closable="false" show-icon
-                class="mb-4" />
-
-            <div class="actions">
-                <input ref="imageInputRef" class="hidden-input" type="file" accept="image/jpeg,image/png,image/webp"
-                    @change="handleImageChange">
-                <el-button type="primary" @click="chooseImage">选择图片</el-button>
-                <el-button type="success" :disabled="!selectedImage || uploading" :loading="uploading"
-                    @click="submitImage">
-                    上传图片
-                </el-button>
-                <el-button :disabled="uploading" @click="clearImage">清空</el-button>
-            </div>
-
-            <div class="summary" v-if="selectedImage">
-                <div class="summary-item">
-                    <span class="label">文件名</span>
-                    <span class="value">{{ selectedImage.name }}</span>
-                </div>
-                <div class="summary-item">
-                    <span class="label">文件大小</span>
-                    <span class="value">{{ formatFileSize(selectedImage.size) }}</span>
-                </div>
-                <div class="summary-item">
-                    <span class="label">图片尺寸</span>
-                    <span class="value">{{ imageSizeText }}</span>
-                </div>
-            </div>
-
-            <el-progress v-if="uploading || uploadProgress > 0" :percentage="uploadProgress" :stroke-width="14"
-                class="progress" />
-
-            <el-empty v-if="!selectedImage" description="请选择一张图片" />
-
-            <div v-else class="preview-grid">
-                <div class="preview-card">
-                    <div class="section-title">图片预览</div>
-                    <div class="image-preview-box">
-                        <img :src="previewUrl" :alt="selectedImage.name">
+                    <div class="stat">
+                        <span class="stat__label">文件大小</span>
+                        <span class="stat__value">{{ formatFileSize(selectedImage.size) }}</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat__label">图片尺寸</span>
+                        <span class="stat__value">{{ imageSizeText }}</span>
                     </div>
                 </div>
 
-                <div class="preview-card">
-                    <div class="section-title">分析结果</div>
-                    <div class="color-preview" :style="{ background: dominantColor }"></div>
-                    <div class="meta-list">
-                        <div class="meta-item">
-                            <span class="meta-label">主色值</span>
-                            <span class="meta-value">{{ dominantColor }}</span>
+                <el-progress v-if="uploading || uploadProgress > 0" :percentage="uploadProgress" :stroke-width="10" />
+
+                <el-empty v-if="!selectedImage" description="请选择一张图片" />
+
+                <div v-else class="preview-grid">
+                    <div class="panel preview-card">
+                        <div class="section-title">图片预览</div>
+                        <div class="image-preview-box">
+                            <img :src="previewUrl" :alt="selectedImage.name">
                         </div>
-                        <div class="meta-item">
-                            <span class="meta-label">文件类型</span>
-                            <span class="meta-value">{{ selectedImage.type || 'unknown' }}</span>
-                        </div>
-                        <div class="meta-item">
-                            <span class="meta-label">上传状态</span>
-                            <el-tag :type="statusTagMap[uploadStatus]">
-                                {{ statusTextMap[uploadStatus] }}
-                            </el-tag>
+                    </div>
+
+                    <div class="panel preview-card">
+                        <div class="section-title">分析结果</div>
+                        <div class="color-preview" :style="{ background: dominantColor }"></div>
+                        <div class="meta-list">
+                            <div class="meta-item">
+                                <span class="meta-label">主色值</span>
+                                <span class="meta-value">{{ dominantColor }}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">文件类型</span>
+                                <span class="meta-value">{{ selectedImage.type || 'unknown' }}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">上传状态</span>
+                                <el-tag :type="statusTagMap[uploadStatus]">
+                                    {{ statusTextMap[uploadStatus] }}
+                                </el-tag>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </el-card>
+        </section>
     </div>
 </template>
 
@@ -288,133 +287,89 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped lang="scss">
-.image-upload-page {
-    padding: 24px;
+/* 版式主体来自 design-system.scss 的 .page / .panel / .stat-grid / .btn-row，这里
+   只保留页面私有部分。原先的 padding: 24px 会叠在 .layout_content 的 16px 上变成
+   40px，已移除。 */
+.hidden-input {
+    display: none;
+}
 
-    .page-card {
-        border-radius: 16px;
+.actions {
+    margin: 14px 0;
+}
+
+.preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    margin-top: 14px;
+}
+
+.preview-card {
+    padding: 14px;
+}
+
+.section-title {
+    margin-bottom: 12px;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--text-primary);
+}
+
+/* 图片待填槽位：暗色主题下用最淡的中性面，不再用蓝白渐变。 */
+.image-preview-box {
+    min-height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: var(--surface-muted);
+
+    img {
+        max-width: 100%;
+        max-height: 360px;
+        object-fit: contain;
     }
+}
 
-    .card-header {
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        gap: 16px;
+.color-preview {
+    height: 120px;
+    margin-bottom: 16px;
+    border: 1px solid var(--hairline);
+}
 
-        h2 {
-            margin: 0 0 8px;
-            font-size: 22px;
-            font-weight: 600;
-            color: #1f2937;
-        }
+.meta-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
 
-        p {
-            margin: 0;
-            color: #6b7280;
-            font-size: 14px;
-        }
-    }
+.meta-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--hairline);
+}
 
-    .hidden-input {
-        display: none;
-    }
+.meta-item:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+}
 
-    .actions {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        margin-bottom: 20px;
-    }
+.meta-label {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+}
 
-    .summary {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 12px;
-        margin-bottom: 20px;
-    }
-
-    .summary-item,
-    .preview-card {
-        padding: 14px 16px;
-        border: 1px solid #e5e7eb;
-        border-radius: 12px;
-        background: #f8fafc;
-    }
-
-    .label,
-    .meta-label {
-        display: block;
-        margin-bottom: 6px;
-        font-size: 13px;
-        color: #6b7280;
-    }
-
-    .value,
-    .meta-value {
-        font-size: 15px;
-        font-weight: 600;
-        color: #111827;
-        word-break: break-all;
-    }
-
-    .progress {
-        margin-bottom: 20px;
-    }
-
-    .preview-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 16px;
-    }
-
-    .section-title {
-        margin-bottom: 12px;
-        font-size: 15px;
-        font-weight: 600;
-        color: #111827;
-    }
-
-    .image-preview-box {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 280px;
-        border-radius: 12px;
-        background: linear-gradient(135deg, #eff6ff, #f8fafc);
-        overflow: hidden;
-
-        img {
-            max-width: 100%;
-            max-height: 360px;
-            object-fit: contain;
-        }
-    }
-
-    .color-preview {
-        height: 120px;
-        border-radius: 12px;
-        margin-bottom: 16px;
-        border: 1px solid rgba(15, 23, 42, 0.08);
-    }
-
-    .meta-list {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-    }
-
-    .meta-item {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
-        padding-bottom: 12px;
-        border-bottom: 1px solid #e5e7eb;
-    }
-
-    .meta-item:last-child {
-        padding-bottom: 0;
-        border-bottom: none;
-    }
+.meta-value {
+    font-size: 12px;
+    color: var(--text-primary);
+    font-variant-numeric: tabular-nums;
+    word-break: break-all;
 }
 </style>

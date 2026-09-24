@@ -1,66 +1,65 @@
 <template>
-    <div class="folder-upload-page">
-        <el-card shadow="hover" class="page-card">
-            <template #header>
-                <div class="card-header">
-                    <div>
-                        <h2>文件夹上传示例</h2>
-                        <p>示例接口：`POST /api/files/upload-folder`</p>
+    <div class="page">
+        <section class="panel">
+            <header class="panel__head">
+                <div>
+                    <h2 class="panel__title">文件夹上传示例</h2>
+                    <p class="panel__meta">示例接口：POST /api/files/upload-folder</p>
+                </div>
+                <el-tag type="success">保留目录结构</el-tag>
+            </header>
+
+            <div class="panel__body">
+                <el-alert title="上传时会同时提交文件内容和 webkitRelativePath，后端可以按相对路径还原目录结构。" type="info"
+                    :closable="false" show-icon />
+
+                <div class="btn-row actions">
+                    <input ref="folderInputRef" class="folder-input" type="file" webkitdirectory multiple
+                        @change="handleFolderChange">
+                    <el-button type="primary" @click="chooseFolder">选择文件夹</el-button>
+                    <el-button type="success" :disabled="!selectedFiles.length || uploading" :loading="uploading"
+                        @click="submitFolder">
+                        上传文件夹
+                    </el-button>
+                    <el-button :disabled="uploading" @click="clearSelection">清空</el-button>
+                </div>
+
+                <div class="stat-grid" v-if="selectedFiles.length">
+                    <div class="stat">
+                        <span class="stat__label">文件夹名</span>
+                        <span class="stat__value">{{ folderName }}</span>
                     </div>
-                    <el-tag type="success">保留目录结构</el-tag>
+                    <div class="stat">
+                        <span class="stat__label">文件数量</span>
+                        <span class="stat__value">{{ selectedFiles.length }}</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat__label">总大小</span>
+                        <span class="stat__value">{{ totalSizeText }}</span>
+                    </div>
                 </div>
-            </template>
 
-            <el-alert title="上传时会同时提交文件内容和 webkitRelativePath，后端可以按相对路径还原目录结构。" type="info" :closable="false" show-icon
-                class="mb-4" />
+                <el-progress v-if="uploading || uploadProgress > 0" :percentage="uploadProgress" :stroke-width="10" />
 
-            <div class="actions">
-                <input ref="folderInputRef" class="folder-input" type="file" webkitdirectory multiple
-                    @change="handleFolderChange">
-                <el-button type="primary" @click="chooseFolder">选择文件夹</el-button>
-                <el-button type="success" :disabled="!selectedFiles.length || uploading" :loading="uploading"
-                    @click="submitFolder">
-                    上传文件夹
-                </el-button>
-                <el-button :disabled="uploading" @click="clearSelection">清空</el-button>
+                <el-empty v-if="!selectedFiles.length" description="请选择一个本地文件夹" />
+
+                <el-table v-else :data="selectedFiles" border stripe max-height="460" class="file-table">
+                    <el-table-column type="index" label="#" width="60" align="center" />
+                    <el-table-column prop="name" label="文件名" min-width="220" show-overflow-tooltip />
+                    <el-table-column prop="relativePath" label="相对路径" min-width="320" show-overflow-tooltip />
+                    <el-table-column label="大小" width="120" align="right">
+                        <template #default="{ row }">
+                            {{ formatFileSize(row.size) }}
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="type" label="类型" width="180" show-overflow-tooltip>
+                        <template #default="{ row }">
+                            {{ row.type || 'unknown' }}
+                        </template>
+                    </el-table-column>
+                </el-table>
             </div>
-
-            <div class="summary" v-if="selectedFiles.length">
-                <div class="summary-item">
-                    <span class="label">文件夹名</span>
-                    <span class="value">{{ folderName }}</span>
-                </div>
-                <div class="summary-item">
-                    <span class="label">文件数量</span>
-                    <span class="value">{{ selectedFiles.length }}</span>
-                </div>
-                <div class="summary-item">
-                    <span class="label">总大小</span>
-                    <span class="value">{{ totalSizeText }}</span>
-                </div>
-            </div>
-
-            <el-progress v-if="uploading || uploadProgress > 0" :percentage="uploadProgress" :stroke-width="14"
-                class="progress" />
-
-            <el-empty v-if="!selectedFiles.length" description="请选择一个本地文件夹" />
-
-            <el-table v-else :data="selectedFiles" border stripe max-height="460" class="file-table">
-                <el-table-column type="index" label="#" width="60" align="center" />
-                <el-table-column prop="name" label="文件名" min-width="220" show-overflow-tooltip />
-                <el-table-column prop="relativePath" label="相对路径" min-width="320" show-overflow-tooltip />
-                <el-table-column label="大小" width="120" align="right">
-                    <template #default="{ row }">
-                        {{ formatFileSize(row.size) }}
-                    </template>
-                </el-table-column>
-                <el-table-column prop="type" label="类型" width="180" show-overflow-tooltip>
-                    <template #default="{ row }">
-                        {{ row.type || 'unknown' }}
-                    </template>
-                </el-table-column>
-            </el-table>
-        </el-card>
+        </section>
     </div>
 </template>
 
@@ -200,78 +199,19 @@ const formatFileSize = (size: number = 0): string => {
 </script>
 
 <style scoped lang="scss">
-.folder-upload-page {
-    padding: 24px;
+/* 版式来自 design-system.scss 的 .page / .panel / .stat-grid / .btn-row，这里只
+   保留页面私有项。
+   注意原来这里写的 padding: 24px 会叠在 .layout_content 已有的 16px 上变成 40px
+   —— 这是全项目最普遍的「双 padding」来源，已移除。 */
+.folder-input {
+    display: none;
+}
 
-    .page-card {
-        border-radius: 16px;
-    }
+.actions {
+    margin: 14px 0;
+}
 
-    .card-header {
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        gap: 16px;
-
-        h2 {
-            margin: 0 0 8px;
-            font-size: 22px;
-            font-weight: 600;
-            color: #1f2937;
-        }
-
-        p {
-            margin: 0;
-            color: #6b7280;
-            font-size: 14px;
-        }
-    }
-
-    .folder-input {
-        display: none;
-    }
-
-    .actions {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        margin-bottom: 20px;
-    }
-
-    .summary {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 12px;
-        margin-bottom: 20px;
-    }
-
-    .summary-item {
-        padding: 14px 16px;
-        border: 1px solid #e5e7eb;
-        border-radius: 12px;
-        background: #f8fafc;
-    }
-
-    .label {
-        display: block;
-        margin-bottom: 6px;
-        font-size: 13px;
-        color: #6b7280;
-    }
-
-    .value {
-        font-size: 15px;
-        font-weight: 600;
-        color: #111827;
-        word-break: break-all;
-    }
-
-    .progress {
-        margin-bottom: 20px;
-    }
-
-    .file-table {
-        margin-top: 12px;
-    }
+.file-table {
+    margin-top: 14px;
 }
 </style>

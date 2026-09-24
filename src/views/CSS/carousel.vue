@@ -60,7 +60,7 @@ function updateCarousel() {
 .carousel_warp {
     width: 400px;
     height: 300px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--hairline);
     overflow: hidden;
     position: relative;
     .carousel_list{
@@ -73,23 +73,15 @@ function updateCarousel() {
             width: 100%;
             flex-shrink: 0;
             height: 100%;
-            &:nth-child(1){
-                background-color: #f00;
+            color: var(--text-primary);
+            /* 幻灯片底色是演示内容——没有图片的那几张全靠底色才看得见，不能像普通
+               装饰色那样直接删掉。原来用的是浏览器原色红/绿/蓝/黄，跟主题无关，
+               改成「琥珀淡底 / 中性面」交替：既能分辨相邻两张，又同属一套主题。 */
+            &:nth-child(odd){
+                background-color: var(--brand-soft);
             }
-            &:nth-child(2){
-                background-color: #0f0;
-            }
-            &:nth-child(3){
-                background-color: #00f;
-            }
-            &:nth-child(4){
-                background-color: #ff0;
-            }
-            &:nth-child(5){
-                background-color: #f00;
-            }
-            &:nth-child(6){
-                background-color: #0f0;
+            &:nth-child(even){
+                background-color: var(--surface-raised);
             }
             img{
                 width: 100%;
@@ -104,9 +96,10 @@ function updateCarousel() {
         width: 70px;
         height: 70px;
         border-radius: 50%;
-        background-color: #ccc;
-        color: #fff;
-        border: none;
+        /* 原来是 #ccc 底 + #fff 字，对比度只有 ~1.4:1，字几乎看不见。 */
+        background-color: var(--surface-raised);
+        color: var(--text-primary);
+        border: 1px solid var(--hairline);
         cursor: pointer;
         z-index: 10;
     }

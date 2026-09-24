@@ -351,7 +351,7 @@ onBeforeUnmount(() => {
     height: 100vh;
     display: flex;
     flex-direction: column;
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+    background: var(--app-bg);
     position: relative;
     overflow: hidden;
     
@@ -362,8 +362,7 @@ onBeforeUnmount(() => {
         left: 0;
         right: 0;
         bottom: 0;
-        background: radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.15) 0%, transparent 50%),
-                    radial-gradient(circle at 80% 50%, rgba(118, 75, 162, 0.15) 0%, transparent 50%);
+        background: none;
         pointer-events: none;
     }
 }
@@ -375,23 +374,18 @@ onBeforeUnmount(() => {
     z-index: 10;
     
     h1 {
-        color: white;
-        font-size: 42px;
-        font-weight: 800;
         margin: 0 0 8px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        text-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
-        letter-spacing: 2px;
+        font-size: 20px;
+        font-weight: 500;
+        letter-spacing: 0.1em;
+        color: var(--brand);
     }
     
     .subtitle {
-        color: rgba(255, 255, 255, 0.7);
-        font-size: 14px;
         margin: 0;
-        font-weight: 400;
+        color: var(--text-tertiary);
+        font-size: 12px;
+        letter-spacing: 0.04em;
     }
 }
 
@@ -420,23 +414,23 @@ onBeforeUnmount(() => {
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
-    color: white;
+    color: var(--text-primary);
     z-index: 20;
     
     .spinner {
         width: 48px;
         height: 48px;
         margin: 0 auto 16px;
-        border: 3px solid rgba(255, 255, 255, 0.2);
-        border-top-color: #667eea;
+        border: 2px solid var(--hairline);
+        border-top-color: var(--brand);
         border-radius: 50%;
         animation: spin 0.8s linear infinite;
     }
     
     p {
         margin: 0;
-        font-size: 14px;
-        color: rgba(255, 255, 255, 0.8);
+        font-size: 12px;
+        color: var(--text-tertiary);
     }
 }
 
@@ -455,26 +449,25 @@ onBeforeUnmount(() => {
 }
 
 .control-btn {
-    width: 56px;
-    height: 56px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    border: none;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+    border: 1px solid transparent;
+    background: var(--brand);
+    color: var(--app-bg);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+    transition: background-color var(--transition-fast), border-color var(--transition-fast);
     
     &:hover {
-        transform: scale(1.1);
-        box-shadow: 0 6px 30px rgba(102, 126, 234, 0.6);
+        background: var(--brand-hover);
     }
     
-    &:active {
-        transform: scale(0.95);
+    &:focus-visible {
+        outline: 1px solid var(--brand);
+        outline-offset: 2px;
     }
 }
 
@@ -486,19 +479,18 @@ onBeforeUnmount(() => {
         width: 10px;
         height: 10px;
         border-radius: 50%;
-        background: rgba(255, 255, 255, 0.3);
+        background: var(--hairline-strong);
         cursor: pointer;
-        transition: all 0.3s ease;
+        transition: background-color var(--transition-fast), width var(--transition-fast);
         
         &:hover {
-            background: rgba(255, 255, 255, 0.5);
-            transform: scale(1.2);
+            background: var(--text-tertiary);
         }
         
         &.active {
-            width: 32px;
-            border-radius: 6px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            width: 28px;
+            border-radius: 0;
+            background: var(--brand);
         }
     }
 }

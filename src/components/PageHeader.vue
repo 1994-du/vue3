@@ -48,20 +48,20 @@ defineProps<{
 }
 
 .page-heading__marker {
-    width: 4px;
-    height: 20px;
-    border-radius: 2px;
+    width: 3px;
+    height: 16px;
+    border-radius: 0;
     background: var(--brand);
     flex-shrink: 0;
 }
 
 h1 {
     margin: 0;
-    font-size: 20px;
+    font-size: 13px;
     line-height: 1.3;
-    font-weight: 700;
+    font-weight: 500;
+    letter-spacing: 0.04em;
     color: var(--text-primary);
-    letter-spacing: 0;
 }
 
 .page-heading__actions {
@@ -73,7 +73,7 @@ h1 {
 }
 
 .page-heading__actions :deep(.el-button) {
-    min-height: 36px;
+    min-height: 32px;
 }
 
 .page-heading__actions :deep(.el-button + .el-button) {

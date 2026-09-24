@@ -1,60 +1,84 @@
 <template>
-    <section ref="pageRootRef" class="home-page">
-        <header class="home-page__hero">
-            <div>
-                <span class="home-page__kicker">REPOSITORY PULSE</span>
-                <h1>代码变更</h1>
-                <p>追踪 Knowledge Engine 的最新提交，快速了解工作区正在发生什么。</p>
+    <section class="cockpit">
+        <!-- ticker: commits marquee, the terminal's market tape -->
+        <div v-if="tickerRows.length" class="ticker">
+            <span class="ticker-label">COMMITS</span>
+            <div class="ticker-track">
+                <span v-for="(row, index) in tickerRows" :key="`${row.sha}-${index}`" class="ticker-item">
+                    <span class="ticker-sha">{{ shortSha(row, 7) }}</span>
+                    <span class="commit-type" :data-kind="commitType(row)">{{ commitType(row) }}</span>
+                    <span class="ticker-msg">{{ commitSubject(row) }}</span>
+                    <span class="ticker-time">{{ formatStamp(row) }}</span>
+                </span>
             </div>
-            <div class="home-page__meta">
-                <span class="home-page__branch">{{ branch }}</span>
-                <span class="home-page__sync" :class="{ 'is-loading': isLoading }">
-                    <i aria-hidden="true"></i>
+        </div>
+
+        <header class="cockpit-hero">
+            <div class="cockpit-hero__text">
+                <span class="data-label">REPOSITORY PULSE</span>
+                <h1>代码变更</h1>
+                <p>追踪 Knowledge Engine 的最新提交。每条 commit 按时间倒序铺在等宽列里，琥珀色只留给关键数据。</p>
+            </div>
+            <div class="cockpit-hero__meta">
+                <span class="meta-chip">{{ branch }}</span>
+                <span class="meta-chip" :data-state="isLoading ? 'busy' : 'idle'">
+                    <span class="status-dot" :class="{ 'is-busy': isLoading }"></span>
                     {{ isLoading ? '同步中' : '已连接' }}
                 </span>
             </div>
         </header>
 
-        <div class="home-page__stats" aria-label="提交概览">
-            <div class="home-page__stat">
-                <span>本页提交</span>
-                <strong>{{ tableData.length }}</strong>
+        <div class="stat-grid">
+            <div class="stat-pane">
+                <span class="data-label">本页提交</span>
+                <strong class="data-value">{{ tableData.length }}</strong>
+                <span class="stat-note">per page {{ pageSize }}</span>
             </div>
-            <div class="home-page__stat">
-                <span>当前分支</span>
-                <strong>{{ branch }}</strong>
+            <div class="stat-pane">
+                <span class="data-label">当前分支</span>
+                <strong class="data-value data-value--ink">{{ branch }}</strong>
+                <span class="stat-note">mainline</span>
             </div>
-            <div class="home-page__stat">
-                <span>每页数量</span>
-                <strong>{{ pageSize }}</strong>
+            <div class="stat-pane">
+                <span class="data-label">每页数量</span>
+                <strong class="data-value data-value--ink">{{ pageSize }}</strong>
+                <span class="stat-note">per page</span>
+            </div>
+            <div class="stat-pane">
+                <span class="data-label">上次同步</span>
+                <strong class="data-value data-value--ink">{{ lastSync || '--:--' }}</strong>
+                <span class="stat-note">local time</span>
             </div>
         </div>
 
-        <div class="home-page__table-shell">
-            <div class="home-page__table-heading">
-                <div>
-                    <span class="home-page__section-kicker">RECENT COMMITS</span>
-                    <h2>最近提交</h2>
-                </div>
-                <span class="home-page__table-note">GitHub API</span>
+        <div class="log-pane">
+            <div class="log-head">
+                <span class="log-title">RECENT COMMITS · 最近提交</span>
+                <span class="log-source">SOURCE: api.github.com/repos/1994-du/vue3</span>
             </div>
-            <el-table v-loading="isLoading" :data="tableData" style="width: 100%" border stripe
-                :header-cell-style="{ background: 'var(--surface-subtle)', color: 'var(--text-primary)', fontWeight: 'bold' }"
-                :cell-style="{ color: 'var(--text-secondary)' }" :row-class-name="tableRowClassName">
-                <el-table-column prop="sha" label="SHA" width="300">
+
+            <el-table v-loading="isLoading" :data="tableData" style="width: 100%">
+                <el-table-column label="SHA" width="140">
                     <template #default="{ row }">
-                        <code class="commit-sha">{{ row.sha?.slice(0, 12) }}</code>
+                        <code class="col-sha">{{ shortSha(row, 12) }}</code>
                     </template>
                 </el-table-column>
-                <el-table-column prop="commit.author.name" label="Author" width="150" />
-                <el-table-column prop="commit.message" label="Message" min-width="280" show-overflow-tooltip />
-                <el-table-column prop="commit.author.date" label="Date" width="200">
+                <el-table-column prop="commit.author.name" label="Author" width="130" />
+                <el-table-column label="Message" min-width="320">
                     <template #default="{ row }">
-                        <span class="commit-date">{{ new Date(row.commit.author.date).toLocaleString() }}</span>
+                        <span class="commit-type" :data-kind="commitType(row)">{{ commitType(row) }}</span>
+                        <span class="col-message">{{ commitSubject(row) }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="Date" width="170" align="right">
+                    <template #default="{ row }">
+                        <span class="col-date">{{ formatStamp(row) }}</span>
                     </template>
                 </el-table-column>
             </el-table>
-            <div class="home-page__pagination">
+
+            <div class="log-foot">
+                <span class="log-count">PAGE <span class="log-count__strong">{{ pageNum }}</span> · TOTAL <span class="log-count__strong">100</span></span>
                 <el-pagination :current-page="pageNum" :page-size="pageSize" :total="100" layout="prev, pager, next"
                     @current-change="handlePageChange" />
             </div>
@@ -63,9 +87,17 @@
 </template>
 
 <script setup lang="ts">
-import { inject, onMounted, ref } from 'vue'
-import Axios from 'axios';
+import { computed, inject, onMounted, ref } from 'vue'
+import Axios from 'axios'
 import { breadcrumbKey } from '@/utils/breadcrumb'
+
+interface CommitRow {
+    sha?: string
+    commit?: {
+        message?: string
+        author?: { name?: string; date?: string }
+    }
+}
 
 const breadcrumb = inject(breadcrumbKey)
 
@@ -74,15 +106,43 @@ breadcrumb?.setItems([
     { label: '代码变更' }
 ])
 
-const pageRootRef = ref<HTMLElement | null>(null)
-const tableData = ref<any[]>([])
+const tableData = ref<CommitRow[]>([])
 const pageSize = ref(10)
 const pageNum = ref(1)
 const branch = ref('master')
 const isLoading = ref(false)
+const lastSync = ref('')
 
-const tableRowClassName = (_row: unknown, index: number): string => {
-    return index % 2 === 0 ? 'even-row' : 'odd-row'
+/* 终端行情带要无缝滚动，所以把当前页的提交复制一份接在后面；
+   CSS 动画跑 50% 位移，循环时正好接回起点，中间不会露空。 */
+const tickerRows = computed<CommitRow[]>(() => {
+    if (!tableData.value.length) return []
+    return [...tableData.value, ...tableData.value]
+})
+
+const shortSha = (row: CommitRow, length: number): string => row.sha?.slice(0, length) ?? ''
+
+/* GitHub 的提交信息遵循 conventional commits：`type(scope): subject`。
+   解析出 type 作为彩色芯片，正文只留 subject 一行——终端不做多行折行。 */
+const commitType = (row: CommitRow): string => {
+    const message = row.commit?.message ?? ''
+    const matched = message.match(/^([a-z]+)(\(.+?\))?:/i)
+    return matched ? matched[1].toLowerCase() : 'chore'
+}
+
+const commitSubject = (row: CommitRow): string => {
+    const message = (row.commit?.message ?? '').split('\n')[0]
+    return message.replace(/^([a-z]+)(\(.+?\))?:\s*/i, '')
+}
+
+/* 固定宽度的时间戳：终端的时间列必须定长，否则等宽字体也救不了对齐。 */
+const formatStamp = (row: CommitRow): string => {
+    const raw = row.commit?.author?.date
+    if (!raw) return ''
+    const date = new Date(raw)
+    if (Number.isNaN(date.getTime())) return ''
+    const pad = (value: number): string => String(value).padStart(2, '0')
+    return `${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}`
 }
 
 const handlePageChange = (page: number): void => {
@@ -90,215 +150,306 @@ const handlePageChange = (page: number): void => {
     fetchData()
 }
 
-onMounted(() => {
-    fetchData()
-})
-
-const fetchData = () => {
+const fetchData = (): void => {
     isLoading.value = true
     Axios.get(`https://api.github.com/repos/1994-du/vue3/commits?per_page=${pageSize.value}&page=${pageNum.value}&sha=${branch.value}`)
         .then((res) => {
             tableData.value = res.data
+            const now = new Date()
+            const pad = (value: number): string => String(value).padStart(2, '0')
+            lastSync.value = `${pad(now.getHours())}:${pad(now.getMinutes())}`
         })
         .finally(() => {
             isLoading.value = false
         })
 }
+
+onMounted(() => {
+    fetchData()
+})
 </script>
 
 <style lang="scss" scoped>
-.home-page {
+.cockpit {
     min-height: 100%;
-    padding: clamp(4px, 1vw, 12px);
     color: var(--text-primary);
 }
 
-.home-page__hero {
+/* --------------------------------------------------------------------------
+   Ticker — the market tape
+   ----------------------------------------------------------------------- */
+
+.ticker {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    height: 32px;
+    margin: -16px -16px 16px;
+    padding: 0 16px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--hairline);
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 11px;
+}
+
+.ticker-label {
+    flex-shrink: 0;
+    color: var(--brand);
+    font-weight: 500;
+    letter-spacing: 0.14em;
+}
+
+.ticker-track {
+    display: flex;
+    gap: 32px;
+    animation: ticker-scroll 60s linear infinite;
+}
+
+.ticker-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.ticker-sha {
+    color: var(--brand);
+}
+
+.ticker-msg {
+    color: var(--text-secondary);
+}
+
+.ticker-time {
+    color: var(--text-tertiary);
+}
+
+@keyframes ticker-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ticker-track {
+        animation: none;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   Hero
+   ----------------------------------------------------------------------- */
+
+.cockpit-hero {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
     gap: 24px;
-    padding: 8px 4px 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--hairline);
+    margin-bottom: 16px;
 }
 
-.home-page__kicker,
-.home-page__section-kicker {
-    display: block;
-    color: var(--brand);
-    font-size: 10px;
-    font-weight: 800;
-    letter-spacing: 0.08em;
-}
-
-.home-page__hero h1 {
-    margin: 8px 0 6px;
-    font-size: clamp(24px, 2vw, 34px);
+.cockpit-hero__text h1 {
+    margin: 6px 0 6px;
+    color: var(--text-primary);
+    font-size: 22px;
     line-height: 1.15;
-    letter-spacing: 0;
+    font-weight: 500;
+    letter-spacing: -0.01em;
 }
 
-.home-page__hero p {
-    max-width: 620px;
+.cockpit-hero__text p {
+    max-width: 560px;
     margin: 0;
     color: var(--text-tertiary);
-    font-size: 13px;
+    font-size: 12px;
     line-height: 1.7;
 }
 
-.home-page__meta {
+.cockpit-hero__meta {
     display: flex;
     align-items: center;
-    gap: 9px;
+    gap: 8px;
     flex-shrink: 0;
 }
 
-.home-page__branch,
-.home-page__sync,
-.home-page__table-note {
-    min-height: 28px;
+.meta-chip {
     display: inline-flex;
     align-items: center;
-    gap: 7px;
+    gap: 6px;
+    height: 26px;
     padding: 0 9px;
     color: var(--text-secondary);
     background: var(--surface);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-xs);
+    border: 1px solid var(--hairline);
     font-size: 11px;
-    font-weight: 700;
+    letter-spacing: 0.04em;
 }
 
-.home-page__sync i {
-    width: 6px;
-    height: 6px;
-    display: block;
-    border-radius: 50%;
-    background: var(--success);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--success) 14%, transparent);
-}
+/* --------------------------------------------------------------------------
+   Stat panes — 4-up data grid
+   ----------------------------------------------------------------------- */
 
-.home-page__sync.is-loading i {
-    background: var(--accent);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent);
-}
-
-.home-page__stats {
+.stat-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 10px;
-    margin-bottom: 14px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0;
+    border: 1px solid var(--hairline);
+    margin-bottom: 16px;
 }
 
-.home-page__stat {
-    min-height: 82px;
-    padding: 15px 16px;
+.stat-pane {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    background: var(--surface);
+    gap: 6px;
+    padding: 12px 14px;
+    border-right: 1px solid var(--hairline);
 }
 
-.home-page__stat span {
+.stat-pane:last-child {
+    border-right: 0;
+}
+
+.stat-note {
     color: var(--text-tertiary);
-    font-size: 11px;
-    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.06em;
 }
 
-.home-page__stat strong {
-    color: var(--text-primary);
-    font-size: 22px;
-    line-height: 1;
-}
+/* --------------------------------------------------------------------------
+   Commit log pane
+   ----------------------------------------------------------------------- */
 
-.home-page__table-shell {
-    overflow: hidden;
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
+.log-pane {
+    border: 1px solid var(--hairline);
     background: var(--surface);
-    box-shadow: var(--shadow-sm);
 }
 
-.home-page__table-heading {
-    min-height: 72px;
-    padding: 16px 18px;
+.log-head {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    border-bottom: 1px solid var(--border-color);
+    padding: 10px 14px;
+    background: var(--table-header-bg);
+    border-bottom: 1px solid var(--hairline);
 }
 
-.home-page__table-heading h2 {
-    margin: 5px 0 0;
+.log-title {
     color: var(--text-primary);
-    font-size: 16px;
-    line-height: 1.3;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
 }
 
-.commit-sha {
-    color: var(--brand);
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    font-size: 12px;
-}
-
-.commit-date {
+.log-source {
     color: var(--text-tertiary);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+}
+
+.col-sha {
+    color: var(--brand);
+    font-family: var(--font-mono);
     font-size: 12px;
 }
 
-.home-page__pagination {
-    min-height: 58px;
-    padding: 12px 16px;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    border-top: 1px solid var(--border-color);
-    background: var(--surface-subtle);
+.col-message {
+    color: var(--text-secondary);
 }
 
-@media (max-width: 700px) {
-    .home-page__hero {
+.col-date {
+    color: var(--text-tertiary);
+    font-size: 11px;
+}
+
+.commit-type {
+    display: inline-block;
+    margin-right: 8px;
+    padding: 1px 5px;
+    color: var(--text-tertiary);
+    border: 1px solid var(--hairline);
+    font-size: 10px;
+    letter-spacing: 0.04em;
+}
+
+.commit-type[data-kind='feat'] {
+    color: var(--success);
+    border-color: color-mix(in srgb, var(--success) 42%, transparent);
+}
+
+.commit-type[data-kind='fix'] {
+    color: var(--danger);
+    border-color: color-mix(in srgb, var(--danger) 42%, transparent);
+}
+
+.commit-type[data-kind='refactor'] {
+    color: var(--brand);
+    border-color: color-mix(in srgb, var(--brand) 42%, transparent);
+}
+
+.log-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 10px 14px;
+    background: var(--table-header-bg);
+    border-top: 1px solid var(--hairline);
+}
+
+.log-count {
+    color: var(--text-tertiary);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+}
+
+.log-count__strong {
+    color: var(--text-primary);
+}
+
+/* --------------------------------------------------------------------------
+   Responsive
+   ----------------------------------------------------------------------- */
+
+@media (max-width: 900px) {
+    .stat-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .stat-pane:nth-child(2) {
+        border-right: 0;
+    }
+
+    .stat-pane:nth-child(1),
+    .stat-pane:nth-child(2) {
+        border-bottom: 1px solid var(--hairline);
+    }
+
+    .cockpit-hero {
         align-items: flex-start;
         flex-direction: column;
-        padding-bottom: 18px;
     }
 
-    .home-page__meta {
-        width: 100%;
-    }
-
-    .home-page__stats {
-        gap: 7px;
-    }
-
-    .home-page__stat {
-        min-height: 72px;
-        padding: 12px;
-    }
-
-    .home-page__stat strong {
-        font-size: 18px;
-    }
-
-    .home-page__table-heading {
-        padding: 14px;
+    .log-source {
+        display: none;
     }
 }
 
-@media (max-width: 480px) {
-    .home-page__stats {
+@media (max-width: 560px) {
+    .stat-grid {
         grid-template-columns: 1fr;
     }
 
-    .home-page__stat {
-        min-height: 60px;
-        gap: 8px;
+    .stat-pane {
+        border-right: 0;
+        border-bottom: 1px solid var(--hairline);
     }
 
-    .home-page__table-note {
-        display: none;
+    .stat-pane:last-child {
+        border-bottom: 0;
     }
 }
 </style>

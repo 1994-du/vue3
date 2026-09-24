@@ -23,7 +23,7 @@
         width: 300px;
         aspect-ratio: 16 /9;
         display: block;
-        border-radius: 10px;
+        border-radius: 0;
     }
     &::after{
         content: '';
@@ -32,7 +32,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        border-radius: 10px;
+        border-radius: 0;
         background: url(/img/kenan.png) no-repeat;
         background-size: 100% 100%;
         transform: scaleY(-1);

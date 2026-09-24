@@ -1,5 +1,6 @@
-/* Application shell: floating glass rail, frosted header, open content stage.
-   The ambient field lives on <body>, so the shell itself stays transparent. */
+/* Application shell: a fixed terminal grid. Full-bleed panes, hairline
+   dividers, a flush side rail and a flush header. Nothing floats, nothing
+   frosts, nothing rounds — the shell is a workstation frame, not a card. */
 
 #vue3 {
     width: 100%;
@@ -21,45 +22,35 @@
    ----------------------------------------------------------------------- */
 
 .layout_menu {
-    width: 248px;
+    width: 240px;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
-    margin: 12px 0 12px 12px;
-    padding: 12px 10px;
+    margin: 0;
+    padding: 0;
     color: var(--menu-text-strong);
-    background: var(--glass);
-    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-    border: 1px solid var(--hairline);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-md);
-    transition: width var(--transition-base), transform var(--transition-base);
+    background: var(--surface);
+    border-right: 1px solid var(--hairline);
+    transition: width var(--transition-base);
     z-index: 30;
 }
 
-/* will-change 只给真正会动的元素。顶栏是静止的，给它提升合成层没有收益，
-   反而会让 backdrop-filter 的取景在重绘时整块失效——左上角会闪出一块
-   没被模糊的原始背景（"好像背景的东西"）。侧栏在窄屏下靠 transform 滑入，保留。 */
-.layout_menu {
-    will-change: transform, opacity;
-}
-
 .layout_menu.collapsed {
-    width: 76px;
+    width: 56px;
 }
 
 .layout_menu_logo {
     width: 100%;
-    height: 54px;
-    padding: 0 8px;
+    height: 48px;
+    padding: 0 14px;
     display: flex;
     align-items: center;
-    gap: 11px;
+    gap: 10px;
+    flex-shrink: 0;
     color: inherit;
     background: transparent;
     border: 0;
-    border-radius: var(--radius-sm);
+    border-bottom: 1px solid var(--hairline);
     cursor: pointer;
     text-align: left;
     transition: background-color var(--transition-fast);
@@ -69,34 +60,32 @@
     background: var(--menu-hover);
 }
 
+/* 字标回到「排版」而不是「图形块」：琥珀色的 KE 直接写在上面，不加底、不加圆角、
+   不加发光。终端的身份来自字符本身。 */
 .brand-mark {
-    width: 34px;
-    height: 34px;
-    display: grid;
-    place-items: center;
     flex-shrink: 0;
-    color: #ffffff;
-    background: var(--grad);
-    border-radius: var(--radius-sm);
-    box-shadow: 0 10px 24px -12px rgba(236, 72, 153, 0.9);
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: 0.02em;
+    color: var(--brand);
+    font-family: var(--font-mono);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    line-height: 1;
 }
 
 .brand-copy {
     min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 1px;
 }
 
 .brand-copy strong {
     overflow: hidden;
     color: var(--menu-text-strong);
-    font-size: 14px;
+    font-size: 12px;
     line-height: 1.2;
-    font-weight: 700;
+    font-weight: 500;
+    letter-spacing: 0.04em;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -104,9 +93,9 @@
 .brand-copy small {
     color: var(--menu-text-muted);
     font-family: var(--font-mono);
-    font-size: 10px;
+    font-size: 9px;
     line-height: 1.2;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
 }
 
@@ -115,8 +104,7 @@
     flex: 1;
     overflow-x: hidden;
     overflow-y: auto;
-    margin: 14px -2px 10px 0;
-    padding-right: 2px;
+    padding: 6px 0;
 }
 
 .menu_scroll_container::-webkit-scrollbar,
@@ -127,41 +115,39 @@
 .menu_scroll_container::-webkit-scrollbar-thumb,
 .layout_content::-webkit-scrollbar-thumb {
     background: var(--border-strong);
-    border-radius: var(--radius-pill);
 }
 
 .menu_scroll_container::-webkit-scrollbar-thumb:hover,
 .layout_content::-webkit-scrollbar-thumb:hover {
-    background: color-mix(in srgb, var(--brand) 55%, var(--border-strong));
+    background: var(--brand);
 }
 
+/* 收起按钮 = 底部一条状态栏按键，方角描边，无渐变无光晕 */
 .custome_menu_btn {
     width: 100%;
-    height: 38px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 6px;
     flex-shrink: 0;
     color: var(--menu-text);
-    background: var(--glass);
-    border: 1px solid var(--hairline);
-    border-radius: var(--radius-pill);
+    background: transparent;
+    border: 0;
+    border-top: 1px solid var(--hairline);
     cursor: pointer;
-    transition: color var(--transition-fast), background-color var(--transition-fast),
-        border-color var(--transition-fast), box-shadow var(--transition-fast);
+    transition: color var(--transition-fast), background-color var(--transition-fast);
 }
 
 .custome_menu_btn:hover {
-    color: var(--menu-active-text);
-    background: var(--grad-soft);
-    border-color: color-mix(in srgb, var(--brand) 45%, var(--hairline));
-    box-shadow: 0 12px 28px -16px rgba(124, 58, 237, 0.8);
+    color: var(--brand);
+    background: var(--surface-muted);
 }
 
 .custome_menu_btn span {
-    font-size: 12px;
-    font-weight: 600;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
 }
 
 /* --------------------------------------------------------------------------
@@ -174,32 +160,22 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    /* Mirror the rail's 12px gutter on the left too, otherwise the header's
-       rounded corner butts straight into the rail's and reads as one seam. */
-    padding: 12px;
+    padding: 0;
     background: transparent;
 }
 
-/* 顶栏不再用近乎透明的 --glass。它背后只有静态底色 + 左上角那团极光，
-   5% 白 + backdrop-filter 等于给这团光开了扇窗：标题左边会浮出一块
-   "像背景"的亮斑（实测左角 rgb(67,42,118) vs 中部 rgb(56,28,65)），
-   顺带把侧栏 --shadow-md 的暗角也一起透上来。
-   给足自身底色后，顶栏是一条均匀的磨砂条，两种主题下都成立
-   （亮色 --surface-raised 是 #fff → 0.82 白，暗色是 #141733）。 */
+/* 顶栏是一条 `chrome`，不是一张卡片：全宽、贴边、靠下 hairline 与内容分行。
+   标题降回 13px —— 终端不给页面标题留 20px 的排场，当前路由只是状态行的一部分。 */
 .topbar {
-    height: 64px;
+    height: 48px;
     padding: 0 16px;
     flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 20px;
-    background: color-mix(in srgb, var(--surface-raised) 82%, transparent);
-    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-    border: 1px solid var(--hairline);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
+    background: var(--surface);
+    border-bottom: 1px solid var(--hairline);
 }
 
 .header_left,
@@ -217,9 +193,6 @@
     gap: 8px;
 }
 
-/* 顶栏是全局唯一的页面标题位。这里只放页面名，一个 20px 的标题就够了——
-   以前主标题前面还挂过一枚"所属分组"胶囊（CSS），那东西有描边和底色、看着像按钮，
-   又和侧栏高亮 + 页内大标题三处重复，已去掉。 */
 .route-heading {
     min-width: 0;
     display: flex;
@@ -231,10 +204,10 @@
     min-width: 0;
     overflow: hidden;
     color: var(--text-primary);
-    font-size: 20px;
-    line-height: 1.25;
-    font-weight: 700;
-    letter-spacing: -0.01em;
+    font-size: 13px;
+    line-height: 1.3;
+    font-weight: 500;
+    letter-spacing: 0.04em;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -252,72 +225,68 @@
 }
 
 .mobile-menu-button {
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
     place-items: center;
-    background: var(--glass);
+    background: transparent;
     border: 1px solid var(--hairline);
-    border-radius: var(--radius-pill);
 }
 
 .topbar-divider {
     width: 1px;
-    height: 24px;
+    height: 20px;
     margin: 0 2px;
     background: var(--hairline);
 }
 
 .user-trigger {
-    height: 44px;
-    padding: 0 8px 0 6px;
+    height: 32px;
+    padding: 0 6px;
     display: flex;
     align-items: center;
-    gap: 9px;
+    gap: 8px;
     border: 1px solid transparent;
-    border-radius: var(--radius-pill);
     transition: background-color var(--transition-fast), border-color var(--transition-fast);
 }
 
 .user-trigger:hover {
-    background: var(--glass);
+    background: var(--surface-muted);
     border-color: var(--hairline);
 }
 
-/* 头像只保留渐变填充，不加发光/描边。
-   之前这里是 box-shadow: 0 0 0 2px rgba(255,255,255,.12), 0 10px 22px -12px rgba(236,72,153,.9)，
-   在暗色顶栏上圈出一层白边和一团粉色光晕，看起来像头像浮着一块脏阴影；
-   头像本身有渐变底和 34px 的圆形轮廓，已经足够和底色区分。 */
 .user-trigger .el-avatar {
     flex-shrink: 0;
-    color: #ffffff;
-    background: var(--grad);
-    font-size: 13px;
-    font-weight: 800;
+    color: var(--app-bg);
+    background: var(--brand);
+    font-size: 12px;
+    font-weight: 600;
 }
 
 .user-copy {
-    min-width: 88px;
+    min-width: 84px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 1px;
+    gap: 0;
 }
 
 .user-copy strong {
     max-width: 128px;
     overflow: hidden;
     color: var(--text-primary);
-    font-size: 13px;
+    font-size: 12px;
     line-height: 1.3;
-    font-weight: 700;
+    font-weight: 500;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
 .user-copy small {
     color: var(--text-tertiary);
-    font-size: 10px;
+    font-size: 9px;
     line-height: 1.3;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
 }
 
 .user-chevron {
@@ -330,14 +299,13 @@
     flex: 1;
     overflow-x: hidden;
     overflow-y: auto;
-    padding: 14px 4px 4px;
+    padding: 16px;
     text-align: left;
 }
 
 .route-stage {
     width: 100%;
-    height: 100%;
-    overflow: hidden;
+    min-height: 100%;
 }
 
 .menu-overlay {
@@ -352,11 +320,9 @@
     .layout_menu,
     .layout_menu.collapsed {
         position: fixed;
-        inset: 12px auto 12px 12px;
-        width: min(82vw, 280px);
-        margin: 0;
-        transform: translateX(calc(-100% - 24px));
-        box-shadow: var(--shadow-lg);
+        inset: 0 auto 0 0;
+        width: min(82vw, 260px);
+        transform: translateX(-100%);
     }
 
     .layout_menu.mobile-open {
@@ -374,8 +340,6 @@
         display: block;
         padding: 0;
         background: var(--veil);
-        backdrop-filter: blur(4px);
-        -webkit-backdrop-filter: blur(4px);
         border: 0;
         z-index: 20;
     }
@@ -388,12 +352,8 @@
         display: none;
     }
 
-    .layout_container {
-        padding: 12px;
-    }
-
     .layout_content {
-        padding: 12px 4px 4px;
+        padding: 12px;
     }
 }
 
@@ -410,13 +370,5 @@
 
     .user-trigger {
         padding: 0 2px;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .layout_menu,
-    .topbar,
-    .route-stage {
-        will-change: auto;
     }
 }

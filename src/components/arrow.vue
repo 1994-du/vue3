@@ -41,10 +41,10 @@ defineProps({
     line-height: 25px;
     position: relative;
     /* padding: 10px 24px; */
-    background-color: #f3f3ff;
-    color: #4c6ef5;
+    background-color: var(--surface-muted);
+    color: var(--text-secondary);
     font-size: 12px;
-    font-weight: bold;
+    font-weight: 500;
     clip-path: polygon(
         0 0,
         calc(100% - 12px) 0,
@@ -54,12 +54,12 @@ defineProps({
         12px 50%
     );
     margin-right: 10px;
-    transition: background-color 0.3s, color 0.3s;
+    transition: background-color var(--transition-fast), color var(--transition-fast);
 }
 
 .step.active {
-  background-color: #4c6ef5;
-  color: white;
+  background-color: var(--brand);
+  color: var(--app-bg);
 }
 /* 第一个步骤：左侧圆角 + 右箭头 */
 .step.first {
@@ -71,8 +71,8 @@ defineProps({
     0% 100%,
     0% 50%
   );
-  border-top-left-radius: 16px;
-  border-bottom-left-radius: 16px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }
 
 /* 最后一个步骤：左箭头 + 右侧圆角 */
@@ -84,8 +84,8 @@ defineProps({
     0% 100%,
     12px 50%
   );
-  border-top-right-radius: 16px;
-  border-bottom-right-radius: 16px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
   margin-right: 0;
 }
 </style>

@@ -39,18 +39,21 @@
 </script>
   
 <style lang="scss" scoped>
+  /* 代码块本来就是终端语汇，接回 token 即可：底取地面色、字取主文色、方角，
+     外面补一圈 hairline 让它和页面有明确边界。 */
   .codepre {
-    font-family: monospace;
+    font-family: inherit;
     white-space: pre-wrap; /* 保留换行和缩进 */
-    background-color:black;
+    background-color: var(--app-bg);
+    border: 1px solid var(--hairline);
     padding: 16px;
-    border-radius: 4px;
-    color: #333;
+    border-radius: 0;
+    color: var(--text-secondary);
     pre {
         display: block; /* 使每个 <pre> 元素保持为内联 */
         margin: 0;
-        background: black;
-        color: white;
+        background: transparent;
+        color: var(--text-primary);
     }
   }
 </style>

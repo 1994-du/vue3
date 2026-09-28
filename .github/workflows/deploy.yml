@@ -8,8 +8,9 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    # 部署总时长保险丝：历史正常全程 ~1 分钟，超过 15 分钟必定是传输卡死
-    timeout-minutes: 15
+    # 部署总时长保险丝：上传步基线约 17.5 分钟（海外 runner → 国内服务器
+    # 链路吞吐只有几 KB/s），设 30 分钟：真死锁会失败退出，正常慢传输能跑完
+    timeout-minutes: 30
     # 同组并发：新 push 触发的运行会自动取消还在挂着的旧运行，
     # 避免一次传输停滞把后续部署全堵在队列里
     concurrency:

@@ -8,8 +8,8 @@
 #    创建的主机组 ID（默认示例值 gitee-go 需替换）
 #
 # 部署目录写死在 script 里的 /var/www/html/Vue3，换机器改那里即可。
-# 排错提示：若 Gitee 提示 Node 版本不合法，在网页「任务编排」里重选版本号，
-# 网页保存后会自动回写本文件。
+# 排错提示：构建步骤自带 Node 安装（npmmirror 镜像），与平台 nodeVersion 无关；
+# 若流水线失败，先看「Node.js 构建」任务日志里 node -v / npm -v 是否正常输出。
 # ──────────────────────────────────────────────────────────────────────────
 
 version: '1.0'
@@ -33,8 +33,18 @@ stages:
       - step: build@nodejs
         name: build_nodejs
         displayName: Node.js 构建
+        # nodeVersion 写大版本号（如 '20'）会导致平台工具供应失败、npm 不在 PATH，
+        # 所以下面第一条命令直接自装 Node 20（npmmirror 镜像），不依赖平台预装
         nodeVersion: '20'
         commands:
+          # ── 自装 Node 20（构建机为 linux-x64；换 arm64 需改包名）────────
+          - export NODE_DIR=$HOME/node20 && mkdir -p $NODE_DIR
+          - >-
+            curl -fsSL
+            https://registry.npmmirror.com/-/binary/node/v20.18.1/node-v20.18.1-linux-x64.tar.gz
+            | tar -xz -C $NODE_DIR --strip-components=1
+          - export PATH=$NODE_DIR/bin:$PATH && node -v && npm -v
+          # ── 构建 ──────────────────────────────────────────────
           # 使用国内镜像源，避免 Gitee 构建机访问官方源超时
           - npm config set registry https://registry.npmmirror.com
           - npm ci

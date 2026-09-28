@@ -775,6 +775,9 @@ select:focus-visible {
     border: 1px solid var(--hairline-strong) !important;
     border-radius: 0 !important;
     background: var(--surface-raised) !important;
+    /* is-dark tooltip 的文字色取 var(--el-bg-color)，暗色下是深色 → 深底深字。
+       必须在这里接管，否则菜单管理等页的 tooltip 全部不可读 */
+    color: var(--text-primary) !important;
     box-shadow: none !important;
 }
 

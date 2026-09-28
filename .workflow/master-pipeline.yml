@@ -1,0 +1,77 @@
+# Gitee Go 流水线：master 分支推送后自动构建并部署到服务器
+#
+# ── 启用前必须在 Gitee 网页完成三步（本文件的 YAML 无法代办）──────────────
+# 1. 开通：进入仓库 → 「流水线」→ 开通 Gitee Go（免费，需绑定手机号）
+# 2. 添加主机：Gitee 右上角「企业/个人管理」→ 资源管理 → 主机管理，
+#    添加部署服务器（IP、SSH 端口、登录用户名）；凭证管理里添加 SSH 私钥
+# 3. 改 hostGroupID：把下面「主机部署」步骤的 hostGroupID 改成你在第 2 步
+#    创建的主机组 ID（默认示例值 gitee-go 需替换）
+#
+# 部署目录写死在 script 里的 /var/www/html/Vue3，换机器改那里即可。
+# 排错提示：若 Gitee 提示 Node 版本不合法，在网页「任务编排」里重选版本号，
+# 网页保存后会自动回写本文件。
+# ──────────────────────────────────────────────────────────────────────────
+
+version: '1.0'
+name: vue3-master-deploy
+displayName: Vue3 构建部署
+
+triggers:
+  trigger: auto
+  push:
+    branches:
+      precise:
+        - master
+
+stages:
+  - name: stage-build
+    displayName: 编译
+    strategy: naturally
+    trigger: auto
+    executor: []
+    steps:
+      - step: build@nodejs
+        name: build_nodejs
+        displayName: Node.js 构建
+        nodeVersion: '20'
+        commands:
+          # 使用国内镜像源，避免 Gitee 构建机访问官方源超时
+          - npm config set registry https://registry.npmmirror.com
+          - npm ci
+          # 类型检查：本地 vite build 不查类型，这一关只在 CI 里跑
+          - npm run typecheck
+          - npm run build
+        artifacts:
+          - name: BUILD_ARTIFACT
+            path:
+              - ./dist
+        caches:
+          - ~/.npm
+        notify: []
+        strategy:
+          retry: '0'
+
+  - name: stage-deploy
+    displayName: 部署
+    strategy: naturally
+    trigger: auto
+    executor: []
+    steps:
+      - step: deploy@agent
+        name: deploy_agent
+        displayName: 主机部署
+        # ↓↓↓ 改成你自己的主机组 ID ↓↓↓
+        hostGroupID: gitee-go
+        deployArtifact:
+          # source: build —— 直接取上游构建产出，不用先发版到制品库
+          - source: build
+            name: output
+            target: ~/gitee_go/deploy
+            dependArtifact: BUILD_ARTIFACT
+        script: |
+          set -e
+          mkdir -p /var/www/html/Vue3
+          rm -rf /var/www/html/Vue3/*
+          # 产物包内顶层是 dist/，strip-components=1 去掉这一层
+          tar -zxf ~/gitee_go/deploy/output.tar.gz -C /var/www/html/Vue3 --strip-components=1
+          echo "deployed at $(date)"

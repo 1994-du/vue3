@@ -70,8 +70,8 @@ stages:
       - step: deploy@agent
         name: deploy_agent
         displayName: 主机部署
-        # 主机组「aliyun」的数字 ID（agent 注册命令里的 labelId）
-        hostGroupID: '27766'
+        # 主机组「aliyun」
+        hostGroupID: 'aliyun'
         deployArtifact:
           # source: build —— 直接取上游构建产出，不用先发版到制品库
           - source: build

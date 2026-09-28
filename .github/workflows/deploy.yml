@@ -8,6 +8,13 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    # 部署总时长保险丝：历史正常全程 ~1 分钟，超过 15 分钟必定是传输卡死
+    timeout-minutes: 15
+    # 同组并发：新 push 触发的运行会自动取消还在挂着的旧运行，
+    # 避免一次传输停滞把后续部署全堵在队列里
+    concurrency:
+      group: deploy-vue3
+      cancel-in-progress: true
 
     steps:
       - name: 拉取代码
@@ -40,3 +47,5 @@ jobs:
           source: "dist/*"
           target: "/var/www/html/Vue3"
           strip_components: 1
+          # SSH 连接/握手超时：连不上或中途停滞 60s 就报错退出，不再无限挂起
+          timeout: 60s

@@ -1230,6 +1230,240 @@ html:root .dx_button_danger {
 }
 
 /* ============================================================================
+   文档页通用零件（WebWorker 页先落地，其余 Js / Vue3 / Http 页复用同一套）
+   —— 这些原本写在各页 <style scoped> 里，逐页复制会漂移，提到全局。
+   ========================================================================== */
+
+/* panel__head 是 space-between，标题和副标题各占一端；head-group 把
+   kicker 与标题竖着叠起来放在左端。 */
+.head-group {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+}
+
+/* 概念区正文 */
+.intro__text {
+    margin: 0 0 14px;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    max-width: 860px;
+}
+
+.intro__text code {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--brand);
+    background: var(--brand-soft);
+    padding: 1px 6px;
+}
+
+.intro__text em {
+    font-style: normal;
+    color: var(--brand);
+}
+
+/* 要点卡：左侧 monospace 短标签 + 右侧说明，auto-fit 自动换行 */
+.intro__points {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 10px;
+}
+
+.point {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    border: 1px solid var(--hairline);
+    background: var(--surface-subtle);
+    padding: 10px 12px;
+}
+
+.point__k {
+    flex: none;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--brand);
+    border-right: 1px solid var(--hairline);
+    padding-right: 10px;
+}
+
+.point__v {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* 控制行：标签 + 一组按钮 + 提示语 */
+.w-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.w-label {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-tertiary);
+}
+
+.w-btns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* 直角终端键：默认描边，悬停/选中走品牌色 */
+.w-btn {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-secondary);
+    background: transparent;
+    border: 1px solid var(--hairline);
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+
+.w-btn:hover:not(:disabled) {
+    color: var(--brand);
+    border-color: var(--brand);
+}
+
+.w-btn.is-active {
+    color: var(--brand);
+    border-color: var(--brand);
+    background: var(--brand-soft);
+}
+
+.w-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.w-hint {
+    font-size: 12px;
+    color: var(--text-tertiary);
+}
+
+/* 实验卡网格 */
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 12px;
+}
+
+.card {
+    border: 1px solid var(--hairline);
+    background: var(--surface-raised);
+    padding: 14px;
+}
+
+.card__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.card__title {
+    margin: 0;
+    font-size: 14px;
+    color: var(--text-primary);
+}
+
+.card__tag {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    padding: 2px 8px;
+    border: 1px solid var(--hairline);
+    color: var(--text-tertiary);
+}
+
+.card__tag.is-bad {
+    color: var(--danger);
+    border-color: var(--danger);
+}
+
+.card__tag.is-good {
+    color: var(--success);
+    border-color: var(--success);
+}
+
+.card__desc {
+    margin: 0 0 12px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+}
+
+.card__btn {
+    width: 100%;
+    padding: 9px 12px;
+    margin-bottom: 12px;
+}
+
+/* 键值结果行 */
+.res-row {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    font-size: 12px;
+}
+
+.res-k {
+    flex: none;
+    width: 40px;
+    color: var(--text-tertiary);
+}
+
+.res-v {
+    color: var(--text-secondary);
+}
+
+.res-v.mono {
+    font-family: var(--font-mono);
+    color: var(--text-primary);
+}
+
+.res-v.is-warn {
+    color: var(--warning);
+}
+
+.res-v.is-ok {
+    color: var(--success);
+}
+
+.res-v.is-bad {
+    color: var(--danger);
+}
+
+/* 代码块标题 + 编辑器容器 */
+.code-block {
+    margin-bottom: 16px;
+}
+
+.code-block:last-child {
+    margin-bottom: 0;
+}
+
+.code-block__label {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-tertiary);
+    margin-bottom: 6px;
+}
+
+/* 等宽数据格 / 小型徽标 */
+.mono {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+}
+
+/* ============================================================================
    Responsive
    ========================================================================== */
 

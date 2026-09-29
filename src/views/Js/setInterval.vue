@@ -1,50 +1,397 @@
 <template>
-  <div class="setInterval">
-    <h4>为啥setInterval不精确</h4>
-    <code>
-        <pre>1. 事件循环和执行栈</pre>
-        <pre>JavaScript 是单线程的，这意味着它只有一个线程来执行代码。如果某个任务已经在执行，新的定时任务就必须等待，直到当前任务执行完毕。因此，即使设置了定时器，也可能由于任务的阻塞或执行栈的压满，导致定时器的回调被延迟执行。
-•例如：如果在 setInterval 调用的时间点有其他长时间运行的操作（比如计算密集型的循环），setInterval 回调会被推迟。</pre>
-        <pre>2. 定时器的最小精度</pre>
-        <pre>浏览器对定时器的精度有一定的限制。在现代浏览器中，定时器的最小精度通常是 4ms（以前有的浏览器更长，通常为 10ms 或更长）。这意味着即使你设置了 setInterval 的时间间隔为 1ms，实际上可能会间隔 4ms 或更长。
-•浏览器的优化：为防止大量频繁调用回调函数对性能造成影响，浏览器会进行优化。例如，当多个定时器的时间间隔非常短时，浏览器会合并它们，减少回调调用的频率</pre>
-        <pre>3. 任务延迟</pre>
-        <pre>setInterval 在每次间隔到达时会把回调函数放入事件队列（event queue）中，事件队列的执行取决于当前执行栈是否空闲。如果当前栈中的任务比较多，或者浏览器在进行重绘、重排等渲染任务时，定时器的回调会被推迟。
-•例如：如果你每秒钟请求一次网络数据，而在每个请求回调的同时浏览器进行页面渲染或者其他计算，定时器的执行会受到影响，导致间隔变长。</pre>
-    </code>
-    <h1>如何实现精确的setInterval</h1>
-    <code>
-        <pre>1. 使用 requestAnimationFrame</pre>
-        <pre>对于需要精确控制执行间隔的场景，requestAnimationFrame 是一个比 setInterval 更为精确的选择。
-它会根据浏览器的重绘周期来调度回调函数，使得回调函数的执行时机更加精确。requestAnimationFrame 主要用于动画帧的更新，但也可以用于周期性任务。</pre>
-        <pre>2. 使用 Date.now() 或 performance.now()</pre>
-        <pre>可以结合 Date.now() 或 performance.now() 来手动计算回调之间的时间差，从而确保任务按照预期的时间间隔执行：</pre>
-    </code>
-    <code>
-        <pre>function preciseInterval(callback, interval) {</pre>
-        <pre>   let lastTime = Date.now();</pre>
-        <pre>   function loop() {</pre>
-        <pre>       let now = Date.now();</pre>
-        <pre>       let delta = now - lastTime;</pre>
-        <pre>       if (delta >= interval) {</pre>
-        <pre>           callback();</pre>
-        <pre>           lastTime = now - (delta % interval);  // 确保精确的间隔</pre>
-        <pre>       }</pre>
-        <pre>       requestAnimationFrame(loop);</pre>
-        <pre>   }</pre>
-        <pre>   loop();</pre>
-        <pre>}</pre>
-        <pre>preciseInterval(() => {</pre>
-        <pre>   console.log('执行');</pre>
-        <pre>}, 1000); // 每隔 1000ms 执行一次</pre>
-    </code>
-  </div>
+    <div class="page">
+        <!-- ① 概念 -->
+        <section class="panel">
+            <div class="panel__head">
+                <div class="head-group">
+                    <span class="kicker">setInterval</span>
+                    <h2 class="panel__title">定时器从来就不是「精确」的意思</h2>
+                </div>
+                <span class="panel__meta">它只是「尽快插队」，且误差会累积</span>
+            </div>
+            <div class="panel__body">
+                <p class="intro__text">
+                    <code>setInterval(fn, 100)</code> 并不是每 100ms 执行一次 fn，
+                    它的真实含义是：<em>每隔 100ms 把 fn 塞进任务队列</em>。
+                    主线程要是正忙着，回调就得排队等着；浏览器还有最小值限制（嵌套超过 5 层后通常至少 4ms），
+                    后台标签页甚至会被压到 1 秒以上。更糟的是 <strong>误差会累积</strong>。
+                </p>
+                <div class="intro__points">
+                    <div class="point">
+                        <span class="point__k">排队</span>
+                        <span class="point__v">回调入队后要等调用栈空出来，同步阻塞会让它迟到</span>
+                    </div>
+                    <div class="point">
+                        <span class="point__k">最小间隔</span>
+                        <span class="point__v">嵌套 5 层以上多为 ≥4ms；后台标签页会被限流</span>
+                    </div>
+                    <div class="point">
+                        <span class="point__k">累积</span>
+                        <span class="point__v">按「上次结束 + 间隔」排程，误差会不断往后滚雪球</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ② 漂移实验 -->
+        <section class="panel">
+            <div class="panel__head">
+                <div class="head-group">
+                    <span class="kicker">Experiment</span>
+                    <h2 class="panel__title">原生 vs 自纠偏，同时开跑</h2>
+                </div>
+                <span class="panel__meta">设定间隔 {{ interval }} ms，柱子代表实际偏差</span>
+            </div>
+            <div class="panel__body">
+                <div class="w-row">
+                    <span class="w-label">间隔</span>
+                    <div class="w-btns">
+                        <button
+                            v-for="d in DELAYS"
+                            :key="d"
+                            type="button"
+                            class="w-btn"
+                            :class="{ 'is-active': interval === d }"
+                            :disabled="running"
+                            @click="interval = d">
+                            {{ d }} ms
+                        </button>
+                    </div>
+                </div>
+
+                <div class="w-row">
+                    <div class="w-btns">
+                        <button type="button" class="w-btn" :class="{ 'is-active': running }" @click="toggle">
+                            {{ running ? '停止' : '开始' }}
+                        </button>
+                        <button type="button" class="w-btn" @click="blockMain">制造 400ms 卡顿</button>
+                        <button type="button" class="w-btn" @click="clear">清空数据</button>
+                    </div>
+                    <span class="w-hint">卡顿会直接顶出一个大偏差，肉眼可见</span>
+                </div>
+
+                <div class="stat-grid iv-stats">
+                    <div class="stat">
+                        <span class="stat__label">原生次数</span>
+                        <span class="stat__value">{{ nativeTicks.length }}</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat__label">原生平均偏差</span>
+                        <span class="stat__value is-bad">{{ avgNative }} ms</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat__label">自纠偏次数</span>
+                        <span class="stat__value">{{ fixedTicks.length }}</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat__label">自纠偏平均偏差</span>
+                        <span class="stat__value is-ok">{{ avgFixed }} ms</span>
+                    </div>
+                </div>
+
+                <div class="charts">
+                    <div class="chart">
+                        <div class="chart__head">
+                            <span class="chart__name">setInterval</span>
+                            <span class="chart__meta mono">最大 {{ maxNative }} ms</span>
+                        </div>
+                        <div class="chart__body">
+                            <span
+                                v-for="(t, i) in nativeTicks"
+                                :key="`n-${i}`"
+                                class="bar bar--native"
+                                :class="{ 'is-late': t - interval > 20 }"
+                                :style="{ height: barHeight(t) + 'px' }">
+                            </span>
+                            <span v-if="!nativeTicks.length" class="queue__empty">尚未采集</span>
+                        </div>
+                    </div>
+
+                    <div class="chart">
+                        <div class="chart__head">
+                            <span class="chart__name">自纠偏 setTimeout</span>
+                            <span class="chart__meta mono">最大 {{ maxFixed }} ms</span>
+                        </div>
+                        <div class="chart__body">
+                            <span
+                                v-for="(t, i) in fixedTicks"
+                                :key="`f-${i}`"
+                                class="bar bar--fixed"
+                                :class="{ 'is-late': t - interval > 20 }"
+                                :style="{ height: barHeight(t) + 'px' }">
+                            </span>
+                            <span v-if="!fixedTicks.length" class="queue__empty">尚未采集</span>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="iv-tip">
+                    柱子的高度 = 实际间隔相对设定值的偏差。左边会越跑越歪（误差累积），
+                    右边每次都用「目标时刻」重新校准，歪了也能拉回来。
+                </p>
+            </div>
+        </section>
+
+        <!-- ③ 源码 -->
+        <section class="panel">
+            <div class="panel__head">
+                <div class="head-group">
+                    <span class="kicker">Source</span>
+                    <h2 class="panel__title">两种靠谱一点的写法</h2>
+                </div>
+                <span class="panel__meta">动画用 rAF，周期任务用自纠偏 setTimeout</span>
+            </div>
+            <div class="panel__body">
+                <div class="code-block">
+                    <div class="code-block__label">自纠偏 setTimeout · 右边那张图就是它在跑</div>
+                    <CodeEditor :code="fixCode" />
+                </div>
+                <div class="code-block">
+                    <div class="code-block__label">配合 requestAnimationFrame 做动画计时</div>
+                    <CodeEditor :code="rafCode" />
+                </div>
+            </div>
+        </section>
+    </div>
 </template>
-<script setup lang="ts">
+
+<script lang="ts" setup>
+import { type Ref, computed, onBeforeUnmount, ref, watch } from 'vue'
+
+const DELAYS = [100, 500, 1000] as const
+const MAX_KEEP = 48
+
+const interval = ref<number>(500)
+const running = ref(false)
+const nativeTicks = ref<number[]>([])
+const fixedTicks = ref<number[]>([])
+
+let nativeId: ReturnType<typeof setInterval> | null = null
+let fixedId: ReturnType<typeof setTimeout> | null = null
+let nativeLast = 0
+let fixedTarget = 0
+
+function push(list: Ref<number[]>, ms: number) {
+    list.value = [...list.value, ms].slice(-MAX_KEEP)
+}
+
+const avgOf = (list: number[]) =>
+    list.length ? Math.round(list.reduce((sum, v) => sum + v, 0) / list.length - interval.value) : 0
+const maxOf = (list: number[]) => (list.length ? Math.max(...list) - interval.value : 0)
+
+const avgNative = computed(() => avgOf(nativeTicks.value))
+const avgFixed = computed(() => avgOf(fixedTicks.value))
+const maxNative = computed(() => maxOf(nativeTicks.value))
+const maxFixed = computed(() => maxOf(fixedTicks.value))
+
+function barHeight(actual: number) {
+    const drift = Math.abs(actual - interval.value)
+    return Math.min(48, Math.max(3, Math.round((drift / interval.value) * 48)))
+}
+
+function start() {
+    stopTimers()
+    running.value = true
+
+    // ① 原生：每次排程 1000ms 后入队，误差会被下一次继承
+    nativeLast = performance.now()
+    nativeId = setInterval(() => {
+        const now = performance.now()
+        push(nativeTicks, Math.round(now - nativeLast))
+        nativeLast = now
+    }, interval.value)
+
+    // ② 自纠偏：始终算「下一个该触发的绝对时刻」，歪了能拉回来
+    fixedTarget = performance.now() + interval.value
+    const loop = () => {
+        const now = performance.now()
+        const prevTarget = fixedTarget
+        push(fixedTicks, Math.round(now - (prevTarget - interval.value)))
+        fixedTarget += interval.value
+        // 万一落后太多（比如切走了标签页），直接跳到现在，别追补一堆
+        if (fixedTarget < now) fixedTarget = now + interval.value
+        fixedId = setTimeout(loop, Math.max(0, fixedTarget - performance.now()))
+    }
+    fixedId = setTimeout(loop, interval.value)
+}
+
+function stopTimers() {
+    if (nativeId) clearInterval(nativeId)
+    if (fixedId) clearTimeout(fixedId)
+    nativeId = null
+    fixedId = null
+}
+
+function toggle() {
+    if (running.value) {
+        stopTimers()
+        running.value = false
+        return
+    }
+    clear()
+    start()
+}
+
+function clear() {
+    nativeTicks.value = []
+    fixedTicks.value = []
+}
+
+function blockMain() {
+    // 同步忙等，模拟一次长时间计算把主线程占住
+    const until = performance.now() + 400
+    while (performance.now() < until) {
+        /* 故意卡住主线程 */
+    }
+}
+
+watch(interval, () => {
+    const wasRunning = running.value
+    stopTimers()
+    running.value = false
+    clear()
+    if (wasRunning) start()
+})
+
+onBeforeUnmount(stopTimers)
+
+/* ── 展示用源码 ───────────────────────────────────────── */
+const fixCode = `// 自纠偏：每次都按「计划中的绝对时刻」排下一次
+function preciseInterval(callback, interval) {
+  let target = Date.now() + interval
+  let timer = null
+  let stopped = false
+
+  const tick = () => {
+    if (stopped) return
+    callback()
+
+    target += interval
+    const now = Date.now()
+    // 落后太多就丢掉累积的欠账，重新对表
+    if (target < now) target = now + interval
+
+    timer = setTimeout(tick, Math.max(0, target - Date.now()))
+  }
+
+  timer = setTimeout(tick, interval)
+  return () => { stopped = true; clearTimeout(timer) }
+}
+
+const stop = preciseInterval(() => {
+  console.log('准点执行', Date.now())
+}, 1000)
+
+// 不用了记得停
+stop()`
+
+const rafCode = `// 动画计时：跟着屏幕刷新率走，比任何定时器都准
+function tickEveryFrame(callback) {
+  let start = performance.now()
+  let raf = 0
+
+  const loop = (now) => {
+    callback(now - start)      // 传进来的 elapsed 才是真实经过的时间
+    raf = requestAnimationFrame(loop)
+  }
+  raf = requestAnimationFrame(loop)
+
+  return () => cancelAnimationFrame(raf)
+}
+
+// 做动画时不要用「每次 += 固定值」假设帧率恒定，
+// 而要用真实经过的时间换算进度：
+function move(start) {
+  const DURATION = 1000
+  return (now) => {
+    const p = Math.min(1, (now - start) / DURATION)   // 0 → 1
+    el.style.transform = \`translateX(\${240 * p}px)\`
+  }
+}
+
+// 补充：后台标签页里 setTimeout/setInterval 会被限流到秒级，
+// 所以「倒计时」这类要准的功能，应当以时间戳为准而不是累计次数。`
 </script>
-<style lang='scss' scoped>
-p{
-    text-align: left;
-    margin: 0;
+
+<style scoped>
+.iv-stats {
+    margin-bottom: 14px;
+}
+
+.is-bad {
+    color: var(--danger);
+}
+.is-ok {
+    color: var(--success);
+}
+
+.charts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 12px;
+}
+
+.chart {
+    border: 1px solid var(--hairline);
+    background: var(--surface-subtle);
+}
+
+.chart__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--hairline);
+}
+
+.chart__name {
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--text-tertiary);
+}
+
+.chart__meta {
+    font-size: 11px;
+    color: var(--text-tertiary);
+}
+
+.chart__body {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 56px;
+    padding: 8px 10px;
+    overflow-x: auto;
+}
+
+.bar {
+    flex: 1 1 4px;
+    min-width: 3px;
+    background: var(--brand);
+    transition: height 0.12s linear;
+}
+
+.bar--fixed {
+    background: var(--success);
+}
+
+.bar.is-late {
+    background: var(--danger);
+}
+
+.iv-tip {
+    margin: 14px 0 0;
+    font-size: 12px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    border-left: 2px solid var(--brand);
+    padding-left: 10px;
+}
+
+.queue__empty {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-tertiary);
+    opacity: 0.7;
 }
 </style>

@@ -1,10 +1,11 @@
-self.onmessage = (data)=>{
-    console.log('worker接受的数据',data); 
-    console.time('耗时')
-    let sum = 0
-    for (let i = 0; i < 10_000_000_000; i++) {
-        sum += i
-    }
-    console.timeEnd('耗时')
-    self.postMessage(`worker返回数据-${sum}`)
+// work.ts —— 这段代码跑在 Worker 线程里，和主线程互不干扰
+self.onmessage = (e) => {
+  const { loops } = e.data as { loops: number }
+  const start = performance.now()
+  let sum = 0
+  for (let i = 0; i < loops; i++) {
+    sum += i
+  }
+  // 计算结果 + 耗时一起发回主线程
+  self.postMessage({ sum, ms: Math.round(performance.now() - start) })
 }

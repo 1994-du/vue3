@@ -1606,6 +1606,139 @@ html:root .dx_button_danger {
 }
 
 /* ============================================================================
+   命令速查（Git / npm / nvm / mysql 等手册类页面共用）
+   ========================================================================== */
+
+/* 过滤输入框：宽度固定、聚焦描边转主色 */
+.cmd-search {
+    flex: 0 0 260px;
+    min-width: 0;
+    padding: 6px 10px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-primary);
+    background: var(--app-bg);
+    border: 1px solid var(--hairline);
+    border-radius: 0;
+    outline: none;
+
+    &:focus {
+        border-color: var(--brand);
+    }
+
+    &::placeholder {
+        color: var(--text-tertiary);
+    }
+}
+
+/* 一组同类命令：标题 + 列表 */
+.cmd-group {
+    margin-bottom: 14px;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.cmd-group__title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+}
+
+.cmd-group__count {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0;
+    color: var(--text-tertiary);
+    opacity: 0.7;
+}
+
+/* 一条命令：左侧说明，右侧命令本体 + 复制按钮 */
+.cmd {
+    display: grid;
+    grid-template-columns: 1fr auto 64px;
+    align-items: center;
+    gap: 12px;
+    padding: 7px 12px;
+    border: 1px solid var(--hairline);
+    border-bottom: none;
+    background: var(--surface);
+
+    &:last-child {
+        border-bottom: 1px solid var(--hairline);
+    }
+
+    &:hover {
+        background: var(--surface-muted);
+    }
+}
+
+.cmd.is-danger {
+    border-left: 2px solid var(--danger);
+}
+
+.cmd__t {
+    min-width: 0;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.cmd__code {
+    justify-self: end;
+    max-width: 100%;
+    overflow: hidden;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--brand);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.cmd__copy {
+    padding: 2px 8px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--text-tertiary);
+    background: transparent;
+    border: 1px solid var(--hairline);
+    border-radius: 0;
+    cursor: pointer;
+    transition: color var(--transition-fast), border-color var(--transition-fast);
+
+    &:hover {
+        color: var(--brand);
+        border-color: var(--brand);
+    }
+
+    &.is-done {
+        color: var(--success);
+        border-color: color-mix(in srgb, var(--success) 55%, transparent);
+    }
+}
+
+@media (max-width: 760px) {
+    .cmd {
+        grid-template-columns: 1fr auto;
+        row-gap: 4px;
+    }
+
+    .cmd__code {
+        grid-column: 1 / -1;
+        justify-self: start;
+        white-space: normal;
+        word-break: break-all;
+    }
+}
+
+/* ============================================================================
    Responsive
    ========================================================================== */
 

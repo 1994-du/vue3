@@ -1,6 +1,48 @@
 <template>
+  <div class="page">
+    <!-- 概念：只加说明，不动下面的聊天逻辑 -->
+    <section class="panel">
+      <div class="panel__head">
+        <div class="head-group">
+          <span class="kicker">WebSocket</span>
+          <h2 class="panel__title">一次 HTTP 握手，换来双向长连接</h2>
+        </div>
+        <span class="panel__meta">下面这个聊天室是真实在跑的</span>
+      </div>
+      <div class="panel__body">
+        <p class="intro__text">
+          HTTP 是<em>问一句答一句</em>，服务端永远不能主动开口。WebSocket 先用一次 HTTP 请求
+          带上 <code>Upgrade: websocket</code>，服务端回 <strong>101 Switching Protocols</strong>
+          —— 从这一刻起这条连接就不再是 HTTP 了，双方可以随时互相推数据，
+          也就省掉了轮询那一堆重复的请求头。
+        </p>
+        <div class="intro__points">
+          <div class="point">
+            <span class="point__k">和轮询比</span>
+            <span class="point__v">省掉每次的 HTTP 头开销，延迟从「轮询间隔」降到「网络往返」</span>
+          </div>
+          <div class="point">
+            <span class="point__k">生产必补三件事</span>
+            <span class="point__v">心跳保活、断线重连（指数退避）、重连后重新订阅</span>
+          </div>
+          <div class="point">
+            <span class="point__k">readyState</span>
+            <span class="point__v">CONNECTING(0) / OPEN(1) / CLOSING(2) / CLOSED(3)，发消息前要判断</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel__head">
+        <div class="head-group">
+          <span class="kicker">Live Chat</span>
+          <h2 class="panel__title">实时聊天室</h2>
+        </div>
+        <span class="panel__meta">连的是 {{ wsUrl }}，消息会推给所有在线的人</span>
+      </div>
+      <div class="panel__body">
   <div class="websocket_wrap">
-    <h4>WebSocket</h4>
     <div ref="message_box" class="message_box">
       <div class="message_box_item" :class="item.username !== username ? 'active' : ''" v-for="(item, index) in messageList" :key="index">
         <!-- 显示时间 -->
@@ -33,6 +75,26 @@
       <img :src="previewImageSrc" alt="预览图片" @click.stop>
       <div class="close-button" @click.stop="closeImagePreview">×</div>
     </div>
+  </div>
+      </div>
+    </section>
+
+    <!-- 源码：页面里真实运行的那部分 -->
+    <section class="panel">
+      <div class="panel__head">
+        <div class="head-group">
+          <span class="kicker">Source</span>
+          <h2 class="panel__title">心跳、重连与状态判断</h2>
+        </div>
+        <span class="panel__meta">单纯的 new WebSocket 撑不到生产</span>
+      </div>
+      <div class="panel__body">
+        <div class="code-block">
+          <div class="code-block__label">一个能真正上线的基础封装</div>
+          <CodeEditor :code="wsCode" />
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 <script setup lang="ts">
@@ -71,6 +133,8 @@ interface UploadResponse {
     fileUrl?: string
     msg?: string
 }
+
+const wsUrl = String(import.meta.env.VITE_WS ?? '')
 
 let username = localStorage.getItem('username') || '';
 let message_box = ref<HTMLElement | null>(null);
@@ -239,6 +303,73 @@ onMounted(() => {
 onUnmounted(() => {
   disConnectServer();
 });
+
+/* ── 展示用源码 ──────────────────────────────────────── */
+const wsCode = `// ① 最基础的用法（本页聊天室就是这么连的）
+const socket = new WebSocket(import.meta.env.VITE_WS)
+
+socket.onopen = () => socket.send(JSON.stringify({ type: 'username', payload: { token } }))
+socket.onmessage = (e) => handle(JSON.parse(e.data))
+socket.onerror = (e) => console.error('ws error', e)
+socket.onclose = (e) => console.log('关闭码', e.code, e.reason)
+
+// 发之前一定判断状态，CLOSED 上 send 会直接抛错
+if (socket.readyState === WebSocket.OPEN) socket.send(data)
+
+// ── ② 生产要补的三件事 ──────────────────────────────────
+class ReconnectWS {
+  private ws: WebSocket | null = null
+  private retries = 0
+  private timer: number | null = null
+  private pingTimer: number | null = null
+
+  connect() {
+    this.ws = new WebSocket(import.meta.env.VITE_WS)
+    this.ws.onopen = () => {
+      this.retries = 0
+      this.heartbeat()
+      this.onReopen?.()          // ← 重连后要重新订阅 / 补发未送达的消息
+    }
+    this.ws.onclose = () => this.scheduleReconnect()
+  }
+
+  /** 心跳：定时发 ping，服务端回了就说明连接还活着 */
+  private heartbeat() {
+    if (this.pingTimer) clearInterval(this.pingTimer)
+    this.pingTimer = window.setInterval(() => {
+      if (this.ws?.readyState !== WebSocket.OPEN) return
+      this.ws.send(JSON.stringify({ type: 'ping' }))
+    }, 25_000)
+  }
+
+  /** 指数退避重连：1s / 2s / 4s … 封顶 30s，别写成死循环狂重连 */
+  private scheduleReconnect() {
+    if (this.timer) return
+    const delay = Math.min(30_000, 1000 * 2 ** this.retries++)
+    this.timer = window.setTimeout(() => {
+      this.timer = null
+      this.connect()
+    }, delay)
+  }
+
+  send(data: unknown) {
+    if (this.ws?.readyState === WebSocket.OPEN) this.ws.send(JSON.stringify(data))
+    else console.warn('连接不可用，这条消息丢了', data)   // 或者先入队，恢复后补发
+  }
+
+  close() {
+    if (this.pingTimer) clearInterval(this.pingTimer)
+    if (this.timer) clearTimeout(this.timer)
+    this.ws?.close(1000, 'client close')                 // 1000 = 正常关闭
+  }
+}
+
+// ── ③ 几个要记住的细节 ──────────────────────────────────
+// · 浏览器对 ws:// 的个数有限制（每页约 255），别每个组件都 new 一条
+// · 页面隐藏（切 tabs）时连接可能被节流，心跳间隔要留余量
+// · 部署在 HTTPS 下就必须用 wss://，否则浏览器直接拒绝
+// · 图片这类大消息别走 WebSocket：先 HTTP 上传拿到 URL，再把 URL 发出去
+//   —— 本页「发送图片」走的正是这条路`
 </script>
 <style lang='scss' scoped>
 .websocket_wrap {

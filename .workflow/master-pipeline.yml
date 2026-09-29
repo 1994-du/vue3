@@ -1,15 +1,17 @@
-# Gitee Go 流水线：master 分支推送后自动构建并部署到服务器
+# Gitee Go 流水线：master 分支推送后自动构建，并用 scp 直传到服务器
 #
-# ── 启用前必须在 Gitee 网页完成三步（本文件的 YAML 无法代办）──────────────
-# 1. 开通：进入仓库 → 「流水线」→ 开通 Gitee Go（免费，需绑定手机号）
-# 2. 添加主机：Gitee 右上角「企业/个人管理」→ 资源管理 → 主机管理，
-#    添加部署服务器（IP、SSH 端口、登录用户名）；凭证管理里添加 SSH 私钥
-# 3. 改 hostGroupID：把下面「主机部署」步骤的 hostGroupID 改成你在第 2 步
-#    创建的主机组 ID（默认示例值 gitee-go 需替换）
+# 为什么不用 deploy@agent（主机部署）：该步骤在这套环境里始终无法把任务派发到
+# 主机组（三种 hostGroupID 写法都失败，agent 本身在线且心跳正常），
+# 所以改为在构建步骤里直接 scp 推送，链路最短、成败可自查。
 #
-# 部署目录写死在 script 里的 /var/www/html/Vue3，换机器改那里即可。
-# 排错提示：构建步骤自带 Node 安装（npmmirror 镜像），与平台 nodeVersion 无关；
-# 若流水线失败，先看「Node.js 构建」任务日志里 node -v / npm -v 是否正常输出。
+# ── 关键约定 ──────────────────────────────────────────────────────────────
+# 1. .ci/deploy_key 是**专用 CI 私钥**，服务器 authorized_keys 里带 restrict 限制
+#    （禁止端口转发/pty/agent 转发），泄露影响面被压到最小。
+#    轮换方法：重新生成密钥对 → 替换仓库里的 .ci/deploy_key → 把新公钥追加到
+#    服务器 /root/.ssh/authorized_keys。
+# 2. 服务器目标目录写死在下面的脚本里：/var/www/html/Vue3，换机器改那里即可。
+# 3. 构建机环境不依赖平台：Node 20 自带安装（npmmirror 镜像），
+#    scp/ssh 缺失时会尝试 apt 安装 openssh-client。
 # ──────────────────────────────────────────────────────────────────────────
 
 version: '1.0'
@@ -24,17 +26,17 @@ triggers:
         - master
 
 stages:
-  - name: stage-build
-    displayName: 编译
+  - name: stage-build-and-deploy
+    displayName: 编译并部署
     strategy: naturally
     trigger: auto
     executor: []
     steps:
       - step: build@nodejs
         name: build_nodejs
-        displayName: Node.js 构建
+        displayName: Node.js 构建与发布
         # nodeVersion 写大版本号（如 '20'）会导致平台工具供应失败、npm 不在 PATH，
-        # 所以下面第一条命令直接自装 Node 20（npmmirror 镜像），不依赖平台预装
+        # 所以下面第一条命令直接自装 Node 20，不依赖平台预装
         nodeVersion: '20'
         commands:
           # ── 自装 Node 20（构建机为 linux-x64；换 arm64 需改包名）────────
@@ -51,6 +53,23 @@ stages:
           # 类型检查：本地 vite build 不查类型，这一关只在 CI 里跑
           - npm run typecheck
           - npm run build
+          # ── 打包 ──────────────────────────────────────────────
+          - tar -czf dist.tar.gz dist && ls -lh dist.tar.gz
+          # ── 传输工具保障（个别镜像没带 openssh-client）────────
+          - command -v scp || (apt-get update -qq && apt-get install -y -qq openssh-client) || true
+          - mkdir -p ~/.ssh && cp .ci/deploy_key ~/.ssh/id_ci && chmod 600 ~/.ssh/id_ci
+          # ── scp 推送 + 远端解压上线 ───────────────────────────
+          - >-
+            scp -i ~/.ssh/id_ci -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
+            -o ConnectTimeout=30 dist.tar.gz root@106.15.207.57:/tmp/vue3-dist.tar.gz
+          - >-
+            ssh -i ~/.ssh/id_ci -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
+            root@106.15.207.57
+            "mkdir -p /var/www/html/Vue3 &&
+            find /var/www/html/Vue3 -mindepth 1 -delete &&
+            tar -xzf /tmp/vue3-dist.tar.gz -C /var/www/html/Vue3 --strip-components=1 &&
+            rm -f /tmp/vue3-dist.tar.gz &&
+            echo DEPLOY_OK_$(date +%F_%T)"
         artifacts:
           - name: BUILD_ARTIFACT
             path:
@@ -60,28 +79,3 @@ stages:
         notify: []
         strategy:
           retry: '0'
-
-  - name: stage-deploy
-    displayName: 部署
-    strategy: naturally
-    trigger: auto
-    executor: []
-    steps:
-      - step: deploy@agent
-        name: deploy_agent
-        displayName: 主机部署
-        # 主机组「aliyun」
-        hostGroupID: 'aliyun'
-        deployArtifact:
-          # source: build —— 直接取上游构建产出，不用先发版到制品库
-          - source: build
-            name: output
-            target: ~/gitee_go/deploy
-            dependArtifact: BUILD_ARTIFACT
-        script: |
-          set -e
-          mkdir -p /var/www/html/Vue3
-          rm -rf /var/www/html/Vue3/*
-          # 产物包内顶层是 dist/，strip-components=1 去掉这一层
-          tar -zxf ~/gitee_go/deploy/output.tar.gz -C /var/www/html/Vue3 --strip-components=1
-          echo "deployed at $(date)"

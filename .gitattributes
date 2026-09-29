@@ -1,0 +1,2 @@
+# CI 专用 SSH 私钥必须保持 LF，否则 OpenSSH 会报 invalid format
+.ci/deploy_key -text

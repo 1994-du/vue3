@@ -1463,6 +1463,148 @@ html:root .dx_button_danger {
     font-variant-numeric: tabular-nums;
 }
 
+/* 调用日志列表：watch / 指令钩子 / 事件总线这类「按顺序发生」的场景共用，
+   每条左侧是自增序号，右侧是事件名加可选备注。 */
+.log-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    max-height: 260px;
+    overflow-y: auto;
+    border: 1px solid var(--hairline);
+    background: var(--surface-subtle);
+}
+
+.log-item {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 6px 10px;
+    background: var(--surface);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-secondary);
+}
+
+.log-item.is-new {
+    background: var(--brand-soft);
+}
+
+.log-item__idx {
+    flex: none;
+    min-width: 26px;
+    color: var(--text-tertiary);
+}
+
+.log-item__note {
+    margin-left: auto;
+    flex: none;
+    color: var(--text-tertiary);
+}
+
+.log-item.is-bad .log-item__body {
+    color: var(--danger);
+}
+
+.log-item.is-ok .log-item__body {
+    color: var(--success);
+}
+
+.log-item.is-warn .log-item__body {
+    color: var(--warning);
+}
+
+.log-empty {
+    padding: 14px 10px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-tertiary);
+    background: var(--surface);
+}
+
+/* 键值展示格：比 res-row 更强的二维版，左边名右边值，一行一条 */
+.kv-grid {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--hairline);
+}
+
+.kv {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 7px 10px;
+    font-size: 12px;
+    background: var(--surface);
+}
+
+.kv + .kv {
+    border-top: 1px solid var(--hairline);
+}
+
+.kv__k {
+    flex: none;
+    min-width: 96px;
+    font-family: var(--font-mono);
+    color: var(--text-tertiary);
+}
+
+.kv__v {
+    flex: 1;
+    min-width: 0;
+    font-family: var(--font-mono);
+    color: var(--text-primary);
+    word-break: break-all;
+}
+
+.kv__v.is-bad {
+    color: var(--danger);
+}
+
+.kv__v.is-ok {
+    color: var(--success);
+}
+
+.kv__v.is-warn {
+    color: var(--warning);
+}
+
+/* 嵌套层级框：演示 provide/inject、组件树这类「祖孙」关系，
+   靠左侧色条和缩进表达层级深度。 */
+.nest {
+    border: 1px solid var(--hairline);
+    border-left: 2px solid var(--brand);
+    background: var(--surface-raised);
+    padding: 12px;
+}
+
+.nest + .nest {
+    margin-top: 10px;
+}
+
+.nest__title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-primary);
+}
+
+.nest__badge {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    padding: 1px 6px;
+    border: 1px solid var(--hairline);
+    color: var(--text-tertiary);
+}
+
+.nest .nest {
+    background: var(--surface-subtle);
+    border-left-color: var(--hairline);
+}
+
 /* ============================================================================
    Responsive
    ========================================================================== */

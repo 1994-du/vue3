@@ -1,13 +1,35 @@
 <template>
-    <el-upload
-      :file-list="fileList"
-      :before-upload="beforeUpload"
-      :on-change="handleChange"
-      multiple
-    >
-      <el-button>点击上传</el-button>
-    </el-upload>
+    <div class="page">
+      <section class="panel">
+        <div class="panel__head">
+          <div class="head-group">
+            <span class="kicker">Element Plus</span>
+            <h2 class="panel__title">el-upload 手动上传</h2>
+          </div>
+          <span class="panel__meta">before-upload 返回 false 拦掉自动上传，改由 on-change 里手动发起</span>
+        </div>
+        <div class="panel__body">
+          <el-upload
+            :file-list="fileList"
+            :before-upload="beforeUpload"
+            :on-change="handleChange"
+            multiple
+          >
+            <el-button>点击上传</el-button>
+          </el-upload>
+        </div>
+      </section>
+    </div>
   </template>
+
+  <style scoped>
+  .head-group {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+  }
+  </style>
   
   <script>
   export default {

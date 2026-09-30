@@ -1,14 +1,22 @@
 <template>
-    <div>
-        <h4>el-popover</h4>
+    <div class="page">
+        <section class="panel">
+            <div class="panel__head">
+                <div class="head-group">
+                    <span class="kicker">Element Plus</span>
+                    <h2 class="panel__title">el-popover 弹层与表格选择</h2>
+                </div>
+                <span class="panel__meta">勾选多个经办人时弹层会被拦截，提示「经办人不是同一个」</span>
+            </div>
+            <div class="panel__body">
+                <popButton>测试</popButton>
 
-        <popButton>测试</popButton>
-
-
-        <el-table :data="tableData" @selection-change="handleSelectionChange">
-            <el-table-column type="selection"></el-table-column>
-            <el-table-column prop="handler" label="经办人"></el-table-column>
-        </el-table>
+                <el-table :data="tableData" @selection-change="handleSelectionChange">
+                    <el-table-column type="selection"></el-table-column>
+                    <el-table-column prop="handler" label="经办人"></el-table-column>
+                </el-table>
+            </div>
+        </section>
     </div>
 </template>
 
@@ -64,5 +72,15 @@ const userSelect = (data: any) => {
 </script>
 
 <style lang='scss' scoped>
+.head-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
 
+/* 表格紧跟在按钮下方，给它一点呼吸空间 */
+.panel__body .el-table {
+    margin-top: 12px;
+}
 </style>

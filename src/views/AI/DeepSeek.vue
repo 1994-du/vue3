@@ -3,7 +3,7 @@
         <header class="ds-head">
             <div class="ds-head__copy">
                 <span class="kicker">DeepSeek · Chat</span>
-                <h1 class="ds-title grad-text">对话工作台</h1>
+                <h1 class="ds-title">对话工作台</h1>
                 <p class="ds-sub">向 DeepSeek 提问，回复会保留在当前会话中；清空后即可开一段新的对话。</p>
             </div>
             <button v-if="messages.length" type="button" class="ds-reset" @click="reset">

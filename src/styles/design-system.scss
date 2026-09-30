@@ -34,6 +34,10 @@ html:root {
     --danger: #F23645;
     --warning: #FFA02F;
     --success: #00B96B;
+    /* --info 是数据可视化用的「分类色」，必须和 --aqua / --text-tertiary（同为
+       #5E6680）区分开，否则时序柱里 DNS 段会和「重定向」段糊成同一色。
+       取青色：终端配色里青=信息态，且不抢琥珀的主色地位。 */
+    --info: #5CB8D8;
 
     /* 旧调色板的渐变令牌保留名字，值全部压成纯色：终端不渐变。 */
     --grad: #FFA02F;
@@ -297,6 +301,8 @@ html:root[data-theme='light'] {
     --danger: #C0272D;
     --warning: #9A5B00;
     --success: #0A7A46;
+    /* 亮色下青色必须加深，否则浅底对比度不达标（同 --brand 的处理逻辑）。 */
+    --info: #1F6A85;
 
     --grad: #9A5B00;
     --grad-line: #9A5B00;

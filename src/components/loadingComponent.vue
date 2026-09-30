@@ -13,6 +13,7 @@
     align-items: center;
     height: 100%;
     width: 100%;
-    font-size: 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
 }
 </style>

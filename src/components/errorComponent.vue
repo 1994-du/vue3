@@ -8,8 +8,8 @@
 </script>
 <style scoped lang='scss'>
 .error-component {
-    color: red;
-    font-size: 20px;
+    color: var(--danger);
+    font-size: 14px;
     display: flex;
     justify-content: center;
     align-items: center;

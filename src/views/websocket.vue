@@ -407,7 +407,7 @@ class ReconnectWS {
         background: var(--glass-strong);
         border: 1px solid var(--hairline);
         line-height: 40px;
-        font-size: 16px;
+        font-size: 14px;
         padding: 5px;
         display: flex;
         justify-content: center;
@@ -426,7 +426,7 @@ class ReconnectWS {
         background: var(--glass-strong);
         border: 1px solid var(--hairline);
         line-height: 40px;
-        font-size: 16px;
+        font-size: 14px;
         padding: 5px;
         position: relative;
         display: flex;
@@ -510,7 +510,7 @@ class ReconnectWS {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: var(--veil);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -521,12 +521,13 @@ class ReconnectWS {
     max-height: 90%;
   }
 
+  /* 关闭按钮用文本色而不是写死白色：亮色主题下遮罩是浅灰，白字会看不见。 */
   .close-button {
     position: absolute;
     top: 20px;
     right: 20px;
-    color: white;
-    font-size: 30px;
+    color: var(--text-primary);
+    font-size: 22px;
     cursor: pointer;
   }
 }

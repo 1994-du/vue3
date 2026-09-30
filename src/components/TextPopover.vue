@@ -92,7 +92,7 @@
       width:5px;
   }
   .popover_textover::-webkit-scrollbar-thumb {
-      background:rgb(224, 224, 224);
+      background: var(--border-strong);
 	  border-radius: 0;
   }
   </style>

@@ -1,7 +1,7 @@
 /* ============================================================================
    DeepSeek chat workspace
    A single-column reading layout: header, scrolling thread, composer.
-   Everything derives from the Future Glass token layer.
+   全部走 Terminal token 层：发丝线方框、0 圆角、无毛玻璃、无装饰阴影。
    ========================================================================== */
 
 .ds {
@@ -11,7 +11,7 @@
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 12px;
 }
 
 /* ---- header -------------------------------------------------------------- */
@@ -21,42 +21,45 @@
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-    gap: 20px;
+    gap: 16px;
 }
 
 .ds-head__copy {
     min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: 7px;
+    gap: 6px;
 }
 
+/* 终端规范：标题不放大，靠 letter-spacing 与 mono 字体区分层级。 */
 .ds-title {
     margin: 0;
-    font-size: 30px;
-    line-height: 1.15;
-    font-weight: 700;
-    letter-spacing: -0.02em;
+    font-size: 14px;
+    line-height: 1.3;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--text-primary);
 }
 
 .ds-sub {
     margin: 0;
     max-width: 56ch;
     color: var(--text-secondary);
-    font-size: 13px;
+    font-size: 12px;
     line-height: 1.6;
 }
 
 .ds-reset {
     flex-shrink: 0;
-    height: 36px;
-    padding: 0 16px;
+    height: 32px;
+    padding: 0 12px;
     color: var(--text-secondary);
-    background: var(--glass);
+    background: var(--surface-raised);
     border: 1px solid var(--hairline);
-    border-radius: var(--radius-pill);
+    border-radius: 0;
+    font-family: var(--font-mono);
     font-size: 12px;
-    font-weight: 600;
+    font-weight: 500;
     cursor: pointer;
     transition:
         color var(--transition-fast),
@@ -65,9 +68,9 @@
 }
 
 .ds-reset:hover {
-    color: var(--text-primary);
-    background: var(--glass-strong);
-    border-color: var(--hairline-strong);
+    color: var(--brand);
+    background: var(--brand-soft);
+    border-color: var(--brand);
 }
 
 /* ---- thread -------------------------------------------------------------- */
@@ -76,13 +79,10 @@
     min-height: 0;
     flex: 1;
     overflow-y: auto;
-    padding: 22px;
-    background: var(--glass);
-    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    padding: 16px;
+    background: var(--surface);
     border: 1px solid var(--hairline);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-md);
+    border-radius: 0;
 }
 
 .ds-thread::-webkit-scrollbar {
@@ -91,7 +91,7 @@
 
 .ds-thread::-webkit-scrollbar-thumb {
     background: var(--border-strong);
-    border-radius: var(--radius-pill);
+    border-radius: 0;
 }
 
 /* ---- empty state --------------------------------------------------------- */
@@ -108,26 +108,26 @@
     text-align: center;
 }
 
-/* the icon inside sizes itself from 1em, so drive it with font-size */
+/* 方形描边徽标：终端里没有圆形光晕，也没有投影。 */
 .ds-empty__mark {
-    width: 54px;
-    height: 54px;
+    width: 48px;
+    height: 48px;
     display: grid;
     place-items: center;
     margin-bottom: 6px;
-    color: #ffffff;
-    background: var(--grad);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-glow);
-    font-size: 26px;
+    color: var(--brand);
+    background: var(--brand-soft);
+    border: 1px solid var(--hairline);
+    border-radius: 0;
+    font-size: 24px;
 }
 
 .ds-empty h2 {
     margin: 0;
     color: var(--text-primary);
-    font-size: 17px;
-    font-weight: 700;
-    letter-spacing: -0.01em;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
 }
 
 .ds-empty p {
@@ -149,23 +149,25 @@
 
 .ds-prompts button {
     height: 32px;
-    padding: 0 14px;
+    padding: 0 12px;
     color: var(--text-secondary);
-    background: var(--glass-strong);
+    background: var(--surface-raised);
     border: 1px solid var(--hairline);
-    border-radius: var(--radius-pill);
+    border-radius: 0;
+    font-family: var(--font-mono);
     font-size: 12px;
     cursor: pointer;
     transition:
         color var(--transition-fast),
-        border-color var(--transition-fast),
-        transform var(--transition-fast);
+        background-color var(--transition-fast),
+        border-color var(--transition-fast);
 }
 
+/* 悬浮只换色，不做位移：终端界面没有浮起动画。 */
 .ds-prompts button:hover {
-    color: var(--text-primary);
-    border-color: color-mix(in srgb, var(--brand) 55%, var(--hairline));
-    transform: translateY(-1px);
+    color: var(--brand);
+    background: var(--brand-soft);
+    border-color: var(--brand);
 }
 
 /* ---- messages ------------------------------------------------------------ */
@@ -173,7 +175,7 @@
 .msg_list {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 16px;
 }
 
 .msg {
@@ -188,53 +190,45 @@
 }
 
 .msg__avatar {
-    width: 34px;
-    height: 34px;
+    width: 32px;
+    height: 32px;
     flex-shrink: 0;
     display: grid;
     place-items: center;
     object-fit: cover;
-    background: var(--glass-strong);
+    background: var(--surface-raised);
     border: 1px solid var(--hairline);
-    border-radius: var(--radius-sm);
+    border-radius: 0;
 }
 
 .msg__avatar--bot {
-    color: #ffffff;
-    background: var(--grad);
-    /* 与 .el-button--primary 同源：元素有 1px 边框时，background 简写会把
-       origin 重置成 padding-box 而 clip 还是 border-box，梯度图会平铺出 1px 反色边 */
-    background-origin: border-box;
-    background-repeat: no-repeat;
-    border-color: transparent;
-    font-size: 20px;
+    color: var(--brand);
+    background: var(--brand-soft);
+    font-size: 18px;
 }
 
 .msg__body {
     max-width: min(78%, 62ch);
-    padding: 12px 16px;
-    border-radius: var(--radius-md);
-    font-size: 14px;
+    padding: 12px 14px;
+    border: 1px solid var(--hairline);
+    border-radius: 0;
+    font-size: 13px;
     line-height: 1.7;
     text-align: left;
     white-space: pre-wrap;
     overflow-wrap: anywhere;
 }
 
+/* 用户气泡用琥珀底色 + 发丝线描边，避免「白字压在亮琥珀上」在暗色主题下对比度不足。 */
 .msg--user .msg__body {
-    color: #ffffff;
-    background: var(--grad);
-    border-top-right-radius: var(--radius-xs);
-    box-shadow: var(--shadow-glow);
+    color: var(--text-primary);
+    background: var(--brand-soft);
+    border-color: var(--hairline-strong);
 }
 
 .msg--assistant .msg__body {
     color: var(--text-primary);
-    background: var(--glass-strong);
-    border: 1px solid var(--hairline);
-    border-top-left-radius: var(--radius-xs);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    background: var(--surface-raised);
 }
 
 /* ---- composer ------------------------------------------------------------ */
@@ -243,14 +237,11 @@
     flex-shrink: 0;
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 10px;
-    background: var(--glass);
-    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    gap: 8px;
+    padding: 8px;
+    background: var(--surface);
     border: 1px solid var(--hairline);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-md);
+    border-radius: 0;
 }
 
 .ds-composer .el-input {
@@ -259,14 +250,12 @@
 }
 
 .ds-composer :deep(.el-input__wrapper) {
-    padding: 1px 16px;
+    padding: 1px 12px;
     background: var(--surface-subtle);
     border: 1px solid var(--hairline);
-    border-radius: var(--radius-pill);
+    border-radius: 0;
     box-shadow: none;
-    transition:
-        border-color var(--transition-fast),
-        box-shadow var(--transition-fast);
+    transition: border-color var(--transition-fast);
 }
 
 .ds-composer :deep(.el-input__wrapper:hover) {
@@ -274,47 +263,27 @@
 }
 
 .ds-composer :deep(.el-input__wrapper.is-focus) {
-    border-color: color-mix(in srgb, var(--brand) 60%, var(--hairline));
-    box-shadow: 0 0 0 4px var(--brand-soft);
+    border-color: var(--brand);
 }
 
 .ds-composer :deep(.el-input__inner) {
-    height: 42px;
+    height: 32px;
 }
 
 .ds-composer :deep(.el-button) {
     flex-shrink: 0;
-    height: 44px;
-    padding: 0 22px;
+    height: 34px;
+    padding: 0 16px;
     border: 0;
-    border-radius: var(--radius-pill);
-    font-weight: 700;
-}
-
-/* ---- motion -------------------------------------------------------------- */
-
-@media (prefers-reduced-motion: no-preference) {
-    .msg {
-        animation: msg-in 420ms var(--ease) both;
-    }
-}
-
-@keyframes msg-in {
-    from {
-        opacity: 0;
-        transform: translateY(8px);
-    }
-    to {
-        opacity: 1;
-        transform: none;
-    }
+    border-radius: 0;
+    font-weight: 500;
 }
 
 /* ---- responsive ---------------------------------------------------------- */
 
 @media (max-width: 720px) {
     .ds {
-        gap: 14px;
+        gap: 12px;
     }
 
     .ds-head {
@@ -323,21 +292,11 @@
         gap: 12px;
     }
 
-    .ds-title {
-        font-size: 23px;
-    }
-
     .ds-thread {
-        padding: 16px;
+        padding: 12px;
     }
 
     .msg__body {
         max-width: 86%;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .ds-prompts button:hover {
-        transform: none;
     }
 }

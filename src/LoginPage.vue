@@ -9,33 +9,33 @@
 
             <div class="login-head">
                 <span class="data-label">TERMINAL ACCESS</span>
-                <h1 id="login-title">账户登录</h1>
-                <p>使用你的工作空间账号继续。登录后进入多面板工作区。</p>
+                <h1 id="login-title">{{ $t('login.title') }}</h1>
+                <p>{{ $t('login.subtitle') }}</p>
             </div>
 
             <el-form :model="loginObj" label-position="top" class="login-form">
-                <el-form-item label="账号">
+                <el-form-item :label="$t('login.account')">
                     <el-input v-focus v-model="loginObj.username" type="text" autocomplete="username"
                         placeholder="enter username" :prefix-icon="User" @keyup.enter="handleLogin" />
                 </el-form-item>
 
-                <el-form-item label="密码">
+                <el-form-item :label="$t('login.password')">
                     <el-input v-model="loginObj.password" type="password" autocomplete="current-password"
                         placeholder="enter password" :prefix-icon="Lock" show-password
                         @keyup.enter="handleLogin" />
                 </el-form-item>
 
                 <div class="form-options">
-                    <el-checkbox v-model="loginObj.remember">记住密码</el-checkbox>
+                    <el-checkbox v-model="loginObj.remember">{{ $t('login.rememberPassword') }}</el-checkbox>
                 </div>
 
                 <el-button type="primary" class="login-submit" :loading="isLoading" @click="handleLogin">
-                    登录
+                    {{ $t('common.login') }}
                 </el-button>
 
                 <div class="form-footer">
-                    <span>还没有账号？</span>
-                    <el-button link type="primary" @click="handleRegistry">立即注册</el-button>
+                    <span>{{ $t('login.noAccount') }}</span>
+                    <el-button link type="primary" @click="handleRegistry">{{ $t('login.registerNow') }}</el-button>
                 </div>
             </el-form>
 
@@ -50,6 +50,7 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { Lock, User } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import { toLogin, toRegistry } from '@/api/auth'
@@ -65,6 +66,7 @@ interface LoginForm {
 
 const userInfoStore = useUserInfoStore()
 const router = useRouter()
+const { t } = useI18n()
 const isLoading = ref(false)
 const loginObj = reactive<LoginForm>({
     username: '',
@@ -87,7 +89,7 @@ onMounted(() => {
 
 const validateCredentials = (): boolean => {
     if (!loginObj.username.trim() || !loginObj.password) {
-        ElMessage.warning('请输入账号和密码')
+        ElMessage.warning(t('login.accountRequired'))
         return false
     }
     return true
@@ -111,13 +113,13 @@ const handleLogin = async (): Promise<void> => {
     try {
         const res = await toLogin(loginObj)
         if (res.code !== 200) {
-            ElMessage.error(res.message || res.msg || '登录失败，请检查账号密码')
+            ElMessage.error(res.message || res.msg || t('login.loginFailed'))
             return
         }
 
         const { token, menus = [], username, avatar } = res.data
         if (!token) {
-            ElMessage.error('登录响应缺少 token')
+            ElMessage.error(t('login.tokenMissing'))
             return
         }
         saveCredentials()
@@ -140,7 +142,7 @@ const handleRegistry = async (): Promise<void> => {
         password: loginObj.password
     })
     if (res.code === 200) {
-        ElMessage.success(res.msg || '注册成功，请登录')
+        ElMessage.success(res.msg || t('login.registerSuccess'))
     }
 }
 </script>

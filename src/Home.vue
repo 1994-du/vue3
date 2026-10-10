@@ -35,12 +35,12 @@
             <button
                 type="button"
                 class="custome_menu_btn"
-                :aria-label="isCollapse ? '展开导航' : '收起导航'"
-                :title="isCollapse ? '展开导航' : '收起导航'"
+                :aria-label="isCollapse ? $t('topbar.expandNav') : $t('topbar.collapseNav')"
+                :title="isCollapse ? $t('topbar.expandNav') : $t('topbar.collapseNav')"
                 @click="collapse">
                 <el-icon v-if="!isCollapse"><ArrowLeft /></el-icon>
                 <el-icon v-else><ArrowRight /></el-icon>
-                <span v-if="!isCollapse">收起导航</span>
+                <span v-if="!isCollapse">{{ $t('topbar.collapseNav') }}</span>
             </button>
         </aside>
 
@@ -62,6 +62,7 @@
 
                 <div class="header_right">
                     <HeaderSearch @click="openSearchModal" />
+                    <LangSwitch />
                     <ThemeSwitch />
                     <span class="topbar-divider" aria-hidden="true"></span>
                     <el-dropdown placement="bottom-end" @command="handleCommand">
@@ -70,8 +71,8 @@
                                 {{ userInitial }}
                             </el-avatar>
                             <span class="user-copy">
-                                <strong>{{ userInfoStore.userInfo.name || '用户' }}</strong>
-                                <small>当前账号</small>
+                                <strong>{{ userInfoStore.userInfo.name || $t('topbar.user') }}</strong>
+                                <small>{{ $t('topbar.currentAccount') }}</small>
                             </span>
                             <el-icon class="user-chevron"><ArrowDown /></el-icon>
                         </button>
@@ -79,11 +80,11 @@
                             <el-dropdown-menu>
                                 <el-dropdown-item command="userInfo">
                                     <el-icon><User /></el-icon>
-                                    个人信息
+                                    {{ $t('topbar.userInfo') }}
                                 </el-dropdown-item>
                                 <el-dropdown-item divided command="loginOut">
                                     <el-icon><SwitchButton /></el-icon>
-                                    退出登录
+                                    {{ $t('topbar.logout') }}
                                 </el-dropdown-item>
                             </el-dropdown-menu>
                         </template>
@@ -108,6 +109,7 @@
 import ModalSearch from '@/components/ModalSearch.vue'
 import HeaderSearch from '@/components/HeaderSearch.vue'
 import ThemeSwitch from '@/components/ThemeSwitch.vue'
+import LangSwitch from '@/components/LangSwitch.vue'
 import NativeMenu from '@/components/NativeMenu.vue'
 import {
     ArrowDown,

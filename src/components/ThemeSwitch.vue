@@ -1,9 +1,9 @@
 <template>
-    <el-tooltip :content="currentTheme === 'dark' ? '切换浅色模式' : '切换深色模式'" placement="bottom">
+    <el-tooltip :content="currentTheme === 'dark' ? $t('topbar.switchToLight') : $t('topbar.switchToDark')" placement="bottom">
         <button
             type="button"
             class="theme-switch"
-            :aria-label="currentTheme === 'dark' ? '切换浅色模式' : '切换深色模式'"
+            :aria-label="currentTheme === 'dark' ? $t('topbar.switchToLight') : $t('topbar.switchToDark')"
             @click="toggleTheme">
             <el-icon>
                 <Sunny v-if="currentTheme === 'dark'" />

@@ -11,7 +11,6 @@ import dxUI from '@1994-du/vue3-ui'
 import '@1994-du/vue3-ui/lib/style.css'
 import '@1994-du/vue3-ui/lib/theme.css'
 import ElementPlus from 'element-plus'
-import zhCn from 'element-plus/es/locale/lang/zh-cn'
 /* 这里刻意不引 './styles/element_plus.scss'。那份文件把 EP 的 theme-chalk 全量
    编译了一遍，但 vite.config.js 的 additionalData 会先注入 element_index.scss
    的 $namespace: 'vue3'，于是它产出的 5622 条规则全是 .vue3-* 前缀，而运行时
@@ -26,10 +25,8 @@ import { persistenceHtmlTheme } from '@/utils/saveHtmlTheme'
 import customDirective from '@/utils/customDirective'
 import IndexDB from '@/utils/indexedDB'
 
-// 国际化
-import LanguageZH from '@/lang/zh-cn'
-import LanguageEN from '@/lang/en-us'
-import { createI18n } from 'vue-i18n'
+// 国际化（locale 初始化与切换逻辑在 @/lang 内，Element Plus 语言由 App.vue 的 ConfigProvider 跟随）
+import i18n from '@/lang'
 
 // 全局组件
 import registryComponents from '@/components/index'
@@ -44,8 +41,8 @@ registryComponents(app)
 app.config.globalProperties.$bus = mitt()
 
 app.use(dxUI)
-app.use(ElementPlus, { locale: zhCn })
-app.use(createI18n({ locale: 'zh-cn', messages: { 'en-us': LanguageEN, 'zh-cn': LanguageZH } }))
+app.use(ElementPlus)
+app.use(i18n)
 app.use(customDirective)
 
 const pinia = createPinia()

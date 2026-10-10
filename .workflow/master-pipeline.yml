@@ -5,10 +5,14 @@
 # 所以改为在构建步骤里直接 scp 推送，链路最短、成败可自查。
 #
 # ── 关键约定 ──────────────────────────────────────────────────────────────
-# 1. .ci/deploy_key 是**专用 CI 私钥**，服务器 authorized_keys 里带 restrict 限制
+# 1. 部署私钥**不再入库**，改由平台密钥 DEPLOY_KEY 注入（Gitee 项目设置 →
+#    流水线 → 密钥/环境变量）。服务器 authorized_keys 里带 restrict 限制
 #    （禁止端口转发/pty/agent 转发），泄露影响面被压到最小。
-#    轮换方法：重新生成密钥对 → 替换仓库里的 .ci/deploy_key → 把新公钥追加到
-#    服务器 /root/.ssh/authorized_keys。
+#    轮换方法：重新生成密钥对 → 把新公钥**追加**到服务器
+#    /root/.ssh/authorized_keys → 更新平台里的 DEPLOY_KEY →
+#    确认 CI 跑通后，再从 authorized_keys 删掉旧公钥那一行。
+#    ⚠️ 只删仓库里的文件不算轮换：git 历史里那份照样能用，
+#       必须让服务器不再信任旧公钥，旧钥才算真正作废。
 # 2. 服务器目标目录写死在下面的脚本里：/var/www/html/Vue3，换机器改那里即可。
 # 3. 构建机环境不依赖平台：Node 20 自带安装（npmmirror 镜像），
 #    scp/ssh 缺失时会尝试 apt 安装 openssh-client。
@@ -57,7 +61,17 @@ stages:
           - tar -czf dist.tar.gz dist && ls -lh dist.tar.gz
           # ── 传输工具保障（个别镜像没带 openssh-client）────────
           - command -v scp || (apt-get update -qq && apt-get install -y -qq openssh-client) || true
-          - mkdir -p ~/.ssh && cp .ci/deploy_key ~/.ssh/id_ci && chmod 600 ~/.ssh/id_ci
+          # ── 私钥取用：优先平台密钥 DEPLOY_KEY，未配置时回落仓库内文件 ──────
+          # 回落分支只是迁移期过渡，等 Gitee 项目设置里配好 DEPLOY_KEY 后，
+          # 下一版会删掉回落并移除 .ci/deploy_key。
+          - >-
+            mkdir -p ~/.ssh &&
+            if [ -n "$DEPLOY_KEY" ]; then
+              printf '%s\n' "$DEPLOY_KEY" > ~/.ssh/id_ci;
+            else
+              cp .ci/deploy_key ~/.ssh/id_ci;
+            fi &&
+            chmod 600 ~/.ssh/id_ci
           # ── scp 推送 + 远端解压上线 ───────────────────────────
           - >-
             scp -i ~/.ssh/id_ci -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null

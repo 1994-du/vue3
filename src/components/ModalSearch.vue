@@ -1,5 +1,5 @@
 <template>
-    <div class="modal_wrap" role="dialog" aria-modal="true" aria-label="搜索菜单" @click.self="closeModal">
+    <div class="modal_wrap" role="dialog" aria-modal="true" :aria-label="$t('topbar.searchMenu')" @click.self="closeModal">
         <div class="modal_inner">
             <div class="modal_input">
                 <el-icon class="modal_search_icon"><Search /></el-icon>
@@ -9,9 +9,9 @@
                     @compositionstart="setIpt(true)"
                     @compositionend="setIpt(false)"
                     @input="menuSearch(menuIpt)"
-                    placeholder="搜索菜单名称">
+                    :placeholder="$t('topbar.searchMenuPlaceholder')">
                 </el-input>
-                <button type="button" class="modal_close" aria-label="关闭搜索" title="关闭搜索" @click="closeSearch">
+                <button type="button" class="modal_close" :aria-label="$t('topbar.closeSearch')" :title="$t('topbar.closeSearch')" @click="closeSearch">
                     <el-icon><Close /></el-icon>
                 </button>
             </div>
@@ -25,7 +25,7 @@
                     <span>{{ item.menuName }}</span>
                     <el-icon><ArrowRight /></el-icon>
                 </button>
-                <div v-if="menuIpt && !filterMenu.length" class="modal_empty">未找到匹配菜单</div>
+                <div v-if="menuIpt && !filterMenu.length" class="modal_empty">{{ $t('topbar.noMatchMenu') }}</div>
             </div>
         </div>
     </div>

@@ -1,8 +1,8 @@
 <template>
-    <el-tooltip content="搜索菜单" placement="bottom">
-        <button type="button" class="header-search" aria-label="搜索菜单">
+    <el-tooltip :content="$t('topbar.searchMenu')" placement="bottom">
+        <button type="button" class="header-search" :aria-label="$t('topbar.searchMenu')">
             <el-icon><Search /></el-icon>
-            <span class="header-search__label">搜索</span>
+            <span class="header-search__label">{{ $t('common.search') }}</span>
             <kbd>{{ currentKey }} F</kbd>
         </button>
     </el-tooltip>

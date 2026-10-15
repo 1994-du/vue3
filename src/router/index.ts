@@ -5,15 +5,13 @@ import {
     getToken,
     isTokenExpired,
     parseJWT,
+    redirectToSSO,
     setupTokenExpiryCheck
 } from '@/utils/tokenManager'
 import { initRoutes, hasDynamicRoutes } from '@/utils/generateRoutes'
 import useUserInfoStore from '@/store/pinia/userInfo'
 import { getCurrentUserMenu } from '@/api/auth'
 import routes, { ROUTE_MISS_NAME } from './routes'
-
-// SSO 统一登录地址（生产环境）。本地联调时改成 SSO 的 dev 地址，如 http://127.0.0.1:5273/#/login
-const SSO_LOGIN_URL = 'http://106.15.207.57/SSOLogin/#/login'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.VITE_PROJECT_URL),
@@ -38,25 +36,14 @@ router.beforeEach(async to => {
         return { path: to.path || defaultPath, query: {}, replace: true }
     }
 
-    // ② 已登录访问 /login → 直接进入应用
-    if (to.path === '/login' && getToken() && !isTokenExpired()) {
-        setupTokenExpiryCheck()
-        if (userInfoStore.menus.length) {
-            const redirectPath = await initRoutes()
-            return { path: redirectPath, replace: true }
-        }
-    }
-
-    // ③ 错误页直接放行
+    // ② 错误页直接放行
     if (to.path === '/error') return true
 
     // ④ 未登录 → 整页跳转 SSO，并带回当前要访问的地址
     if (!getToken() || isTokenExpired()) {
         clearTokenCheckTimer()
         clearAuthState()
-        const base = (import.meta.env.VITE_PROJECT_URL || '').replace(/\/$/, '')
-        const redirectUrl = location.origin + base + to.fullPath
-        window.location.href = `${SSO_LOGIN_URL}?redirect=${encodeURIComponent(redirectUrl)}`
+        redirectToSSO(to.fullPath)
         return false
     }
 

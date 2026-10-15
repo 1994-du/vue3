@@ -24,6 +24,16 @@ export {
 }
 export type { JWTPayload }
 
+// SSO 统一登录地址（生产环境）。本地联调时改成 SSO 的 dev 地址，如 http://127.0.0.1:5273/#/login
+const SSO_LOGIN_URL = 'http://106.15.207.57/SSOLogin/#/login'
+
+// 未登录 / 登录过期 / 退出 → 整页跳转 SSO，并带回当前要访问的地址
+export function redirectToSSO(redirectPath?: string): void {
+    const base = (import.meta.env.VITE_PROJECT_URL || '').replace(/\/$/, '')
+    const target = redirectPath || location.origin + base + router.currentRoute.value.fullPath
+    window.location.href = `${SSO_LOGIN_URL}?redirect=${encodeURIComponent(target)}`
+}
+
 let tokenCheckTimer: number | null = null
 let isHandlingTokenExpire = false
 
@@ -57,13 +67,8 @@ export const handleTokenExpire = async (message: string = '登录已过期，请
         ElMessage.warning(message)
     }
 
-    try {
-        if (router.currentRoute.value.path !== '/login') {
-            await router.replace('/login')
-        }
-    } finally {
-        isHandlingTokenExpire = false
-    }
+    redirectToSSO()
+    isHandlingTokenExpire = false
 }
 
 export const setupTokenExpiryCheck = (): void => {
@@ -82,8 +87,5 @@ export const setupTokenExpiryCheck = (): void => {
 export const loginOutEffect = async (): Promise<void> => {
     clearTokenCheckTimer()
     clearAuthState()
-
-    if (router.currentRoute.value.path !== '/login') {
-        await router.replace('/login')
-    }
+    redirectToSSO()
 }

@@ -12,7 +12,6 @@
                 </span>
             </div>
         </div>
-
         <header class="cockpit-hero">
             <div class="cockpit-hero__text">
                 <span class="data-label">REPOSITORY PULSE</span>

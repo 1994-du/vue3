@@ -8,31 +8,6 @@ export interface LoginPayload {
     remember?: boolean
 }
 
-export interface LoginData {
-    token: string
-    menus: MenuItem[]
-    username: string
-    avatar?: string
-}
-
-export interface RegisterPayload {
-    username: string
-    password: string
-}
-
-/**
- * @description 登录
- */
-export const toLogin = (data: LoginPayload): Promise<ApiResponse<LoginData>> => {
-    return axios({
-        url: '/auth/login',
-        method: 'post',
-        needAuth: false,
-        operationType: 'operate',
-        data
-    }) as Promise<ApiResponse<LoginData>>
-}
-
 /**
  * @description 退出登录
  */
@@ -46,25 +21,22 @@ export const toLoginOut = (data: LoginPayload): Promise<ApiResponse<unknown>> =>
     })
 }
 
-/**
- * @description 注册
- */
-export const toRegistry = (data: RegisterPayload): Promise<ApiResponse<unknown>> => {
-    return axios({
-        url: '/auth/register',
-        method: 'post',
-        needAuth: false,
-        operationType: 'operate',
-        data
-    })
+export interface CurrentUserProfile {
+    userId?: number | null
+    username?: string
+    avatar?: string
+    roleId?: number | null
+    roleName?: string
+    gender?: string
+    menus: MenuItem[]
 }
 
 /**
- * @description 获取当前用户菜单数据
+ * @description 获取当前登录用户完整信息（菜单按角色过滤 + 用户名/头像/角色）
  */
-export const getCurrentUserMenu = (): Promise<ApiResponse<MenuItem[]>> => {
+export const getCurrentUserProfile = (): Promise<ApiResponse<CurrentUserProfile>> => {
     return axios({
-        url: '/auth/getMenus',
-        method: 'post'
+        url: '/auth/me',
+        method: 'get'
     })
 }

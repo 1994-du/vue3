@@ -37,6 +37,9 @@ export interface CurrentUserProfile {
 export const getCurrentUserProfile = (): Promise<ApiResponse<CurrentUserProfile>> => {
     return axios({
         url: '/auth/me',
-        method: 'get'
+        method: 'get',
+        // 路由守卫在 SSO 回跳落地时调用；401 不应把刚登录的用户踢回 SSO
+        // （见 api/index.ts 中 skipAuthRedirect 的说明）
+        skipAuthRedirect: true
     })
 }

@@ -73,7 +73,11 @@ Axios.interceptors.response.use(
         if (requestConfig.showLoading) hideLoading()
 
         if (isUnauthorized(response)) {
-            void handleTokenExpire()
+            // SSO 回跳落地时的用户信息探测允许 401：后端与签发 token 的后端可能不是
+            // 同一套（本地 dev 直连本地库），此时不能清登录态并跳回 SSO，否则会形成
+            // 「登录 → 回跳 → 401 → 跳 SSO」死循环。token 是否真的过期由
+            // isTokenExpired()/setupTokenExpiryCheck() 依据本地 exp 判断。
+            if (!requestConfig.skipAuthRedirect) void handleTokenExpire()
             return Promise.reject(createTokenExpiredError())
         }
 
@@ -97,7 +101,7 @@ Axios.interceptors.response.use(
         }
 
         if (isUnauthorized(error.response)) {
-            void handleTokenExpire()
+            if (!requestConfig?.skipAuthRedirect) void handleTokenExpire()
         } else {
             const responseData = error.response?.data as ApiResponse | undefined
             ElMessage.error(responseData?.msg || responseData?.message || '请求失败')

@@ -12,6 +12,8 @@ export interface ApiRequestConfig<D = unknown> extends AxiosRequestConfig<D> {
     operationType?: 'query' | 'operate'
     showLoading?: boolean
     showSuccess?: boolean
+    /** 401 时不自动清空登录态并跳转 SSO（用于 SSO 回跳落地时的用户信息探测） */
+    skipAuthRedirect?: boolean
 }
 
 export class ApiError extends Error {

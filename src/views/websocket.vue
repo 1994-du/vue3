@@ -102,6 +102,7 @@ import { ElMessage } from 'element-plus';
 import { nextTick, onMounted, onUnmounted, ref } from 'vue';
 // @ts-ignore
 import { uploadFile } from '@/api/api';
+import { getToken } from '@/utils/authStorage';
 
 // 定义消息项接口
 interface MessageItem {
@@ -164,7 +165,7 @@ const connectServer = (): void => {
       type: 'username',
       payload: {
         username: username,
-        token: localStorage.getItem('token'),
+        token: getToken(),
         time: getCurrentTime() // 添加时间属性
       }
     };
@@ -217,7 +218,7 @@ const sendMessage = (): void => {
       type: 'chat',
       payload: {
         isImage: false,
-        token: localStorage.getItem('token'),
+        token: getToken(),
         username: username,
         message: message.value,
         time: getCurrentTime() // 添加时间属性
@@ -258,7 +259,7 @@ const sendImage = async (event: Event): Promise<void> => {
             type: 'chat',
             payload: {
               isImage: true,
-              token: localStorage.getItem('token'),
+              token: getToken(),
               username: username,
               image: imageUrl, // 使用服务器返回的图片地址
               time: getCurrentTime() // 添加时间属性

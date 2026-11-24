@@ -24,8 +24,18 @@ export {
 }
 export type { JWTPayload }
 
-// SSO 统一登录地址（生产环境）。本地联调时改成 SSO 的 dev 地址，如 http://127.0.0.1:5273/#/login
-const SSO_LOGIN_URL = 'http://106.15.207.57/SSOLogin/#/login'
+const PRODUCTION_SSO_LOGIN_URL = 'http://106.15.207.57/SSOLogin/#/login'
+
+function getSSOLoginUrl(): string {
+    const configuredUrl = import.meta.env.VITE_SSO_LOGIN_URL?.trim()
+    if (configuredUrl) return configuredUrl
+
+    if (import.meta.env.DEV) {
+        return `${location.protocol}//${location.hostname}:5273/#/login`
+    }
+
+    return PRODUCTION_SSO_LOGIN_URL
+}
 
 /**
  * 未登录 / 登录过期 / 退出 → 整页跳转 SSO，并带回当前要访问的地址。
@@ -61,7 +71,7 @@ export function redirectToSSO(redirectPath?: string): void {
         // target 由上一步构造，理论上一定合法；异常时保持原值
     }
 
-    window.location.href = `${SSO_LOGIN_URL}?redirect=${encodeURIComponent(target)}`
+    window.location.href = `${getSSOLoginUrl()}?redirect=${encodeURIComponent(target)}`
 }
 
 let tokenCheckTimer: number | null = null

@@ -3,8 +3,9 @@ export interface JWTPayload {
     [key: string]: unknown
 }
 
-const TOKEN_KEY = 'token'
-const TOKEN_EXPIRE_KEY = 'tokenExpireTime'
+const STORAGE_SCOPE = import.meta.env.DEV ? ':development' : ''
+const TOKEN_KEY = `token${STORAGE_SCOPE}`
+const TOKEN_EXPIRE_KEY = `tokenExpireTime${STORAGE_SCOPE}`
 const USER_INFO_KEY = 'userInfo'
 const CLOCK_SKEW = 5000
 
